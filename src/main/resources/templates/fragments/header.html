@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
+
+<header th:fragment="headerFragment" class="header">
+	<div class="header__inner">
+		<div class="nav-icon" sec:authorize="isAuthenticated()">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+		<a href="/" class="logo">logo</a>
+
+		<nav class="nav" sec:authorize="isAuthenticated()">
+			<h2 class="nav__heading"><a href="/">Logo</a></h2>
+			<ul class="nav__list">
+
+				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')" ><a href="/admin/teamreg" class="nav__link">부서등록</a></li>
+				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')" ><a href="/admin/accountreg" class="nav__link">사용자등록</a></li>
+
+
+				<li class="nav__item"><a href="/facility/psc/pscreg" class="nav__link">대표시설물정보/PSC교량</a></li>
+				<li class="nav__item"><a href="/ltd/datasearch" class="nav__link">장기조사데이터조회</a></li>
+				<li class="nav__item"><a href="/env/envsearch" class="nav__link">환경정보조회</a></li>
+				<li class="nav__item"><a href="/env/testmap" class="nav__link">환경정보조회테스트</a></li>
+			</ul>
+		</nav>
+
+		<div class="info" sec:authorize="isAuthenticated()">
+			<ul>
+				<li>
+<!--					<a href="/mypage" class="info__btn"><span th:text="${session.username}"></span></a>-->
+					<a href="/mypage" class="info__btn"><div sec:authentication="name"></div></a>
+
+				</li>
+				<li>
+					<form th:action="@{/logout}" method="post">
+				        <input type="submit" class="info__btn" value="로그아웃"/>
+				    </form>
+				</li>
+			</ul>
+		</div>
+		<div class="info" sec:authorize="!isAuthenticated()">
+			<ul>
+				<li>
+					<a href="/login" class="info__btn">로그인</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</header>
+
+</html>

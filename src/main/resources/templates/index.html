@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+
+</th:block>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+
+
+</th:block>
+
+
+
+<div layout:fragment="content" class="content">
+	<div class="grid">
+		<div class="grid__item">
+			<div class="grid__inner">
+				<div class="introduce">
+					<div class="introduce__text">
+						<h3>건설 119 데스크 메인화면 </h3>
+
+						<a href="./intro/ubms" class="introduce__link">시설물 노후도 평가 서비스 소개 바로가기></a>
+					</div>
+					<div class="introduce__img">
+						<ul class="introduce__slide">
+							<li>
+								<img src="/assets/images/dummy/subbg02.gif" alt="">
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="grid__item half">
+			<div class="grid__inner">
+				<div class="howto">
+					<h3>시스템 사용방법</h3>
+					<ul class="howto__list">
+						<li class="howto__item">
+							<div class="howto__text">
+								<h4>회원 가입 절차</h4>
+								<p>시스템에 등록하기 위해<br>관리자에게 회원가입 정보를 제출하세요</p>
+							</div>
+							<div class="howto__img">
+								<img src="/assets/images/dummy/subbg05.gif" alt="">
+							</div>
+						</li>
+						<!-- <li class="howto__item">
+							<div class="howto__text">
+								<h4>관리자용</h4>
+								<p>관리자 메뉴의 사용법을 확인하세요</p>
+								<a href="./intro/manualuser#admin">관리자 사용법 확인하러 가기></a>
+							</div>
+							<div class="howto__img">
+								<img src="/assets/images/mainimg__admin.jpg" alt="">
+								<a href="http://www.freepik.com">Designed by vectorpocket / Freepik</a>
+							</div>
+						</li>
+						<li class="howto__item">
+							<div class="howto__text">
+								<h4>점검자용</h4>
+								<p>현장 점검에 대한 내용을 <br>기록, 관리 및 조회하는 방법을 확인하세요</p>
+								<a href="./intro/manualuser#admin">점검 사용법 확인하러 가기></a>
+							</div>
+							<div class="howto__img">
+								<img src="/assets/images/mainimg__inspect.jpg" alt="">
+								<a href="http://www.freepik.com">Designed by vectorpocket / Freepik</a>
+							</div>
+						</li> -->
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="grid__item half">
+			<div class="grid__inner">
+				<div class="quick-menu">
+					<h3>Quick Menu</h3>
+					<ul>
+                                       <li>
+							<a href="#">시설물 조회</a>
+						</li>
+						<li>
+							<a href="#">열화 정보 조회</a>
+						</li>
+						<li>
+							<a href="#">노후도 평가 조회</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="grid__item height-auto">
+			<div class="grid__inner">
+				<div class="news">
+	                <h3 class="news__heading">News</h3>
+	                <ul class="news__list">
+	                    <li>
+	                        <div class="news__content news__content--img">
+	                            <div class="news__img">
+	                                <img src="/assets/images/dummy/news01.jpg" alt="">
+	                            </div>
+	                            <div class="news__textarea">
+	                                <h4 class="news__headline">카탈루나 무역청 대표단 KICT 방원</h4>
+	                                <p class="news__text">한국건설기술연구원은 카탈루나 무역투자청 대표단과 국가과학기술연구회를 맞이하여 3월 13일(수) 일산 본원에서 워크숍을 개최하였다. 이번 워크숍은 글로벌 기술상용화를 위한 출연(연)-카탈루냐 민간 기업과 연구소 간 협력 강화 및 세부 기술분야에서 협력 활성화 지원 및 네트워크 구축으로 글로벌 기술상용화를 위한 기틀을 마련하기 위해 "4차 산업혁명 대비를 위한 혁신, 네트워킹 그리고 기업가 정신"이라는 주제하에 개최되었다. </p>
+	                            </div>
+	                        </div>
+	                    </li>
+	                    <li>
+	                        <div class="news__content">
+	                            <div class="news__img">
+	                                <img src="/assets/images/dummy/news01.jpg" alt="">
+	                            </div>
+	                            <div class="news__textarea">
+	                                <h4 class="news__headline">카탈루나 무역청 대표단 KICT 방원</h4>
+	                                <p class="news__text">한국건설기술연구원은 카탈루나 무역투자청 대표단과 국가과학기술연구회를 맞이하여 3월 13일(수) 일산 본원에서 워크숍을 개최하였다. 이번 워크숍은 글로벌 기술상용화를 위한 출연(연)-카탈루냐 민간 기업과 연구소 간 협력 강화 및 세부 기술분야에서 협력 활성화 지원 및 네트워크 구축으로 글로벌 기술상용화를 위한 기틀을 마련하기 위해 "4차 산업혁명 대비를 위한 혁신, 네트워킹 그리고 기업가 정신"이라는 주제하에 개최되었다. </p>
+	                            </div>
+	                        </div>
+	                    </li>
+	                    <li>
+	                        <div class="news__content">
+	                            <div class="news__img">
+	                                <img src="/assets/images/dummy/news01.jpg" alt="">
+	                            </div>
+	                            <div class="news__textarea">
+	                                <h4 class="news__headline">카탈루나 무역청 대표단 KICT 방원</h4>
+	                                <p class="news__text">한국건설기술연구원은 카탈루나 무역투자청 대표단과 국가과학기술연구회를 맞이하여 3월 13일(수) 일산 본원에서 워크숍을 개최하였다. 이번 워크숍은 글로벌 기술상용화를 위한 출연(연)-카탈루냐 민간 기업과 연구소 간 협력 강화 및 세부 기술분야에서 협력 활성화 지원 및 네트워크 구축으로 글로벌 기술상용화를 위한 기틀을 마련하기 위해 "4차 산업혁명 대비를 위한 혁신, 네트워킹 그리고 기업가 정신"이라는 주제하에 개최되었다. </p>
+	                            </div>
+	                        </div>
+	                    </li>
+	                    <li>
+	                        <div class="news__content">
+	                            <div class="news__img">
+	                                <img src="/assets/images/dummy/news01.jpg" alt="">
+	                            </div>
+	                            <div class="news__textarea">
+	                                <h4 class="news__headline">카탈루나 무역청 대표단 KICT 방원</h4>
+	                                <p class="news__text">한국건설기술연구원은 카탈루나 무역투자청 대표단과 국가과학기술연구회를 맞이하여 3월 13일(수) 일산 본원에서 워크숍을 개최하였다. 이번 워크숍은 글로벌 기술상용화를 위한 출연(연)-카탈루냐 민간 기업과 연구소 간 협력 강화 및 세부 기술분야에서 협력 활성화 지원 및 네트워크 구축으로 글로벌 기술상용화를 위한 기틀을 마련하기 위해 "4차 산업혁명 대비를 위한 혁신, 네트워킹 그리고 기업가 정신"이라는 주제하에 개최되었다. </p>
+	                            </div>
+	                        </div>
+	                    </li>
+	                </ul>
+	            </div>
+			</div>
+		</div>
+	</div>
+</div>
+</html>

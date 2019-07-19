@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+
+</th:block>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+	<script>
+		$(function() {
+			$("#btnSaveEmail").on('click',function(){
+				callsaveEmail();
+			});
+
+			$("#btnSavePassword").on('click',function(){
+				callsavePassword();
+			});
+
+		});
+
+		function callsaveEmail(){
+
+			if ($("#userid").val().trim() == '') {
+				alert("회원정보가 존재하지않습니다. 로그인 후 다시 시도하세요");
+				return false;
+			}
+
+
+			var $form = $('form[name="frmreg"]');
+
+			var params = $form.serialize();
+
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+
+			$.ajax({
+				url:'/api/account/modifyemail',
+				type : 'post',
+				//dataType: 'html',
+				data : params,
+				cache:false,
+				error:function(request,status,error){
+					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				},
+				success: function(res){
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+					alert('저장되었습니다. ');
+
+
+
+				}
+
+			});
+		}
+
+		function callsavePassword(){
+
+			if ($("#userid").val().trim() == '') {
+				alert("회원정보가 존재하지않습니다. 로그인 후 다시 시도하세요");
+				return false;
+			}
+
+
+			var $form = $('form[name="frmreg"]');
+
+			var params = $form.serialize();
+
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+
+			$.ajax({
+				url:'/api/account/modifypassword',
+				type : 'post',
+				//dataType: 'html',
+				data : params,
+				cache:false,
+				error:function(request,status,error){
+					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				},
+				success: function(res){
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+					alert('저장되었습니다. ');
+					$("#password").val('');
+					$("#oldpassword").val('');
+					$("#passwordconfirm").val('');
+
+
+
+				}
+
+			});
+		}
+
+
+	</script>
+
+</th:block>
+
+<div layout:fragment="content" class="content">
+	<section class="section">
+		<article class="article">
+			<h3 class="article__head">회원 정보</h3>
+			<form id="frmreg" name="frmreg" action="">
+				<table class="c-table">
+					<colgroup>
+						<col style="width: 150px;" />
+						<col />
+						<col style="width: 150px;" />
+						<col />
+					</colgroup>
+					<tbody>
+						<tr>
+							<th>아이디</th>
+							<td>
+								<div class="c-text"><input type="text" class="c-text__input" readonly th:value="${account.userid}" id="userid" name ="userid"/></div>
+							</td>
+							<th>이름</th>
+							<td>
+								<div class="c-text"><input type="text" class="c-text__input" readonly th:value="${account.username}" id="username" name ="username"/></div>
+							</td>
+						</tr>
+						<tr>
+							<th>현재비밀번호</th>
+							<td>
+								<div class="c-text"><input type="password" class="c-text__input" id="oldpassword" name ="oldpassword" /></div>
+							</td>
+							<th>신규비밀번호</th>
+							<td>
+								<div class="c-flex">
+									<div class="c-flex__input">
+										<div class="c-text"><input type="password" class="c-text__input" id="password" name ="password" placeholder="새 비밀 번호" /></div>
+									</div>
+									<div class="c-flex__input">
+										<div class="c-text"><input type="password" class="c-text__input" id="passwordconfirm" name ="passwordconfirm" placeholder="새 비밀 번호 확인" /></div>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>이메일</th>
+							<td colspan="3">
+								<div class="c-text"><input type="email" class="c-text__input" th:value="${account.email}" id="email" name ="email"/></div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+			<div class="c-function">
+				<div class="c-function__group c-function__group--right">
+					<div class="c-function__item"><button class="c-button c-button--point" id="btnSaveEmail">이메일변경</button></div>
+					<div class="c-function__item"><button class="c-button c-button--point" id="btnSavePassword">비밀번호변경</button></div>
+
+				</div>
+			</div>
+		</article>
+	</section>
+</div>
+</html>

@@ -1,0 +1,46 @@
+package kr.co.broadwave.desk.common;
+
+/**
+ * @author InSeok
+ * Date : 2019-04-04
+ * Time : 09:39
+ * Remark : Rest controller 응답코드
+ */
+public enum ResponseErrorCode {
+    E001("E001", "이미 존재하는 데이터입니다. 입력된데이터의 코드(아이디)를 확인하시기바랍니다."),
+    E002("E002", "사용중인 데이터는 삭제할수 없습니다."),
+    E003("E003", "삭제할 데이터가 데이터베이스에 존재하지않습니다."),
+    E004("E004", "데이터가 존재하지 않습니다."),
+    E005("E005", "부서코드가 존재하지않습니다."),
+    E006("E006", "패스워드를 입력하세요."),
+    E007("E007", "아이디를 입력하세요."),
+    E008("E008", "선택된 그래프 선택 옵션이 유효하지 않습니다. 새로 고침 후 조회하시거나 관리자에게 문의하세요"),
+    E009("E009", "변경하고자하는 회원정보가 존재하지않습니다. 로그인 후 다시 시도하세요"),
+    E010("E010", "현재 비밀번호가 일치하지 않습니다."),
+    E011("E011", "신규 입력한 비밀번호가 일치하지 않습니다."),
+    ;
+
+    private String code;
+    private String desc;
+
+    ResponseErrorCode(String code, String desc) {
+        this.code = code;
+        this.desc = desc;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+}
