@@ -107,4 +107,11 @@ public class Maincontroller {
 
         return "login";
     }
+
+    @RequestMapping("/signup")
+    public String siguup(HttpServletRequest request){
+
+
+        return "signup";
+    }
 }
