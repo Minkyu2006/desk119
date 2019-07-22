@@ -1,10 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    PC화면 출동일지등록화면
-</body>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+
+</th:block>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+
+
+</th:block>
+
+
+
+<div layout:fragment="content" class="content">
+<h2>PC화면 출동일지등록화면</h2>
+
+<section class="section">
+	<h2 class="section__heading">재난·재해 발생현장 조사 및 분석결과보고서</h2>
+	<article class="article">
+		<table class="c-input-table">
+			<colgroup>
+				<col style="width: 100px;" />
+				<col />
+				<col style="width: 100px;" />
+				<col />
+			</colgroup>
+			<tbody>
+				<tr>
+					<th>작성자</th>
+					<td></td>
+					<th>재해·재난 분과</th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>관련부처</th>
+					<td colspan="3"></td>
+				</tr>
+				<tr>
+					<th>관련문서</th>
+					<td colspan="3"></td>
+				</tr>
+				<tr>
+					<th>조사일시</th>
+					<td></td>
+					<th>조사위치</th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>조사시설물</th>
+					<td colspan="3"></td>
+				</tr>
+				<tr>
+					<th>조사목적</th>
+					<td colspan="3"></td>
+				</tr>
+				<tr>
+					<th>조사담당자</th>
+					<td colspan="3"></td>
+				</tr>
+				<tr>
+					<th>공동 참여기관</th>
+					<td colspan="3"></td>
+				</tr>
+				<tr>
+					<th>현장개요</th>
+					<td colspan="3"></td>
+				</tr>
+				<tr>
+					<th>조사·분석 결과</th>
+					<td colspan="3"></td>
+				</tr>
+				<tr>
+					<th>검토의견 (대응방안)</th>
+					<td colspan="3"></td>
+				</tr>
+				<tr>
+					<th>관련사진</th>
+					<td colspan="3"></td>
+				</tr>
+			</tbody>
+		</table>
+	</article>
+	
+</section>
+
+</div>
 </html>

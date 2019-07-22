@@ -41,10 +41,10 @@
 				</form>
 			</div>
 			<div class="login-box__inner" sec:authorize="isAuthenticated()">
-				<a href="/mypage" class="info__btn"><span th:text="${session.username}"></span></a>
+				<a href="/mypage" class="login-box__text"><span th:text="${session.username}"></span></a>
 
 				<form th:action="@{/logout}" method="post">
-					<input type="submit" class="info__btn" value="로그아웃"/>
+					<input type="submit" class="login-box__button" value="로그아웃"/>
 				</form>
 			</div>
 		</div>
