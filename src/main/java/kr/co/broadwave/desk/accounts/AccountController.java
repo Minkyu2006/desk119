@@ -20,6 +20,11 @@ public class AccountController {
         return "admin/accountreg";
     }
 
+    //사용자승인
+    @RequestMapping("accountapproval")
+    public String accountApproval(){
+        return "admin/accountapproval";
+    }
     
 
 }

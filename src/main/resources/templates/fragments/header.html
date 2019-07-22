@@ -18,10 +18,12 @@
 			<ul class="nav__list">
 
 				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')" ><a href="/admin/teamreg" class="nav__link">부서등록</a></li>
-				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')" ><a href="/admin/accountreg" class="nav__link">사용자등록</a></li>
+				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')" ><a href="/admin/accountreg" class="nav__link">사용자관리</a></li>
+				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')" ><a href="/admin/accountapproval" class="nav__link">사용자승인</a></li>
 
 
-				<li class="nav__item"><a href="/record/reg" class="nav__link">출동일지등록</a></li>
+
+				<li class="nav__item"><a href="/record/reg" class="nav__link">출동일지작성</a></li>
 			</ul>
 		</nav>
 

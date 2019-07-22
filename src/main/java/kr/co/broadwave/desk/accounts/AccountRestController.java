@@ -117,6 +117,7 @@ public class AccountRestController {
 
     }
 
+    //회원가입처리
     @PostMapping("signup")
     public ResponseEntity signup(@ModelAttribute AccountMapperDto accountMapperDto, HttpServletRequest request){
 
