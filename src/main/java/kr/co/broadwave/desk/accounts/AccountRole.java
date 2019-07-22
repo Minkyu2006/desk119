@@ -7,7 +7,7 @@ package kr.co.broadwave.desk.accounts;
  * Remark : 사용자 권한 구분
  */
 public enum AccountRole {
-    ROLE_USER("ROLE_USER", "사용자"),
+    ROLE_USER("ROLE_USER", "출동대원"),
     ROLE_ADMIN("ROLE_ADMIN", "관리자")
     ;
 

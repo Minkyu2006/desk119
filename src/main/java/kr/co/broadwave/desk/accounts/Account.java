@@ -40,6 +40,9 @@ public class Account {
     @Column(name="user_email")
     private String email;
 
+    @Column(name="user_cellphone")
+    private String cellphone;
+
 
 
     @Column(name="insert_date")
