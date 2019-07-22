@@ -27,20 +27,88 @@
 		<table class="c-input-table">
 			<colgroup>
 				<col style="width: 100px;" />
-				<col />
+				<col style="width: 300px;" />
 				<col style="width: 100px;" />
 				<col />
 			</colgroup>
 			<tbody>
 				<tr>
 					<th>작성자</th>
-					<td></td>
+					<td>
+						<div class="c-text"><input type="text" class="c-text__input" /></div>
+					</td>
 					<th>재해·재난 분과</th>
-					<td></td>
+					<td>
+						<ul class="c-input-list">
+							<li>
+								<div class="c-checkbox">
+									<input type="checkbox" class="c-checkbox__input" name="branch" id="branch01" />
+									<label for="branch01" class="c-checkbox__label">붕괴</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-checkbox">
+									<input type="checkbox" class="c-checkbox__input" name="branch" id="branch02" />
+									<label for="branch02" class="c-checkbox__label">화재/폭발</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-checkbox">
+									<input type="checkbox" class="c-checkbox__input" name="branch" id="branch03" />
+									<label for="branch03" class="c-checkbox__label">지진</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-checkbox">
+									<input type="checkbox" class="c-checkbox__input" name="branch" id="branch04" />
+									<label for="branch04" class="c-checkbox__label">싱크홀</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-checkbox">
+									<input type="checkbox" class="c-checkbox__input" name="branch" id="branch05" />
+									<label for="branch05" class="c-checkbox__label">교통사고</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-checkbox">
+									<input type="checkbox" class="c-checkbox__input" name="branch" id="branch06" />
+									<label for="branch06" class="c-checkbox__label">홍수/가뭄</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-checkbox">
+									<input type="checkbox" class="c-checkbox__input" name="branch" id="branch07" />
+									<label for="branch07" class="c-checkbox__label">환경오염</label>
+								</div>
+							</li>
+						</ul>
+					</td>
 				</tr>
 				<tr>
 					<th>관련부처</th>
-					<td colspan="3"></td>
+					<td colspan="3">
+						<ul class="c-input-list">
+							<li>
+								<div class="c-radio">
+									<input type="radio" name="department" id="department01" class="c-radio__input" />
+									<label for="department01" class="c-radio__label">정부·지자체</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-radio">
+									<input type="radio" name="department" id="department02" class="c-radio__input" />
+									<label for="department02" class="c-radio__label">타 기관</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-radio">
+									<input type="radio" name="department" id="department03" class="c-radio__input" />
+									<label for="department03" class="c-radio__label">KICT 자체</label>
+								</div>
+							</li>
+						</ul>
+					</td>
 				</tr>
 				<tr>
 					<th>관련문서</th>
@@ -48,17 +116,143 @@
 				</tr>
 				<tr>
 					<th>조사일시</th>
-					<td></td>
+					<td>
+						<div class="c-calendar-layout">
+                            <div class="c-calendar">
+                                <input type="text" class="c-calendar__input hasDatepicker" id="sdate" name="ts_start_date" value="">
+                                <button type="button" class="ui-datepicker-trigger">
+                                	<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
+                                </button>
+                            </div>
+                            <span>-</span>
+                            <div class="c-calendar">
+                                <input type="text" class="c-calendar__input hasDatepicker" id="edate" name="ts_end_date" value="">
+                                <button type="button" class="ui-datepicker-trigger">
+                                	<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
+                                </button>
+                            </div>
+                        </div>
+					</td>
 					<th>조사위치</th>
-					<td></td>
+					<td class="c-input-table__non-padding">
+						<table class="c-input-table c-input-table--inner">
+							<colgroup>
+								<col style="width: 100px;" />
+								<col />
+							</colgroup>
+							<tbody>
+								<tr>
+									<th>행정구역</th>
+									<td>
+										<ul class="c-input-list">
+											<li>
+												<div class="c-select">
+													<select name="" id="" class="c-select__input">
+														<option value="">서울특별시</option>
+														<option value="">경기도</option>
+														<option value="">강원도</option>
+														<option value="">경상남도</option>
+														<option value="">경상북도</option>
+													</select>
+												</div>
+											</li>
+											<li>
+												<div class="c-select">
+													<select name="" id="" class="c-select__input">
+														<option value="">영등포구</option>
+														<option value="">종로구</option>
+														<option value="">강서구</option>
+														<option value="">강남구</option>
+														<option value="">마포구</option>
+													</select>
+												</div>
+											</li>
+										</ul>
+									</td>
+								</tr>
+								<tr>
+									<th>상세위치</th>
+									<td>
+										<div class="c-text"><input type="text" class="c-text__input" /></div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
 				</tr>
 				<tr>
 					<th>조사시설물</th>
-					<td colspan="3"></td>
+					<td colspan="3">
+						<ul class="c-input-list">
+							<li>
+								<div class="c-checkbox">
+									<input type="checkbox" name="scan" class="c-checkbox__input" id="scan01" />
+									<label for="scan01" class="c-checkbox__label">교량</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-checkbox">
+									<input type="checkbox" name="scan" class="c-checkbox__input" id="scan02" />
+									<label for="scan02" class="c-checkbox__label">옹벽</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-checkbox">
+									<input type="checkbox" name="scan" class="c-checkbox__input" id="scan03" />
+									<label for="scan03" class="c-checkbox__label">비탈면</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-checkbox">
+									<input type="checkbox" name="scan" class="c-checkbox__input" id="scan04" />
+									<label for="scan04" class="c-checkbox__label">터널</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-checkbox">
+									<input type="checkbox" name="scan" class="c-checkbox__input" id="scan05" />
+									<label for="scan05" class="c-checkbox__label">도로</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-checkbox">
+									<input type="checkbox" name="scan" class="c-checkbox__input" id="scan06" />
+									<label for="scan06" class="c-checkbox__label">기타도로시설물</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-checkbox">
+									<input type="checkbox" name="scan" class="c-checkbox__input" id="scan07" />
+									<label for="scan07" class="c-checkbox__label">건축물</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-checkbox">
+									<input type="checkbox" name="scan" class="c-checkbox__input" id="scan08" />
+									<label for="scan08" class="c-checkbox__label">지만</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-checkbox">
+									<input type="checkbox" name="scan" class="c-checkbox__input" id="scan09" />
+									<label for="scan09" class="c-checkbox__label">지하시설물</label>
+								</div>
+							</li>
+							<li>
+								<div class="c-checkbox c-checkbox--input">
+									<input type="checkbox" name="scan" class="c-checkbox__input" id="scan10" />
+									<label for="scan10" class="c-checkbox__label">기타</label>
+									<div class="c-text c-text--small"><input type="text" class="c-text__input" /></div>
+								</div>
+							</li>
+						</ul>
+					</td>
 				</tr>
 				<tr>
 					<th>조사목적</th>
-					<td colspan="3"></td>
+					<td colspan="3">
+						<textarea class="c-textarea"></textarea>
+					</td>
 				</tr>
 				<tr>
 					<th>조사담당자</th>
@@ -66,11 +260,15 @@
 				</tr>
 				<tr>
 					<th>공동 참여기관</th>
-					<td colspan="3"></td>
+					<td colspan="3">
+						<textarea class="c-textarea"></textarea>
+					</td>
 				</tr>
 				<tr>
 					<th>현장개요</th>
-					<td colspan="3"></td>
+					<td colspan="3">
+						<textarea class="c-textarea"></textarea>
+					</td>
 				</tr>
 				<tr>
 					<th>조사·분석 결과</th>
