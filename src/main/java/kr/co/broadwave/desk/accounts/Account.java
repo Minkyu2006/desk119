@@ -1,5 +1,6 @@
 package kr.co.broadwave.desk.accounts;
 
+import kr.co.broadwave.desk.bscodes.ApprovalType;
 import kr.co.broadwave.desk.teams.Team;
 import lombok.*;
 
@@ -61,6 +62,10 @@ public class Account {
     @Enumerated(EnumType.STRING)
     @Column(name="user_role")
     private AccountRole role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="user_approval_type")
+    private ApprovalType approvalType;
 
     @ManyToOne(targetEntity = Team.class,fetch = FetchType.LAZY)
     @JoinColumn(name="team_id")

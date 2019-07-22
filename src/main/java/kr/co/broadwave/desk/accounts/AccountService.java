@@ -113,7 +113,9 @@ public class AccountService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userid) throws UsernameNotFoundException {
-        Account account = accountRepository.findByUserid(userid).get();
+        //Account account = accountRepository.findByUserid(userid).get();
+        Account account = accountRepository.findByUseridAndApprovalType(userid).get(); // 승인된사용자만 로그인가능
+
 
         return new User(account.getUserid(),account.getPassword(),true,true,true,true,getAuthorities(account));
     }

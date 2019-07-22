@@ -1,5 +1,6 @@
 package kr.co.broadwave.desk.accounts;
 
+import kr.co.broadwave.desk.bscodes.ApprovalType;
 import kr.co.broadwave.desk.common.AjaxResponse;
 import kr.co.broadwave.desk.common.CommonUtils;
 import kr.co.broadwave.desk.common.ResponseErrorCode;
@@ -112,6 +113,59 @@ public class AccountRestController {
         Account accountSave =  this.accountService.saveAccount(account);
 
         log.info("사용자 저장 성공 : " + accountSave.toString() );
+        return ResponseEntity.ok(res.success());
+
+    }
+
+    @PostMapping("signup")
+    public ResponseEntity signup(@ModelAttribute AccountMapperDto accountMapperDto, HttpServletRequest request){
+
+
+        Account account = modelMapper.map(accountMapperDto, Account.class);
+
+
+        //패스워드를 입력하세요.
+        if (accountMapperDto.getPassword() == null || accountMapperDto.getPassword().equals("")){
+            log.info(ResponseErrorCode.E006.getDesc());
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E006.getCode(), ResponseErrorCode.E006.getDesc()));
+        }
+        //아이디를 입력하세요.
+        if (accountMapperDto.getUserid() == null || accountMapperDto.getUserid().equals("")){
+            log.info(ResponseErrorCode.E007.getDesc());
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E007.getCode(), ResponseErrorCode.E007.getDesc()));
+        }
+
+
+
+        Optional<Account> optionalAccount = accountService.findByUserid(account.getUserid());
+
+
+
+        //userid 중복체크
+        if (optionalAccount.isPresent()) {
+            log.info("회원가입저장실패(아이디중복) 사용자아이디: '" + account.getUserid() + "'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E008.getCode(), ResponseErrorCode.E008.getDesc()));
+        }
+        account.setInsert_id("signUp");
+        account.setInsertDateTime(LocalDateTime.now());
+        account.setApprovalType(ApprovalType.AT01); // 미승인상태로 회원가입
+
+        Optional<Team> optionalTeam = teamService.findByTeamcode("T00002");
+        //부서코드가 존재하지않으면
+        if (!optionalTeam.isPresent()) {
+            log.info(" 선택한 부서 DB 존재 여부 체크.  부서코드: '" + accountMapperDto.getTeamcode() +"'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E005.getCode(), ResponseErrorCode.E005.getDesc()));
+        }else{
+            Team team = optionalTeam.get();
+            account.setTeam(team);
+        }
+
+
+
+
+        Account accountSave =  this.accountService.saveAccount(account);
+
+        log.info("회원가입 저장 성공 : " + accountSave.toString() );
         return ResponseEntity.ok(res.success());
 
     }

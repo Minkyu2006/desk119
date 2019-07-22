@@ -109,9 +109,8 @@ public class Maincontroller {
     }
 
     @RequestMapping("/signup")
-    public String siguup(HttpServletRequest request){
-
-
+    public String siguup(HttpServletRequest request,Model model){
+        model.addAttribute("roles", AccountRole.values());
         return "signup";
     }
 }

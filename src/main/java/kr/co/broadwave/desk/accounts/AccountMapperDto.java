@@ -21,6 +21,7 @@ public class AccountMapperDto {
     private String username;
     private String password;
     private String email;
+    private String cellphone;
     private AccountRole role;
     private String teamcode;
     private String mode;

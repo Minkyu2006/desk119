@@ -3,6 +3,7 @@ package kr.co.broadwave.desk.configs;
 import kr.co.broadwave.desk.accounts.Account;
 import kr.co.broadwave.desk.accounts.AccountRole;
 import kr.co.broadwave.desk.accounts.AccountService;
+import kr.co.broadwave.desk.bscodes.ApprovalType;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class AppRunner implements ApplicationRunner {
 
         Team team2 = Team.builder()
                 .teamcode("T00002")
-                .teamname("관리팀")
+                .teamname("회원가입")
                 .remark("최초생성")
                 .insertDateTime(LocalDateTime.now())
                 .insert_id("system")
@@ -63,6 +64,7 @@ public class AppRunner implements ApplicationRunner {
                 .email("admin@mail.com")
                 .cellphone("010-1111-2222")
                 .password("123789")
+                .approvalType(ApprovalType.AT02)
                 .insertDateTime(LocalDateTime.now())
                 .insert_id("system")
                 .role(AccountRole.ROLE_ADMIN)
@@ -82,6 +84,7 @@ public class AppRunner implements ApplicationRunner {
                 .insertDateTime(LocalDateTime.now())
                 .insert_id("system")
                 .role(AccountRole.ROLE_USER)
+                .approvalType(ApprovalType.AT02)
                 .build();
         account2.setTeam(team2);
         if(!accountService.findByUserid(account2.getUserid()).isPresent()) {

@@ -19,11 +19,7 @@ public class AccountController {
         model.addAttribute("roles", AccountRole.values());
         return "admin/accountreg";
     }
-    //테스트 맵
-    @RequestMapping("maptest")
-    public String maptest(){
-        return "admin/maptest";
-    }
+
     
 
 }

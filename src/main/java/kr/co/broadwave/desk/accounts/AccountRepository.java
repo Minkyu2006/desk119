@@ -24,6 +24,10 @@ public interface AccountRepository extends JpaRepository<Account,Long>,QuerydslP
     @Query("select a from Account a join fetch a.team where a.userid = :userid")
     Optional<Account> findByUserid(@Param("userid") String userid);
 
+    //승인된 사용자에대해서만 조회
+    @Query("select a from Account a join fetch a.team where a.userid = :userid and a.approvalType = 'AT02'")
+    Optional<Account> findByUseridAndApprovalType(@Param("userid") String userid);
+
     long countByTeam(Team team);
 
 
