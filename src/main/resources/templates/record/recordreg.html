@@ -12,7 +12,7 @@
 
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
-
+	
 
 </th:block>
 
@@ -88,26 +88,13 @@
 				<tr>
 					<th>관련부처</th>
 					<td colspan="3">
-						<ul class="c-input-list">
-							<li>
-								<div class="c-radio">
-									<input type="radio" name="department" id="department01" class="c-radio__input" />
-									<label for="department01" class="c-radio__label">정부·지자체</label>
-								</div>
-							</li>
-							<li>
-								<div class="c-radio">
-									<input type="radio" name="department" id="department02" class="c-radio__input" />
-									<label for="department02" class="c-radio__label">타 기관</label>
-								</div>
-							</li>
-							<li>
-								<div class="c-radio">
-									<input type="radio" name="department" id="department03" class="c-radio__input" />
-									<label for="department03" class="c-radio__label">KICT 자체</label>
-								</div>
-							</li>
-						</ul>
+						<div class="c-select">
+							<select class="c-select__input">
+								<option value="">정부·지자체</option>
+								<option value="">타 기관</option>
+								<option value="">KICT 자체</option>
+							</select>
+						</div>
 					</td>
 				</tr>
 				<tr>
@@ -256,7 +243,50 @@
 				</tr>
 				<tr>
 					<th>조사담당자</th>
-					<td colspan="3"></td>
+					<td colspan="3">
+						<ul class="c-input-list">
+							<li>
+								<div class="c-text">
+									<input type="text" class="c-text__input" placeholder="사번" />
+								</div>
+							</li>
+							<li>
+								<div class="c-text">
+									<input type="text" class="c-text__input" placeholder="이름" />
+								</div>
+							</li>
+							<li>
+								<div class="c-text">
+									<input type="text" class="c-text__input" placeholder="부서명" />
+								</div>
+							</li>
+							<li>
+								<button class="c-button">추가</button>
+							</li>
+						</ul>
+						<ul class="c-result-list" style="margin-top: 10px;">
+							<li>
+								<ul class="c-input-list">
+									<li>0000001</li>
+									<li>최인석</li>
+									<li>소프트웨어팀</li>
+									<li>
+										<button class="c-button c-button--small">삭제</button>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<ul class="c-input-list">
+									<li>0000002</li>
+									<li>김지겸</li>
+									<li>소프트웨어팀</li>
+									<li>
+										<button class="c-button c-button--small">삭제</button>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</td>
 				</tr>
 				<tr>
 					<th>공동 참여기관</th>
@@ -272,18 +302,66 @@
 				</tr>
 				<tr>
 					<th>조사·분석 결과</th>
-					<td colspan="3"></td>
+					<td colspan="3">
+						<textarea class="c-textarea"></textarea>
+					</td>
 				</tr>
 				<tr>
 					<th>검토의견 (대응방안)</th>
-					<td colspan="3"></td>
+					<td colspan="3">
+						<textarea class="c-textarea"></textarea>
+					</td>
 				</tr>
 				<tr>
 					<th>관련사진</th>
-					<td colspan="3"></td>
+					<td colspan="3">
+						<div class="c-file">
+							<input type="text" readonly="readonly" class="c-file__input" id="pickture2" name="picture2" />
+							<label class="c-file__button">파일선택<input type="file" name="picture1" id="picture1" /></label>
+						</div>
+						<ul class="c-result-list" style="margin-top: 10px;">
+							<li>
+								<ul class="c-input-list">
+									<li>재난재해분과_행정구역_조사시작일시_작성자명_사진이름_순번.jpg</li>
+									<li>
+										<button class="c-button c-button--small">삭제</button>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<ul class="c-input-list">
+									<li>붕괴_서울특별시종로구_20190723_김지겸_붕괴사진_01.jpg</li>
+									<li>
+										<button class="c-button c-button--small">삭제</button>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</td>
 				</tr>
 			</tbody>
 		</table>
+	</article>
+	
+	<article class="article">
+		<h3>보고서 입력 확인사항</h3>
+		<ol>
+			<li>
+				<p>1. 관련문서 : 공문 있을 경우 기재 - 공문 명만 입력? 파일 입력?</p>
+			</li>
+			<li>
+				<p>2. 조사목적, 현장개요 : 에디터로 작성?</p>
+			</li>
+			<li>
+				<p>3. 공동참여기관 : 조사참여기관/참여자 정보 기재 - 기관명과 참여자 이름만 작성? 다른 작성할 양식이 있는 것인지</p>
+			</li>
+			<li>
+				<p>4. 조사분석결과와 검토의견의 경우 1,2,3 숫자로 나누어져 있는데 하나씩 추가하는 것으로 가야할 지 아니면 에디터로 형식에 구애 받지 않고 작성 가능하게 해야할지</p>
+			</li>
+			<li>
+				<p>5. 관련사진 : 사진 첨부 후 인쇄과정에서 사진이 보여야할텐데 어떤식으로</p>
+			</li>
+		</ol>
 	</article>
 	
 </section>

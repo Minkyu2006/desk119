@@ -775,6 +775,9 @@
     font-weight: 700;
     letter-spacing: -0.3px;
 }
+.c-paging__item.c-paging__control {
+	padding: 0;
+}
 .c-paging__total {
     display: table-cell;
     width: 100px;
