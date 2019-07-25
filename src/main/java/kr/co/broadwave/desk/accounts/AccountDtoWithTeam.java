@@ -16,6 +16,7 @@ public class AccountDtoWithTeam {
     private String userid;
     private String username;
     private String email;
+    private String cellphone;
     private AccountRole role;
     private String teamcode;
     private String teamname;
@@ -66,5 +67,13 @@ public class AccountDtoWithTeam {
 
     public void setTeamname(String teamname) {
         this.teamname = teamname;
+    }
+
+    public String getCellphone() {
+        return cellphone;
+    }
+
+    public void setCellphone(String cellphone) {
+        this.cellphone = cellphone;
     }
 }

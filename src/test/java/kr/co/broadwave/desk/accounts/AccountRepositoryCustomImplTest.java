@@ -99,4 +99,15 @@ public class AccountRepositoryCustomImplTest {
 
 
     }
+
+    @Test
+    public void findAllByApproval(){
+        String startDate ="20190715";
+        int year = Integer.parseInt(startDate.substring(0,4));
+        int month = Integer.parseInt(startDate.substring(4,6));
+        int day = Integer.parseInt(startDate.substring(6,8));
+        System.out.println(year);
+        System.out.println(month);
+        System.out.println(day);
+    }
 }

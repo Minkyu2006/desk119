@@ -56,6 +56,10 @@ public class AccountService implements UserDetailsService {
     public Page<AccountDtoWithTeam> findAllBySearchStrings(String userid,String username,String teamname,Pageable pageable){
         return accountRepositoryCustom.findAllBySearchStrings(userid,username,teamname,pageable);
     }
+    public Page<AccountDto> findAllByApproval(String username, String startDate, String endDate, Pageable pageable) {
+        return accountRepositoryCustom.findAllByApproval(username,startDate,endDate,pageable);
+    }
+
 
     public void delete(Account account){
         accountRepository.delete(account);
@@ -122,6 +126,7 @@ public class AccountService implements UserDetailsService {
     private Collection<? extends GrantedAuthority> getAuthorities(Account account) {
         return Arrays.asList(new SimpleGrantedAuthority(account.getRole().getCode()));
     }
+
 
 
 }

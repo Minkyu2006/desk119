@@ -287,6 +287,23 @@ public class AccountRestController {
         return CommonUtils.ResponseEntityPage(accounts);
 
     }
+
+    @PostMapping("approvallist")
+    public ResponseEntity accountApprovalList(
+                                      @RequestParam(value="username", defaultValue="") String username,
+                                      @RequestParam(value="startdate", defaultValue="") String startdate,
+                                      @RequestParam(value="enddate", defaultValue="") String enddate,
+                                      Pageable pageable){
+
+        log.info("회원가입 승인조회 / 조회조건 : username / '" + username + "', startdate / '" + startdate + "', enddate / '" + enddate + "'");
+
+
+        Page<AccountDto> accounts = this.accountService.findAllByApproval(username,startdate,enddate, pageable);
+        return CommonUtils.ResponseEntityPage(accounts);
+
+    }
+
+
     @PostMapping("del")
     public ResponseEntity accountdel(@RequestParam (value="userid", defaultValue="") String userid
                                      ){
