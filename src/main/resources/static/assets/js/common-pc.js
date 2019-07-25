@@ -114,6 +114,27 @@ $(document).ready(function(){
     });
 
     // datepicker
+    
+    $('.c-date__calendar').datepicker({
+    	dateFormat: 'yy-mm-dd',
+    	firstDay: 1
+    });
+    
+    $(document).on('click', '.c-date .c-date__input-box', function(e) {
+    	var $me = $(this),
+    		$parent = $me.parents('.c-date');
+    		$parent.toggleClass('open');
+    });
+    
+    $('.c-date__calendar').on('change', function() {
+    	var $me = $(this),
+    		$selected = $me.val(),
+    		$parent = $me.parents('.c-date');
+    	
+    	$parent.find('.c-date__result').children('span').html($selected);
+    });
+    
+    /*
     $.datepicker.regional['en'] = {
         prevText: '이전달',
         nextText: '다음달',
@@ -149,6 +170,8 @@ $(document).ready(function(){
     $('#edate').datepicker("option", "onClose", function ( selectedDate ) {
         $("#sdate").datepicker( "option", "maxDate", selectedDate );
     });
+    
+    */
 
     // $.datepicker.setDefaults($.datepicker.regional['en']);
     //

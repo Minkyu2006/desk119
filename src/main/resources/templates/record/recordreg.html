@@ -27,7 +27,7 @@
 		<table class="c-input-table">
 			<colgroup>
 				<col style="width: 100px;" />
-				<col style="width: 300px;" />
+				<col style="width: 400px;" />
 				<col style="width: 100px;" />
 				<col />
 			</colgroup>
@@ -99,24 +99,41 @@
 				</tr>
 				<tr>
 					<th>관련문서</th>
-					<td colspan="3"></td>
+					<td colspan="3">
+						<ul class="c-input-list">
+							<li>
+								<div class="c-text">
+									<input type="text" class="c-text__input" placeholder="공문명을 입력하세요" />
+								</div>
+							</li>
+							<li>
+								<button class="c-button">추가</button>
+							</li>
+						</ul>
+					</td>
 				</tr>
 				<tr>
-					<th>조사일시</th>
+					<th>조사일자</th>
 					<td>
 						<div class="c-calendar-layout">
-                            <div class="c-calendar">
-                                <input type="text" class="c-calendar__input hasDatepicker" id="sdate" name="ts_start_date" value="">
-                                <button type="button" class="ui-datepicker-trigger">
-                                	<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
-                                </button>
+                            <div class="c-date">
+                            	<div class="c-date__input-box">
+                            		<div class="c-date__result"><span></span></div>
+                            		<button type="button" class="c-date__button">
+	                                	<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
+	                                </button>
+                            	</div>
+                                <div class="c-date__calendar"></div>
                             </div>
                             <span>-</span>
-                            <div class="c-calendar">
-                                <input type="text" class="c-calendar__input hasDatepicker" id="edate" name="ts_end_date" value="">
-                                <button type="button" class="ui-datepicker-trigger">
-                                	<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
-                                </button>
+                            <div class="c-date">
+                            	<div class="c-date__input-box">
+                            		<div class="c-date__result"><span></span></div>
+                            		<button type="button" class="c-date__button">
+	                                	<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
+	                                </button>
+                            	</div>
+                                <div class="c-date__calendar"></div>
                             </div>
                         </div>
 					</td>
