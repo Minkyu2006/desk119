@@ -54,6 +54,21 @@
 .c-table tr.align--right td {
     text-align: right;
 }
+.c-table td a {
+	display: inlinek;
+	color: #222;
+	font-size: 14px;
+	line-height: 1.4;
+}
+.c-table td a:hover {
+	text-decoration: underline;
+}
+.c-table td a + img {
+	display: inline;
+	height: 14px;
+	margin: 0;
+	padding: 0;
+}
 
 .c-table.c-table--non-border th,
 .c-table.c-table--non-border td {
