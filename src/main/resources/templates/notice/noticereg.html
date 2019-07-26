@@ -15,11 +15,18 @@
 <th:block layout:fragment="script">
 	<script src="/assets/js/summernote/summernote-lite.js"></script>
 	<script>
-		$(document).ready(function() {
+		$(function(){
 	        $('#summernote').summernote({
 	            height: 300
 	        });
+			$("#btnSave").on('click',function(){
+				save();
+			});
+
 	    });
+		function save(){
+			alert("save");
+		}
 	</script>
 
 </th:block>
@@ -79,7 +86,7 @@
 				</table>
 				<div class="c-function">
 					<div class="c-function__group c-function__group--right">
-						<div class="c-function__item"><button class="c-button c-button--point">작성완료</button></div>
+						<div class="c-function__item"><button class="c-button c-button--point" id="btnSave">작성완료</button></div>
 						<div class="c-function__item"><button class="c-button">취소</button></div>
 					</div>
 				</div>

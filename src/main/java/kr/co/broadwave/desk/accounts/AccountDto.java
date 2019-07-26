@@ -4,6 +4,7 @@ import kr.co.broadwave.desk.bscodes.ApprovalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class AccountDto {
     private String userid;
     private String username;

@@ -1,5 +1,6 @@
 package kr.co.broadwave.desk.accounts;
 
+import kr.co.broadwave.desk.bscodes.ApprovalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class AccountMapperDto {
     private String email;
     private String cellphone;
     private AccountRole role;
+    private ApprovalType approvalType;
     private String teamcode;
     private String mode;
 }

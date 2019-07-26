@@ -1,5 +1,6 @@
 package kr.co.broadwave.desk.accounts;
 
+import kr.co.broadwave.desk.bscodes.ApprovalType;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,9 @@ public class AccountService implements UserDetailsService {
         return accountRepositoryCustom.findAllByApproval(username,startDate,endDate,pageable);
     }
 
+    public Long saveApproval(Account account, ApprovalType approvalType,String loginId){
+        return accountRepositoryCustom.saveApproval(account,approvalType,loginId);
+    }
 
     public void delete(Account account){
         accountRepository.delete(account);

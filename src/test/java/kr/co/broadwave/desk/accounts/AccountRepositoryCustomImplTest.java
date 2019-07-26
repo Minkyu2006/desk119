@@ -1,5 +1,6 @@
 package kr.co.broadwave.desk.accounts;
 
+import kr.co.broadwave.desk.bscodes.ApprovalType;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamRepository;
 import org.junit.Test;
@@ -12,6 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -102,12 +106,130 @@ public class AccountRepositoryCustomImplTest {
 
     @Test
     public void findAllByApproval(){
-        String startDate ="20190715";
-        int year = Integer.parseInt(startDate.substring(0,4));
-        int month = Integer.parseInt(startDate.substring(4,6));
-        int day = Integer.parseInt(startDate.substring(6,8));
-        System.out.println(year);
-        System.out.println(month);
-        System.out.println(day);
+
+        //given
+        Team t1 = Team.builder()
+                .teamcode("A001")
+                .teamname("TestTeam1")
+                .remark("비고").build();
+        teamRepository.save(t1);
+        Account a1 = Account.builder()
+                .userid("S0001")
+                .username("테스트유저")
+                .password("1234")
+                .email("test@naver.com")
+                .role(AccountRole.ROLE_ADMIN)
+                .approvalType(ApprovalType.AT01)
+                .insertDateTime(LocalDateTime.now())
+                .team(t1)
+                .build();
+        Account a2 = Account.builder()
+                .userid("S0002")
+                .username("테스트유저2")
+                .password("1234")
+                .email("test2@naver.com")
+                .approvalType(ApprovalType.AT02)
+                .role(AccountRole.ROLE_ADMIN)
+                .insertDateTime(LocalDateTime.now())
+                .team(t1)
+                .build();
+        Account a3 = Account.builder()
+                .userid("S0003")
+                .username("신규유저")
+                .password("1234")
+                .email("test3@naver.com")
+                .role(AccountRole.ROLE_ADMIN)
+                .approvalType(ApprovalType.AT01)
+                .insertDateTime(LocalDateTime.now())
+                .team(t1)
+                .build();
+        accountRepository.save(a1);
+        accountRepository.save(a2);
+        accountRepository.save(a3);
+
+        Pageable pageable = PageRequest.of(0, 2, Sort.Direction.ASC, "userid");
+
+        //when
+        Page<AccountDto> accounts1 = accountRepositoryCustom.findAllByApproval("", "", "", pageable);
+        Page<AccountDto> accounts2 = accountRepositoryCustom.findAllByApproval("신규유저", "", "", pageable);
+
+
+
+        //then
+        System.out.println(accounts1.getContent());
+        assertThat(accounts1.getTotalPages()).as("totalPages [expect 1]").isEqualTo(1);    // 미승인유저
+        assertThat(accounts1.getContent().size()).as("CurrentPage Size [expect 2]").isEqualTo(2); //현재페이지에나오는수
+        assertThat(accounts1.getTotalElements()).as("Total row count [expect 2]").isEqualTo(2);  // 총 라인수
+
+
+        assertThat(accounts2.getTotalPages()).as("totalPages [expect 1]").isEqualTo(1);
+        assertThat(accounts2.getContent().size()).as("CurrentPage Size [expect 1]").isEqualTo(1);
+
+
+        //정리
+        accountRepository.delete(a1);
+        accountRepository.delete(a2);
+        accountRepository.delete(a3);
+        teamRepository.delete(t1);
+
+    }
+
+    @Test
+    public void saveApproval(){
+        //given
+        Team t1 = Team.builder()
+                .teamcode("A001")
+                .teamname("TestTeam1")
+                .remark("비고").build();
+        teamRepository.save(t1);
+        Account a1 = Account.builder()
+                .userid("S0001")
+                .username("테스트유저")
+                .password("1234")
+                .email("test@naver.com")
+                .role(AccountRole.ROLE_ADMIN)
+                .approvalType(ApprovalType.AT01)
+                .team(t1)
+                .build();
+        Account a2 = Account.builder()
+                .userid("S0002")
+                .username("테스트유저2")
+                .password("1234")
+                .email("test2@naver.com")
+                .approvalType(ApprovalType.AT01)
+                .role(AccountRole.ROLE_ADMIN)
+                .team(t1)
+                .build();
+        Account a3 = Account.builder()
+                .userid("S0003")
+                .username("신규유저")
+                .password("1234")
+                .email("test3@naver.com")
+                .approvalType(ApprovalType.AT01)
+                .role(AccountRole.ROLE_ADMIN)
+                .team(t1)
+                .build();
+        accountRepository.save(a1);
+        accountRepository.save(a2);
+        accountRepository.save(a3);
+
+        //when
+        Long aLong = accountRepositoryCustom.saveApproval(a1, ApprovalType.AT02, "testApproval");
+
+        Optional<Account> optionalAccount = accountRepository.findByUserid(a1.getUserid());
+
+
+        //then
+        assertThat(aLong).as("업데이트 처리된 행 [expect 1]").isEqualTo(1); //수정된 행이 1개
+        assertThat(optionalAccount.get().getApprovalType()).as("승인필드 값 확인 [expect AT02]").isEqualTo(ApprovalType.AT02);
+        assertThat(optionalAccount.get().getApproval_id()).as("승인 한 사람 아이디 확인 [expect 'testApproval']").isEqualTo("testApproval");
+
+
+        //delete
+        accountRepository.delete(a1);
+        accountRepository.delete(a2);
+        accountRepository.delete(a3);
+        teamRepository.delete(t1);
+
     }
 }

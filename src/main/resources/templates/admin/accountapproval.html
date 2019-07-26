@@ -80,8 +80,10 @@
 						html += '<td >'+ echoNull2Blank(value.email) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.role) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.insertDateTime) +'</td>';
-						html += '<td><button class="c-button c-button--small c-button--point">승인</button></td>';
-						html += '<td><button class="c-button c-button--small">거절</button></td>';
+						html += '<td ><button class="c-button c-button--small c-button--point" id ="okbtn_'+ echoNull2Blank(value.userid) +'"' +
+								'onclick="callApproval(\''+ echoNull2Blank(value.userid) +'\',\'AT02\');">승인</button></td>';
+						html += '<td><button class="c-button c-button--small" id ="rebtn_'+ echoNull2Blank(value.userid) + '"' +
+								'onclick="callApproval(\''+ echoNull2Blank(value.userid) +'\',\'AT03\');">거절</button></td>';
 
 						html += '</tr>';
 					});
@@ -92,6 +94,57 @@
 			});
 
 
+
+		}
+
+		function callApproval(userid,approvaltype) {
+			//alert (userid + '/' + approvaltype);
+			if (($("#okbtn_"+userid).html() != "승인") && ($("#rebtn_"+userid).html() != "거절") ){
+				alert("이미 승인(반려) 처리가 완료되었습니다.");
+				return false;
+			}
+
+			if (approvaltype=='AT02') {
+				$("#okbtn_"+userid).html("승인완료");
+				$("#rebtn_"+userid).html("승인완료");
+			}else{
+				$("#okbtn_"+userid).html("거절완료");
+				$("#rebtn_"+userid).html("거절완료");
+			}
+
+
+
+			var params = {
+				userid:userid,
+				approvaltype:approvaltype
+			};
+
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+
+			$.ajax({
+				url:'/api/account/approval',
+				type : 'post',
+				//dataType: 'html',
+				data : params,
+				cache:false,
+				error:function(request,status,error){
+					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				},
+				success: function(res){
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+
+
+
+
+
+				}
+
+			});
 
 		}
 
@@ -164,7 +217,7 @@
 						<th>이름</th>
 						<th>전화번호</th>
 						<th>이메일</th>
-						<th>권한</th>
+						<th>요청권한</th>
 						<th>가입일시</th>
 						<th>승인</th>
 						<th>반려</th>

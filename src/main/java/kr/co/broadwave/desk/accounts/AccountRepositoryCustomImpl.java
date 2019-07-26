@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -111,5 +112,19 @@ public class AccountRepositoryCustomImpl extends QuerydslRepositorySupport imple
 
         final List<AccountDto> accounts = getQuerydsl().applyPagination(pageable, query).fetch();
         return new PageImpl<>(accounts, pageable, query.fetchCount());
+    }
+
+    @Override
+    @Transactional
+    public Long saveApproval(Account account, ApprovalType approvalType, String loginId) {
+        QAccount qAccount  = QAccount.account;
+
+        return update(qAccount).where(qAccount.id.eq(account.getId()))
+                .set(qAccount.approvalType,approvalType)
+                .set(qAccount.approval_id,loginId)
+                .set(qAccount.approvalDateTime,LocalDateTime.now())
+                .execute();
+
+
     }
 }

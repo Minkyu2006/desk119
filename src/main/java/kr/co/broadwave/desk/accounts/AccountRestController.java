@@ -303,7 +303,33 @@ public class AccountRestController {
 
     }
 
+    //회원가입 승인처리
+    @PostMapping("approval")
+    public ResponseEntity saveApproval(
+                                    @RequestParam(value="userid", defaultValue="") String userid,
+                                    @RequestParam(value="approvaltype", defaultValue="") String approvaltype,
+                                    HttpServletRequest request
+                                    ){
+        Optional<Account> optionalAccount = accountService.findByUserid(userid);
 
+
+        if(!optionalAccount.isPresent()){
+            log.info("회원가입 승인처리실패 : 사용자아이디: '" + userid + "'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E012.getCode(), ResponseErrorCode.E012.getDesc()));
+        }
+
+
+        String currentuserid = CommonUtils.getCurrentuser(request);
+
+        Long aLong = accountService.saveApproval(optionalAccount.get(), ApprovalType.valueOf(approvaltype), currentuserid);
+        if (!aLong.equals(1L)){
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E013.getCode(), ResponseErrorCode.E013.getDesc()));
+        }
+
+        return ResponseEntity.ok(res.success());
+    }
+
+    //사용자삭제
     @PostMapping("del")
     public ResponseEntity accountdel(@RequestParam (value="userid", defaultValue="") String userid
                                      ){
