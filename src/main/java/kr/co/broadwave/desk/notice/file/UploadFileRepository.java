@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Remark :
  */
 public interface UploadFileRepository extends JpaRepository<UploadFile,Long> {
+    public UploadFile findOneByFileName(String fileName);
 }

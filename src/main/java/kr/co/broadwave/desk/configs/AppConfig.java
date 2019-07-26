@@ -25,4 +25,9 @@ public class AppConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    @Bean(name = "uploadPath")
+    public String uploadPath() {
+        return "d:/tmp/image/";
+    }
+
 }
