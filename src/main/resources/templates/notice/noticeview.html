@@ -1,10 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    공지사항 보기
-</body>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+
+</th:block>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+	
+
+</th:block>
+
+
+
+<div layout:fragment="content" class="content">
+	<section class="section">
+		<article class="article">
+			<h2 class="article__heading">공지사항</h2>
+			<div class="notice-view">
+				<div class="notice-view__contents">
+					<table class="c-table">
+						<colgroup>
+							<col style="width: 150px;" />
+							<col />
+							<col style="width: 150px;" />
+							<col />
+							<col style="width: 150px;" />
+							<col />
+						</colgroup>
+						<tbody>
+							<tr>
+								<td colspan="6" class="align--center">공지사항 제목 공지사항 제목 공지사항 제목 공지사항 제목 공지사항 제목</td>
+							</tr>
+							<tr>
+								<th>작성자</th>
+								<td>관리자</td>
+								<th>게시일</th>
+								<td>20190725</td>
+								<th>조회수</th>
+								<td>85</td>
+							</tr>
+							<tr>
+								<td colspan="6">
+									<div id="summernote">
+										<!-- 에디터로 작성된 영역 -->
+										<div style="padding: 20px; min-height: 300px; text-align: center;line-height: 1.4;">
+											<h2 style="font-size: 18px;font-weight: 700;">에디터로 작성된 영역이 들어갈 자리</h2>
+											<p style="margin-top: 10px;">이 영역은 에디터로 작성될 공지사항이</p>
+											<p>들어갈 내용의 예시입니다.</p>
+											<p>추 후에는 주석처리 된 이 영역은</p>
+											<p>전부 다 삭제됩니다.</p>
+										</div>
+										<!-- /에디터로 작성된 영역 -->
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th>첨부파일</th>
+								<td colspan="5">
+									<ul class="c-file-list">
+										<li><a href="">파일명파일명파일명.확장자</a></li>
+										<li><a href="">파일명파일명파일명.확장자</a></li>
+									</ul>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="c-function">
+					<div class="c-function__group c-function__group--right">
+						<div class="c-function__item"><button class="c-button c-button--point">수정</button></div>
+						<div class="c-function__item"><button class="c-button">삭제</button></div>
+						<div class="c-function__item"><button class="c-button">목록으로</button></div>
+					</div>
+				</div>
+			</div>
+		</article>
+	</section>
+</div>
 </html>
