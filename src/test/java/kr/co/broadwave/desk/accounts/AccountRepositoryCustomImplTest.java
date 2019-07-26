@@ -84,7 +84,7 @@ public class AccountRepositoryCustomImplTest {
 
 
         //then
-        System.out.println(accounts1.getContent());
+        //System.out.println(accounts1.getContent());
         assertThat(accounts1.getTotalPages()).isEqualTo(2);
         assertThat(accounts1.getContent().size()).isEqualTo(2);
         assertThat(accounts1.getTotalElements()).isEqualTo(3);

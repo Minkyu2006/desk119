@@ -52,8 +52,10 @@ public class AccountDto {
     }
 
     public String getInsertDateTime() {
+        if (this.insertDateTime == null){
+            return null;
+        }
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
         return insertDateTime.format(dateTimeFormatter);
     }
 }
