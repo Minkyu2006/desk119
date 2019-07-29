@@ -34,6 +34,9 @@ public class NoticeController {
 
         model.addAttribute("notice", noticeDto);
 
+
+
+
         return "notice/noticeview";
     }
 }

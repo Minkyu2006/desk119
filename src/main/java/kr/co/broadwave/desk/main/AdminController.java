@@ -43,6 +43,13 @@ public class AdminController {
         return "admin/accountapproval";
     }
 
+
+    //관리코드등록
+    @RequestMapping("mastercodereg")
+    public String masterCodeReg(){
+        return "admin/mastercodereg";
+    }
+
     //공지사항등록
     @RequestMapping("noticereg")
     public String noticeReg(){
@@ -54,11 +61,11 @@ public class AdminController {
     public String noticeReg(Model model, @PathVariable Long id){
         NoticeDto noticeDto = noticeService.findById(id);
 
-        if (!noticeDto.equals(null)) {
-            model.addAttribute("modify", true);
+        if (noticeDto != null) {
+            model.addAttribute("valueExist", true);
             model.addAttribute("notice", noticeDto);
         }else{
-            model.addAttribute("modify", false);
+            model.addAttribute("valueExist", false);
         }
 
         return "notice/noticereg";

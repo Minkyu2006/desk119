@@ -35,19 +35,19 @@
 						</colgroup>
 						<tbody>
 							<tr>
-								<td colspan="6" class="align--center">공지사항 제목 공지사항 제목 공지사항 제목 공지사항 제목 공지사항 제목</td>
+								<td colspan="6" class="align--center" th:text="${notice?.subject}"></td>
 							</tr>
 							<tr>
 								<th>작성자</th>
-								<td th:text="${notice.modify_name}"></td>
+								<td th:text="${notice?.modify_name}"></td>
 								<th>게시일</th>
-								<td th:text="${notice.modifyDateTime}"></td>
+								<td th:text="${notice?.modifyDateTime}"></td>
 								<th>조회수</th>
-								<td th:text="${notice.hitCount}"></td>
+								<td th:text="${notice?.hitCount}"></td>
 							</tr>
 							<tr>
 								<td colspan="6">
-									<div class="note-frame" th:utext="${notice.content}">
+									<div class="note-frame" th:utext="${notice?.content}">
 
 									</div>
 								</td>

@@ -132,12 +132,12 @@
 							<tr>
 								<th>제목</th>
 								<td>
-									<th:block th:if="${modify}">
+									<th:block th:if="${valueExist}">
 										<div class="c-text"><input type="text" class="c-text__input"  id ="subject" name = "subject"
 										th:value="${notice.subject}"
 										/></div>
 									</th:block>
-									<th:block th:if="!${modify}">
+									<th:block th:if="!${valueExist}">
 										<div class="c-text"><input type="text" class="c-text__input"  id ="subject" name = "subject"
 										/></div>
 									</th:block>
@@ -173,12 +173,12 @@
 							<tr>
 								<td colspan="2">
 									<div id="summernote2">
-										<th:block th:if="${modify}">
+										<th:block th:if="${valueExist}">
 											<textarea class="form-control" id="summernote" name="content" placeholder="content" maxlength="140" rows="7"
 												th:field="${notice.content}">
 											</textarea>
 										</th:block>
-										<th:block th:if="!${modify}">
+										<th:block th:if="!${valueExist}">
 											<textarea class="form-control" id="summernote" name="content" placeholder="content" maxlength="140" rows="7">
 											</textarea>
 										</th:block>
