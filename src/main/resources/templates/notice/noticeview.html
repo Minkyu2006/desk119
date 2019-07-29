@@ -39,24 +39,16 @@
 							</tr>
 							<tr>
 								<th>작성자</th>
-								<td>관리자</td>
+								<td th:text="${notice.modify_name}"></td>
 								<th>게시일</th>
-								<td>20190725</td>
+								<td th:text="${notice.modifyDateTime}"></td>
 								<th>조회수</th>
-								<td>85</td>
+								<td th:text="${notice.hitCount}"></td>
 							</tr>
 							<tr>
 								<td colspan="6">
-									<div id="summernote">
-										<!-- 에디터로 작성된 영역 -->
-										<div style="padding: 20px; min-height: 300px; text-align: center;line-height: 1.4;">
-											<h2 style="font-size: 18px;font-weight: 700;">에디터로 작성된 영역이 들어갈 자리</h2>
-											<p style="margin-top: 10px;">이 영역은 에디터로 작성될 공지사항이</p>
-											<p>들어갈 내용의 예시입니다.</p>
-											<p>추 후에는 주석처리 된 이 영역은</p>
-											<p>전부 다 삭제됩니다.</p>
-										</div>
-										<!-- /에디터로 작성된 영역 -->
+									<div th:utext="${notice.content}">
+
 									</div>
 								</td>
 							</tr>

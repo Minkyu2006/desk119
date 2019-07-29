@@ -17,15 +17,98 @@
 	<script>
 		$(function(){
 	        $('#summernote').summernote({
-	            height: 300
+	            height: 300,
+				minHeight: null,
+				maxHeight: null,
+				focus: true,
+				lang: 'ko-KR'
+				// callbacks: {
+				// 	onImageUpload: function(files, editor, welEditable) {
+				// 		for (var i = files.length - 1; i >= 0; i--) {
+				// 			sendFile(files[i], this);
+				// 		}
+				// 	}
+				// }
 	        });
+
+
 			$("#btnSave").on('click',function(){
 				save();
 			});
 
 	    });
+
+		// function sendFile(file, el) {
+		// 	var form_data = new FormData();
+		// 	form_data.append('file', file);
+		// 	var token = $("meta[name='_csrf']").attr("content");
+		// 	var header = $("meta[name='_csrf_header']").attr("content");
+		// 	$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+		//
+		// 	$.ajax({
+		// 		data: form_data,
+		// 		type: "POST",
+		// 		url: '/api/notice/image',
+		// 		cache: false,
+		// 		contentType: false,
+		// 		enctype: 'multipart/form-data',
+		// 		processData: false,
+		// 		success: function(url) {
+		// 			$(el).summernote('editor.insertImage', url);
+		//
+		// 		}
+		// 	});
+		// }
+
 		function save(){
-			alert("save");
+
+			if ($("#subject").val().trim() == '') {
+				alert("제목을 입력하세요.");
+				$("#subject").trigger('focus');
+				return false;
+			}
+
+			if ($("#summernote").val().trim() == '') {
+				alert("본문내용을 입력하세요.");
+
+				var HTMLstring = '<p><b>1231</b></p><p><b>가나다라</b></p><p><b><span style="font-family: Tahoma; background-color: rgb(255, 255, 0);">색상지정</span></b></p>';
+				$('#summernote').summernote('code', HTMLstring);
+
+				return false;
+			}
+
+
+			var $form = $('form[name="frmreg"]');
+
+			var params = $form.serialize();
+
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+
+			$.ajax({
+				url:'/api/notice/reg',
+				type : 'post',
+				//dataType: 'html',
+				data : params,
+				cache:false,
+				error:function(request,status,error){
+					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				},
+				success: function(res){
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+					alert('공지사항이 등록 되었습니다.');
+					location.href="/";
+
+
+
+				}
+
+			});
+
 		}
 	</script>
 
@@ -38,60 +121,82 @@
 		<article class="article">
 			<h2 class="article__heading">공지사항 등록</h2>
 			<div class="notice-write">
-				<table class="c-table">
-					<colgroup>
-						<col style="width: 150px;" />
-						<col />
-					</colgroup>
-					<tbody>
-						<tr>
-							<th>제목</th>
-							<td>
-								<div class="c-text"><input type="text" class="c-text__input" /></div>
-							</td>
-						</tr>
-						<tr>
-							<th>파일첨부</th>
-							<td>
-								<div class="c-file">
-									<input type="text" readonly="readonly" class="c-file__input" id="pickture2" name="picture2">
-									<label class="c-file__button">파일선택<input type="file" name="picture1" id="picture1"></label>
-								</div>
-								<ul class="c-result-list" style="margin-top: 10px;">
-									<li>
-										<ul class="c-input-list">
-											<li>파일명.확장자</li>
-											<li>
-												<button class="c-button c-button--small">삭제</button>
-											</li>
-										</ul>
-									</li>
-									<li>
-										<ul class="c-input-list">
-											<li>파일명.확장자</li>
-											<li>
-												<button class="c-button c-button--small">삭제</button>
-											</li>
-										</ul>
-									</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2">
-								<div id="summernote2">
-									<textarea class="form-control" id="summernote" name="content" placeholder="content" maxlength="140" rows="7"></textarea>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+				<form name="frmreg">
+					<table class="c-table">
+						<colgroup>
+							<col style="width: 150px;" />
+							<col />
+						</colgroup>
+						<tbody>
+
+							<tr>
+								<th>제목</th>
+								<td>
+									<th:block th:if="${modify}">
+										<div class="c-text"><input type="text" class="c-text__input"  id ="subject" name = "subject"
+										th:value="${notice.subject}"
+										/></div>
+									</th:block>
+									<th:block th:if="!${modify}">
+										<div class="c-text"><input type="text" class="c-text__input"  id ="subject" name = "subject"
+										/></div>
+									</th:block>
+								</td>
+							</tr>
+							<tr>
+								<th>파일첨부</th>
+								<td>
+									<div class="c-file">
+										<input type="text" readonly="readonly" class="c-file__input" id="pickture2" name="picture2">
+										<label class="c-file__button">파일선택<input type="file" name="picture1" id="picture1"></label>
+									</div>
+									<ul class="c-result-list" style="margin-top: 10px;">
+										<li>
+											<ul class="c-input-list">
+												<li>파일명.확장자</li>
+												<li>
+													<button class="c-button c-button--small">삭제</button>
+												</li>
+											</ul>
+										</li>
+										<li>
+											<ul class="c-input-list">
+												<li>파일명.확장자</li>
+												<li>
+													<button class="c-button c-button--small">삭제</button>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<div id="summernote2">
+										<th:block th:if="${modify}">
+											<textarea class="form-control" id="summernote" name="content" placeholder="content" maxlength="140" rows="7"
+												th:field="${notice.content}">
+											</textarea>
+										</th:block>
+										<th:block th:if="!${modify}">
+											<textarea class="form-control" id="summernote" name="content" placeholder="content" maxlength="140" rows="7">
+											</textarea>
+										</th:block>
+
+									</div>
+								</td>
+							</tr>
+
+						</tbody>
+					</table>
+				</form>
 				<div class="c-function">
 					<div class="c-function__group c-function__group--right">
 						<div class="c-function__item"><button class="c-button c-button--point" id="btnSave">작성완료</button></div>
 						<div class="c-function__item"><button class="c-button">취소</button></div>
 					</div>
 				</div>
+
 			</div>
 			
 		</article>
