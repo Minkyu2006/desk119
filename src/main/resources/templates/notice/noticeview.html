@@ -7,7 +7,7 @@
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
-
+	<link rel="stylesheet" href="/assets/js/summernote/summernote-lite.css" />
 </th:block>
 
 <!-- 사용자 스크립트 추가 -->
@@ -47,7 +47,7 @@
 							</tr>
 							<tr>
 								<td colspan="6">
-									<div th:utext="${notice.content}">
+									<div class="note-frame" th:utext="${notice.content}">
 
 									</div>
 								</td>
