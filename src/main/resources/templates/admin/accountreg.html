@@ -34,8 +34,8 @@
 				del();
 			});
 
-			$('#btn-search').on('click', function(e) {
-				$('#pop-search').addClass('open');
+			$('.btn__member').on('click', function(e) {
+				$('#pop-member').addClass('open');
 				
 				e.preventDefault();
 			});
@@ -383,73 +383,6 @@
 </th:block>
 
 <div layout:fragment="content" class="content">
-	<section class="section">
-		<article class="article">
-			<h3 class="article__head">사용자등록</h3>
-			<form name="frmreg">
-				<table class="c-table c-table--non-border">
-					<colgroup>
-						<col style="width: 130px;" />
-						<col />
-						<col style="width: 130px;" />
-						<col />
-					</colgroup>
-					<tbody>
-						<tr>
-							<th>아이디</th>
-							<td>
-								<input type="hidden" class="c-text__input" id="mode" name="mode" value = "N"/>
-								<div class="c-text"><input type="text" class="c-text__input" id="userid" name="userid" /></div>
-							</td>
-							<th>패스워드</th>
-							<td>
-								<div class="c-text"><input type="password" class="c-text__input" id="password" name="password"/></div>
-							</td>
-						</tr>
-						<tr>
-							<th>이름</th>
-							<td>
-								<div class="c-text"><input type="text" class="c-text__input" id="username" name="username"/></div>
-							</td>
-							<th>이메일</th>
-							<td>
-								<div class="c-text"><input type="text" class="c-text__input" id="email" name="email"/></div>
-							</td>
-						</tr>
-						<tr>
-							<th>권한</th>
-							<td>
-								<div class="c-select">
-									<select class="c-select__input" id="role" name="role">
-										<option th:each ="role : ${roles}"
-												th:value="${role.getCode()}"
-												th:text="${role.getDesc()}"></option>
-
-									</select>
-								</div>
-							</td>
-							<th>부서</th>
-							<td>
-								<div class="c-text c-text--duo">
-									<input type="text" class="c-text__input" readonly placeholder="부서코드" id="teamcode" name="teamcode"/>
-									<input type="text" class="c-text__input" readonly placeholder="부서명" id="teamname" name="teamname"/>
-									<button class="c-text__button" id="btn-search">검색</button>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</form>
-			
-			<div class="c-function">
-				<div class="c-function__group c-function__group--right">
-					<div class="c-function__item"><button class="c-button c-button--point" id="btnNew">신규</button></div>
-					<div class="c-function__item"><button class="c-button c-button--point" id="btnSave">저장</button></div>
-					<div class="c-function__item"><button class="c-button" id="btnDel">삭제</button></div>
-				</div>
-			</div>
-		</article>
-	</section>
 	
 	<section class="section">
 		<article class="article">
@@ -480,7 +413,7 @@
 						<td>
 							<div class="c-text"><input type="text" class="c-text__input" id="s_username" /></div>
 						</td>
-						<th>부서명</th>
+						<th>이메일</th>
 						<td>
 							<div class="c-text"><input type="text" class="c-text__input" id="s_teamname" /></div>
 						</td>
@@ -495,101 +428,194 @@
 		<article class="article">
 			<table class="c-table c-table--hover">
 				<colgroup>
-					<col style="width: 120px;" />
-					<col style="width: 120px;" />
 					<col />
-					<col style="width: 120px;" />
-					<col style="width: 120px;" />
 					<col />
+					<col />
+					<col />
+					<col />
+					<col style="width: 60px;" />
 				</colgroup>
 				<thead>
 					<tr>
 						<th>아이디</th>
 						<th>이름</th>
+						<th>전화번호</th>
 						<th>이메일</th>
 						<th>권한</th>
-						<th>부서코드</th>
-						<th>부서명</th>
+						<th></th>
 					</tr>
 				</thead>
-				<tbody id="schList">
-
+				<tbody>
+					<tr>
+						<td>admin</td>
+						<td>관리자</td>
+						<td>000-0000-0000</td>
+						<td>00000000@000000000.00.00</td>
+						<td>관리자</td>
+						<td>
+							<button class="c-button c-button--point btn__member">수정</button>
+						</td>
+					</tr>
+					<tr>
+						<td>member01</td>
+						<td>출동대원1</td>
+						<td>000-0000-0000</td>
+						<td>00000000@000000000.00.00</td>
+						<td>출동대원</td>
+						<td>
+							<button class="c-button c-button--point btn__member">수정</button>
+						</td>
+					</tr>
+					<tr>
+						<td>member02</td>
+						<td>출동대원2</td>
+						<td>000-0000-0000</td>
+						<td>00000000@000000000.00.00</td>
+						<td>출동대원</td>
+						<td>
+							<button class="c-button c-button--point btn__member">수정</button>
+						</td>
+					</tr>
+					<tr>
+						<td>member03</td>
+						<td>출동대원3</td>
+						<td>000-0000-0000</td>
+						<td>00000000@000000000.00.00</td>
+						<td>출동대원</td>
+						<td>
+							<button class="c-button c-button--point btn__member">수정</button>
+						</td>
+					</tr>
+					<tr>
+						<td>member04</td>
+						<td>출동대원4</td>
+						<td>000-0000-0000</td>
+						<td>00000000@000000000.00.00</td>
+						<td>출동대원</td>
+						<td>
+							<button class="c-button c-button--point btn__member">수정</button>
+						</td>
+					</tr>
+					<tr>
+						<td>member05</td>
+						<td>출동대원5</td>
+						<td>000-0000-0000</td>
+						<td>00000000@000000000.00.00</td>
+						<td>출동대원</td>
+						<td>
+							<button class="c-button c-button--point btn__member">수정</button>
+						</td>
+					</tr>
+					<tr>
+						<td>member06</td>
+						<td>출동대원6</td>
+						<td>000-0000-0000</td>
+						<td>00000000@000000000.00.00</td>
+						<td>출동대원</td>
+						<td>
+							<button class="c-button c-button--point btn__member">수정</button>
+						</td>
+					</tr>
+					<tr>
+						<td>member07</td>
+						<td>출동대원7</td>
+						<td>000-0000-0000</td>
+						<td>00000000@000000000.00.00</td>
+						<td>출동대원</td>
+						<td>
+							<button class="c-button c-button--point btn__member">수정</button>
+						</td>
+					</tr>
+					<tr>
+						<td>member08</td>
+						<td>출동대원8</td>
+						<td>000-0000-0000</td>
+						<td>00000000@000000000.00.00</td>
+						<td>출동대원</td>
+						<td>
+							<button class="c-button c-button--point btn__member">수정</button>
+						</td>
+					</tr>
+					<tr>
+						<td>member09</td>
+						<td>출동대원9</td>
+						<td>000-0000-0000</td>
+						<td>00000000@000000000.00.00</td>
+						<td>출동대원</td>
+						<td>
+							<button class="c-button c-button--point btn__member">수정</button>
+						</td>
+					</tr>
 				</tbody>
 			</table>
-			<div class="c-pager">
-				<div class="c-paging" id ="paging1">
-					<!-- 페이징 처리되는곳   -->
-				</div>
-				<div class="c-paging__total">
-					<div class="c-paging__total-group">
-						Total
-					</div>
-					<div class="c-paging__total-group" id ="totalCnt">0</div>
-				</div>
-			</div>
+			<div class="c-paging">
+	                <div class="c-paging__arrow">
+	                    <a href="#" class="c-paging__item c-paging__control">
+	                    	<img src="/assets/images/icon__first-page.png" alt="첫 페이지">
+	                    </a>
+	                    <a href="#" class="c-paging__item c-paging__control">
+	                    	<img src="/assets/images/icon__prev.png" alt="이전 페이지">
+	                    </a>
+	                </div>
+	                <div class="c-paging__group">
+	                    <a href="#" class="c-paging__item check">1</a>
+	                    <a href="#" class="c-paging__item">2</a>
+	                    <a href="#" class="c-paging__item">3</a>
+	                    <a href="#" class="c-paging__item">4</a>
+	                    <a href="#" class="c-paging__item">5</a>
+	                    <a href="#" class="c-paging__item">6</a>
+	                    <a href="#" class="c-paging__item">7</a>
+	                    <a href="#" class="c-paging__item">8</a>
+	                    <a href="#" class="c-paging__item">9</a>
+	                    <a href="#" class="c-paging__item">10</a>
+	                </div>
+	                <div class="c-paging__arrow">
+	                    <a href="#" class="c-paging__item c-paging__control">
+	                    	<img src="/assets/images/icon__next.png" alt="다음 페이지">
+	                    </a>
+	                    <a href="#" class="c-paging__item c-paging__control">
+	                    	<img src="/assets/images/icon__last-page.png" alt="마지막 페이지">
+	                    </a>
+	                </div>
+	            </div>
 		</article>
 	</section>
 
-    <div class="l-popup" id="pop-search">
-    	<div class="l-popup__container">
+    <div class="l-popup" id="pop-member">
+    	<div class="l-popup__container" style="width: 300px;">
     		<div class="l-popup__head">
-    			<div class="l-popup__heading">부서 검색</div>
+    			<h3 class="l-popup__heading">회원정보 수정</h3>
     		</div>
     		<div class="l-popup__content">
     			<div class="l-popup__section">
-    				<table class="c-table c-table--non-border">
-    					<colgroup>
-    						<col style="width: 100px;" />
-    						<col />
-    						<col style="width: 100px;" />
-    						<col />
-    						<col style="width: 60px;" />
-    					</colgroup>
-    					<tbody>
-    						<tr>
-    							<th>부서코드</th>
-    							<td>
-    								<div class="c-text"><input type="text" class="c-text__input" id="p_teamcode" /></div>
-    							</td>
-    							<th>부서명</th>
-    							<td>
-    								<div class="c-text"><input type="text" class="c-text__input" id="p_teamname" /></div>
-    							</td>
-    							<td>
-    								<button class="c-button c-button--point" id="btnSearchP1">조회</button>
-    							</td>
-    						</tr>
-    					</tbody>
-    				</table>
-    			</div>
-    			<div class="l-popup__section">
-    				<table class="c-table">
-    					<colgroup>
-    						<col />
-    						<col />
-    						<col style="width: 50px;" />
-    					</colgroup>
-    					<thead>
-    						<tr>
-    							<th>부서코드</th>
-    							<th>부서명</th>
-    							<th></th>
-    						</tr>
-    					</thead>
-    					<tbody id ="schListP1">
-
-
-    					</tbody>
-    				</table>
-					<div class="c-pager">
-						<div class="c-paging" id="pagingp1">
-							<!-- 페이징 처리되는곳   -->
+    				<div class="member">
+						<div class="member__form-item">
+							<label for="userid" class="join__label">아이디</label>
+							<input type="text" class="join__input" readonly id="userid" name ="userid" />
 						</div>
-						<div class="c-paging__total">
-							<div class="c-paging__total-group">
-								Total
-							</div>
-							<div class="c-paging__total-group" id ="totalCntP1">0</div>
+						<div class="member__form-item">
+							<label for="username" class="join__label">이름</label>
+							<input type="text" class="join__input" id="username" name ="username" />
+						</div>
+						<div class="member__form-item">
+							<label for="oldpassword" class="join__label">현재 비밀번호</label>
+							<input type="text" class="join__input" id="oldpassword" name ="oldpassword" />
+						</div>
+						<div class="member__form-item">
+							<label for="password" class="join__label">신규 비밀번호</label>
+							<input type="text" class="join__input" id="password" name ="password" />
+						</div>
+						<div class="member__form-item">
+							<label for="passwordconfirm" class="join__label">신규 비밀번호 확인</label>
+							<input type="text" class="join__input" id="passwordconfirm" name ="passwordconfirm" />
+						</div>
+						<div class="member__form-item">
+							<label for="phone" class="join__label">전화번호</label>
+							<input type="text" class="join__input" id="phone" />
+						</div>
+						<div class="member__form-item">
+							<label for="email" class="join__label">e-mail</label>
+							<input type="text" class="join__input" id="email" name ="email" />
 						</div>
 					</div>
     			</div>

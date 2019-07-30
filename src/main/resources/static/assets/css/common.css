@@ -660,3 +660,41 @@ body {
 	background-color: #fff;
 	transform: rotate(145deg);
 }
+
+
+
+/* popup */
+.l-popup {
+	opacity: 0;
+	visibility: hidden;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, .2);
+	z-index: 10;
+}
+.l-popup.open {
+	opacity: 1;
+	visibility: visible;
+}
+.l-popup__container {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	background-color: #fff;
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	-o-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+.l-popup__content {
+	padding: 20px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+
