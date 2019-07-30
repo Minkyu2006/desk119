@@ -9,6 +9,9 @@ logging.level.kr.co.broadwave=DEBUG
 logging.file.max-history=5
 logging.file=./logs/desk.log
 
+#파일업로드 경로
+noticefile.upload.directory=C:/project/desk/src/main/resources/static/assets/uploadfiles/noticeimages/
+
 
 # ===============================
 # = ExcelDownLoad
