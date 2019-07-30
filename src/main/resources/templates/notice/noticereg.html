@@ -21,14 +21,14 @@
 				minHeight: null,
 				maxHeight: null,
 				focus: true,
-				lang: 'ko-KR'
-				// callbacks: {
-				// 	onImageUpload: function(files, editor, welEditable) {
-				// 		for (var i = files.length - 1; i >= 0; i--) {
-				// 			sendFile(files[i], this);
-				// 		}
-				// 	}
-				// }
+				lang: 'ko-KR',
+				callbacks: {
+					onImageUpload: function(files, editor, welEditable) {
+						for (var i = files.length - 1; i >= 0; i--) {
+							sendFile(files[i], this);
+						}
+					}
+				}
 	        });
 
 
@@ -81,27 +81,27 @@
 			})
 	    });
 
-		// function sendFile(file, el) {
-		// 	var form_data = new FormData();
-		// 	form_data.append('file', file);
-		// 	var token = $("meta[name='_csrf']").attr("content");
-		// 	var header = $("meta[name='_csrf_header']").attr("content");
-		// 	$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
-		//
-		// 	$.ajax({
-		// 		data: form_data,
-		// 		type: "POST",
-		// 		url: '/api/notice/image',
-		// 		cache: false,
-		// 		contentType: false,
-		// 		enctype: 'multipart/form-data',
-		// 		processData: false,
-		// 		success: function(url) {
-		// 			$(el).summernote('editor.insertImage', url);
-		//
-		// 		}
-		// 	});
-		// }
+		function sendFile(file, el) {
+			var form_data = new FormData();
+			form_data.append('file', file);
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+
+			$.ajax({
+				data: form_data,
+				type: "POST",
+				url: '/api/notice/image',
+				cache: false,
+				contentType: false,
+				enctype: 'multipart/form-data',
+				processData: false,
+				success: function(url) {
+					$(el).summernote('editor.insertImage', url);
+
+				}
+			});
+		}
 
 		function save(){
 
