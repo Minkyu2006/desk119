@@ -4,11 +4,15 @@ import kr.co.broadwave.desk.accounts.Account;
 import kr.co.broadwave.desk.accounts.AccountService;
 import kr.co.broadwave.desk.common.AjaxResponse;
 import kr.co.broadwave.desk.common.CommonUtils;
+import kr.co.broadwave.desk.common.MediaUtils;
 import kr.co.broadwave.desk.common.ResponseErrorCode;
 import kr.co.broadwave.desk.notice.file.UploadFile;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,11 +50,35 @@ public class NoticeRestController {
         this.imageService = imageService;
     }
 
+    @GetMapping("/image/{fileId}")
+    @ResponseBody
+    public ResponseEntity<?> serveFile(@PathVariable Long fileId) {
+        try {
+            UploadFile uploadedFile = imageService.load(fileId);
+            HttpHeaders headers = new HttpHeaders();
+
+            String fileName = uploadedFile.getFileName();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + new String(fileName.getBytes("UTF-8"), "ISO-8859-1") + "\"");
+
+            if (MediaUtils.containsImageMediaType(uploadedFile.getContentType())) {
+                headers.setContentType(MediaType.valueOf(uploadedFile.getContentType()));
+            } else {
+                headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            }
+
+            Resource resource = imageService.loadAsResource(uploadedFile.getSaveFileName());
+            return ResponseEntity.ok().headers(headers).body(resource);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
     @PostMapping("image")
     public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) {
         try {
             UploadFile uploadedFile = imageService.store(file,null);
-            return ResponseEntity.ok().body("/noticeimage/" + uploadedFile.getId());
+            return ResponseEntity.ok().body("/api/notice/image/" + uploadedFile.getId());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();

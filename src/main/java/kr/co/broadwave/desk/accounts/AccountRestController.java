@@ -202,6 +202,7 @@ public class AccountRestController {
             account.setTeam(optionalAccount.get().getTeam());
             account.setRole(optionalAccount.get().getRole());
             account.setUsername(optionalAccount.get().getUsername());
+            account.setApprovalType(optionalAccount.get().getApprovalType());
 
         }
         account.setModify_id(currentuserid);
@@ -258,6 +259,7 @@ public class AccountRestController {
             account.setTeam(optionalAccount.get().getTeam());
             account.setRole(optionalAccount.get().getRole());
             account.setUsername(optionalAccount.get().getUsername());
+            account.setApprovalType(optionalAccount.get().getApprovalType());
 
         }
         account.setModify_id(currentuserid);

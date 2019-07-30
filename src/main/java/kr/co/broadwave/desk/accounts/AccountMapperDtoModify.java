@@ -22,5 +22,6 @@ public class AccountMapperDtoModify {
     private String oldpassword;
     private String passwordconfirm;
     private String email;
+    private String cellphone;
 
 }
