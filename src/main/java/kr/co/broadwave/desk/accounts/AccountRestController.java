@@ -279,13 +279,13 @@ public class AccountRestController {
     @PostMapping("list")
     public ResponseEntity accountList(@RequestParam(value="userid", defaultValue="") String userid,
                                       @RequestParam(value="username", defaultValue="") String username,
-                                      @RequestParam(value="teamname", defaultValue="") String teamname,
+                                      @RequestParam(value="email", defaultValue="") String email,
                                       Pageable pageable){
 
-        log.info("부서 리스트 조회 / 조회조건 : userid / '" + userid + "' username / '" + username + "', teamname / '" + teamname + "'");
+        log.info("부서 리스트 조회 / 조회조건 : userid / '" + userid + "' username / '" + username + "', email / '" + email + "'");
 
 
-        Page<AccountDtoWithTeam> accounts = this.accountService.findAllBySearchStrings(userid, username, teamname, pageable);
+        Page<AccountDtoWithTeam> accounts = this.accountService.findAllBySearchStrings(userid, username, email, pageable);
         return CommonUtils.ResponseEntityPage(accounts);
 
     }

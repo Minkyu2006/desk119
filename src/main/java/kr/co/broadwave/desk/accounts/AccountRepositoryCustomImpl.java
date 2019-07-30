@@ -29,7 +29,7 @@ public class AccountRepositoryCustomImpl extends QuerydslRepositorySupport imple
 
 
     @Override
-    public Page<AccountDtoWithTeam> findAllBySearchStrings(String userid, String username,String teamname, Pageable pageable) {
+    public Page<AccountDtoWithTeam> findAllBySearchStrings(String userid, String username,String email, Pageable pageable) {
         QAccount account  = QAccount.account;
         QTeam team = QTeam.team;
 
@@ -53,8 +53,8 @@ public class AccountRepositoryCustomImpl extends QuerydslRepositorySupport imple
         if (username != null && !username.isEmpty()){
             query.where(account.username.containsIgnoreCase(username));
         }
-        if (teamname != null && !teamname.isEmpty()){
-            query.where(team.teamname.containsIgnoreCase(teamname));
+        if (email != null && !email.isEmpty()){
+            query.where(account.email.containsIgnoreCase(email));
         }
 
 

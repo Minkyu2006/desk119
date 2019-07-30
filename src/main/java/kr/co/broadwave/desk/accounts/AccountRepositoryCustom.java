@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
  * Remark :
  */
 public interface AccountRepositoryCustom {
-    Page<AccountDtoWithTeam> findAllBySearchStrings(String userid, String username,String teamname, Pageable pageable);
+    Page<AccountDtoWithTeam> findAllBySearchStrings(String userid, String username,String email, Pageable pageable);
     Page<AccountDto> findAllByApproval(String username,String startDate, String endDate, Pageable pageable);
     Long saveApproval(Account account, ApprovalType approvalType, String loginId);
 

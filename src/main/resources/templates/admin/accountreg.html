@@ -12,9 +12,7 @@
 <th:block layout:fragment="script">
 	<script>
 		$(function(){
-			$("#btnSearchP1").on('click',function(){
-				callListPopup();
-			});
+
 
 			$("#btnSearch").on('click',function(){
 				callList(1);
@@ -26,8 +24,8 @@
 			$("#btnSave").on('click',function(){
 				save();
 			});
-			$("#btnNew").on('click',function(){
-				init();
+			$("#btnCancel").on('click',function(){
+				cancel();
 			});
 
 			$("#btnDel").on('click',function(){
@@ -49,6 +47,13 @@
 
 
 		})
+
+		function cancel() {
+			$('.l-popup').removeClass('open');
+			init();
+
+
+		}
 
 		function del(){
 
@@ -106,11 +111,9 @@
 			$("#password").val('');
 			$("#username").val('');
 			$("#email").val('');
-			$("#teamcode").val('');
-			$("#teamname").val('');
-			$("#mode").val('N');
+			$("#cellphone").val('');
 			$("#role").val('ROLE_USER');
-			$("#userid").removeAttr("readonly");
+
 
 		}
 
@@ -180,16 +183,11 @@
 		function searchclear(){
 			$("#s_userid").val('');
 			$("#s_username").val('');
-			$("#s_teamname").val('');
+			$("#s_email").val('');
 
 
 		}
 
-		function selectpopup1(code,name){
-			$("#teamcode").val(code);
-			$("#teamname").val(name);
-			$('.l-popup').removeClass('open');
-		}
 
 		function callList(page){
 
@@ -207,7 +205,7 @@
 			var params = {
 				userid:$("#s_userid").val(),
 				username:$("#s_username").val(),
-				teamname:$("#s_teamname").val()
+				email:$("#s_email").val()
 			};
 
 			$schList.empty().append('<tr ><td colspan="6" align = "center">조회 중</td></tr>');
@@ -246,13 +244,14 @@
 
 					var html = '';
 					$.each(res.data.datalist, function(key, value){
-						html += '<tr onclick="javascript:callinfo(\''+ echoNull2Blank(value.userid) +'\');">';
+						// html += '<tr onclick="javascript:callinfo(\''+ echoNull2Blank(value.userid) +'\');">';
+						html += '<tr>';
 						html += '<td >'+ echoNull2Blank(value.userid) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.username) +'</td>';
+						html += '<td >'+ echoNull2Blank(value.cellphone) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.email) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.role) +'</td>';
-						html += '<td >'+ echoNull2Blank(value.teamcode) +'</td>';
-						html += '<td >'+ echoNull2Blank(value.teamname) +'</td>';
+						html += '<td ><button class="c-button c-button--point btn__member" onclick="javascript:callinfo(\''+ echoNull2Blank(value.userid) +'\');">수정</button></td>';
 
 						html += '</tr>';
 					});
@@ -267,6 +266,7 @@
 
 		function callinfo(userid) {
 
+			$('#pop-member').addClass('open');
 			var params = {
 				userid:userid
 			};
@@ -292,11 +292,9 @@
 					$("#username").val(res.data.datarow.username);
 					$("#password").val('');
 					$("#email").val(res.data.datarow.email);
+					$("#cellphone").val(res.data.datarow.cellphone);
 					$("#role").val(res.data.datarow.role);
-					$("#teamcode").val(res.data.datarow.team.teamcode);
-					$("#teamname").val(res.data.datarow.team.teamname);
-					$("#mode").val('U');
-					$("#userid").attr("readonly",true);
+
 
 
 
@@ -308,76 +306,7 @@
 		}
 
 
-		function callListPopup(page){
 
-			page = page - 1;
-			if (page < 0) page = 0
-
-			var perPage = 10;
-			var perArea = 5;
-			var totCnt = 0;
-
-			var $schList = $('#schListP1');
-			var $totalCnt = $('#totalCntP1');
-			var params = {
-				  teamcode:$("#p_teamcode").val()
-				, teamname:$("#p_teamname").val()
-				};
-
-			$schList.empty().append('<tr ><td colspan="3" align = "center">조회 중</td></tr>');
-			$totalCnt.text('0');
-
-			var token = $("meta[name='_csrf']").attr("content");
-			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
-
-
-			$.ajax({
-				url:'/api/team/list?size='+ perPage + '&page=' + page,
-				type : 'post',
-				//dataType: json,
-				data : params,
-				cache:false,
-				error:function(request,status,error){
-					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-				},
-				success: function(res){
-					//화면 출력
-					totCnt = res.data.total_rows;
-					$("#paging1").jqueryPager({pageSize: perPage,
-						pageBlock: perArea,
-						currentPage: page + 1,
-						pageTotal: totCnt,
-						clickEvent: 'callList'});
-
-					if (totCnt == 0) {
-						$schList.empty().append('<tr class="t-c"><td colspan="3" align="center">조회된 데이터가 없습니다.</td></tr>');
-						return;
-					}
-
-					$totalCnt.text(totCnt);
-
-
-					var html = '';
-					$.each(res.data.datalist, function(key, value){
-						html += '<tr>';
-						html += '<td >'+ echoNull2Blank(value.teamcode) +'</td>';
-						html += '<td >'+ echoNull2Blank(value.teamname) +'</td>';
-						html += '<td >';
-						html += '   <button class="c-button c-button--small c-button--point" ';
-						html += '   onclick="javascript:selectpopup1(\''+ echoNull2Blank(value.teamcode) +'\',\''+ echoNull2Blank(value.teamname) +'\');">';
-						html += '  선택</button> ';
-						html += ' </td>';
-
-						html += '</tr>';
-					});
-					$schList.html(html);
-
-				}
-
-			});
-
-		}
 	</script>
 
 </th:block>
@@ -389,7 +318,7 @@
 			<h3 class="article__head">사용자조회</h3>
 			<div class="l-float-heading">
 				<div class="l-float-heading--left">
-					<h4 class="article__head">검색조건<span class="article__head-caption">(수정하려면 조회후 해당라인을 클릭하세요)</span></h4>
+					<h4 class="article__head">검색조건</h4>
 				</div>
 				<div class="l-float-heading--right"><button class="c-button c-button--small" id="btnClear" >조건 초기화</button></div>
 			</div>
@@ -415,7 +344,7 @@
 						</td>
 						<th>이메일</th>
 						<td>
-							<div class="c-text"><input type="text" class="c-text__input" id="s_teamname" /></div>
+							<div class="c-text"><input type="text" class="c-text__input" id="s_email" /></div>
 						</td>
 						<td>
 							<button class="c-button c-button--point" id="btnSearch">조회</button>
@@ -445,139 +374,21 @@
 						<th></th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td>admin</td>
-						<td>관리자</td>
-						<td>000-0000-0000</td>
-						<td>00000000@000000000.00.00</td>
-						<td>관리자</td>
-						<td>
-							<button class="c-button c-button--point btn__member">수정</button>
-						</td>
-					</tr>
-					<tr>
-						<td>member01</td>
-						<td>출동대원1</td>
-						<td>000-0000-0000</td>
-						<td>00000000@000000000.00.00</td>
-						<td>출동대원</td>
-						<td>
-							<button class="c-button c-button--point btn__member">수정</button>
-						</td>
-					</tr>
-					<tr>
-						<td>member02</td>
-						<td>출동대원2</td>
-						<td>000-0000-0000</td>
-						<td>00000000@000000000.00.00</td>
-						<td>출동대원</td>
-						<td>
-							<button class="c-button c-button--point btn__member">수정</button>
-						</td>
-					</tr>
-					<tr>
-						<td>member03</td>
-						<td>출동대원3</td>
-						<td>000-0000-0000</td>
-						<td>00000000@000000000.00.00</td>
-						<td>출동대원</td>
-						<td>
-							<button class="c-button c-button--point btn__member">수정</button>
-						</td>
-					</tr>
-					<tr>
-						<td>member04</td>
-						<td>출동대원4</td>
-						<td>000-0000-0000</td>
-						<td>00000000@000000000.00.00</td>
-						<td>출동대원</td>
-						<td>
-							<button class="c-button c-button--point btn__member">수정</button>
-						</td>
-					</tr>
-					<tr>
-						<td>member05</td>
-						<td>출동대원5</td>
-						<td>000-0000-0000</td>
-						<td>00000000@000000000.00.00</td>
-						<td>출동대원</td>
-						<td>
-							<button class="c-button c-button--point btn__member">수정</button>
-						</td>
-					</tr>
-					<tr>
-						<td>member06</td>
-						<td>출동대원6</td>
-						<td>000-0000-0000</td>
-						<td>00000000@000000000.00.00</td>
-						<td>출동대원</td>
-						<td>
-							<button class="c-button c-button--point btn__member">수정</button>
-						</td>
-					</tr>
-					<tr>
-						<td>member07</td>
-						<td>출동대원7</td>
-						<td>000-0000-0000</td>
-						<td>00000000@000000000.00.00</td>
-						<td>출동대원</td>
-						<td>
-							<button class="c-button c-button--point btn__member">수정</button>
-						</td>
-					</tr>
-					<tr>
-						<td>member08</td>
-						<td>출동대원8</td>
-						<td>000-0000-0000</td>
-						<td>00000000@000000000.00.00</td>
-						<td>출동대원</td>
-						<td>
-							<button class="c-button c-button--point btn__member">수정</button>
-						</td>
-					</tr>
-					<tr>
-						<td>member09</td>
-						<td>출동대원9</td>
-						<td>000-0000-0000</td>
-						<td>00000000@000000000.00.00</td>
-						<td>출동대원</td>
-						<td>
-							<button class="c-button c-button--point btn__member">수정</button>
-						</td>
-					</tr>
+				<tbody id="schList">
+
 				</tbody>
 			</table>
-			<div class="c-paging">
-	                <div class="c-paging__arrow">
-	                    <a href="#" class="c-paging__item c-paging__control">
-	                    	<img src="/assets/images/icon__first-page.png" alt="첫 페이지">
-	                    </a>
-	                    <a href="#" class="c-paging__item c-paging__control">
-	                    	<img src="/assets/images/icon__prev.png" alt="이전 페이지">
-	                    </a>
-	                </div>
-	                <div class="c-paging__group">
-	                    <a href="#" class="c-paging__item check">1</a>
-	                    <a href="#" class="c-paging__item">2</a>
-	                    <a href="#" class="c-paging__item">3</a>
-	                    <a href="#" class="c-paging__item">4</a>
-	                    <a href="#" class="c-paging__item">5</a>
-	                    <a href="#" class="c-paging__item">6</a>
-	                    <a href="#" class="c-paging__item">7</a>
-	                    <a href="#" class="c-paging__item">8</a>
-	                    <a href="#" class="c-paging__item">9</a>
-	                    <a href="#" class="c-paging__item">10</a>
-	                </div>
-	                <div class="c-paging__arrow">
-	                    <a href="#" class="c-paging__item c-paging__control">
-	                    	<img src="/assets/images/icon__next.png" alt="다음 페이지">
-	                    </a>
-	                    <a href="#" class="c-paging__item c-paging__control">
-	                    	<img src="/assets/images/icon__last-page.png" alt="마지막 페이지">
-	                    </a>
-	                </div>
-	            </div>
+			<div class="c-pager">
+				<div class="c-paging" id ="paging1">
+					<!-- 페이징 처리되는곳   -->
+				</div>
+				<div class="c-paging__total">
+					<div class="c-paging__total-group">
+						Total
+					</div>
+					<div class="c-paging__total-group" id ="totalCnt">0</div>
+				</div>
+			</div>
 		</article>
 	</section>
 
@@ -598,30 +409,35 @@
 							<input type="text" class="join__input" id="username" name ="username" />
 						</div>
 						<div class="member__form-item">
-							<label for="oldpassword" class="join__label">현재 비밀번호</label>
-							<input type="text" class="join__input" id="oldpassword" name ="oldpassword" />
-						</div>
-						<div class="member__form-item">
-							<label for="password" class="join__label">신규 비밀번호</label>
+							<label for="password" class="join__label">비밀번호</label>
 							<input type="text" class="join__input" id="password" name ="password" />
 						</div>
 						<div class="member__form-item">
-							<label for="passwordconfirm" class="join__label">신규 비밀번호 확인</label>
-							<input type="text" class="join__input" id="passwordconfirm" name ="passwordconfirm" />
-						</div>
-						<div class="member__form-item">
-							<label for="phone" class="join__label">전화번호</label>
-							<input type="text" class="join__input" id="phone" />
+							<label for="cellphone" class="join__label">전화번호</label>
+							<input type="text" class="join__input" id="cellphone" name ="cellphone" />
 						</div>
 						<div class="member__form-item">
 							<label for="email" class="join__label">e-mail</label>
 							<input type="text" class="join__input" id="email" name ="email" />
 						</div>
+
+						<div class="member__form-item">
+							<label for="role" class="join__label">권한</label>
+							<div class="c-select">
+								<select class="c-select__input" id="role" name="role">
+									<option th:each ="role : ${roles}"
+											th:value="${role.getCode()}"
+											th:text="${role.getDesc()}"></option>
+
+								</select>
+							</div>
+						</div>
 					</div>
 					<div class="c-function">
 						<div class="c-function__group c-function__group--right">
-							<div class="c-function__item"><button class="c-button c-button--point">저장</button></div>
-							<div class="c-function__item"><button class="c-button">취소</button></div>
+							<div class="c-function__item"><button class="c-button c-button--point">일반정보수정</button></div>
+							<div class="c-function__item"><button class="c-button c-button--point">비밀번호수정</button></div>
+							<div class="c-function__item"><button class="c-button" id="btnCancel">취소</button></div>
 						</div>
 					</div>
     			</div>

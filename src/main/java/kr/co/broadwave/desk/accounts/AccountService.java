@@ -54,8 +54,8 @@ public class AccountService implements UserDetailsService {
         return this.accountRepository.findByUserid(userid);
     }
 
-    public Page<AccountDtoWithTeam> findAllBySearchStrings(String userid,String username,String teamname,Pageable pageable){
-        return accountRepositoryCustom.findAllBySearchStrings(userid,username,teamname,pageable);
+    public Page<AccountDtoWithTeam> findAllBySearchStrings(String userid,String username,String email,Pageable pageable){
+        return accountRepositoryCustom.findAllBySearchStrings(userid,username,email,pageable);
     }
     public Page<AccountDto> findAllByApproval(String username, String startDate, String endDate, Pageable pageable) {
         return accountRepositoryCustom.findAllByApproval(username,startDate,endDate,pageable);

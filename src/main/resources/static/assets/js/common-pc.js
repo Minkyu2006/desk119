@@ -58,9 +58,13 @@ function echoNull2Blank(str) {
 
             html += '<div class="c-paging__wrapper">';
 
+            html += '<div class="c-paging__arrow">';
+            html += '<a href="javascript:'+ clickEvent +'(1);" class="c-paging__item c-paging__control"><img src="/assets/images/icon__first-page.png" alt="첫 페이지"></a>';
+            html += '</div>';
+
             if (sPage > 1) {
                 html += '<div class="c-paging__arrow">';
-                html += '<a href="javascript:'+ clickEvent +'(' + (sPage-pageBlock) + ');" class="c-paging__item c-paging__prev"><img src="/images/button__page-left--hover.png" alt="이전"></a>';
+                html += '<a href="javascript:'+ clickEvent +'(' + (sPage-pageBlock) + ');" class="c-paging__item c-paging__control"><img src="/assets/images/icon__prev.png" alt="이전 페이지"></a>';
                 html += '</div>';
             }
 
@@ -78,9 +82,15 @@ function echoNull2Blank(str) {
 
             if (ePage < pageTotalCnt) {
                html += '<div class="c-paging__arrow">';
-               html+= '<a href="javascript:'+ clickEvent +'(' + (ePage+1) + ');" class="c-paging__item c-paging__next"><img src="/images/button__page-right--hover.png" alt="다음"></a>';
+               html+= '<a href="javascript:'+ clickEvent +'(' + (ePage+1) + ');" class="c-paging__item c-paging__control"><img src="/assets/images/icon__next.png" alt="다음 페이지"></a>';
                html += '</div>';
             }
+
+            html += '<div class="c-paging__arrow">';
+            html+= '<a href="javascript:'+ clickEvent +'(' + (pageTotalCnt) + ');" class="c-paging__item c-paging__control"><img src="/assets/images/icon__last-page.png" alt="마지막 페이지"></a>';
+            html += '</div>';
+
+
             html += '</div>';
 
             $(this).empty().html(html);
