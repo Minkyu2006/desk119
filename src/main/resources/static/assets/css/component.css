@@ -1213,21 +1213,18 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  border: 1px solid #ddd;
+  
   border-radius: 3px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
 }
 
 .c-file__input {
-  /* -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1; */
     float: left;
-    width: calc(100% - 84px);
-    height: 28px;
+    width: calc(100% - 134px);
+    height: 30px;
     padding: 0 10px;
-    border: 0;
+    border: 1px solid #ddd;
     background-color: #fff;
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
@@ -1237,13 +1234,13 @@
 .c-file__button {
     float: left;
     width: 84px;
-    height: 28px;
+    height: 30px;
     padding: 0 14px;
     border: 0;
     background-color: #eee;
     color: #222;
     font-size: 14px;
-    line-height: 28px;
+    line-height: 30px;
     cursor: pointer;
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
@@ -1254,8 +1251,27 @@
   display: none;
 }
 .c-file__button:hover,
-.c-file__button:focus {
+.c-file__button:focus,
+.c-file__control:hover {
   background-color: #d6d6d6;
+  text-decoration: none !important;
+}
+.c-file__control {
+	float: left;
+	display: block;
+	width: 40px;
+	margin-left: 10px;
+	height: 30px;
+	line-height: 30px !important;
+	border: 0;
+	background-color: #eee;
+	color: #222;
+	text-align: center;
+	cursor: pointer;
+	-webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    -webkit-transition: background-color .2s;
+    transition: background-color .2s;
 }
 
 
@@ -1733,15 +1749,9 @@ input[type=text]:-ms-clear {
 /* file-list */
 .c-file-list {
 	display: block;
-	padding: 10px;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-}
-.c-file-list li,
-.c-file-list li a {
-	display: block;
-	line-height: 1.4;
 }
 .c-file-list li + li {
 	margin-top: 5px;

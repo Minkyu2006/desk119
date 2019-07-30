@@ -35,8 +35,10 @@
 			$("#btnSave").on('click',function(){
 				save();
 			});
+			
 
 			// file area
+			// file name
 			$('.c-file__button input').change(function(){
 				var txt = [];
 				for(var i=0; i<this.files.length; i++){
@@ -45,6 +47,38 @@
 				$(this).parent().prev('.c-file__input').val( txt.join() );
 			}).change();
 
+			//file add			
+			$('.c-file__control.add').on('click', function() {
+				var last = $(this).parents('.c-file-list').children('li').last();
+				var clName = last.attr('class');
+				console.log(clName);
+				var num = Number(clName.replace(/[^0-9]/g,''));
+				var idx = num + 1;
+				console.log(idx);
+				//var idx = $(this).parents('.c-file-list').children('li').length;
+				var filearea = '<li class="c-file-list__item' + idx + '">' +
+				'<div class="c-file">' +
+				'<input type="text" readonly="readonly" class="c-file__input" id="file' + idx + '" name="file' + idx + '" />' +
+				'<label class="c-file__button">파일선택<input type="file" name="file' + idx + '" /></label>' +
+				'<a href="#" class="c-file__control remove">삭제</a>' +
+				'</div>' +
+				'</li>';
+				
+				$(this).parents('.c-file-list').append(filearea);
+				$('.c-file__button input').change(function(){
+					var txt = [];
+					for(var i=0; i<this.files.length; i++){
+						txt.push(this.files[i].name);
+					}
+					$(this).parent().prev('.c-file__input').val( txt.join() );
+				}).change();
+			})
+			
+			//file remove
+			$(document).on('click', '.c-file__control.remove', function() {
+				var idx = $(this).parents('li');
+				idx.remove();
+			})
 	    });
 
 		// function sendFile(file, el) {
@@ -155,16 +189,24 @@
 							<tr>
 								<th>파일첨부</th>
 								<td>
-									<div class="c-file">
-<!--										<input type="text" readonly="readonly" class="c-file__input" id="pickture2" name="picture2">-->
-<!--										<label class="c-file__button">파일선택<input type="file" name="file1" ></label>-->
-
-
-										파일선택<input type="file" name="file1" >
-										파일선택<input type="file" name="file2" >
-										파일선택<input type="file" name="file3" >
-
-									</div>
+									<ul class="c-file-list">
+										<li class="c-file-list__item0">
+											<div class="c-file">
+												<input type="text" readonly="readonly" class="c-file__input" id="file0" name="file0">
+												<label class="c-file__button">파일선택<input type="file" name="file0" /></label>
+												<a href="#" class="c-file__control add">추가</a>
+											</div>
+										</li>
+										
+										<!-- <li>
+											<div class="c-file">
+												<input type="text" readonly="readonly" class="c-file__input" id="file1" name="file1">
+												<label class="c-file__button">파일선택<input type="file" name="file1" /></label>
+												<a href="#" class="c-file__control remove">삭제</a>
+											</div>
+										</li> -->
+									</ul>
+									
 									<ul class="c-result-list" style="margin-top: 10px;">
 										<li>
 											<ul class="c-input-list">
