@@ -28,14 +28,16 @@ import java.util.stream.Stream;
  */
 @Service
 public class ImageService {
+
+
     private static final Logger logger = LoggerFactory.getLogger(ImageService.class);
 
     private final Path rootLocation;
 
     @Autowired
-    public ImageService(String uploadPath) {
-        logger.info("PATH :: " + uploadPath);
-        this.rootLocation = Paths.get(uploadPath);
+    public ImageService(String uploadNoticePath) {
+        logger.info("PATH :: " + uploadNoticePath);
+        this.rootLocation = Paths.get(uploadNoticePath);
     }
 
     @Autowired
@@ -72,7 +74,7 @@ public class ImageService {
         return rootLocation.resolve(fileName);
     }
 
-    public UploadFile store(MultipartFile file) throws Exception {
+    public UploadFile store(MultipartFile file,Notice notice) throws Exception {
         try {
             if (file.isEmpty()) {
                 throw new Exception("Failed to store empty file " + file.getOriginalFilename());
@@ -87,6 +89,7 @@ public class ImageService {
             Resource resource = loadAsResource(saveFileName);
 
             UploadFile saveFile = new UploadFile();
+            saveFile.setNotice(notice);
             saveFile.setSaveFileName(saveFileName);
             saveFile.setFileName(file.getOriginalFilename());
             saveFile.setContentType(file.getContentType());

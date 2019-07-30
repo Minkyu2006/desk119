@@ -77,7 +77,7 @@ public class UploadFileUtils {
         Calendar cal = Calendar.getInstance();
 
         String yearPath = File.separator + cal.get(Calendar.YEAR);
-        String monthPath = yearPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.MONTH));
+        String monthPath = yearPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.MONTH) +1);
         String datePath = monthPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.DATE));
 
         makeDir(uploadPath, yearPath, monthPath, datePath);

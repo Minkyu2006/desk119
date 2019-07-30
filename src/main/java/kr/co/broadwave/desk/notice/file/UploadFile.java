@@ -1,5 +1,6 @@
 package kr.co.broadwave.desk.notice.file;
 
+import kr.co.broadwave.desk.notice.Notice;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,6 +27,10 @@ public class UploadFile {
     @Column(name="bf_id")
     private Long id;
 
+
+    @ManyToOne(targetEntity = Notice.class,fetch = FetchType.LAZY)
+    @JoinColumn(name="bn_id")
+    private Notice notice;
 
     @Column(name="bf_filename")
     private String fileName;

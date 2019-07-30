@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Optional;
 
 /**
@@ -47,7 +49,7 @@ public class NoticeRestController {
     @PostMapping("image")
     public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) {
         try {
-            UploadFile uploadedFile = imageService.store(file);
+            UploadFile uploadedFile = imageService.store(file,null);
             return ResponseEntity.ok().body("/noticeimage/" + uploadedFile.getId());
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,18 +60,26 @@ public class NoticeRestController {
 
 
     @PostMapping("reg")
-    public ResponseEntity noticeSave(@ModelAttribute NoticeMapperDto noticeMapperDto , HttpServletRequest request){
-        Notice notice = modelMapper.map(noticeMapperDto, Notice.class);
+//    public ResponseEntity noticeSave(@ModelAttribute NoticeMapperDto noticeMapperDto , HttpServletRequest request){
+    public ResponseEntity noticeSave(MultipartHttpServletRequest multi) throws Exception {
+        //Notice notice = modelMapper.map(noticeMapperDto, Notice.class);
 
-        String currentuserid = CommonUtils.getCurrentuser(request);
+
+        String subject = multi.getParameter("subject");
+        String content = multi.getParameter("content");
+        Notice notice = Notice.builder()
+                .subject(subject)
+                .content(content)
+                .build();
+
+
+        String currentuserid = CommonUtils.getCurrentuser(multi);
         Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
 
         if (!optionalAccount.isPresent()) {
             log.info("공지사항 저장한 사람 아이디 미존재('E014) : '" + currentuserid + "'");
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E014.getCode(), ResponseErrorCode.E014.getDesc()));
         }
-
-
         notice.setInsert_id(currentuserid);
         notice.setInsert_name(optionalAccount.get().getUsername());
         notice.setInsertDateTime(LocalDateTime.now());
@@ -80,7 +90,23 @@ public class NoticeRestController {
 
         Notice noticeSave = noticeService.save(notice);
 
-        log.info("공지사항 저장 성공 : " + noticeSave.toString() );
+        //파일저장
+        Iterator<String> files = multi.getFileNames();
+        while(files.hasNext()) {
+            String uploadFile = files.next();
+
+            MultipartFile mFile = multi.getFile(uploadFile);
+            //String fileName = mFile.getOriginalFilename();
+            //파일이 존재할때만
+            if (!mFile.isEmpty()) {
+                //System.out.println("파일명 확인  : " + fileName);
+                imageService.store(mFile,noticeSave);
+            }
+
+        }
+
+
+        //log.info("공지사항 저장 성공 : " + noticeSave.toString() );
         return ResponseEntity.ok(res.success());
 
 

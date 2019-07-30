@@ -36,6 +36,15 @@
 				save();
 			});
 
+			// file area
+			$('.c-file__button input').change(function(){
+				var txt = [];
+				for(var i=0; i<this.files.length; i++){
+					txt.push(this.files[i].name);
+				}
+				$(this).parent().prev('.c-file__input').val( txt.join() );
+			}).change();
+
 	    });
 
 		// function sendFile(file, el) {
@@ -70,17 +79,14 @@
 
 			if ($("#summernote").val().trim() == '') {
 				alert("본문내용을 입력하세요.");
-
-				var HTMLstring = '<p><b>1231</b></p><p><b>가나다라</b></p><p><b><span style="font-family: Tahoma; background-color: rgb(255, 255, 0);">색상지정</span></b></p>';
-				$('#summernote').summernote('code', HTMLstring);
-
 				return false;
 			}
 
 
-			var $form = $('form[name="frmreg"]');
+			//var $form = $('form[name="frmreg"]');
+			//var formData = $form.serialize();
+			var formData = new FormData(document.getElementById('frmreg')); //new FormData($("#frmreg"));
 
-			var params = $form.serialize();
 
 
 			var token = $("meta[name='_csrf']").attr("content");
@@ -91,7 +97,10 @@
 				url:'/api/notice/reg',
 				type : 'post',
 				//dataType: 'html',
-				data : params,
+				data : formData,
+				processData : false,
+				contentType : false,
+				enctype: 'multipart/form-data',
 				cache:false,
 				error:function(request,status,error){
 					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -121,7 +130,7 @@
 		<article class="article">
 			<h2 class="article__heading">공지사항 등록</h2>
 			<div class="notice-write">
-				<form name="frmreg">
+				<form id ="frmreg" name="frmreg" enctype="multipart/form-data">
 					<table class="c-table">
 						<colgroup>
 							<col style="width: 150px;" />
@@ -147,8 +156,14 @@
 								<th>파일첨부</th>
 								<td>
 									<div class="c-file">
-										<input type="text" readonly="readonly" class="c-file__input" id="pickture2" name="picture2">
-										<label class="c-file__button">파일선택<input type="file" name="picture1" id="picture1"></label>
+<!--										<input type="text" readonly="readonly" class="c-file__input" id="pickture2" name="picture2">-->
+<!--										<label class="c-file__button">파일선택<input type="file" name="file1" ></label>-->
+
+
+										파일선택<input type="file" name="file1" >
+										파일선택<input type="file" name="file2" >
+										파일선택<input type="file" name="file3" >
+
 									</div>
 									<ul class="c-result-list" style="margin-top: 10px;">
 										<li>
