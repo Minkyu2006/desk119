@@ -3,6 +3,8 @@ package kr.co.broadwave.desk.notice;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,11 +19,13 @@ import java.util.Optional;
 @Service
 public class NoticeService {
     private final NoticeRepository noticeRepository;
+    private final NoticeRepositoryCustom noticeRepositoryCustom;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public NoticeService(NoticeRepository noticeRepository, ModelMapper modelMapper) {
+    public NoticeService(NoticeRepository noticeRepository, NoticeRepositoryCustom noticeRepositoryCustom, ModelMapper modelMapper) {
         this.noticeRepository = noticeRepository;
+        this.noticeRepositoryCustom = noticeRepositoryCustom;
         this.modelMapper = modelMapper;
     }
 
@@ -38,5 +42,8 @@ public class NoticeService {
             return null;
         }
     }
+    public Page<NoticeDto> findAllBySearchStrings(String username, String subject, Pageable pageable){
+        return noticeRepositoryCustom.findAllBySearchStrings(username,subject,pageable);
 
+    }
 }

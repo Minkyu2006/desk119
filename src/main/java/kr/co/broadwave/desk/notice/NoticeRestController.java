@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -137,6 +139,20 @@ public class NoticeRestController {
         //log.info("공지사항 저장 성공 : " + noticeSave.toString() );
         return ResponseEntity.ok(res.success());
 
+
+    }
+
+
+    @PostMapping("list")
+    public ResponseEntity accountList(@RequestParam(value="subject", defaultValue="") String subject,
+                                      @RequestParam(value="username", defaultValue="") String username,
+                                      Pageable pageable){
+
+        log.info("공지사항 조회 / 조회조건 : subject / '" + subject + "' username / '" + username + "'");
+
+
+        Page<NoticeDto> notices = noticeService.findAllBySearchStrings(subject, username, pageable);
+        return CommonUtils.ResponseEntityPage(notices);
 
     }
 }
