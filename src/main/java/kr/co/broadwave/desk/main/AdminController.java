@@ -1,18 +1,15 @@
 package kr.co.broadwave.desk.main;
 
 import kr.co.broadwave.desk.accounts.AccountRole;
-import kr.co.broadwave.desk.notice.Notice;
-import kr.co.broadwave.desk.notice.NoticeDto;
-import kr.co.broadwave.desk.notice.NoticeRepository;
-import kr.co.broadwave.desk.notice.NoticeService;
-import org.aspectj.weaver.ast.Not;
+import kr.co.broadwave.desk.notice.*;
+import kr.co.broadwave.desk.notice.file.UploadFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Optional;
+import java.util.List;
 
 /**
  * @author InSeok
@@ -24,10 +21,11 @@ import java.util.Optional;
 public class AdminController {
 
     private final NoticeService noticeService;
-
+    private final ImageService imageService;
     @Autowired
-    public AdminController(NoticeService noticeService) {
+    public AdminController(NoticeService noticeService, ImageService imageService) {
         this.noticeService = noticeService;
+        this.imageService = imageService;
     }
 
     //사용자등록화면
@@ -61,9 +59,11 @@ public class AdminController {
     public String noticeReg(Model model, @PathVariable Long id){
         NoticeDto noticeDto = noticeService.findById(id);
 
+        List<UploadFile> uploadFiles = imageService.uploadFileList(id);
         if (noticeDto != null) {
             model.addAttribute("valueExist", true);
             model.addAttribute("notice", noticeDto);
+            model.addAttribute("uploadFiles", uploadFiles);
         }else{
             model.addAttribute("valueExist", false);
         }

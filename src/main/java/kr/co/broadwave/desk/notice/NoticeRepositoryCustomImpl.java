@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -84,4 +85,17 @@ public class NoticeRepositoryCustomImpl extends QuerydslRepositorySupport implem
         return new PageImpl<>(notices, pageable, query.fetchCount());
 
     }
+
+    @Override
+    @Transactional
+    public Long hitCountUpdate(Notice notice) {
+        QNotice qNotice = QNotice.notice;
+        Integer hitCount = notice.getHitCount() + 1 ;
+
+        return update(qNotice).where(qNotice.id.eq(notice.getId()))
+                .set(qNotice.hitCount,hitCount)
+                .execute();
+
+    }
+
 }

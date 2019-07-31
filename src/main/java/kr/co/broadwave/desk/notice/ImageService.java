@@ -3,6 +3,7 @@ package kr.co.broadwave.desk.notice;
 import kr.co.broadwave.desk.common.UploadFileUtils;
 import kr.co.broadwave.desk.notice.file.UploadFile;
 import kr.co.broadwave.desk.notice.file.UploadFileRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,15 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  * @author InSeok
  * Date : 2019-07-26
  * Remark : 공지사항등록에서 HTML에디터내에 이미지 파일 첨부시 이미지파일을 업로드하기위한 서비스
  */
+@Slf4j
 @Service
 public class ImageService {
 
@@ -33,9 +33,11 @@ public class ImageService {
     private static final Logger logger = LoggerFactory.getLogger(ImageService.class);
 
     private final Path rootLocation;
+    private final NoticeRepository noticeRepository;
 
     @Autowired
-    public ImageService(String uploadNoticePath) {
+    public ImageService(String uploadNoticePath, NoticeRepository noticeRepository) {
+        this.noticeRepository = noticeRepository;
         logger.info("PATH :: " + uploadNoticePath);
         this.rootLocation = Paths.get(uploadNoticePath);
     }
@@ -102,5 +104,38 @@ public class ImageService {
         } catch (IOException e) {
             throw new Exception("Failed to store file " + file.getOriginalFilename(), e);
         }
+    }
+
+    //특정 게시물의 첨부파일목록을 반환하는 함수
+    public List<UploadFile> uploadFileList(Long notice_id){
+
+        log.info("공지사항 첨부파일 내역 조회 / 공지사항 ID '" + notice_id + "'");
+
+        Optional<Notice> optionalNotice = noticeRepository.findById(notice_id);
+        if (optionalNotice.isPresent()){
+            return uploadFileRepository.findByNotice(optionalNotice.get());
+        }else{
+            return null;
+        }
+
+    }
+    //특정파일삭제하기(-1반환이면 오류)
+    public int uploadFileDelete(Long fileId){
+        log.info("공지사항 첨부파일 삭제 시작 / 파일ID '" + fileId + "'");
+        Optional<UploadFile> optionalUploadFile = uploadFileRepository.findById(fileId);
+        if (optionalUploadFile.isPresent()){
+
+            //실제 파일삭제
+            String filePath = optionalUploadFile.get().getFilePath();
+            File file = new File(filePath);
+            file.delete();
+            //DB에서 삭제
+            uploadFileRepository.delete(optionalUploadFile.get());
+
+            return 1;
+        }else{
+            return -1;
+        }
+
     }
 }

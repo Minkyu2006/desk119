@@ -12,6 +12,15 @@
 
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
+	<script>
+		function linkList() {
+			location.href="/notice/noticelist";
+		}
+
+		function linkReg(noticeid) {
+			location.href="/admin/noticereg/" + noticeid;
+		}
+	</script>
 	
 
 </th:block>
@@ -56,8 +65,9 @@
 								<th>첨부파일</th>
 								<td colspan="5">
 									<ul class="c-file-list">
-										<li><a href="">파일명파일명파일명.확장자</a></li>
-										<li><a href="">파일명파일명파일명.확장자</a></li>
+										<li th:each ="uploadfile : ${uploadFiles}"
+												><a th:href="@{/notice/download/{id}(id=${uploadfile.id})}"  th:text="${uploadfile.fileName}"></a></li>
+
 									</ul>
 								</td>
 							</tr>
@@ -66,9 +76,8 @@
 				</div>
 				<div class="c-function">
 					<div class="c-function__group c-function__group--right">
-						<div class="c-function__item"><button class="c-button c-button--point">수정</button></div>
-						<div class="c-function__item"><button class="c-button">삭제</button></div>
-						<div class="c-function__item"><button class="c-button">목록으로</button></div>
+						<div class="c-function__item"><button class="c-button c-button--point" sec:authorize = "hasRole('ROLE_ADMIN')" th:onclick="|javascript:linkReg('${notice.id}')|">수정</button></div>
+						<div class="c-function__item"><button class="c-button" onclick="linkList();">목록으로</button></div>
 					</div>
 				</div>
 			</div>

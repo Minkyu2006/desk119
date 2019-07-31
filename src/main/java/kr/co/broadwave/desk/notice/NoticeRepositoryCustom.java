@@ -11,4 +11,5 @@ import org.springframework.data.domain.Pageable;
 public interface NoticeRepositoryCustom {
     Page<NoticeDto> findAllByApproval(String username, String subject, Pageable pageable);
     Page<NoticeDto> findAllBySearchStrings(String subject,String username, Pageable pageable);
+    Long hitCountUpdate(Notice notice);
 }

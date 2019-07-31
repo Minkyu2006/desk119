@@ -42,8 +42,26 @@ public class NoticeService {
             return null;
         }
     }
+    public Optional<Notice> findByIdNotice(Long id){
+        return  noticeRepository.findById(id);
+
+    }
+
     public Page<NoticeDto> findAllBySearchStrings(String username, String subject, Pageable pageable){
         return noticeRepositoryCustom.findAllBySearchStrings(username,subject,pageable);
+
+    }
+    public void delete(Notice notice){
+        noticeRepository.delete(notice);
+    }
+    //공지사항 클릭수 증가
+    public Long hitCountUpdate(Long noticeId){
+        Optional<Notice> optionalNotice = noticeRepository.findById(noticeId);
+        if (optionalNotice.isPresent()) {
+            return noticeRepositoryCustom.hitCountUpdate(optionalNotice.get());
+        }else{
+            return -1L;
+        }
 
     }
 }

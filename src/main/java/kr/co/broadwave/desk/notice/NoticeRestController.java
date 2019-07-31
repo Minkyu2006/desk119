@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -42,6 +43,7 @@ public class NoticeRestController {
     private final NoticeService noticeService;
     private final AccountService accountService;
     private final ImageService imageService;
+
 
 
     @Autowired
@@ -143,8 +145,9 @@ public class NoticeRestController {
     }
 
 
+    //공지사항 조회
     @PostMapping("list")
-    public ResponseEntity accountList(@RequestParam(value="subject", defaultValue="") String subject,
+    public ResponseEntity noticeList(@RequestParam(value="subject", defaultValue="") String subject,
                                       @RequestParam(value="username", defaultValue="") String username,
                                       Pageable pageable){
 
@@ -155,4 +158,42 @@ public class NoticeRestController {
         return CommonUtils.ResponseEntityPage(notices);
 
     }
+    //공지사항내파일삭제
+    @PostMapping("filedel")
+    public ResponseEntity filedelete(@RequestParam(value="fileid", defaultValue="") Long fileid){
+
+        log.info("공지사항 첨부파일삭제 시작/ 파일ID : '" + fileid + "'");
+
+        int resultValue = imageService.uploadFileDelete(fileid);
+        if (resultValue == -1){
+            log.info("첨부파일 삭제시 에러발생('E015) fileID: '" + fileid + "'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E015.getCode(), ResponseErrorCode.E015.getDesc()));
+
+        }
+        log.info("공지사항 첨부파일삭제 성공/ 파일ID : '" + fileid + "'");
+        return ResponseEntity.ok(res.success());
+    }
+
+    @PostMapping("del")
+    public ResponseEntity noticeDelete(@RequestParam(value="noticeid", defaultValue="") Long noticeid){
+
+        log.info("공지사항 삭제 시작 / 게시번호 ID : '" + noticeid + "'");
+
+        Optional<Notice> optionalNotice = noticeService.findByIdNotice(noticeid);
+
+        if (!optionalNotice.isPresent()){
+            log.info("공지사항삭제 에러 데이터존재하지않습니다.('E003') fileID: '" + noticeid + "'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E003.getCode(), ResponseErrorCode.E003.getDesc()));
+        }
+        //첨부파일삭제
+        List<UploadFile> uploadFiles = imageService.uploadFileList(noticeid);
+        uploadFiles.forEach(uploadFile -> {
+            imageService.uploadFileDelete(uploadFile.getId());
+        });
+
+        noticeService.delete(optionalNotice.get());
+        log.info("공지사항 삭제 성공 / 게시번호 ID : '" + noticeid + "'");
+        return ResponseEntity.ok(res.success());
+    }
+
 }

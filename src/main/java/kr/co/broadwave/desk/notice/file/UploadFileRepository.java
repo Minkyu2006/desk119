@@ -1,6 +1,9 @@
 package kr.co.broadwave.desk.notice.file;
 
+import kr.co.broadwave.desk.notice.Notice;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
 
 /**
  * @author InSeok
@@ -8,5 +11,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Remark :
  */
 public interface UploadFileRepository extends JpaRepository<UploadFile,Long> {
-    public UploadFile findOneByFileName(String fileName);
+    List<UploadFile> findByNotice(Notice notice);
+
 }
