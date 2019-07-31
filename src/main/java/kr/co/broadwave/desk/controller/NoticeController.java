@@ -1,5 +1,8 @@
-package kr.co.broadwave.desk.notice;
+package kr.co.broadwave.desk.controller;
 
+import kr.co.broadwave.desk.notice.ImageService;
+import kr.co.broadwave.desk.notice.NoticeDto;
+import kr.co.broadwave.desk.notice.NoticeService;
 import kr.co.broadwave.desk.notice.file.UploadFile;
 import kr.co.broadwave.desk.notice.file.UploadFileRepository;
 import lombok.extern.slf4j.Slf4j;

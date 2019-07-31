@@ -1,4 +1,4 @@
-package kr.co.broadwave.desk.main;
+package kr.co.broadwave.desk.controller;
 
 import kr.co.broadwave.desk.accounts.AccountRole;
 import kr.co.broadwave.desk.notice.*;

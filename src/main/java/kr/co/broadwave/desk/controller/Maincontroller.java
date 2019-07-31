@@ -1,4 +1,4 @@
-package kr.co.broadwave.desk.main;
+package kr.co.broadwave.desk.controller;
 
 import kr.co.broadwave.desk.accounts.*;
 import kr.co.broadwave.desk.common.CommonUtils;
