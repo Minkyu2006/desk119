@@ -441,6 +441,45 @@ body {
 
 /* subpage */
 
+/* code */
+.code {
+	position: relative;
+	width: 100%;
+	padding: 20px;
+	border: 1px solid #222;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.code__category {
+	position: absolute;
+	top: -1px;
+	left: -1px; 
+	width: 33.33334%;
+	padding: 10px;
+	border: 1px solid #222;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.code__detail {
+	overflow: hidden;
+	margin: -10px;
+}
+.code__detail-item {
+	float: left;
+	width: 33.3333%;
+	padding: 10px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.code__detail-item:first-child {
+	margin-left: 33.3334%;
+}
+.code__detail-item:last-child {
+	width: 100%;
+}
 
 
 /* login page */
