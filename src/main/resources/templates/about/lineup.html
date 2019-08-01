@@ -1,10 +1,426 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    라인업
-</body>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+
+</th:block>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+
+</th:block>
+
+	<div layout:fragment="content" class="content">
+		<section class="section">
+			<article class="article">
+				<h2 class="article__heading">건설119 출동대원 라인업</h2>
+				<div class="organization">
+					<ul>
+						<li>
+							<a>위원장<br />(연구부원장)</a>
+							<ul>
+								<li>
+									<a>간사<br />(노후인프라센터장)</a>
+									<ul>
+										<li>
+											<a>붕괴</a>
+											<ul>
+												<li><a>건축물</a></li>
+												<li><a>교량</a></li>
+												<li><a>지반</a></li>
+												<li><a>사면</a></li>
+												<li><a>터널</a></li>
+												<li><a>도로</a></li>
+											</ul>
+										</li>
+										<li><a>화재/폭발</a></li>
+										<li><a>지진</a></li>
+										<li><a>싱크홀</a></li>
+										<li><a>교통사고</a></li>
+										<li><a>홍수/가뭄</a></li>
+										<li><a>환경오염</a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+				<p style="text-align: center;margin: 10px 0;">모바일 조직도 문제</p>
+			</article>
+			
+			<article class="article">
+				<table class="organization-table">
+					<colgroup>
+						<col />
+						<col />
+						<col style="width: 25%;" />
+						<col style="width: 25%;" />
+						<col style="width: 25%;" />
+					</colgroup>
+					<tbody>
+						<tr>
+							<th colspan="5">위원장</th>
+						</tr>
+						<tr>
+							<td colspan="5">정문경 연구부원장</td>
+						</tr>
+						<tr>
+							<th colspan="5">간사</th>
+						</tr>
+						<tr>
+							<td colspan="5">노후인프라센터 박기태 센터장</td>
+						</tr>
+						<tr>
+							<th colspan="2">재난·재해 분과</th>
+							<th>부서명</th>
+							<th>직급</th>
+							<th>전문가</th>
+						</tr>
+						<tr>
+							<td rowspan="27">붕괴</td>
+							<td rowspan="8">건축물</td>
+							<td rowspan="6">국민생활연구본부</td>
+							<td>연구위원</td>
+							<td>최기성</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>박금성</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>이상섭</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>허병욱</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>곽명근</td>
+						</tr>
+						<tr>
+							<td>선임연구위원</td>
+							<td>배규웅</td>
+						</tr>
+						<tr>
+							<td rowspan="2">복합재난대응연구단</td>
+							<td>수석연구원</td>
+							<td>박상기</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>김형도</td>
+						</tr>
+						<tr>
+							<td rowspan="8">교량</td>
+							<td>인프라안전연구본부</td>
+							<td>선임연구위원</td>
+							<td>김정호</td>
+						</tr>
+						<tr>
+							<td rowspan="7">노후인프라센터</td>
+							<td>연구위원</td>
+							<td>이종석</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>김병철</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>나원기</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>민지영</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>유영준</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>서동우</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>진승섭</td>
+						</tr>
+						<tr>
+							<td rowspan="2">지반</td>
+							<td rowspan="2">인프라안전연구본부</td>
+							<td>연구위원</td>
+							<td>김영석</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>정재형</td>
+						</tr>
+						<tr>
+							<td rowspan="5">사면</td>
+							<td rowspan="2">인프라안전연구본부</td>
+							<td>수석연구원</td>
+							<td>김승현</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>권오일</td>
+						</tr>
+						<tr>
+							<td rowspan="3">복합재난대응연구단</td>
+							<td>수석연구원</td>
+							<td>이종현</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>김진환</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>백용</td>
+						</tr>
+						<tr>
+							<td rowspan="2">터널</td>
+							<td>도로관리통합센터</td>
+							<td>수석연구원</td>
+							<td>이규필</td>
+						</tr>
+						<tr>
+							<td>인프라안전연구본부</td>
+							<td>선임연구위원</td>
+							<td>이성원</td>
+						</tr>
+						<tr>
+							<td rowspan="2">도로</td>
+							<td rowspan="2">노후인프라센터</td>
+							<td>연구위원</td>
+							<td>남정희</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>전성일</td>
+						</tr>
+						
+						<tr>
+							<td colspan="2" rowspan="5">화재 / 폭발</td>
+							<td rowspan="4">화재안전연구소</td>
+							<td>연구위원</td>
+							<td>김정엽</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>여인환</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>채승언</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>안찬솔</td>
+						</tr>
+						<tr>
+							<td>국민생활연구본부</td>
+							<td>선임연구위원</td>
+							<td>배규웅</td>
+						</tr>
+						
+						<tr>
+							<td colspan="2" rowspan="15">지진</td>
+							<td rowspan="2">국민생활연구본부</td>
+							<td>선임연구위원</td>
+							<td>유영찬</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>신지욱</td>
+						</tr>
+						<tr>
+							<td rowspan="11">인프라안전연구본부</td>
+							<td>선임연구위원</td>
+							<td>김영진</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>유인균</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>김종관</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>진원종</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>곽임종</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>윤혜진</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>김석중</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>한진태</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>신현섭</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>조정래</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>조창백</td>
+						</tr>
+						<tr>
+							<td rowspan="2">복합재난대응연구단</td>
+							<td>연구위원</td>
+							<td>김주형</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>박상기</td>
+						</tr>
+						
+						<tr>
+							<td colspan="2" rowspan="8">싱크홀</td>
+							<td rowspan="5">인프라안전연구본부</td>
+							<td>연구위원</td>
+							<td>이대영</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>정재형</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>박희문</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>권오일</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>김동민</td>
+						</tr>
+						<tr>
+							<td rowspan="2">미래융합연구본부</td>
+							<td>연구위원</td>
+							<td>최창호</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>조진우</td>
+						</tr>
+						<tr>
+							<td>복합재난대응연구단</td>
+							<td>연구위원</td>
+							<td>김주형</td>
+						</tr>
+						
+						<tr>
+							<td colspan="2" rowspan="8">교통사고</td>
+							<td rowspan="4">인프라안전연구본부</td>
+							<td>선임연구위원</td>
+							<td>노관섭</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>이유화</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>백종대</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>문재필</td>
+						</tr>
+						<tr>
+							<td rowspan="2">미래융합연구본부</td>
+							<td>연구위원</td>
+							<td>김성현</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>박범진</td>
+						</tr>
+						<tr>
+							<td rowspan="2">복합재난대응연구단</td>
+							<td>연구위원</td>
+							<td>김현석</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>김영록</td>
+						</tr>
+						
+						<tr>
+							<td colspan="2" rowspan="6">홍수 / 가뭄</td>
+							<td rowspan="5">국토보전연구본부</td>
+							<td>선임연구위원</td>
+							<td>윤광석</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>김경탁</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>김지성</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>이찬주</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>문장원</td>
+						</tr>
+						<tr>
+							<td>복합재난대응연구단</td>
+							<td>연구위원</td>
+							<td>이동섭</td>
+						</tr>
+						
+						<tr>
+							<td colspan="2" rowspan="5">환경오염</td>
+							<td rowspan="5">국토보전연구본부</td>
+							<td>선임연구위원</td>
+							<td>김석구</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>김원재</td>
+						</tr>
+						<tr>
+							<td>연구위원</td>
+							<td>김일호</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>최준석</td>
+						</tr>
+						<tr>
+							<td>수석연구원</td>
+							<td>윤성린</td>
+						</tr>
+					</tbody>
+				</table>
+			</article>
+		</section>
+	</div>
 </html>
