@@ -15,4 +15,9 @@ public class RecordController {
     public String regist(){
         return "record/recordreg";
     }
+
+    @RequestMapping("/mreg")
+    public String morileregist(){
+        return "mobile/mrecordreg";
+    }
 }
