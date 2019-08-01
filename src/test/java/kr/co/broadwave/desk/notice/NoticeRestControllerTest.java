@@ -10,10 +10,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 import java.util.Optional;
@@ -69,12 +72,12 @@ public class NoticeRestControllerTest {
                 .build();
         accountRepository.save(a1);
 
+
         //when then
-        mockMvc.perform(post("/api/notice/reg")
-                .with(csrf())
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/notice/reg")
+                .with((csrf()))
                 .param("subject","테스트공지사항제목")
                 .param("content","<p>컨텐츠<p>")
-
         )
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -88,6 +91,9 @@ public class NoticeRestControllerTest {
         });
 
         assertThat(notices.size()).as("공지사항 등록된 수 [Expect 1").isEqualTo(1);
+
+        accountRepository.delete(a1);
+        teamRepository.delete(t1);
 
     }
 }

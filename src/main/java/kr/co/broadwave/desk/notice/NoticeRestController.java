@@ -93,7 +93,7 @@ public class NoticeRestController {
 
     @PostMapping("reg")
 //    public ResponseEntity noticeSave(@ModelAttribute NoticeMapperDto noticeMapperDto , HttpServletRequest request){
-    public ResponseEntity noticeSave(MultipartHttpServletRequest multi) throws Exception {
+    public ResponseEntity noticeSave(MultipartHttpServletRequest multi,HttpServletRequest request) throws Exception {
         //Notice notice = modelMapper.map(noticeMapperDto, Notice.class);
 
 
@@ -105,12 +105,12 @@ public class NoticeRestController {
                 .build();
 
 
-        String currentuserid = CommonUtils.getCurrentuser(multi);
+        String currentuserid = CommonUtils.getCurrentuser(request);
         Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
 
         if (!optionalAccount.isPresent()) {
             log.info("공지사항 저장한 사람 아이디 미존재('E014) : '" + currentuserid + "'");
-            return ResponseEntity.ok(res.fail(ResponseErrorCode.E014.getCode(), ResponseErrorCode.E014.getDesc()));
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E014.getCode(), ResponseErrorCode.E014.getDesc() + "'" + currentuserid + "'" ));
         }
         notice.setInsert_id(currentuserid);
         notice.setInsert_name(optionalAccount.get().getUsername());
