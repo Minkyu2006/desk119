@@ -481,6 +481,151 @@ body {
 	width: 100%;
 }
 
+/* 라인업 조직도 */
+.organization * {
+	margin: 0;
+	padding: 0;
+}
+.organization {
+	display: table;
+	margin: 0 auto;
+}
+.organization ul {
+	padding-top: 20px;
+	position: relative;
+	-webkit-transition: all .5s;
+	-moz-transition: all .5s;
+	-ms-transition: all .5s;
+	-o-transition: all .5s;
+	transition: all .5s;
+}
+.organization li {
+	float: left;
+	text-align: center;
+	list-style-type: none;
+	position: relative;
+	padding: 20px 5px 0 5px;
+	-webkit-transition: all .5s;;
+	-moz-transition: all .5s;;
+	-ms-transition: all .5s;;
+	-o-transition: all .5s;;
+	transition: all .5s;;
+}
+.organization li:before,
+.organization li:after {
+	content: " ";
+	position: absolute;
+	top: 0;
+	right: 50%;
+	width: 50%;
+	height: 20px;
+	border-top: 1px solid #ddd;
+}
+.organization li:after {
+	right: auto;
+	left: 50%;
+	border-left: 1px solid #ddd;
+}
+.organization li:only-child:before,
+.organization li:only-child:after {
+	display: none;
+}
+.organization li:only-child {
+	padding-top: 0;
+}
+.organization li:first-child:before,
+.organization li:last-child:after {
+	border: 0;
+}
+.organization li:first-child:after {
+	-webkit-border-radius: 5px 0 0 0;
+	-moz-border-radius: 5px 0 0 0;
+	border-radius: 5px 0 0 0;
+}
+.organization li:last-child:before {
+	border-right: 1px solid #ddd;
+	-webkit-border-radius: 0 5px 0 0;
+	-moz-border-radius: 0 5px 0 0;
+	border-radius: 0 5px 0 0;
+}
+.organization ul ul:before {
+	content: " ";
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 0;
+	height: 20px;
+	border-left: 1px solid #ddd;
+}
+.organization li a {
+	display: inline-block;
+	padding: 10px;
+	border: 1px solid #ddd;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	color: #222;
+	font-size: 16px;
+	-webkit-transition: all .5s;
+	-moz-transition: all .5s;
+	-ms-transition: all .5s;
+	-o-transition: all .5s;
+	transition: all .5s;
+}
+.organization li a:hover,
+.organization li a:hover+ul li a {
+	background-color: #c8e4f8;
+	color: #000;
+	border: 1px solid #222;
+}
+.organization li a:hover+ul:before,
+.organization li a:hover+ul ul:before,
+.organization li a:hover+ul li:before,
+.organization li a:hover+ul li:after {
+	border-color: #222;
+}
+
+@media(max-width: 1240px) {
+	.organization li a {
+		padding: 5px;
+		font-size: 14px;
+	}
+}
+
+
+/* 라인업 테이블 */
+.organization-table {
+	table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    text-align: center;
+    color: #222;
+    font-size: 14px;
+    border-top: 2px solid #181a1f;
+    border-bottom: 2px solid #181a1f;
+}
+.organization-table th,
+.organization-table td {
+	height: 32px;
+	border: 1px solid #181a1f;
+	font-size: 14px;
+	vertical-align: middle;
+}
+.organization-table th {
+	border-top: 2px solid #181a1f;
+	background-color: #efefef;
+}
+.organization-table th:first-child,
+.organization-table td:first-child {
+	border-left: 0;
+}
+.organization-table th:last-child,
+.organization-table td:last-child {
+	border-right: 0;
+}
 
 /* login page */
 .login-wrap {
