@@ -74,6 +74,9 @@ public class TeamRepositoryCustomImplTest {
         //then
         assertThat(teams.getTotalPages()).isEqualTo(2);
         assertThat(teams.getContent().size()).isEqualTo(1);
+        teamRepository.delete(t1);
+        teamRepository.delete(t2);
+        teamRepository.delete(t3);
 
     }
 }

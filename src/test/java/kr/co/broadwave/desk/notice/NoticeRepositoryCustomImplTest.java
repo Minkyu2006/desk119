@@ -85,7 +85,9 @@ public class NoticeRepositoryCustomImplTest {
         assertThat(noticeDtoPage1.getTotalElements()).as("작성자가 최인석 인 공지검색 [expect 2]").isEqualTo(2);
         assertThat(noticeDtoPage2.getTotalElements()).as("제목에 공지라는 글자가 포함된 인 공지사항검색 [expect 3]").isEqualTo(3);
 
-
+        noticeRepository.delete(n1);
+        noticeRepository.delete(n2);
+        noticeRepository.delete(n3);
 
 
     }
