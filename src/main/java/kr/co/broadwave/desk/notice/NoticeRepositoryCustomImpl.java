@@ -24,35 +24,7 @@ public class NoticeRepositoryCustomImpl extends QuerydslRepositorySupport implem
         super(Notice.class);
     }
 
-    @Override
-    public Page<NoticeDto> findAllByApproval(String username, String subject, Pageable pageable) {
-        QNotice qNotice = QNotice.notice;
 
-        JPQLQuery<NoticeDto> query = from(qNotice)
-                .select(Projections.constructor(NoticeDto.class,
-                        qNotice.id,
-                        qNotice.subject,
-                        qNotice.content,
-                        qNotice.hitCount,
-                        qNotice.insertDateTime,
-                        qNotice.insert_id,
-                        qNotice.insert_name,
-                        qNotice.modifyDateTime,
-                        qNotice.modify_id,
-                        qNotice.modify_name
-                ));
-        if (username != null && !username.isEmpty()){
-            query.where(qNotice.modify_name.containsIgnoreCase(username));
-        }
-
-        if (subject != null && !subject.isEmpty()){
-            query.where(qNotice.subject.containsIgnoreCase(subject));
-        }
-
-        final List<NoticeDto> notices = getQuerydsl().applyPagination(pageable, query).fetch();
-        return new PageImpl<>(notices, pageable, query.fetchCount());
-
-    }
 
     @Override
     public Page<NoticeDto> findAllBySearchStrings(String subject, String username,  Pageable pageable) {

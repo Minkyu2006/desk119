@@ -25,29 +25,31 @@
 				<div class="code">
 					<div class="code__category">
 						<div class="c-select">
-							<label class="c-select__label">분류코드</label>
-							<select class="c-select__input">
-								<option value="">관련부처</option>
-								<option value="">행정구역</option>
+							<label for="codeType" class="c-select__label">대분류</label>
+							<select class="c-select__input" id="codeType" name="codeType">
+								<option th:each ="codetype : ${codetypes}"
+										th:value="${codetype.getCode()}"
+										th:text="${codetype.getDesc()}"></option>
+
 							</select>
 						</div>
 					</div>
 					<ul class="code__detail">
 						<li class="code__detail-item">
 							<div class="c-text">
-								<label for="" class="c-text__label">조건</label>
-								<input type="text" class="c-text__input" value="정부·지자체" />
+								<label for="code" class="c-text__label">코드</label>
+								<input type="text" class="c-text__input" id="code" name="code" />
 							</div>
 						</li>
 						<li class="code__detail-item">
 							<div class="c-text">
-								<label for="" class="c-text__label">코드명</label>
-								<input type="text" class="c-text__input" value="asdf0001" />
+								<label for="name" class="c-text__label">코드명</label>
+								<input type="text" class="c-text__input" id="name" name="name" />
 							</div>
 						</li>
 						<li class="code__detail-item">
-							<label for="" class="c-textarea__label">비고</label>
-							<textarea class="c-textarea"></textarea>
+							<label for="remark" class="c-textarea__label">비고</label>
+							<textarea class="c-textarea" id="remark" name="remark"></textarea>
 						</li>
 					</ul>
 					<div class="c-function">

@@ -1,6 +1,7 @@
 package kr.co.broadwave.desk.controller;
 
 import kr.co.broadwave.desk.accounts.AccountRole;
+import kr.co.broadwave.desk.bscodes.CodeType;
 import kr.co.broadwave.desk.notice.*;
 import kr.co.broadwave.desk.notice.file.UploadFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,8 @@ public class AdminController {
 
     //관리코드등록
     @RequestMapping("mastercodereg")
-    public String masterCodeReg(){
+    public String masterCodeReg(Model model){
+        model.addAttribute("codetypes", CodeType.values());
         return "admin/mastercodereg";
     }
 
