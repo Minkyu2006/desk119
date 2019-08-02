@@ -41,11 +41,11 @@ public class MasterCode {
     @Column(name="bc_remark")
     private String remark;
 
+    @Column(name="insert_date")
+    private LocalDateTime insertDateTime;
+
     @Column(name="insert_id")
     private String insert_id;
-
-    @Column(name="insert_name")
-    private String insert_name;
 
     @Column(name="modify_date")
     private LocalDateTime modifyDateTime;
@@ -53,8 +53,6 @@ public class MasterCode {
     @Column(name="modify_id")
     private String modify_id;
 
-    @Column(name="modify_name")
-    private String modify_name;
 
 
 

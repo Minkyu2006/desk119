@@ -138,7 +138,7 @@ public class NoticeRestController {
         }
 
 
-        //log.info("공지사항 저장 성공 : " + noticeSave.toString() );
+        log.info("공지사항 저장 성공 : " + noticeSave.toString() );
         return ResponseEntity.ok(res.success());
 
 

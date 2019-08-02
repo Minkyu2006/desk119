@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
  * Date : 2019-08-02
  * Remark :
  */
-public interface MasterCodeCustom {
+public interface MasterCodeRepositoryCustom {
     Page<MasterCodeDto> findAllBySearchStrings(CodeType codeType, String code,String name, Pageable pageable);
 
 }

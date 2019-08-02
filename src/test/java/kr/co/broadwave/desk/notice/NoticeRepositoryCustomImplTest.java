@@ -75,8 +75,8 @@ public class NoticeRepositoryCustomImplTest {
         Pageable pageable = PageRequest.of(0, 2, Sort.Direction.ASC, "id");
 
         //when
-        Page<NoticeDto> noticeDtoPage1 = noticeRepositoryCustom.findAllByApproval("최인석", "", pageable);
-        Page<NoticeDto> noticeDtoPage2 = noticeRepositoryCustom.findAllByApproval("", "공지", pageable);
+        Page<NoticeDto> noticeDtoPage1 = noticeRepositoryCustom.findAllBySearchStrings("", "최인석", pageable);
+        Page<NoticeDto> noticeDtoPage2 = noticeRepositoryCustom.findAllBySearchStrings("공지", "", pageable);
 
 
         //then

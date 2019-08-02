@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Optional;
 
 /**
  * @author InSeok
@@ -52,4 +52,33 @@ public class MasterCodeRestcontroller {
         return CommonUtils.ResponseEntityPage(masterCodes);
 
     }
+    //
+    @PostMapping("reg")
+    public ResponseEntity noticeSave(@ModelAttribute MasterCodeMapperDto masterCodeMapperDto , HttpServletRequest request){
+        MasterCode masterCode = modelMapper.map(masterCodeMapperDto, MasterCode.class);
+
+        String currentuserid = CommonUtils.getCurrentuser(request);
+
+        //이미값이 존재하는지 확인
+        Optional<MasterCode> optionalMasterCode = masterCodeService.findByCoAndCodeTypeAndCode(masterCode.getCodeType(), masterCode.getCode());
+        if (optionalMasterCode.isPresent()){
+            masterCode.setId(optionalMasterCode.get().getId());
+            masterCode.setModify_id(currentuserid);
+            masterCode.setModifyDateTime(LocalDateTime.now());
+        }else {
+            masterCode.setInsert_id(currentuserid);
+            masterCode.setInsertDateTime(LocalDateTime.now());
+            masterCode.setModify_id(currentuserid);
+            masterCode.setModifyDateTime(LocalDateTime.now());
+        }
+
+
+        MasterCode saveMastercode = masterCodeService.save(masterCode);
+
+        log.info("마스터코드 저장 성공 : " + saveMastercode.toString() );
+        return ResponseEntity.ok(res.success());
+
+
+    }
+
 }

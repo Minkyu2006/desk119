@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -15,9 +16,10 @@ import java.util.List;
  * Date : 2019-08-02
  * Remark :
  */
-public class MasterCodeCustomImpl extends QuerydslRepositorySupport implements MasterCodeCustom {
+@Repository
+public class MasterCodeRepositoryCustomImpl extends QuerydslRepositorySupport implements MasterCodeRepositoryCustom {
 
-    public MasterCodeCustomImpl() {
+    public MasterCodeRepositoryCustomImpl() {
         super(MasterCode.class);
     }
 
