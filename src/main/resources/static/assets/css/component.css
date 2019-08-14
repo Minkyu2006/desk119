@@ -503,6 +503,7 @@
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     color: #555;
+    text-align: center;
     font-size: 14px;
     line-height: 30px;
 }
@@ -1066,7 +1067,7 @@
 .c-checkbox__label {
   display: inline-block;
   position: relative;
-  padding-left: 25px;
+  padding: 3px 0 3px 25px;
   color: #222;
   font-size: 14px;
   cursor: pointer;
@@ -1608,52 +1609,11 @@
 
 /* input */
 .m-text {
-    display: flex;
+    display: block;
     position: relative;
     width: 100%;
 }
-.m-text__input {
-    width: 100%;
-    padding-left: 70px;
-    padding-right: 20px;
-    height: 30px;
-    border: 1px solid #888;
-    border-radius: 5px;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    font-size: 14px;
-}
-.m-text__label {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 60px;
-    height: 30px;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    background-color: #888;
-    color: #fff;
-    font-size: 14px;
-    line-height: 30px;
-    text-align: center;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-.m-text__reset {
-    opacity: 0;
-    visibility: visible;
-    position: absolute;
-    top: 7px;
-    right: 0;
-    width: 20px;
-    height: 20px;
-    color: #333;
-    font-size: 14px;
-    text-align: center;
-    vertical-align: bottom;
-    cursor: pointer;
-    background-color: transparent;
-}
+
 input[type=text]:-ms-clear {
     display: none;
 }
