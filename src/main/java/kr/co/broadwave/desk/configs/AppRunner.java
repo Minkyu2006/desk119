@@ -46,7 +46,7 @@ public class AppRunner implements ApplicationRunner {
 
         Team team2 = Team.builder()
                 .teamcode("T00002")
-                .teamname("회원가입")
+                .teamname("노후인프라센터")
                 .remark("최초생성")
                 .insertDateTime(LocalDateTime.now())
                 .insert_id("system")

@@ -45,5 +45,8 @@ public class TeamService {
     public List<TeamDto> findAllBySearchStringsExcel(String teamcode,String teamname) {
         return teamRepositoryCustom.findAllBySearchStringsExcel(teamcode,teamname);
     }
+    public List<TeamDto> findTeamList(){
+        return teamRepositoryCustom.findAllBySearchStringsExcel("","");
+    }
 
 }

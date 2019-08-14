@@ -1,12 +1,15 @@
 package kr.co.broadwave.desk.mastercode;
 
 import kr.co.broadwave.desk.bscodes.CodeType;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author InSeok
@@ -18,11 +21,13 @@ public class MasterCodeService {
 
     private final MasterCodeRepository masterCodeRepository;
     private final MasterCodeRepositoryCustom masterCodeRepositoryCustom;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public MasterCodeService(MasterCodeRepository masterCodeRepository, MasterCodeRepositoryCustom masterCodeRepositoryCustom) {
+    public MasterCodeService(MasterCodeRepository masterCodeRepository, MasterCodeRepositoryCustom masterCodeRepositoryCustom, ModelMapper modelMapper) {
         this.masterCodeRepository = masterCodeRepository;
         this.masterCodeRepositoryCustom = masterCodeRepositoryCustom;
+        this.modelMapper = modelMapper;
     }
 
 
@@ -46,8 +51,14 @@ public class MasterCodeService {
 
     }
 
-
     public void delete(MasterCode masterCode) {
         masterCodeRepository.delete(masterCode);
+    }
+    public List<MasterCodeDto> findCodeList(CodeType codeType){
+        List<MasterCode> masterCodes = masterCodeRepository.findByAndCodeType(codeType);
+
+        return masterCodes.stream()
+                .map(masterCode -> modelMapper.map(masterCode, MasterCodeDto.class)
+                ).collect(Collectors.toList());
     }
 }

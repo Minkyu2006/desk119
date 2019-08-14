@@ -1,7 +1,13 @@
 package kr.co.broadwave.desk.controller;
 
 import kr.co.broadwave.desk.accounts.*;
+import kr.co.broadwave.desk.bscodes.CodeType;
 import kr.co.broadwave.desk.common.CommonUtils;
+import kr.co.broadwave.desk.mastercode.MasterCodeDto;
+import kr.co.broadwave.desk.mastercode.MasterCodeService;
+import kr.co.broadwave.desk.teams.Team;
+import kr.co.broadwave.desk.teams.TeamDto;
+import kr.co.broadwave.desk.teams.TeamService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,11 +31,15 @@ public class Maincontroller {
 
     private final AccountService accountService;
     private final LoginlogService loginlogService;
+    private final MasterCodeService masterCodeService;
+    private final TeamService teamService;
 
     @Autowired
-    public Maincontroller(AccountService accountService, LoginlogService loginlogService) {
+    public Maincontroller(AccountService accountService, LoginlogService loginlogService, MasterCodeService masterCodeService, TeamService teamService) {
         this.accountService = accountService;
         this.loginlogService = loginlogService;
+        this.masterCodeService = masterCodeService;
+        this.teamService = teamService;
     }
 
     //메인화면
@@ -110,7 +121,13 @@ public class Maincontroller {
 
     @RequestMapping("/signup")
     public String siguup(HttpServletRequest request,Model model){
+        List<MasterCodeDto> positions = masterCodeService.findCodeList(CodeType.C0001); // 직급코드가져오기
+        List<TeamDto> teams = teamService.findTeamList();
+
         model.addAttribute("roles", AccountRole.values());
+        model.addAttribute("positions", positions);
+        model.addAttribute("teams", teams);
+
         return "signup";
     }
 }

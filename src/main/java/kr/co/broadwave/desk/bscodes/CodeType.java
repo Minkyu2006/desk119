@@ -7,8 +7,7 @@ package kr.co.broadwave.desk.bscodes;
  */
 public enum CodeType {
     C0001("C0001", "직급"),
-    C0002("C0002", "관련부처"),
-    C0003("C0003", "행정구역")
+    C0002("C0002", "관련부처")
     ;
 
     private String code;
