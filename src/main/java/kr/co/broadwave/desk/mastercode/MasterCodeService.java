@@ -41,6 +41,13 @@ public class MasterCodeService {
     public Optional<MasterCode> findByCoAndCodeTypeAndCode(CodeType codeType,String code){
         return masterCodeRepository.findByAndCodeTypeAndCode(codeType,code);
     }
+    public Optional<MasterCode> findById(Long id){
+        return masterCodeRepository.findById(id);
+
+    }
 
 
+    public void delete(MasterCode masterCode) {
+        masterCodeRepository.delete(masterCode);
+    }
 }
