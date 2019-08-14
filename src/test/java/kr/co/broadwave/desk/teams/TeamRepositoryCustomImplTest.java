@@ -38,16 +38,16 @@ public class TeamRepositoryCustomImplTest {
     public void findAllBySearchStrings() {
         //given
         Team t1 = Team.builder()
-                .teamcode("A001")
+                .teamcode("AAA001")
                 .teamname("TestTeam1")
                 .remark("비고").build();
 
         Team t2 = Team.builder()
-                .teamcode("A002")
+                .teamcode("AAA002")
                 .teamname("TestTeam2")
                 .remark("비고2").build();
         Team t3 = Team.builder()
-                .teamcode("A003")
+                .teamcode("AAA003")
                 .teamname("TestTeam3")
                 .remark("비고3").build();
         List<Team> tall =Arrays.asList(t1,t2,t3);
@@ -58,7 +58,7 @@ public class TeamRepositoryCustomImplTest {
         Pageable pageable = PageRequest.of(1, 2, Sort.Direction.ASC, "teamname");
 
         //when
-        Page<TeamDto> teams = teamRepositoryCustom.findAllBySearchStrings("A00","", pageable);
+        Page<TeamDto> teams = teamRepositoryCustom.findAllBySearchStrings("AAA00","", pageable);
 
 
         System.out.println("=============================");

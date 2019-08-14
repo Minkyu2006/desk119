@@ -38,7 +38,7 @@ public class NoticeRepositoryCustomImplTest {
     public void findAllByApproval(){
         //given
         Notice n1 = Notice.builder()
-                .id(1L)
+                .id(100L)
                 .subject("테스트공지사항입니다.")
                 .content("공지사항내용")
                 .modify_name("최인석")
@@ -49,7 +49,7 @@ public class NoticeRepositoryCustomImplTest {
                 //.modifyDateTime(LocalDateTime.now())
                 .build();
         Notice n2 = Notice.builder()
-                .id(2L)
+                .id(200L)
                 .subject("사용법공지입니다.")
                 .content("사용내용")
                 .modify_name("홍길동")
@@ -60,7 +60,7 @@ public class NoticeRepositoryCustomImplTest {
                 .modifyDateTime(LocalDateTime.now())
                 .build();
         Notice n3 = Notice.builder()
-                .id(3L)
+                .id(300L)
                 .subject("세번째공지.")
                 .content("사용내용")
                 .modify_name("최인석")
