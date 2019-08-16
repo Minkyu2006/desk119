@@ -868,6 +868,16 @@
     background-size: 22px 22px;
 }
 
+.c-select__label,
+.c-text__label,
+.c-textarea__label {
+	display: block;
+	margin-bottom: 10px;
+	color: #333;
+	font-size: 14px;
+	font-weight: 700;
+}
+
 /* paging */
 .c-pager {
     position: relative;

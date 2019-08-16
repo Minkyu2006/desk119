@@ -555,6 +555,7 @@ h4.article__heading {
 	left: -1px; 
 	width: 33.33334%;
 	padding: 10px;
+	background-color: #efefef;
 	border: 1px solid #222;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
