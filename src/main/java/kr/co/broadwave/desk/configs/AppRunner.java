@@ -4,6 +4,9 @@ import kr.co.broadwave.desk.accounts.Account;
 import kr.co.broadwave.desk.accounts.AccountRole;
 import kr.co.broadwave.desk.accounts.AccountService;
 import kr.co.broadwave.desk.bscodes.ApprovalType;
+import kr.co.broadwave.desk.bscodes.CodeType;
+import kr.co.broadwave.desk.mastercode.MasterCode;
+import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * @author InSeok
@@ -25,9 +29,31 @@ public class AppRunner implements ApplicationRunner {
     TeamService teamService;
     @Autowired
     AccountService accountService;
+    @Autowired
+    MasterCodeService masterCodeService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+
+        //직급
+        MasterCode position1 = MasterCode.builder()
+                .id(1L)
+                .codeType(CodeType.C0001)
+                .code("ADMIN")
+                .name("관리자")
+                .remark("최초시스템자동생성")
+                .insert_id("system")
+                .insertDateTime(LocalDateTime.now())
+                .modify_id("system")
+                .modifyDateTime(LocalDateTime.now())
+                .build();
+        Optional<MasterCode> optionalMasterCode = masterCodeService.findByCoAndCodeTypeAndCode(position1.getCodeType(), position1.getCode());
+        if (!optionalMasterCode.isPresent()){
+            masterCodeService.save(position1);
+        }else{
+            position1 = optionalMasterCode.get();
+        }
+
 
         //팀저장
 
@@ -64,6 +90,7 @@ public class AppRunner implements ApplicationRunner {
                 .email("admin@mail.com")
                 .cellphone("010-1111-2222")
                 .password("123789")
+                .position(position1)
                 .approvalType(ApprovalType.AT02)
                 .insertDateTime(LocalDateTime.now())
                 .insert_id("system")
@@ -75,21 +102,7 @@ public class AppRunner implements ApplicationRunner {
         }
 
 
-        Account account2 = Account.builder()
-                .userid("hgd")
-                .username("홍길동")
-                .email("hgd@mail.com")
-                .cellphone("010-2222-3333")
-                .password("1234")
-                .insertDateTime(LocalDateTime.now())
-                .insert_id("system")
-                .role(AccountRole.ROLE_USER)
-                .approvalType(ApprovalType.AT02)
-                .build();
-        account2.setTeam(team2);
-        if(!accountService.findByUserid(account2.getUserid()).isPresent()) {
-            accountService.saveAccount(account2);
-        }
+
 
 
 

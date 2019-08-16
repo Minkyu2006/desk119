@@ -1,6 +1,7 @@
 package kr.co.broadwave.desk.mastercode;
 
 import kr.co.broadwave.desk.bscodes.CodeType;
+import kr.co.broadwave.desk.teams.Team;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,6 +11,11 @@ import java.time.LocalDateTime;
  * @author InSeok
  * Date : 2019-07-31
  * Remark :
+ * @Table(name="bs_code"
+ * //        , uniqueConstraints = {
+ * //        @UniqueConstraint(columnNames = {"bc_code_type","bc_code"})
+ * //}
+ * )
  */
 @Entity
 @Getter
@@ -19,9 +25,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Table(name="bs_code", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"bc_code_type","bc_code"})
-})
+@Table(name="bs_code")
 public class MasterCode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

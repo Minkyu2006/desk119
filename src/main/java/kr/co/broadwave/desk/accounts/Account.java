@@ -1,6 +1,7 @@
 package kr.co.broadwave.desk.accounts;
 
 import kr.co.broadwave.desk.bscodes.ApprovalType;
+import kr.co.broadwave.desk.mastercode.MasterCode;
 import kr.co.broadwave.desk.teams.Team;
 import lombok.*;
 
@@ -56,6 +57,9 @@ public class Account {
     @JoinColumn(name="team_id")
     private Team team;
 
+    @ManyToOne(targetEntity = MasterCode.class,fetch = FetchType.LAZY)
+    @JoinColumn(name="position_id")
+    private MasterCode position;
 
 
     @Column(name="insert_date")

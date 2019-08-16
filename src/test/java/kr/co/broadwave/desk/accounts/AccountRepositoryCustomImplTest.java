@@ -1,6 +1,9 @@
 package kr.co.broadwave.desk.accounts;
 
 import kr.co.broadwave.desk.bscodes.ApprovalType;
+import kr.co.broadwave.desk.bscodes.CodeType;
+import kr.co.broadwave.desk.mastercode.MasterCode;
+import kr.co.broadwave.desk.mastercode.MasterCodeRepository;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamRepository;
 import org.junit.Test;
@@ -39,15 +42,31 @@ public class AccountRepositoryCustomImplTest {
 
     @Autowired
     AccountRepositoryCustom accountRepositoryCustom;
+    @Autowired
+    MasterCodeRepository masterCodeRepository;
 
     @Test
     public void findAllBySearchStrings() {
         //given
+
+
         Team t1 = Team.builder()
                 .teamcode("A001")
                 .teamname("TestTeam1")
                 .remark("비고").build();
         teamRepository.save(t1);
+        MasterCode p1 = MasterCode.builder()
+                .codeType(CodeType.C0001)
+                .code("ADMIN")
+                .name("관리자")
+                .remark("최초시스템자동생성")
+                .insert_id("system")
+                .insertDateTime(LocalDateTime.now())
+                .modify_id("system")
+                .modifyDateTime(LocalDateTime.now())
+                .build();
+        masterCodeRepository.save(p1);
+
         Account a1 = Account.builder()
                 .userid("S0001")
                 .username("테스트유저")
@@ -55,6 +74,7 @@ public class AccountRepositoryCustomImplTest {
                 .email("test@naver.com")
                 .role(AccountRole.ROLE_ADMIN)
                 .team(t1)
+                .position(p1)
                 .build();
         Account a2 = Account.builder()
                 .userid("S0002")
@@ -63,6 +83,7 @@ public class AccountRepositoryCustomImplTest {
                 .email("test2@naver.com")
                 .role(AccountRole.ROLE_ADMIN)
                 .team(t1)
+                .position(p1)
                 .build();
         Account a3 = Account.builder()
                 .userid("S0003")
@@ -71,6 +92,7 @@ public class AccountRepositoryCustomImplTest {
                 .email("test3@naver.com")
                 .role(AccountRole.ROLE_ADMIN)
                 .team(t1)
+                .position(p1)
                 .build();
         accountRepository.save(a1);
         accountRepository.save(a2);
@@ -99,6 +121,7 @@ public class AccountRepositoryCustomImplTest {
         accountRepository.delete(a2);
         accountRepository.delete(a3);
         teamRepository.delete(t1);
+        masterCodeRepository.delete(p1);
 
 
 
@@ -108,6 +131,17 @@ public class AccountRepositoryCustomImplTest {
     public void findAllByApproval(){
 
         //given
+        MasterCode p1 = MasterCode.builder()
+                .codeType(CodeType.C0001)
+                .code("ADMIN")
+                .name("관리자")
+                .remark("최초시스템자동생성")
+                .insert_id("system")
+                .insertDateTime(LocalDateTime.now())
+                .modify_id("system")
+                .modifyDateTime(LocalDateTime.now())
+                .build();
+        masterCodeRepository.save(p1);
         Team t1 = Team.builder()
                 .teamcode("A001")
                 .teamname("TestTeam1")
@@ -122,6 +156,7 @@ public class AccountRepositoryCustomImplTest {
                 .approvalType(ApprovalType.AT01)
                 .insertDateTime(LocalDateTime.now())
                 .team(t1)
+                .position(p1)
                 .build();
         Account a2 = Account.builder()
                 .userid("S0002")
@@ -132,6 +167,7 @@ public class AccountRepositoryCustomImplTest {
                 .role(AccountRole.ROLE_ADMIN)
                 .insertDateTime(LocalDateTime.now())
                 .team(t1)
+                .position(p1)
                 .build();
         Account a3 = Account.builder()
                 .userid("S0003")
@@ -142,6 +178,7 @@ public class AccountRepositoryCustomImplTest {
                 .approvalType(ApprovalType.AT01)
                 .insertDateTime(LocalDateTime.now())
                 .team(t1)
+                .position(p1)
                 .build();
         accountRepository.save(a1);
         accountRepository.save(a2);
@@ -171,12 +208,24 @@ public class AccountRepositoryCustomImplTest {
         accountRepository.delete(a2);
         accountRepository.delete(a3);
         teamRepository.delete(t1);
+        masterCodeRepository.delete(p1);
 
     }
 
     @Test
     public void saveApproval(){
         //given
+        MasterCode p1 = MasterCode.builder()
+                .codeType(CodeType.C0001)
+                .code("ADMIN")
+                .name("관리자")
+                .remark("최초시스템자동생성")
+                .insert_id("system")
+                .insertDateTime(LocalDateTime.now())
+                .modify_id("system")
+                .modifyDateTime(LocalDateTime.now())
+                .build();
+        masterCodeRepository.save(p1);
         Team t1 = Team.builder()
                 .teamcode("A001")
                 .teamname("TestTeam1")
@@ -190,6 +239,7 @@ public class AccountRepositoryCustomImplTest {
                 .role(AccountRole.ROLE_ADMIN)
                 .approvalType(ApprovalType.AT01)
                 .team(t1)
+                .position(p1)
                 .build();
         Account a2 = Account.builder()
                 .userid("S0002")
@@ -199,6 +249,7 @@ public class AccountRepositoryCustomImplTest {
                 .approvalType(ApprovalType.AT01)
                 .role(AccountRole.ROLE_ADMIN)
                 .team(t1)
+                .position(p1)
                 .build();
         Account a3 = Account.builder()
                 .userid("S0003")
@@ -208,6 +259,7 @@ public class AccountRepositoryCustomImplTest {
                 .approvalType(ApprovalType.AT01)
                 .role(AccountRole.ROLE_ADMIN)
                 .team(t1)
+                .position(p1)
                 .build();
         accountRepository.save(a1);
         accountRepository.save(a2);
@@ -230,6 +282,7 @@ public class AccountRepositoryCustomImplTest {
         accountRepository.delete(a2);
         accountRepository.delete(a3);
         teamRepository.delete(t1);
+        masterCodeRepository.delete(p1);
 
     }
 }

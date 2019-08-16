@@ -4,6 +4,8 @@ import kr.co.broadwave.desk.bscodes.ApprovalType;
 import kr.co.broadwave.desk.common.AjaxResponse;
 import kr.co.broadwave.desk.common.CommonUtils;
 import kr.co.broadwave.desk.common.ResponseErrorCode;
+import kr.co.broadwave.desk.mastercode.MasterCode;
+import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,16 +41,18 @@ public class AccountRestController {
     private final TeamService teamService;
     private final ModelMapper modelMapper;
     private final LoginlogService loginlogService;
+    private final MasterCodeService masterCodeService;
 
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public AccountRestController(AccountService accountService, ModelMapper modelMapper
-            , TeamService teamService, LoginlogService loginlogService, PasswordEncoder passwordEncoder) {
+            , TeamService teamService, LoginlogService loginlogService, MasterCodeService masterCodeService, PasswordEncoder passwordEncoder) {
         this.accountService = accountService;
         this.modelMapper = modelMapper;
         this.teamService = teamService;
         this.loginlogService = loginlogService;
+        this.masterCodeService = masterCodeService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -58,6 +62,8 @@ public class AccountRestController {
 
         Account account = modelMapper.map(accountMapperDto, Account.class);
         Optional<Team> optionalTeam = teamService.findByTeamcode(accountMapperDto.getTeamcode());
+        Optional<MasterCode> optionalPositionCode = masterCodeService.findById(accountMapperDto.getPostionid());
+
 
         //패스워드를 입력하세요.
         if (accountMapperDto.getPassword() == null || accountMapperDto.getPassword() ==""){
@@ -78,6 +84,14 @@ public class AccountRestController {
             Team team = optionalTeam.get();
             account.setTeam(team);
         }
+        //직급코드가 존재하지않으면
+        if (!optionalPositionCode.isPresent()) {
+            log.info(" 선택한 직급 DB 존재 여부 체크.  직급코드: '" + accountMapperDto.getPostionid() +"'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E016.getCode(), ResponseErrorCode.E016.getDesc()));
+        }else{
+            account.setPosition(optionalPositionCode.get());
+        }
+
 
         Optional<Account> optionalAccount = accountService.findByUserid(account.getUserid());
 
@@ -203,6 +217,7 @@ public class AccountRestController {
             account.setRole(optionalAccount.get().getRole());
             account.setUsername(optionalAccount.get().getUsername());
             account.setApprovalType(optionalAccount.get().getApprovalType());
+            account.setPosition(optionalAccount.get().getPosition());
 
         }
         account.setModify_id(currentuserid);
@@ -260,6 +275,7 @@ public class AccountRestController {
             account.setRole(optionalAccount.get().getRole());
             account.setUsername(optionalAccount.get().getUsername());
             account.setApprovalType(optionalAccount.get().getApprovalType());
+            account.setPosition(optionalAccount.get().getPosition());
 
         }
         account.setModify_id(currentuserid);

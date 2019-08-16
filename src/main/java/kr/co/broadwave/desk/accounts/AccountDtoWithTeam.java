@@ -20,6 +20,24 @@ public class AccountDtoWithTeam {
     private AccountRole role;
     private String teamcode;
     private String teamname;
+    private String positioncode;
+    private String positionname;
+
+    public String getPositioncode() {
+        return positioncode;
+    }
+
+    public void setPositioncode(String positioncode) {
+        this.positioncode = positioncode;
+    }
+
+    public String getPositionname() {
+        return positionname;
+    }
+
+    public void setPositionname(String positionname) {
+        this.positionname = positionname;
+    }
 
     public String getUserid() {
         return userid;

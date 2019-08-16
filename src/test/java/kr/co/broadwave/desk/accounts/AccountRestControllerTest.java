@@ -1,6 +1,9 @@
 package kr.co.broadwave.desk.accounts;
 
 import kr.co.broadwave.desk.bscodes.ApprovalType;
+import kr.co.broadwave.desk.bscodes.CodeType;
+import kr.co.broadwave.desk.mastercode.MasterCode;
+import kr.co.broadwave.desk.mastercode.MasterCodeRepository;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamRepository;
 import org.junit.Test;
@@ -13,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -42,12 +46,26 @@ public class AccountRestControllerTest {
 
     @Autowired
     TeamRepository teamRepository;
+    @Autowired
+    MasterCodeRepository masterCodeRepository;
 
     @Test
     @WithMockUser(value = "testuser",roles = {"ADMIN"})
     public void account_API_list() throws Exception{
 
         //givn
+        MasterCode p1 = MasterCode.builder()
+                .codeType(CodeType.C0001)
+                .code("ADMIN")
+                .name("관리자")
+                .remark("최초시스템자동생성")
+                .insert_id("system")
+                .insertDateTime(LocalDateTime.now())
+                .modify_id("system")
+                .modifyDateTime(LocalDateTime.now())
+                .build();
+        masterCodeRepository.save(p1);
+
         Team t1 = Team.builder()
                 .teamcode("A001")
                 .teamname("TestTeam1")
@@ -57,6 +75,7 @@ public class AccountRestControllerTest {
                 .userid("S0001")
                 .username("테스트유저")
                 .password("1234")
+                .position(p1)
                 .email("test@naver.com")
                 .role(AccountRole.ROLE_ADMIN)
                 .team(t1)
@@ -65,6 +84,7 @@ public class AccountRestControllerTest {
                 .userid("S0002")
                 .username("테스트유저2")
                 .password("1234")
+                .position(p1)
                 .email("test2@naver.com")
                 .role(AccountRole.ROLE_ADMIN)
                 .team(t1)
@@ -73,6 +93,7 @@ public class AccountRestControllerTest {
                 .userid("S0003")
                 .username("신규유저")
                 .password("1234")
+                .position(p1)
                 .email("test3@naver.com")
                 .role(AccountRole.ROLE_ADMIN)
                 .team(t1)
@@ -101,6 +122,7 @@ public class AccountRestControllerTest {
         accountRepository.delete(a2);
         accountRepository.delete(a3);
         teamRepository.delete(t1);
+        masterCodeRepository.delete(p1);
 
     }
 
@@ -132,6 +154,19 @@ public class AccountRestControllerTest {
                 .remark("비고").build();
         teamRepository.save(t1);
 
+        MasterCode p1 = MasterCode.builder()
+                .codeType(CodeType.C0001)
+                .code("ADMIN")
+                .name("관리자")
+                .remark("최초시스템자동생성")
+                .insert_id("system")
+                .insertDateTime(LocalDateTime.now())
+                .modify_id("system")
+                .modifyDateTime(LocalDateTime.now())
+                .build();
+        masterCodeRepository.save(p1);
+
+
         //=========   save     =============
 
         //when then
@@ -142,6 +177,7 @@ public class AccountRestControllerTest {
                 .param("password","112233")
                 .param("email","test@mail.com")
                 .param("teamcode","A001")
+                .param("postionid",p1.getId().toString())
                 .param("mode","N")
                 .param("role","ROLE_USER ")
         )
@@ -184,11 +220,12 @@ public class AccountRestControllerTest {
         )
                 .andDo(print())
                 .andExpect(status().isOk());
-        //then
+//        //then
         Optional<Account> optionalAccount1 = accountRepository.findByUserid(account.getUserid());
         assertThat(optionalAccount1.isPresent()).isEqualTo(false);
 
         teamRepository.delete(t1);
+        masterCodeRepository.delete(p1);
     }
 
 
@@ -197,6 +234,19 @@ public class AccountRestControllerTest {
     public void account_API_saveApproval() throws Exception{
 
         //givn
+
+        MasterCode p1 = MasterCode.builder()
+                .codeType(CodeType.C0001)
+                .code("ADMIN")
+                .name("관리자")
+                .remark("최초시스템자동생성")
+                .insert_id("system")
+                .insertDateTime(LocalDateTime.now())
+                .modify_id("system")
+                .modifyDateTime(LocalDateTime.now())
+                .build();
+        masterCodeRepository.save(p1);
+
         Team t1 = Team.builder()
                 .teamcode("A001")
                 .teamname("TestTeam1")
@@ -207,6 +257,7 @@ public class AccountRestControllerTest {
                 .username("테스트유저")
                 .password("1234")
                 .email("test@naver.com")
+                .position(p1)
                 .approvalType(ApprovalType.AT01)
                 .role(AccountRole.ROLE_ADMIN)
                 .team(t1)
@@ -256,6 +307,7 @@ public class AccountRestControllerTest {
         accountRepository.delete(a2);
         accountRepository.delete(a3);
         teamRepository.delete(t1);
+        masterCodeRepository.delete(p1);
 
     }
 

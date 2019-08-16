@@ -3,6 +3,7 @@ package kr.co.broadwave.desk.accounts;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 import kr.co.broadwave.desk.bscodes.ApprovalType;
+import kr.co.broadwave.desk.mastercode.QMasterCode;
 import kr.co.broadwave.desk.teams.QTeam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,31 +31,35 @@ public class AccountRepositoryCustomImpl extends QuerydslRepositorySupport imple
 
     @Override
     public Page<AccountDtoWithTeam> findAllBySearchStrings(String userid, String username,String email, Pageable pageable) {
-        QAccount account  = QAccount.account;
-        QTeam team = QTeam.team;
+        QAccount qAccount  = QAccount.account;
+        QTeam qTeam = QTeam.team;
+        QMasterCode qMasterCode = QMasterCode.masterCode;
 
-        JPQLQuery<AccountDtoWithTeam> query = from(account)
-                .innerJoin(account.team,team)
+        JPQLQuery<AccountDtoWithTeam> query = from(qAccount)
+                .innerJoin(qAccount.team,qTeam)
+                .innerJoin(qAccount.position,qMasterCode)
                 .select(Projections.constructor(AccountDtoWithTeam.class,
-                        account.userid,
-                        account.username,
-                        account.cellphone,
-                        account.email,
-                        account.role,
-                        team.teamcode,
-                        team.teamname
+                        qAccount.userid,
+                        qAccount.username,
+                        qAccount.cellphone,
+                        qAccount.email,
+                        qAccount.role,
+                        qTeam.teamcode,
+                        qTeam.teamname,
+                        qMasterCode.code,
+                        qMasterCode.name
 
                 ));
 
 
         if (userid != null && !userid.isEmpty()){
-            query.where(account.userid.containsIgnoreCase(userid));
+            query.where(qAccount.userid.containsIgnoreCase(userid));
         }
         if (username != null && !username.isEmpty()){
-            query.where(account.username.containsIgnoreCase(username));
+            query.where(qAccount.username.containsIgnoreCase(username));
         }
         if (email != null && !email.isEmpty()){
-            query.where(account.email.containsIgnoreCase(email));
+            query.where(qAccount.email.containsIgnoreCase(email));
         }
 
 

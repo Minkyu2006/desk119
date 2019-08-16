@@ -27,4 +27,5 @@ public class AccountMapperDto {
     private ApprovalType approvalType;
     private String teamcode;
     private String mode;
+    private Long postionid;
 }

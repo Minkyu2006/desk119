@@ -208,7 +208,7 @@
 				email:$("#s_email").val()
 			};
 
-			$schList.empty().append('<tr ><td colspan="6" align = "center">조회 중</td></tr>');
+			$schList.empty().append('<tr ><td colspan="8" align = "center">조회 중</td></tr>');
 			$totalCnt.text('0');
 
 			var token = $("meta[name='_csrf']").attr("content");
@@ -235,7 +235,7 @@
 						clickEvent: 'callList'});
 
 					if (totCnt == 0) {
-						$schList.empty().append('<tr class="t-c"><td colspan="6" align="center">조회된 데이터가 없습니다.</td></tr>');
+						$schList.empty().append('<tr class="t-c"><td colspan="8" align="center">조회된 데이터가 없습니다.</td></tr>');
 						return;
 					}
 
@@ -248,9 +248,13 @@
 						html += '<tr>';
 						html += '<td >'+ echoNull2Blank(value.userid) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.username) +'</td>';
+						html += '<td >'+ echoNull2Blank(value.positionname) +'</td>';
+						html += '<td >'+ echoNull2Blank(value.teamname) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.cellphone) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.email) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.role) +'</td>';
+
+
 						html += '<td ><button class="c-button c-button--point btn__member" onclick="javascript:callinfo(\''+ echoNull2Blank(value.userid) +'\');">수정</button></td>';
 
 						html += '</tr>';
@@ -362,12 +366,16 @@
 					<col />
 					<col />
 					<col />
+					<col />
+					<col />
 					<col style="width: 60px;" />
 				</colgroup>
 				<thead>
 					<tr>
 						<th>아이디</th>
 						<th>이름</th>
+						<th>직급</th>
+						<th>부서</th>
 						<th>전화번호</th>
 						<th>이메일</th>
 						<th>권한</th>
