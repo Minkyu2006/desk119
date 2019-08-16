@@ -2,8 +2,12 @@ package kr.co.broadwave.desk.controller;
 
 import kr.co.broadwave.desk.accounts.AccountRole;
 import kr.co.broadwave.desk.bscodes.CodeType;
+import kr.co.broadwave.desk.mastercode.MasterCodeDto;
+import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.notice.*;
 import kr.co.broadwave.desk.notice.file.UploadFile;
+import kr.co.broadwave.desk.teams.TeamDto;
+import kr.co.broadwave.desk.teams.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,16 +27,28 @@ public class AdminController {
 
     private final NoticeService noticeService;
     private final ImageService imageService;
+    private final MasterCodeService masterCodeService;
+    private final TeamService teamService;
+
     @Autowired
-    public AdminController(NoticeService noticeService, ImageService imageService) {
+    public AdminController(NoticeService noticeService, ImageService imageService, MasterCodeService masterCodeService, TeamService teamService) {
         this.noticeService = noticeService;
         this.imageService = imageService;
+
+        this.masterCodeService = masterCodeService;
+        this.teamService = teamService;
     }
 
     //사용자등록화면
     @RequestMapping("accountreg")
     public String accoutrreg(Model model){
+
+        List<MasterCodeDto> positions = masterCodeService.findCodeList(CodeType.C0001); // 직급코드가져오기
+        List<TeamDto> teams = teamService.findTeamList();
         model.addAttribute("roles", AccountRole.values());
+        model.addAttribute("positions", positions);
+        model.addAttribute("teams", teams);
+
         return "admin/accountreg";
     }
 
