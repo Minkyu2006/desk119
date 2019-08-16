@@ -134,10 +134,10 @@
 					</div>
 					<div class="join__form-item">
 						<div class="c-select">
-							<label for="team" class="join__label">부서</label>
-							<select name="team" id="team" class="c-select__input">
+							<label for="teamcode" class="join__label">부서</label>
+							<select name="teamcode" id="teamcode" class="c-select__input">
 								<option th:each ="team : ${teams}"
-										th:value="${team.id}"
+										th:value="${team.teamcode}"
 										th:text="${team.teamname}"></option>
 
 							</select>
@@ -145,8 +145,8 @@
 					</div>
 					<div class="join__form-item">
 						<div class="c-select">
-							<label for="position" class="join__label">직급</label>
-							<select name="position" id="position" class="c-select__input">
+							<label for="positionid" class="join__label">직급</label>
+							<select name="positionid" id="positionid" class="c-select__input">
 								<option th:each ="position : ${positions}"
 										th:value="${position.id}"
 										th:text="${position.name}"></option>

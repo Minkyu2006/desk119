@@ -62,7 +62,7 @@ public class AccountRestController {
 
         Account account = modelMapper.map(accountMapperDto, Account.class);
         Optional<Team> optionalTeam = teamService.findByTeamcode(accountMapperDto.getTeamcode());
-        Optional<MasterCode> optionalPositionCode = masterCodeService.findById(accountMapperDto.getPostionid());
+        Optional<MasterCode> optionalPositionCode = masterCodeService.findById(accountMapperDto.getPositionid());
 
 
         //패스워드를 입력하세요.
@@ -86,7 +86,7 @@ public class AccountRestController {
         }
         //직급코드가 존재하지않으면
         if (!optionalPositionCode.isPresent()) {
-            log.info(" 선택한 직급 DB 존재 여부 체크.  직급코드: '" + accountMapperDto.getPostionid() +"'");
+            log.info(" 선택한 직급 DB 존재 여부 체크.  직급코드: '" + accountMapperDto.getPositionid() +"'");
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E016.getCode(), ResponseErrorCode.E016.getDesc()));
         }else{
             account.setPosition(optionalPositionCode.get());
@@ -137,6 +137,8 @@ public class AccountRestController {
 
 
         Account account = modelMapper.map(accountMapperDto, Account.class);
+        Optional<Team> optionalTeam = teamService.findByTeamcode(accountMapperDto.getTeamcode());
+        Optional<MasterCode> optionalPositionCode = masterCodeService.findById(accountMapperDto.getPositionid());
 
 
         //패스워드를 입력하세요.
@@ -165,7 +167,7 @@ public class AccountRestController {
         account.setInsertDateTime(LocalDateTime.now());
         account.setApprovalType(ApprovalType.AT01); // 미승인상태로 회원가입
 
-        Optional<Team> optionalTeam = teamService.findByTeamcode("T00002");
+
         //부서코드가 존재하지않으면
         if (!optionalTeam.isPresent()) {
             log.info(" 선택한 부서 DB 존재 여부 체크.  부서코드: '" + accountMapperDto.getTeamcode() +"'");
@@ -173,6 +175,13 @@ public class AccountRestController {
         }else{
             Team team = optionalTeam.get();
             account.setTeam(team);
+        }
+        //직급코드가 존재하지않으면
+        if (!optionalPositionCode.isPresent()) {
+            log.info(" 선택한 직급 DB 존재 여부 체크.  직급코드: '" + accountMapperDto.getPositionid() +"'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E016.getCode(), ResponseErrorCode.E016.getDesc()));
+        }else{
+            account.setPosition(optionalPositionCode.get());
         }
 
 
