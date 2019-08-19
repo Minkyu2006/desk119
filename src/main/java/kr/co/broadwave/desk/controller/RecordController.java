@@ -16,8 +16,23 @@ public class RecordController {
         return "record/recordreg";
     }
 
+    @RequestMapping("/list")
+    public String recordList(){
+        return "record/recordlist";
+    }
+
+    @RequestMapping("/view")
+    public String recordView(){
+        return "record/recordview";
+    }
+    //모바일 페이지
     @RequestMapping("/mreg")
     public String morileregist(){
         return "mobile/mrecordreg";
+    }
+
+    @RequestMapping("/mview")
+    public String recordMView(){
+        return "mobile/mrecordview";
     }
 }
