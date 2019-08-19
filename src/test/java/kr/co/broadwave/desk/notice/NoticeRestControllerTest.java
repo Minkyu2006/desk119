@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -40,6 +41,7 @@ public class NoticeRestControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
 
     @Autowired
     NoticeRepository noticeRepository;
@@ -92,17 +94,19 @@ public class NoticeRestControllerTest {
         //when then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/notice/reg")
                 .with((csrf()))
-                .param("subject","테스트공지사항제목")
+                .param("subject","RestControllerTest-테스트공지사항제목")
                 .param("content","<p>컨텐츠<p>")
         )
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        List<Notice> notices = noticeRepository.findTop1ByOrderById();
+        List<Notice> notices = noticeRepository.findTop1ByOrderByIdDesc();
+
+
 
         notices.forEach(e->{
             assertThat(e.getInsert_id()).as("등록자아이디 확인 [Expect nrtestuser]").isEqualTo("nrtestuser");
-            assertThat(e.getSubject()).as("공지사항 제목 확인 [Expect 테스트공지사항제목]").isEqualTo("테스트공지사항제목");
+            assertThat(e.getSubject()).as("공지사항 제목 확인 [Expect RestControllerTest-테스트공지사항제목").isEqualTo("RestControllerTest-테스트공지사항제목");
 
         });
 
@@ -110,6 +114,7 @@ public class NoticeRestControllerTest {
 
         accountRepository.delete(a1);
         teamRepository.delete(t1);
+
 
     }
 }

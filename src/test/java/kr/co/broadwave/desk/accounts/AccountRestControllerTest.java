@@ -4,6 +4,7 @@ import kr.co.broadwave.desk.bscodes.ApprovalType;
 import kr.co.broadwave.desk.bscodes.CodeType;
 import kr.co.broadwave.desk.mastercode.MasterCode;
 import kr.co.broadwave.desk.mastercode.MasterCodeRepository;
+import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamRepository;
 import org.junit.Test;
@@ -48,6 +49,9 @@ public class AccountRestControllerTest {
     TeamRepository teamRepository;
     @Autowired
     MasterCodeRepository masterCodeRepository;
+    @Autowired
+    MasterCodeService masterCodeService;
+
 
     @Test
     @WithMockUser(value = "testuser",roles = {"ADMIN"})
@@ -149,14 +153,14 @@ public class AccountRestControllerTest {
 
         //given
         Team t1 = Team.builder()
-                .teamcode("A001")
+                .teamcode("AA001")
                 .teamname("TestTeam1")
                 .remark("비고").build();
         teamRepository.save(t1);
 
         MasterCode p1 = MasterCode.builder()
                 .codeType(CodeType.C0001)
-                .code("ADMIN")
+                .code("Aadmin")
                 .name("관리자")
                 .remark("최초시스템자동생성")
                 .insert_id("system")
@@ -165,51 +169,72 @@ public class AccountRestControllerTest {
                 .modifyDateTime(LocalDateTime.now())
                 .build();
         masterCodeRepository.save(p1);
-
-
         //=========   save     =============
 
         //when then
         mockMvc.perform(post("/api/account/reg")
                 .with(csrf())
-                .param("userid","testcis")
+                .param("userid","testcis2")
                 .param("username","테스트유저")
                 .param("password","112233")
                 .param("email","test@mail.com")
-                .param("teamcode","A001")
-                .param("postionid",p1.getId().toString())
+                .param("teamcode","AA001")
+                .param("positionid",p1.getId().toString())
                 .param("mode","N")
                 .param("role","ROLE_USER ")
         )
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        Optional<Account> optionalAccount = accountRepository.findByUserid("testcis");
+        Optional<Account> optionalAccount = accountRepository.findByUserid("testcis2");
         Account account = optionalAccount.get();
 
         assertThat(optionalAccount.isPresent()).isEqualTo(true);
-        assertThat(account.getUserid()).isEqualTo("testcis");
+        assertThat(account.getUserid()).as("저장테스트 [expect test2]").isEqualTo("testcis2");
 
         //=========   modify     =============
 
         //when then
         mockMvc.perform(post("/api/account/modifyemail")
                 .with(csrf())
-                .param("userid","testcis")
+                .param("userid","testcis2")
                 .param("email","modifytest@mail.com")
-                .param("teamcode","A001")
+                .param("teamcode","AA001")
+                .param("positionid",p1.getId().toString())
                 .param("mode","N")
                 .param("role","ROLE_USER ")
         )
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        Optional<Account> optionalAccountModify = accountRepository.findByUserid("testcis");
+        Optional<Account> optionalAccountModify = accountRepository.findByUserid("testcis2");
         Account accountModify = optionalAccountModify.get();
 
         assertThat(optionalAccountModify.isPresent()).isEqualTo(true);
-        assertThat(accountModify.getUserid()).isEqualTo("testcis");
+        assertThat(accountModify.getUserid()).isEqualTo("testcis2");
         assertThat(accountModify.getEmail()).isEqualTo("modifytest@mail.com");
+
+        //modifyReg
+
+        //when then
+        mockMvc.perform(post("/api/account/modifyReg")
+                .with(csrf())
+                .param("userid","testcis2")
+                .param("email","modifytest@mail.com")
+                .param("username","이름수정테스트")
+                .param("teamcode","AA001")
+                .param("positionid",p1.getId().toString())
+                .param("role","ROLE_USER ")
+        )
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        Optional<Account> optionalAccountModify2 = accountRepository.findByUserid("testcis2");
+        Account accountModify2 = optionalAccountModify2.get();
+
+        assertThat(optionalAccountModify2.isPresent()).isEqualTo(true);
+        assertThat(accountModify2.getUsername()).as("이름수정 테스트 [ expect 이름수정테스트]").isEqualTo("이름수정테스트");
+        assertThat(accountModify2.getEmail()).isEqualTo("modifytest@mail.com");
 
         //=========== del ============
 

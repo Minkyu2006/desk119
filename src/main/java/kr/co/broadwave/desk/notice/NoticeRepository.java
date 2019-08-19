@@ -14,6 +14,6 @@ import java.util.Optional;
  */
 public interface NoticeRepository extends JpaRepository<Notice,Long>, QuerydslPredicateExecutor<Notice> {
 
-    List<Notice> findTop1ByOrderById();
+    List<Notice> findTop1ByOrderByIdDesc();
 
 }

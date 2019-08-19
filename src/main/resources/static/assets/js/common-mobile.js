@@ -1,6 +1,15 @@
 
 //20180328최인석 myoffice 에있는 js 추가함
 
+//Ajax 호출시 에러가났을경우의 메세지 함수
+function ajaxErrorMsg(request) {
+    if (request.status == "403") {
+        alert("로그인 정보가 만료되었거나 권한이 없습니다. 다시 로그인 하세요");
+    } else {
+        alert("code:" + request.status + "\n" + "message:" + request.responseText);
+    }
+}
+
 //JSON KEY to lowercase
 function echoNull2Blank(str) {
     if (str == null) return '';

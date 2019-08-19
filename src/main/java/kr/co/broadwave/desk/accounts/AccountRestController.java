@@ -61,6 +61,7 @@ public class AccountRestController {
 
 
         Account account = modelMapper.map(accountMapperDto, Account.class);
+
         Optional<Team> optionalTeam = teamService.findByTeamcode(accountMapperDto.getTeamcode());
         Optional<MasterCode> optionalPositionCode = masterCodeService.findById(accountMapperDto.getPositionid());
 
@@ -127,6 +128,119 @@ public class AccountRestController {
         Account accountSave =  this.accountService.saveAccount(account);
 
         log.info("사용자 저장 성공 : " + accountSave.toString() );
+        return ResponseEntity.ok(res.success());
+
+    }
+
+    @PostMapping("modifyReg")
+    public ResponseEntity accountModifySave(@ModelAttribute AccountMapperDto accountMapperDto, HttpServletRequest request){
+
+
+        Account account = modelMapper.map(accountMapperDto, Account.class);
+        Optional<Team> optionalTeam = teamService.findByTeamcode(accountMapperDto.getTeamcode());
+        Optional<MasterCode> optionalPositionCode = masterCodeService.findById(accountMapperDto.getPositionid());
+
+        //아이디를 입력하세요.
+        if (accountMapperDto.getUserid() == null || accountMapperDto.getUserid() ==""){
+            log.info(ResponseErrorCode.E007.getDesc());
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E007.getCode(), ResponseErrorCode.E007.getDesc()));
+        }
+
+        //부서코드가 존재하지않으면
+        if (!optionalTeam.isPresent()) {
+            log.info(" 선택한 부서 DB 존재 여부 체크.  부서코드: '" + accountMapperDto.getTeamcode() +"'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E005.getCode(), ResponseErrorCode.E005.getDesc()));
+        }else{
+            Team team = optionalTeam.get();
+            account.setTeam(team);
+        }
+        //직급코드가 존재하지않으면
+        if (!optionalPositionCode.isPresent()) {
+            log.info(" 선택한 직급 DB 존재 여부 체크.  직급코드: '" + accountMapperDto.getPositionid() +"'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E016.getCode(), ResponseErrorCode.E016.getDesc()));
+        }else{
+            account.setPosition(optionalPositionCode.get());
+        }
+
+
+        Optional<Account> optionalAccount = accountService.findByUserid(account.getUserid());
+
+        String currentuserid = CommonUtils.getCurrentuser(request);
+
+
+
+
+        //수정일때
+        if(!optionalAccount.isPresent()){
+            log.info("사용자 일반 관리자(일반정보) : 사용자아이디: '" + account.getUserid() + "'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E004.getCode(), ResponseErrorCode.E004.getDesc()));
+        }else{
+            account.setId(optionalAccount.get().getId());
+            account.setInsert_id(optionalAccount.get().getInsert_id());
+            account.setInsertDateTime(optionalAccount.get().getInsertDateTime());
+            account.setPassword(optionalAccount.get().getPassword());
+            account.setApprovalType(optionalAccount.get().getApprovalType());
+        }
+        account.setModify_id(currentuserid);
+        account.setModifyDateTime(LocalDateTime.now());
+
+
+
+
+
+        Account accountSave =  this.accountService.saveAccount(account);
+
+        log.info("사용자 관리자(일반정보) 수정 성공 : " + accountSave.toString() );
+        return ResponseEntity.ok(res.success());
+
+    }
+
+    @PostMapping("modifyAdminPassword")
+    public ResponseEntity accountmodifyAdminPassword(@ModelAttribute AccountMapperDto accountMapperDto, HttpServletRequest request){
+
+
+        Account account = modelMapper.map(accountMapperDto, Account.class);
+        Optional<Team> optionalTeam = teamService.findByTeamcode(accountMapperDto.getTeamcode());
+        Optional<MasterCode> optionalPositionCode = masterCodeService.findById(accountMapperDto.getPositionid());
+
+        //아이디를 입력하세요.
+        if (accountMapperDto.getUserid() == null || accountMapperDto.getUserid() ==""){
+            log.info(ResponseErrorCode.E007.getDesc());
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E007.getCode(), ResponseErrorCode.E007.getDesc()));
+        }
+
+
+
+        Optional<Account> optionalAccount = accountService.findByUserid(account.getUserid());
+
+        String currentuserid = CommonUtils.getCurrentuser(request);
+
+
+
+
+        //수정일때
+        if(!optionalAccount.isPresent()){
+            log.info("사용자 관리자(패스워드) 실패 : 사용자아이디: '" + account.getUserid() + "'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E004.getCode(), ResponseErrorCode.E004.getDesc()));
+        }else{
+            account.setId(optionalAccount.get().getId());
+            account.setInsert_id(optionalAccount.get().getInsert_id());
+            account.setInsertDateTime(optionalAccount.get().getInsertDateTime());
+            account.setUsername(optionalAccount.get().getUsername());
+            account.setCellphone(optionalAccount.get().getCellphone());
+            account.setEmail(optionalAccount.get().getEmail());
+            account.setTeam(optionalAccount.get().getTeam());
+            account.setApprovalType(optionalAccount.get().getApprovalType());
+            account.setPosition(optionalAccount.get().getPosition());
+            account.setRole(optionalAccount.get().getRole());
+        }
+        account.setModify_id(currentuserid);
+        account.setModifyDateTime(LocalDateTime.now());
+
+
+        Account accountSave =  this.accountService.saveAccount(account);
+
+        log.info("사용자 관리자(패스워드) 수정 성공 : " + accountSave.toString() );
         return ResponseEntity.ok(res.success());
 
     }
@@ -265,7 +379,7 @@ public class AccountRestController {
 
         //수정일때
         if(!optionalAccount.isPresent()){
-            log.info("사용자정보(이메일)수정실패 : 사용자아이디: '" + account.getUserid() + "'");
+            log.info("사용자정보(패스워드)수정실패 : 사용자아이디: '" + account.getUserid() + "'");
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E004.getCode(), ResponseErrorCode.E004.getDesc()));
         }else{
             //현재암호비교
@@ -307,7 +421,7 @@ public class AccountRestController {
                                       @RequestParam(value="email", defaultValue="") String email,
                                       Pageable pageable){
 
-        log.info("부서 리스트 조회 / 조회조건 : userid / '" + userid + "' username / '" + username + "', email / '" + email + "'");
+        log.info("사용자 리스트 조회 / 조회조건 : userid / '" + userid + "' username / '" + username + "', email / '" + email + "'");
 
 
         Page<AccountDtoWithTeam> accounts = this.accountService.findAllBySearchStrings(userid, username, email, pageable);
