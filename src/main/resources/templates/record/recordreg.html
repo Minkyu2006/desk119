@@ -12,7 +12,18 @@
 
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
-	
+	<script>
+		$(function() {
+			// file name
+			$('.c-file__button input').change(function(){
+				var txt = [];
+				for(var i=0; i<this.files.length; i++){
+					txt.push(this.files[i].name);
+				}
+				$(this).parent().prev('.c-file__input').val( txt.join() );
+			}).change();
+		})
+	</script>
 
 </th:block>
 

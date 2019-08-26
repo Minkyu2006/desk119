@@ -513,7 +513,7 @@
 }
 .c-checkbox .c-text.c-text--small .c-text__input {
 	width: 100px;
-	height: 18px;
+	height: 24px;
 }
 .c-text.c-text--label {
 	
@@ -642,6 +642,26 @@
 	width: 100%;
 	background-color: #fff;
 	border-radius: 0;
+}
+.c-date.c-date--small {
+	max-height: 22px;
+}
+.c-date.c-date--small .c-date__input-box {
+	height: 22px;
+}
+.c-date.c-date--small .c-date__result {
+	width: calc(100% - 22px);
+	height: 22px;
+	padding: 0 5px;
+	font-size: 12px;
+	line-height: 22px;
+}
+.c-date.c-date--small .c-date__button {
+	height: 22px;
+	font-size: 12px;
+}
+.c-date.c-date--small .c-date__calendar {
+	
 }
 
 .c-date .ui-datepicker-inline {
@@ -1150,14 +1170,44 @@
 }
 .c-input-list li {
 	float: left;
+	position: relative;
+	margin-top: 0 !important;
 	margin-right: 10px;
 }
 .c-input-list li:last-child {
 	margin-right: 0;
 }
+.c-input-list.c-input-list--button-right {
+	
+}
+.c-input-list.c-input-list--button-right li {
+	width: 50%;
+	margin: 0;
+	padding: 5px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.c-input-list.c-input-list--button-right li:nth-last-child(2) {
+	width: calc(100% - 50px);
+}
+.c-input-list.c-input-list--button-right li:last-child {
+	float: right;
+	width: 40px;
+	margin-left: 10px;
+	padding: 0;
+}
+.c-input-list__name {
+	overflow: hidden;
+	display: block;
+	width: 100%;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
 
-
-
+@media(max-width: 720px) {
+	
+}
 
 
 /* tree */
@@ -1623,6 +1673,9 @@
     position: relative;
     width: 100%;
 }
+.m-text__input {
+	width: 100%;
+}
 
 input[type=text]:-ms-clear {
     display: none;
@@ -1843,4 +1896,12 @@ input[type=text]:-ms-clear {
 }
 .iw-container p span {
 	font-weight: 700;
+}
+
+
+
+
+/* c-result-list */
+.c-result-list .c-input-list li {
+	font-size: 12px;
 }
