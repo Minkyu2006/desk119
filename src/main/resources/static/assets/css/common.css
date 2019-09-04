@@ -301,7 +301,7 @@ body {
 
 @media (max-width: 768px) {
 	.content {
-		min-height: 0;
+		/*min-height: 0;*/
 	}
 }
 

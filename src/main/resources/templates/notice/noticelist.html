@@ -100,15 +100,21 @@
 
 					var html = '';
 					$.each(res.data.datalist, function(key, value){
-						html += '<tr >';
-						html += '<td ><a href="/notice/noticeview/'+ echoNull2Blank(value.id) +'">'+ echoNull2Blank(value.subject) +'</a>';
+						html += '<tr>';
+						html += '<td class="c-retable__title"><a href="/notice/noticeview/'+ echoNull2Blank(value.id) +'" class="c-retable__subject">'+ echoNull2Blank(value.subject) +'</a>';
 						if (datecheck(value.modifyDateTime.substring(0,10)) =='new'){
 							html +='<img src="/assets/images/icon__new.png" alt="새글알림" />';
 						}
-						html +='</td>';
-						html += '<td >'+ echoNull2Blank(value.modify_name) +'</td>';
-						html += '<td >'+ echoNull2Blank(value.modifyDateTime.substring(0,10)) +'</td>';
-						html += '<td >'+ echoNull2Blank(value.hitCount) +'</td>';
+						html += '<div class="c-retable--tablet-visible">';
+						html += '<ul class="c-retable__tablet-list">';
+						html += '<li><img src="/assets/images/icon__user.png" alt="작성자" />' + echoNull2Blank(value.modify_name) + '</li>';
+						html += '<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자" />' + echoNull2Blank(value.modifyDateTime.substring(0,10)) + '</li>'
+						html += '</ul>'
+						html += '</div>';
+						html += '</td>';
+						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.modify_name) +'</td>';
+						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.modifyDateTime.substring(0,10)) +'</td>';
+						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.hitCount) +'</td>';
 
 						html += '</tr>';
 
@@ -132,41 +138,52 @@
 	<section class="section">
 		<h2 class="section__heading">공지사항 리스트</h2>		
 		<article class="article">
-			<table class="c-table">
-				<colgroup>
+			<table class="c-searchtable">
+				<!-- <colgroup>
 					<col style="width: 150px;" />
 					<col />
 					<col style="width: 150px;" />
 					<col />
 					<col style="width: 60px;" />
-				</colgroup>
+				</colgroup>  -->
 				<tbody>
 					<tr>
-						<th>제목</th>
-						<td>
-							<div class="c-text"><input type="text" class="c-text__input" id="s_subject" name = "s_subject" /></div>
+						<td colspan="2">
+							<div class="c-searchtext">
+								<label for="s_subject" class="c-searchtext__label">제목</label>
+								<input type="text" class="c-searchtext__input" id="s_subject" name = "s_subject" />
+							</div>
 						</td>
-						<th>작성자</th>
-						<td>
-							<div class="c-text"><input type="text" class="c-text__input" id="s_username" name = "s_username"/></div>
+						<td colspan="2">
+							<div class="c-searchtext">
+								<label for="s_username" class="c-searchtext__label">작성자</label>
+								<input type="text" class="c-searchtext__input" id="s_username" name = "s_username" />
+							</div>
 						</td>
-						<td>
+						<td class="c-searchtable__button">
 							<button class="c-button c-button--point" id="btnSearch">조회</button>
 						</td>
 					</tr>
+					<!-- <tr>
+						<th class="c-searchtable__title">제목</th>
+						<td class="c-searchtable__form">
+							<div class="c-text"><input type="text" class="c-text__input" id="s_subject" name = "s_subject" /></div>
+						</td>
+						<th class="c-searchtable__title">작성자</th>
+						<td class="c-searchtable__form">
+							<div class="c-text"><input type="text" class="c-text__input" id="s_username" name = "s_username"/></div>
+						</td>
+						<td class="c-searchtable__button">
+							<button class="c-button c-button--point" id="btnSearch">조회</button>
+						</td>
+					</tr> -->
 				</tbody>
 			</table>
 		</article>
 		<article class="article">
 			<div class="notice-list">
-				<table class="c-table">
-					<colgroup>
-						<col />
-						<col style="width: 100px;" />
-						<col style="width: 100px;" />
-						<col style="width: 100px;" />
-					</colgroup>
-					<thead>
+				<table class="c-retable">
+					<thead class="c-retable--tablet-hidden">
 						<tr>
 							<th>제목</th>
 							<th>작성자</th>
