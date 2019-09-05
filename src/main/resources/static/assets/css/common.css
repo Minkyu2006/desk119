@@ -80,7 +80,8 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #181a1f;
+    background-color: #8f6f62;
+    /*background-color: #181a1f;*/
 	z-index: 10;
 }
 .header__inner {
@@ -460,15 +461,15 @@ h4.article__heading {
 
 .banner {
 	position: absolute;
-	right: 100px;
-	top: 50%;
+	right: 0;
+	top: 0;
 	width: 300px;
-	margin: 0 -1px;
-	-webkit-transform: translateY(-50%);
-	-moz-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	-o-transform: translateY(-50%);
-	transform: translateY(-50%);;
+	height: 100%;
+}
+.banner__list {
+	display: block;
+	width: 100%;
+	height: 100%;
 }
 .banner__list:before {
 	content: " ";
@@ -482,30 +483,71 @@ h4.article__heading {
 .banner__item {
 	float: left;
 	width: 50%;
-	padding: 1px;
+	height: 25%;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
-.banner__item:last-child {
+.banner__item:last-child,
+.banner__item:nth-last-child(2) {
 	width: 100%;
 }
+
 .banner__link {
 	display: block;
 	width: 100%;
-	height: 200px;
-	border: 1px solid #222;
+	height: 100%;
 	background-color: #fff;
 	color: #222;
 	line-height: 50px;
 	font-size: 14px;
 	text-align: center;
+	text-indent:-9999px;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
-@media (max-width: 768px) {
+.banner__item--write .banner__link {
+	background: #ff8c26 url('/assets/images/write.png');
+}
+.banner__item--write-list .banner__link {
+	background: #c99769 url('/assets/images/list.png');
+}
+.banner__item--line .banner__link {
+	background: #ffbf60 url('/assets/images/line.png');
+	/*background: #c88f31 url('/assets/images/line.png');*/
+}
+.banner__item--guide .banner__link {
+	background: #ffd378 url('/assets/images/guide.png');
+	/*background: #c9a249 url('/assets/images/guide.png');*/
+}
+.banner__item--notice .banner__link {
+	background: #4f647d url('/assets/images/notice.png');
+}
+.banner__item--table .banner__link {
+	background: #ff8c26 url('');
+}
+
+.banner__item--write .banner__link,
+.banner__item--write-list .banner__link,
+.banner__item--line .banner__link,
+.banner__item--guide .banner__link
+ {
+	background-repeat: no-repeat;
+	background-position: center center;
+	-webkit-background-size: 98px 120px;
+	background-size: 98px 120px;
+}
+.banner__item--notice .banner__link,
+.banner__item--table .banner__link {
+	background-repeat: no-repeat;
+	background-position: center center;
+	-webkit-background-size: 260px 128px;
+	background-size: 260px 128px;
+}
+
+@media (max-width: 1024px) {
 	.banner {
 		position: relative;
 		top: auto;
@@ -514,17 +556,68 @@ h4.article__heading {
 		margin: 0 auto;
 		transform: none;
 	}
+	.banner__list {
+		height: auto;
+	}
 	.banner__item {
 		width: 100%;
-	}
-	.banner__item + .banner__item {
-		margin-top: 20px;
-	}
-	.banner__link {
 		height: auto;
-		padding: 20px 0;
+	}
+	/*.banner__item + .banner__item {
+		margin-top: 10px;
+	}*/
+	.banner__link {
+		height: 168px;
+	}
+	
+	.banner__item--write .banner__link {
+		background: #ff8c26 url('/assets/images/write--mobile.png');
+	}
+	.banner__item--write-list .banner__link {
+		background: #c99769 url('/assets/images/list--mobile.png');
+	}
+	.banner__item--line .banner__link {
+		background: #ffbf60 url('/assets/images/line--mobile.png');
+		/*background: #c88f31 url('/assets/images/line--mobile.png');*/
+	}
+	.banner__item--guide .banner__link {
+		background: #ffd378 url('/assets/images/guide--mobile.png');
+		/*background: #c9a249 url('/assets/images/guide--mobile.png');*/
+	}
+	.banner__item--write .banner__link,
+	.banner__item--write-list .banner__link,
+	.banner__item--line .banner__link,
+	.banner__item--guide .banner__link
+	 {
+		background-repeat: no-repeat;
+		background-position: center center;
+		-webkit-background-size: 260px 128px;
+		background-size: 260px 128px;
 	}
 } 
+
+@media (max-width: 480px) {
+	.banner__link {
+		height: 113px;
+	}
+	.banner__item--write .banner__link,
+	.banner__item--write-list .banner__link,
+	.banner__item--line .banner__link,
+	.banner__item--guide .banner__link
+	 {
+		background-repeat: no-repeat;
+		background-position: center center;
+		-webkit-background-size: 169px 83px;
+		background-size: 169px 83px;
+	}
+	.banner__item--notice .banner__link,
+	.banner__item--table .banner__link {
+		background-repeat: no-repeat;
+		background-position: center center;
+		-webkit-background-size: 169px 83px;
+		background-size: 169px 83px;
+	}
+}
 
 /* subpage */
 .record {
@@ -623,6 +716,35 @@ h4.article__heading {
 }
 
 /* 라인업 조직도 */
+.organization {
+	width: 100%;
+	max-width: 820px;
+	height: 0;
+	margin: 0 auto;
+	padding-bottom: 50%;
+	background: #fff url(/assets/images/organization--horizon.png) no-repeat;
+	background-position: center center;
+	-webkit-background-size: contain;
+	background-size: contain;
+}
+.organization ul {
+	display: block;
+	position: absolute;
+	top: -9999px;
+	left: -9999px;
+	width: 1px;
+	height: 1px;
+	text-indent: -9999px;
+}
+
+@media (max-width: 768px) {
+	.organization {
+		padding-bottom: 141.4516%;
+		background-image: url(/assets/images/organization.png);
+	}
+}
+
+/*
 .organization * {
 	margin: 0;
 	padding: 0;
@@ -827,7 +949,7 @@ h4.article__heading {
 		font-size: 14px;
 	}
 }
-
+*/
 
 /* 라인업 테이블 */
 .organization-table {

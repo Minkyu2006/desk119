@@ -21,7 +21,6 @@
 <div layout:fragment="content" class="content">
 	
 	<div class="main">
-		<h1>건설119 데스크 메인화면</h1>
 		<!-- div class="login-box">
 			<div class="login-box__inner" sec:authorize="!isAuthenticated()">
 				<form th:action="@{/login}" method="post">
@@ -49,11 +48,12 @@
 		</div-->
 		<div class="banner">
 			<ul class="banner__list">
-				<li class="banner__item"><a href="/record/reg" class="banner__link">출동일지작성</a></li>
-				<li class="banner__item"><a href="/record/list" class="banner__link">출동일지조회</a></li>
-				<li class="banner__item"><a href="about/lineup" class="banner__link">건설 119 출동대원 라인업</a></li>
-				<li class="banner__item"><a href="" class="banner__link">건설 119 주요 활동 가이드라인</a></li>
-				<li class="banner__item"><a href="/notice/noticelist" class="banner__link">공지사항</a></li>
+				<li class="banner__item banner__item--write"><a href="/record/reg" class="banner__link">출동일지작성</a></li>
+				<li class="banner__item banner__item--write-list"><a href="/record/list" class="banner__link">출동일지조회</a></li>
+				<li class="banner__item banner__item--line"><a href="about/lineup" class="banner__link">건설 119 출동대원 라인업</a></li>
+				<li class="banner__item banner__item--guide"><a href="" class="banner__link">건설 119 주요 활동 가이드라인</a></li>
+				<li class="banner__item banner__item--notice"><a href="/notice/noticelist" class="banner__link">공지사항</a></li>
+				<li class="banner__item banner__item--table"><a href="#" class="banner__link">도표영역</a></li>
 			</ul>
 		</div>
 	</div>
