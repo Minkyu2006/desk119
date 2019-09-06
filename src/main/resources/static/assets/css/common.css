@@ -387,11 +387,52 @@ h4.article__heading {
 
 /* main */
 .main {
+	position: absolute;
+	top: 0;
+	left: 0;
 	width: 100%;
-	background: #fff no-repeat center center;
+	height: 100%;
+	background: #fff url(/assets/images/main.png) no-repeat;
+	background-position: left bottom;
 	-webkit-background-size: cover;
 	background-size: cover;
 }
+.main__text {
+	position: absolute;
+	top: 14.7169%;
+	right: 340px;
+	width: 38%;
+	height: 0;
+	padding-bottom: 19.1071%;
+	background-image: url(/assets/images/main__text.png);
+	background-repeat: no-repeat;
+	background-position: center center;
+	-webkit-background-size: contain;
+	background-size: contain;
+}
+.main__text p {
+	position: absolute;
+	top: -9999px;
+	left: -9999px;
+	width: 1px;
+	height: 1px;
+	text-indent: -9999px;
+}
+
+@media (max-width: 1024px) {
+	.main {
+		position: relative;
+		top: auto;
+		left: auto;
+		height: auto;
+		background-image: none;
+	}
+	.main__text {
+		display: none;
+	}
+}
+
+
 .login-box {
 	position: absolute;
 	top: 50%;
