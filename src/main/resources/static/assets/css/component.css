@@ -143,6 +143,7 @@
     box-sizing: border-box;
 }
 .c-input-table th {
+	height: 30px;
 	padding: 5px 10px;
 	background-color: #efefef;
 	border: 1px solid #222;
@@ -155,6 +156,7 @@
     box-sizing: border-box;
 }
 .c-input-table td {
+	height: 30px;
 	padding: 5px 10px;
 	border: 1px solid #222;
 	vertical-align: middle;
@@ -187,7 +189,10 @@
 .c-input-table.c-input-table--inner th {
 	background-color: #fff;
 }
-
+.c-input-table pre {
+	white-space: pre-wrap;
+	line-height: 1.4;
+}
 
 /* text ellipsis */
 .c-ellipsis {
@@ -2037,6 +2042,9 @@ input[type=text]:-ms-clear {
 .c-retable--tablet-visible {
 	display: none;
 }
+.c-retable__span--tablet-visible {
+	display: none;
+}
 
 .c-searchtable th {
     padding: 10px;
@@ -2110,7 +2118,7 @@ input[type=text]:-ms-clear {
 	outline: none;
 }
 
-@media(max-width: 960px) {
+@media(max-width: 1024px) {
 	.c-retable td {
 		white-space: normal;
 		font-size: 14px;
@@ -2120,6 +2128,17 @@ input[type=text]:-ms-clear {
 	}
 	.c-retable--tablet-hidden {
 		display: none;
+	}
+	.c-retable__span--tablet-visible {
+		display: inline-block;
+		margin-right: 10px;
+	}
+	.c-retable__title {
+		display: block;
+		width: 100%;
+		height: auto !important;
+		white-space: normal;
+		text-align: left;
 	}
 	
 	
