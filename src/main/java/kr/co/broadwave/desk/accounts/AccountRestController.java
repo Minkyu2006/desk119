@@ -270,8 +270,6 @@ public class AccountRestController {
 
         Optional<Account> optionalAccount = accountService.findByUserid(account.getUserid());
 
-
-
         //userid 중복체크
         if (optionalAccount.isPresent()) {
             log.info("회원가입저장실패(아이디중복) 사용자아이디: '" + account.getUserid() + "'");
