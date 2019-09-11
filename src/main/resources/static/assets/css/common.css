@@ -111,7 +111,7 @@ body {
     font-weight: 700;
 }
 .header__inner .logo img {
-	height: 
+	height: ;
 	vertical-align: text-bottom;
 }
 .header__inner .info {
@@ -153,8 +153,8 @@ body {
 	width: 40px;
 	text-indent: -9999px;
 	background-position: center center;
-	-webkit-background-size: 24px 24px;
-	background-size: 24px 24px;
+	-webkit-background-size: 36px 36px;
+	background-size: 36px 36px;
 	background-repeat: no-repeat;
 }
 .info__btn.info__btn--login {
