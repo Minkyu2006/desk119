@@ -51,7 +51,7 @@ public class RecordController {
     }
 
     //출동일지작성
-    @RequestMapping("recordreg")
+    @RequestMapping("reg")
     public String recordreg(Model model){
         System.out.println("등록화면호출");
         List<MasterCodeDto> arRelatedId = masterCodeService.findCodeList(CodeType.C0001);
@@ -63,7 +63,7 @@ public class RecordController {
     }
 
     //출동일지수정
-    @RequestMapping("recordreg/{id}")
+    @RequestMapping("reg/{id}")
     public String noticeReg(Model model, @PathVariable Long id){
         RecordDto recordDto = recordService.findById(id);
         List<MasterCodeDto> arRelatedId = masterCodeService.findCodeList(CodeType.C0001);
