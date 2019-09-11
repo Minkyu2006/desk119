@@ -114,7 +114,9 @@ public class NoticeRestControllerTest {
 
         accountRepository.delete(a1);
         teamRepository.delete(t1);
-
+        notices.forEach(e->{
+            noticeRepository.delete(e);
+        });
 
     }
 }
