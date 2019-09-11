@@ -1917,8 +1917,24 @@ input[type=text]:-ms-clear {
 
 
 /* c-result-list */
-.c-result-list .c-input-list li {
+.c-result-list {
+	width: 100%;
+	padding: 0 10px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.c-result-list > li + li {
+	margin-top: 5px;
+	padding-top: 5px;
+	border-top: 1px solid #efefef;
+}
+.c-result-list .c-input-list  li {
+	line-height: 22px;
 	font-size: 12px;
+}
+.c-result-list .c-input-list  li:last-child {
+	float: right;
 }
 
 

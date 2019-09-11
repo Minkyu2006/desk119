@@ -110,6 +110,10 @@ body {
     font-size: 32px;
     font-weight: 700;
 }
+.header__inner .logo img {
+	height: 
+	vertical-align: text-bottom;
+}
 .header__inner .info {
     float: right;
     padding: 20px 0;
@@ -131,6 +135,7 @@ body {
     margin-left: 10px;
 }
 .info__btn {
+	display: block;
 	position: relative;
     min-width: 40px;
     height: 40px;
@@ -141,6 +146,25 @@ body {
     line-height: 40px;
     text-align: center;
     cursor: pointer;
+}
+.info__btn.info__btn--login,
+.info__btn.info__btn--logout,
+.info__btn.info__btn--join {
+	width: 40px;
+	text-indent: -9999px;
+	background-position: center center;
+	-webkit-background-size: 24px 24px;
+	background-size: 24px 24px;
+	background-repeat: no-repeat;
+}
+.info__btn.info__btn--login {
+	background-image: url(/assets/images/icon__login.png);
+}
+.info__btn.info__btn--logout {
+	background-image: url(/assets/images/icon__logout.png);
+}
+.info__btn.info__btn--join {
+	background-image: url(/assets/images/icon__join.png);
 }
 
 
@@ -220,7 +244,7 @@ body {
 	left: -300px;
 	width: 300px;
 	height: 100vh;
-	background-color: #3e4046;
+	background-color: #6d6d6d;
 	-moz-transition:all 200ms ease-in;
     -webkit-transition:all 200ms ease-in;
     -o-transition:all 200ms ease-in;
@@ -240,11 +264,15 @@ body {
 	height: 80px;
 	padding: 0 20px;
 	line-height: 80px;
+	background-color: #9b9b9b;
 }
 .nav__heading a {
 	color: #f99d1c;
 	font-size: 32px;
 	font-weight: 700;
+}
+.nav__heading a img {
+	vertical-align: text-bottom
 }
 .nav__list {
 	width: 300px;
@@ -376,7 +404,7 @@ h4.article__heading {
     width: 100%;
     height: 30px;
     padding: 0 20px;
-    background-color: #696b71;
+    background-color: #424242;
     color: #fff;
     font-size: 12px;
     text-align: center;
@@ -399,16 +427,16 @@ h4.article__heading {
 }
 .main__text {
 	position: absolute;
-	top: 10%;
+	top: 20%;
 	right: 440px;
-	width: 25%;
+	width: 35%;
 	height: 0;
-	padding-bottom: 12%;
+	padding-bottom: 30%;
 	background-image: url(/assets/images/main__text.png);
 	background-repeat: no-repeat;
-	background-position: center center;
-	-webkit-background-size: contain;
-	background-size: contain;
+	background-position: center top;
+	-webkit-background-size: 77%;
+	background-size: 77%;
 }
 .main__text p {
 	position: absolute;
@@ -417,6 +445,18 @@ h4.article__heading {
 	width: 1px;
 	height: 1px;
 	text-indent: -9999px;
+}
+.main__img {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 0;
+	padding-bottom: 53.0465%;
+	background-image: url(/assets/images/main02.png);
+	background-position: center center;
+	-webkit-background-size: contain;
+	background-size: contain;
 }
 
 @media (max-width: 1024px) {
