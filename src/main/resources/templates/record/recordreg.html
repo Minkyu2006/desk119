@@ -242,19 +242,12 @@
 			if($("input[name='arIntoStart']").val() != "" && $("input[name='arIntoEnd']").val() != "") {
 				var start = $('input[name=arIntoStart]').val();
 				var end = $('input[name=arIntoEnd]').val();
-				console.log("start : "+start,"end : "+end);
-				console.log("start[0] : "+start[0],"end[0] : "+end[0]);
-				console.log("start[1] : "+start[1],"end[1] : "+end[1]);
-				console.log("start[2] : "+start[2],"end[2] : "+end[2]);
-				console.log("start[3] : "+start[3],"end[3] : "+end[3]);
-				console.log("start[4] : "+start[4],"end[4] : "+end[4]);
-				console.log("start[5] : "+start[5],"end[5] : "+end[5]);
-				console.log("start[6] : "+start[6],"end[6] : "+end[6]);
-				console.log("start[7] : "+start[7],"end[7] : "+end[7]);
-
-
-				// arIntoStart(startArray);
-				// arIntoEnd(endArray);
+				var start2 = [start[0],start[1],start[2],start[3],"-",start[4],start[5],"-",start[6],start[7]];
+				var end2 = [end[0],end[1],end[2],end[3],"-",end[4],end[5],"-",end[6],end[7]];
+				var startArray = start2.join('');
+				var endArray = end2.join('');
+				arIntoStart(startArray);
+				arIntoEnd(endArray);
 			};
 
 			LocationSetting(); //행정구역 onchange실행
@@ -333,7 +326,7 @@
 						return;
 					}
 					alert('출동일지가 등록 되었습니다.');
-					location.href = "/record/recordreg";
+					location.href = "/record/list";
 				}
 			});
 		}
@@ -567,11 +560,6 @@
 											<input id="addSel" type="hidden" class="c-select__input" th:value="${record} ? ${record.arLocationAddressType}: ''"/>
 											<div class="c-select" style="width: 100px;">
 												<select name="arLocationAddressType" id="arLocationAddressType" class="c-select__input" >
-<!--													<option th:each ="LocationAddressType : ${LocationAddressTypes}"-->
-<!--															th:value="${LocationAddressType.getCode()}"-->
-<!--															th:text="${LocationAddressType.getDesc()}"-->
-<!--															th:selected="${LocationAddressType.getCode()} == (${record} ? ${record.arLocationAddressType} : '')">-->
-<!--													</option>-->
 												</select>
 											</div>
 										</li>
