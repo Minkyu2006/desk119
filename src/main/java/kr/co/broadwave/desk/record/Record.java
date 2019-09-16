@@ -100,15 +100,15 @@ public class Record {
     private String arEngine;
 
     //현장개요
-    @Column(name="ar_outline")
+    @Column(length = 100000, name="ar_outline")
     private String arOutline;
 
     //조사결과
-    @Column(name="ar_result")
+    @Column(length = 100000, name="ar_result")
     private String arResult;
 
     //검토의견
-    @Column(name="ar_opinion")
+    @Column(length = 100000, name="ar_opinion")
     private String arOpinion;
 
     //기본적으로 들어가는것들

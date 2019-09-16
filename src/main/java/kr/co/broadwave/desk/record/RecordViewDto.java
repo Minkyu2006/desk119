@@ -2,6 +2,7 @@ package kr.co.broadwave.desk.record;
 
 import kr.co.broadwave.desk.bscodes.LocationAddressType;
 import kr.co.broadwave.desk.bscodes.LocationCityType;
+import kr.co.broadwave.desk.mastercode.MasterCode;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -20,7 +21,7 @@ public class RecordViewDto {
     private String arNumber; //출동일지 번호
     private String arTitle; //출동일지 제목
     private String arWriter; //작성자
-    private Long arRelatedId; //관련부처
+    private MasterCode arRelatedId; //관련부처
     private String arRelatedDetail; //관련부처상세정보
     private String arPapers; //관련문서
     private String arIntoStart; //조사일자 시작
@@ -71,11 +72,11 @@ public class RecordViewDto {
     }
 
 
-    public Long getArRelatedId() {
-        return arRelatedId;
+    public String getArRelatedId() {
+        return arRelatedId.getName();
     }
 
-    public void setArRelatedId(Long arRelatedId) {
+    public void setArRelatedId(MasterCode arRelatedId) {
         this.arRelatedId = arRelatedId;
     }
 
@@ -112,7 +113,7 @@ public class RecordViewDto {
     }
 
     public String getArLocationCityType() {
-        return arLocationCityType.getCode();
+        return arLocationCityType.getDesc();
     }
 
     public void setArLocationCityType(LocationCityType arLocationCityType) {
@@ -120,7 +121,7 @@ public class RecordViewDto {
     }
 
     public String getArLocationAddressType() {
-        return arLocationAddressType.getCode();
+        return arLocationAddressType.getDesc();
     }
 
     public void setArLocationAddressType(LocationAddressType arLocationAddressType) {

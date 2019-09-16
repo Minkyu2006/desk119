@@ -66,8 +66,10 @@
 				<tr>
 
 					<th>조사일시</th>
-					<td th:text="${record} ? ${record.arIntoStart} : ''"></td>
-					<td th:text="${record} ? ${record.arIntoEnd} : ''"></td>
+					<td>
+						<span th:text="${record} ? ${record.arIntoStart} : ''"></span> ~
+						<span th:text="${record} ? ${record.arIntoEnd} : ''"></span>
+					</td>
 
 					<th>조사위치</th>
 					<td class="c-input-table__non-padding">
@@ -79,8 +81,10 @@
 							<tbody>
 								<tr>
 									<th>행정구역</th>
-									<td th:text="${record} ? ${record.arLocationCityType} : ''"></td>
-									<td th:text="${record} ? ${record.arLocationAddressType} : ''"></td>
+									<td>
+										<span th:text="${record} ? ${record.arLocationCityType} : ''"></span>
+										<span th:text="${record} ? ${record.arLocationAddressType} : ''"></span>
+									</td>
 								</tr>
 								<tr>
 									<th>상세위치</th>
@@ -92,7 +96,10 @@
 				</tr>
 				<tr>
 					<th>조사시설물</th>
-					<td colspan=3 th:text="${record} ? ${record.arFacItem} : ''"></td>
+					<td colspan=3>
+						<span th:text="${record} ? ${record.arFacItem} : ''"></span>
+						<span th:text="${record} ? ${record.argita} : ''"></span>
+					</td>
 				</tr>
 				<tr>
 					<th>조사목적</th>

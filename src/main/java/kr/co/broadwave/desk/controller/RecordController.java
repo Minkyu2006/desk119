@@ -5,6 +5,7 @@ import kr.co.broadwave.desk.mastercode.MasterCodeDto;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.record.RecordDto;
 import kr.co.broadwave.desk.record.RecordService;
+import kr.co.broadwave.desk.record.RecordViewDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,14 +58,12 @@ public class RecordController {
     @RequestMapping("reg/{id}")
     public String noticeReg(Model model, @PathVariable Long id){
         RecordDto recordDto = recordService.findById(id);
-        List<MasterCodeDto> arRelatedId = masterCodeService.findCodeList(CodeType.C0001);
+        List<MasterCodeDto> arRelatedId = masterCodeService.findCodeList(CodeType.C0002);
 
-        //List<UploadFile> uploadFiles = imageService.uploadFileList(id);
         model.addAttribute("arRelatedIds", arRelatedId);
         model.addAttribute("LocationCityTypes", LocationCityType.values());
         model.addAttribute("LocationAddressTypes", LocationAddressType.values());
         model.addAttribute("record", recordDto);
-        //model.addAttribute("uploadFiles", uploadFiles);
 
         return "record/recordreg";
     }
@@ -78,12 +77,9 @@ public class RecordController {
     @RequestMapping("view/{id}")
     public String noticeView(Model model, @PathVariable Long id){
 
-        //List<UploadFile> uploadFiles = imageService.uploadFileList(id);
-        //model.addAttribute("uploadFiles", uploadFiles);
-
         //데이터 가져오기
-        RecordDto recordDto = recordService.findById(id);
-        model.addAttribute("record", recordDto);
+        RecordViewDto recordViewDto = recordService.findByIdView(id);
+        model.addAttribute("record", recordViewDto);
 
 
         return "record/recordview";

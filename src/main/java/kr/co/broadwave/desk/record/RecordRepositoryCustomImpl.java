@@ -68,37 +68,4 @@ public class RecordRepositoryCustomImpl extends QuerydslRepositorySupport implem
 
     }
 
-//    @Override
-//    public Optional<RecordViewDto> findByViewId(Long id) {
-//        QRecord qRecord = QRecord.record;
-//
-//        JPQLQuery<RecordViewDto> query = from(qRecord)
-//                .select(Projections.constructor(RecordViewDto.class,
-//                        qRecord.id,
-//                        qRecord.arNumber,
-//                        qRecord.arTitle,
-//                        qRecord.arWriter,
-//                        qRecord.arRelatedId,
-//                        qRecord.arRelatedDetail,
-//                        qRecord.arPapers,
-//                        qRecord.arIntoStart,
-//                        qRecord.arIntoEnd,
-//                        qRecord.arLocationCityType,
-//                        qRecord.arLocationAddressType,
-//                        qRecord.arLocationDetail,
-//                        qRecord.argita,
-//                        qRecord.arPurpose,
-//                        qRecord.arResponsibil,
-//                        qRecord.arEngine,
-//                        qRecord.arOutline,
-//                        qRecord.arResult,
-//                        qRecord.arOpinion,
-//                        qRecord.arDisasterItem,
-//                        qRecord.arFacItem
-//                ));
-//
-//        return null;
-//
-//    }
-
 }

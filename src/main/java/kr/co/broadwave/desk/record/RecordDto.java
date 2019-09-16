@@ -192,12 +192,12 @@ public class RecordDto {
         return arLocationCityType;
     }
 
-    public void setArLocationCityType(LocationCityType arLocationCityType) {
-        this.arLocationCityType = arLocationCityType;
-    }
-
     public String getArLocationAddressType() {
         return arLocationAddressType.getCode();
+    }
+
+    public void setArLocationCityType(LocationCityType arLocationCityType) {
+        this.arLocationCityType = arLocationCityType;
     }
 
     public void setArLocationAddressType(LocationAddressType arLocationAddressType) {

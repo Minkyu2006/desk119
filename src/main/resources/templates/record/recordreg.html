@@ -325,7 +325,6 @@
 				endArray.splice(endArray.indexOf("-"),1);
 				var realstart = startArray.join("");
 				var realend = endArray.join("");
-				console.log("realstart : "+realstart,"realend : "+realend);
 				arIntoStart(realstart);
 				arIntoEnd(realend);
 			};
@@ -526,9 +525,9 @@
 								<label for="branch07" class="c-checkbox__label">환경오염</label>
 							</div>
 						</li>
-						<input type="text" name="arDisasterType" id="arDisasterType" value=""
+						<input type="hidden" name="arDisasterType" id="arDisasterType" value=""
 							   th:value="${record} ? ${record.arDisasterType} : ''">
-						<input type="text" name="arDisasterItem" id="arDisasterItem" value=""
+						<input type="hidden" name="arDisasterItem" id="arDisasterItem" value=""
 							   th:value="${record} ? ${record.arDisasterItem} : ''">
 					</ul>
 				</td>
@@ -701,9 +700,9 @@
 								</div>
 							</div>
 						</li>
-						<input type="text" name="arFac" id="arFac" value=""
+						<input type="hidden" name="arFac" id="arFac" value=""
 							   th:value="${record} ? ${record.arFac} : ''"/>
-						<input type="text" name="arFacItem" id="arFacItem" value=""
+						<input type="hidden" name="arFacItem" id="arFacItem" value=""
 							   th:value="${record} ? ${record.arFacItem} : ''"/>
 					</ul>
 				</td>

@@ -45,9 +45,15 @@ public class RecordService {
         }
     }
 
-//    public Optional<RecordViewDto> findByViewId(Long id){
-//        return recordRepositoryCustom.findByViewId(id);
-//    }
+    public RecordViewDto findByIdView(Long id){
+        Optional<Record> optionalRecord = recordRepository.findById(id);
+        if (optionalRecord.isPresent()) {
+            return modelMapper.map(optionalRecord.get(), RecordViewDto.class);
+        } else {
+            return null;
+        }
+    }
+
 
 
     public Optional<Record> findByArNumber(String arNumber){
