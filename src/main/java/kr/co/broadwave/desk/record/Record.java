@@ -29,7 +29,7 @@ public class Record {
     @Column(name="ar_id")
     private Long id;
 
-    @Column(name="ar_number")
+    @Column(unique = true,name="ar_number")
     private String arNumber;
 
     //출동일지 제목
@@ -125,4 +125,11 @@ public class Record {
     @Column(name="modify_name")
     private String modify_name;
 
+
+    // 추가 재해재난분과 항목들
+    @Column(name="ar_disaster_item")
+    private String arDisasterItem;
+    // 추가 조사시설물 항목들
+    @Column(name="ar_fac_item")
+    private String arFacItem;
 }

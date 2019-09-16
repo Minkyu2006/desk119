@@ -30,15 +30,6 @@ public class RecordController {
         this.recordService = recordService;
     }
 
-    @RequestMapping("/list")
-    public String recordList(){
-        return "record/recordlist";
-    }
-
-    @RequestMapping("/view")
-    public String recordView(){
-        return "record/recordview";
-    }
     //모바일 페이지
     @RequestMapping("/mreg")
     public String morileregist(){
@@ -54,7 +45,7 @@ public class RecordController {
     @RequestMapping("reg")
     public String recordreg(Model model){
         System.out.println("등록화면호출");
-        List<MasterCodeDto> arRelatedId = masterCodeService.findCodeList(CodeType.C0001);
+        List<MasterCodeDto> arRelatedId = masterCodeService.findCodeList(CodeType.C0002);
 
         model.addAttribute("LocationCityTypes", LocationCityType.values());
         model.addAttribute("LocationAddressTypes", LocationAddressType.values());
@@ -76,6 +67,26 @@ public class RecordController {
         //model.addAttribute("uploadFiles", uploadFiles);
 
         return "record/recordreg";
+    }
+
+    // 출동일지 리스트
+    @RequestMapping("/list")
+    public String recordList(){
+        return "record/recordlist";
+    }
+
+    @RequestMapping("view/{id}")
+    public String noticeView(Model model, @PathVariable Long id){
+
+        //List<UploadFile> uploadFiles = imageService.uploadFileList(id);
+        //model.addAttribute("uploadFiles", uploadFiles);
+
+        //데이터 가져오기
+        RecordDto recordDto = recordService.findById(id);
+        model.addAttribute("record", recordDto);
+
+
+        return "record/recordview";
     }
 
 

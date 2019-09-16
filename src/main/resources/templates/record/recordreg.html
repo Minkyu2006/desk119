@@ -30,42 +30,54 @@
 			$(".c-checkbox__input").change(function(){
 				if($("[name='branch']").is(":checked") == true) {
 					var listsArr = new Array(0, 0, 0, 0, 0, 0, 0);
+					var arDisasterArr = new Array();
 					if ($("#branch01").is(":checked") == true) {
 						listsArr[0] = 1;
+						arDisasterArr[0] = $("#branch01").attr('value');
 					} else {
 						listsArr[0] = 0;
+
 					}
 					if ($("#branch02" ).is(":checked") == true) {
 						listsArr[1] = 1;
+						arDisasterArr[1] = $("#branch02").attr('value');
 					} else {
 						listsArr[1] = 0;
+
 					}
 					if ($("#branch03").is(":checked") == true) {
 						listsArr[2] = 1;
+						arDisasterArr[2] = $("#branch03").attr('value');
 					} else {
 						listsArr[2] = 0;
+
 					}
 					if ($("#branch04").is(":checked") == true) {
 						listsArr[3] = 1;
+						arDisasterArr[3] = $("#branch04").attr('value');
 					} else {
 						listsArr[3] = 0;
 					}
 					if ($("#branch05").is(":checked") == true) {
 						listsArr[4] = 1;
+						arDisasterArr[4] = $("#branch05").attr('value');
 					} else {
 						listsArr[4] = 0;
 					}
 					if ($("#branch06").is(":checked") == true) {
 						listsArr[5] = 1;
+						arDisasterArr[5] = $("#branch06").attr('value');
 					} else {
 						listsArr[5] = 0;
 					}
 					if ($("#branch07").is(":checked") == true) {
 						listsArr[6] = 1;
+						arDisasterArr[6] = $("#branch07").attr('value');
 					} else {
 						listsArr[6] = 0;
 					}
 					arDisasterType.value = listsArr.join(",");
+					arDisasterItem.value = arDisasterArr.join(' ');
 				};
 			});
 
@@ -73,60 +85,72 @@
 			$(".c-checkbox__input").change(function(){
 				if($("[name='scan']").is(":checked") == true) {
 					var facArr = new Array(0, 0, 0, 0, 0, 0, 0);
+					var arFacItemArr = new Array();
 					if ($("#scan01").is(":checked") == true) {
 						facArr[0] = 1;
+						arFacItemArr[0] = $("#scan01").attr('value');
 					} else {
 						facArr[0] = 0;
 					}
 					if ($("#scan02" ).is(":checked") == true) {
 						facArr[1] = 1;
+						arFacItemArr[1] = $("#scan02").attr('value');
 					} else {
 						facArr[1] = 0;
 					}
 					if ($("#scan03").is(":checked") == true) {
 						facArr[2] = 1;
+						arFacItemArr[2] = $("#scan03").attr('value');
 					} else {
 						facArr[2] = 0;
 					}
 					if ($("#scan04").is(":checked") == true) {
 						facArr[3] = 1;
+						arFacItemArr[3] = $("#scan04").attr('value');
 					} else {
 						facArr[3] = 0;
 					}
 					if ($("#scan05").is(":checked") == true) {
 						facArr[4] = 1;
+						arFacItemArr[4] = $("#scan05").attr('value');
 					} else {
 						facArr[4] = 0;
 					}
 					if ($("#scan06").is(":checked") == true) {
 						facArr[5] = 1;
+						arFacItemArr[5] = $("#scan06").attr('value');
 					} else {
 						facArr[5] = 0;
 					}
 					if ($("#scan07").is(":checked") == true) {
 						facArr[6] = 1;
+						arFacItemArr[6] = $("#scan07").attr('value');
 					} else {
 						facArr[6] = 0;
 					}
 					if ($("#scan08").is(":checked") == true) {
 						facArr[7] = 1;
+						arFacItemArr[7] = $("#scan08").attr('value');
 					} else {
 						facArr[7] = 0;
 					}
 					if ($("#scan09").is(":checked") == true) {
 						facArr[8] = 1;
+						arFacItemArr[8] = $("#scan09").attr('value');
 					} else {
 						facArr[8] = 0;
 					}
 					if ($("#scan10").is(":checked") == true) {
 						facArr[9] = 1;
+						arFacItemArr[9] = $("#scan10").attr('value');
 						$("#argita").attr("readonly",false);
 					} else {
 						facArr[9] = 0;
 						$("#argita").attr("readonly",true);
-						$("#argita").val("");
+						$("#argita").val(" ");
 					}
 					arFac.value = facArr.join(",");
+					arFacItem.value = arFacItemArr.join(' ');
 				};
 			});
 
@@ -258,7 +282,11 @@
 
 		//출동일지 저장
 		function save() {
-
+			if ($("#arNumber").val().trim() == '') {
+				alert("출동일지번호를 입력하세요.");
+				$("#arTitle").trigger('focus');
+				return false;
+			}
 			if ($("#arTitle").val().trim() == '') {
 				alert("제목을 입력하세요.");
 				$("#arTitle").trigger('focus');
@@ -333,9 +361,38 @@
 
 		//삭제버튼 실행
 		function del() {
-			if ($("#").val() == '') {
+			if ($("#arNumber").val() == '') {
+				alert("삭제하고자하는 출동일지를 선택하세요.");
 				return false;
 			}
+			if (!confirm("출동일지를 삭제합니다.")) {
+				return false;
+			}
+
+			var params = {
+				arNumber : $("#arNumber").val()
+			};
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+
+			$.ajax({
+				url:'/api/record/del',
+				type : 'post',
+				data : params,
+				cache:false,
+				error:function(request,status,error){
+					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				},
+				success: function(res){
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+					alert('출동일지가 삭제 되었습니다.');
+					location.href="/record/list";
+				}
+			});
 		}
 
 		// 행정구역 onchange Post
@@ -429,48 +486,50 @@
 					<ul class="c-input-list">
 						<li>
 							<div class="c-checkbox">
-								<input type="checkbox" class="c-checkbox__input" name="branch" id="branch01"/>
+								<input type="checkbox" class="c-checkbox__input" name="branch" value="붕괴" id="branch01"/>
 								<label for="branch01" class="c-checkbox__label">붕괴</label>
 							</div>
 						</li>
 						<li>
 							<div class="c-checkbox">
-								<input type="checkbox" class="c-checkbox__input" name="branch" id="branch02"/>
+								<input type="checkbox" class="c-checkbox__input" name="branch" value="화재/폭발" id="branch02"/>
 								<label for="branch02" class="c-checkbox__label">화재/폭발</label>
 							</div>
 						</li>
 						<li>
 							<div class="c-checkbox">
-								<input type="checkbox" class="c-checkbox__input" name="branch" id="branch03"/>
+								<input type="checkbox" class="c-checkbox__input" name="branch" value="지진" id="branch03"/>
 								<label for="branch03" class="c-checkbox__label">지진</label>
 							</div>
 						</li>
 						<li>
 							<div class="c-checkbox">
-								<input type="checkbox" class="c-checkbox__input" name="branch" id="branch04"/>
+								<input type="checkbox" class="c-checkbox__input" name="branch" value="싱크홀" id="branch04"/>
 								<label for="branch04" class="c-checkbox__label">싱크홀</label>
 							</div>
 						</li>
 						<li>
 							<div class="c-checkbox">
-								<input type="checkbox" class="c-checkbox__input" name="branch" id="branch05"/>
+								<input type="checkbox" class="c-checkbox__input" name="branch" value="교통사고" id="branch05"/>
 								<label for="branch05" class="c-checkbox__label">교통사고</label>
 							</div>
 						</li>
 						<li>
 							<div class="c-checkbox">
-								<input type="checkbox" class="c-checkbox__input" name="branch" id="branch06"/>
+								<input type="checkbox" class="c-checkbox__input" name="branch" value="홍수/가뭄" id="branch06"/>
 								<label for="branch06" class="c-checkbox__label">홍수/가뭄</label>
 							</div>
 						</li>
 						<li>
 							<div class="c-checkbox">
-								<input type="checkbox" class="c-checkbox__input" name="branch" id="branch07"/>
+								<input type="checkbox" class="c-checkbox__input" name="branch" value="환경오염" id="branch07"/>
 								<label for="branch07" class="c-checkbox__label">환경오염</label>
 							</div>
 						</li>
-						<input type="hidden" name="arDisasterType" id="arDisasterType" value=""
+						<input type="text" name="arDisasterType" id="arDisasterType" value=""
 							   th:value="${record} ? ${record.arDisasterType} : ''">
+						<input type="text" name="arDisasterItem" id="arDisasterItem" value=""
+							   th:value="${record} ? ${record.arDisasterItem} : ''">
 					</ul>
 				</td>
 			</tr>
@@ -580,61 +639,61 @@
 					<ul class="c-input-list">
 						<li>
 							<div class="c-checkbox">
-								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan01"/>
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan01" value="교량"/>
 								<label for="scan01" class="c-checkbox__label">교량</label>
 							</div>
 						</li>
 						<li>
 							<div class="c-checkbox">
-								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan02"/>
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan02" value="옹벽"/>
 								<label for="scan02" class="c-checkbox__label">옹벽</label>
 							</div>
 						</li>
 						<li>
 							<div class="c-checkbox">
-								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan03"/>
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan03" value="비탈면"/>
 								<label for="scan03" class="c-checkbox__label">비탈면</label>
 							</div>
 						</li>
 						<li>
 							<div class="c-checkbox">
-								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan04"/>
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan04" value="터널"/>
 								<label for="scan04" class="c-checkbox__label">터널</label>
 							</div>
 						</li>
 						<li>
 							<div class="c-checkbox">
-								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan05"/>
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan05" value="도로"/>
 								<label for="scan05" class="c-checkbox__label">도로</label>
 							</div>
 						</li>
 						<li>
 							<div class="c-checkbox">
-								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan06"/>
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan06" value="기타도로시설물"/>
 								<label for="scan06" class="c-checkbox__label">기타도로시설물</label>
 							</div>
 						</li>
 						<li>
 							<div class="c-checkbox">
-								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan07"/>
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan07" value="건축물"/>
 								<label for="scan07" class="c-checkbox__label">건축물</label>
 							</div>
 						</li>
 						<li>
 							<div class="c-checkbox">
-								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan08"/>
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan08" value="지만"/>
 								<label for="scan08" class="c-checkbox__label">지만</label>
 							</div>
 						</li>
 						<li>
 							<div class="c-checkbox">
-								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan09"/>
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan09" value="지하시설물"/>
 								<label for="scan09" class="c-checkbox__label">지하시설물</label>
 							</div>
 						</li>
 						<li>
 							<div class="c-checkbox c-checkbox--input">
-								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan10">
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan10" value="기타">
 								<label for="scan10" class="c-checkbox__label">기타</label>
 								<div class="c-text c-text--small">
 									<input id="argita" name="argita" type="text" class="c-text__input"
@@ -642,8 +701,10 @@
 								</div>
 							</div>
 						</li>
-						<input type="hidden" name="arFac" id="arFac" value=""
-							   th:value="${record} ? ${record.arFac} : ''">
+						<input type="text" name="arFac" id="arFac" value=""
+							   th:value="${record} ? ${record.arFac} : ''"/>
+						<input type="text" name="arFacItem" id="arFacItem" value=""
+							   th:value="${record} ? ${record.arFacItem} : ''"/>
 					</ul>
 				</td>
 			</tr>

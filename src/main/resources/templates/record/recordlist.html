@@ -22,7 +22,101 @@
 				}
 				$(this).parent().prev('.c-file__input').val( txt.join() );
 			}).change();
-		})
+
+			$("#btnSearch").on('click',function(){
+				callList(1);
+			});
+
+			callList(1);
+
+		}); //실행 자바쿼리 끝
+
+		function datecheck(str) {
+			var y = str.substr(0, 4);
+			var m = str.substr(5, 2);
+			var d = str.substr(8, 2);
+			var date = new Date(y,m-1,d);
+			var today = new Date()
+			var diff = Math.abs(today.getTime() - date.getTime());
+			diff = Math.ceil(diff / (1000 * 3600 * 24));
+			//return  diff;
+			//2일이전이면 새글
+			if (Number(diff) < 2){
+				return 'new';
+			}else{
+				return 'old';
+			}
+		}
+
+		//리스트뽑기 및 페이징
+		function callList(page){
+			page = page - 1;
+			if (page < 0) page = 0
+
+			var perPage = 10;
+			var perArea = 5;
+			var totCnt = 0;
+			var $schList = $('#schList');
+			var $totalCnt = $('#totalCnt');
+
+			var params = {
+				arNumber:$("#s_arNumber").val(),
+				arTitle:$("#s_arTitle").val(),
+				arWriter:$("#s_arWriter").val()
+			};
+
+			$schList.empty().append('<tr ><td colspan="7" align = "center">조회 중</td></tr>');
+			$totalCnt.text('0');
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+
+			$.ajax({
+				url:'/api/record/list?size='+ perPage + '&page=' + page,
+				type : 'post',
+				data : params,
+				cache:false,
+				error:function(request,status,error){
+					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				},
+				success: function(res){
+					//화면 출력
+					totCnt = res.data.total_rows;
+					$("#paging1").jqueryPager({pageSize: perPage,
+						pageBlock: perArea,
+						currentPage: page + 1,
+						pageTotal: totCnt,
+						clickEvent: 'callList'});
+
+					if (totCnt == 0) {
+						$schList.empty().append('<tr class="t-c"><td colspan="7" align="center">조회된 데이터가 없습니다.</td></tr>');
+						return;
+					}
+
+					$totalCnt.text(totCnt);
+
+					var html = '';
+					$.each(res.data.datalist, function(key, value){
+						html += '<tr>';
+						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arNumber) +'</td>';
+						html += '<td class="c-retable__title"><a href="/record/view/'+ echoNull2Blank(value.id) +'" class="c-retable__subject">'+ echoNull2Blank(value.arTitle) +'</a>';
+						if (datecheck(value.modifyDateTime.substring(0,10)) =='new'){
+							html +='<img src="/assets/images/icon__new.png" alt="새글알림" />';
+						}
+						html += '</td>';
+						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arDisasterItem) +'</td>';
+						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arIntoStart) +' ~ '+ echoNull2Blank(value.arIntoEnd) +'</td>';
+						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arLocationCityType) +' '+ echoNull2Blank(value.arLocationAddressType) +'</td>';
+						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arFacItem) +'</td>';
+						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arWriter) +'</td>';
+						html += '</tr>';
+					});
+					$schList.html(html);
+				}
+			});
+		}
+
 	</script>
 
 </th:block>
@@ -32,6 +126,37 @@
 <div layout:fragment="content" class="content">
 	<section class="section">
 		<h2 class="section__heading">출동일지조회화면</h2>
+
+		<article class="article">
+			<table class="c-retable">
+				<tbody>
+					<tr>
+						<td colspan="2">
+							<div class="c-searchtext">
+								<label for="s_arNumber" class="c-searchtext__label">번호</label>
+								<input type="text" class="c-searchtext__input" id="s_arNumber" name = "s_arNumber" />
+							</div>
+						</td>
+						<td colspan="2">
+							<div class="c-searchtext">
+								<label for="s_arTitle" class="c-searchtext__label">제목</label>
+								<input type="text" class="c-searchtext__input" id="s_arTitle" name = "s_arTitle" />
+							</div>
+						</td>
+						<td colspan="2">
+							<div class="c-searchtext">
+								<label for="s_arWriter" class="c-searchtext__label">작성자</label>
+								<input type="text" class="c-searchtext__input" id="s_arWriter" name = "s_arWriter" />
+							</div>
+						</td>
+						<td class="c-searchtable__button">
+							<button class="c-button c-button--point" id="btnSearch">조회</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</article>
+
 		<article class="article">
 			<table class="c-retable">
 				<thead class="c-retable--tablet-hidden">
@@ -45,207 +170,8 @@
 						<th scope="col">작성자</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-						<td class="c-retable__title">
-							<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-							<img src="/assets/images/icon__new.png" alt="새글알림">
-							<div class="c-retable--tablet-visible">
-								<ul class="c-retable__tablet-list">
-									<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과" />홍수·가뭄</li>
-									<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자" />20190731 ~ 20190731</li>
-									<li><img src="/assets/images/icon__map.png" alt="조사위치" />서울시 양천구</li>
-									<li><img src="/assets/images/icon__user.png" alt="작성자" />황석환</li>
-								</ul>
-							</div>
-						</td>
-						<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-						<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-						<td class="c-retable--tablet-hidden">서울시 양천구</td>
-						<td class="c-retable--tablet-hidden">지하시설물</td>
-						<td class="c-retable--tablet-hidden">황석환</td>
-					</tr>
-					<tr>
-						<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-						<td class="c-retable__title">
-							<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-							<img src="/assets/images/icon__new.png" alt="새글알림">
-							<div class="c-retable--tablet-visible">
-								<ul class="c-retable__tablet-list">
-									<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과" />홍수·가뭄</li>
-									<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자" />20190731 ~ 20190731</li>
-									<li><img src="/assets/images/icon__map.png" alt="조사위치" />서울시 양천구</li>
-									<li><img src="/assets/images/icon__user.png" alt="작성자" />황석환</li>
-								</ul>
-							</div>
-						</td>
-						<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-						<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-						<td class="c-retable--tablet-hidden">서울시 양천구</td>
-						<td class="c-retable--tablet-hidden">지하시설물</td>
-						<td class="c-retable--tablet-hidden">황석환</td>
-					</tr>
-					<tr>
-						<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-						<td class="c-retable__title">
-							<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-							<img src="/assets/images/icon__new.png" alt="새글알림">
-							<div class="c-retable--tablet-visible">
-								<ul class="c-retable__tablet-list">
-									<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과" />홍수·가뭄</li>
-									<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자" />20190731 ~ 20190731</li>
-									<li><img src="/assets/images/icon__map.png" alt="조사위치" />서울시 양천구</li>
-									<li><img src="/assets/images/icon__user.png" alt="작성자" />황석환</li>
-								</ul>
-							</div>
-						</td>
-						<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-						<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-						<td class="c-retable--tablet-hidden">서울시 양천구</td>
-						<td class="c-retable--tablet-hidden">지하시설물</td>
-						<td class="c-retable--tablet-hidden">황석환</td>
-					</tr>
-					<tr>
-						<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-						<td class="c-retable__title">
-							<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-							<img src="/assets/images/icon__new.png" alt="새글알림">
-							<div class="c-retable--tablet-visible">
-								<ul class="c-retable__tablet-list">
-									<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과" />홍수·가뭄</li>
-									<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자" />20190731 ~ 20190731</li>
-									<li><img src="/assets/images/icon__map.png" alt="조사위치" />서울시 양천구</li>
-									<li><img src="/assets/images/icon__user.png" alt="작성자" />황석환</li>
-								</ul>
-							</div>
-						</td>
-						<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-						<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-						<td class="c-retable--tablet-hidden">서울시 양천구</td>
-						<td class="c-retable--tablet-hidden">지하시설물</td>
-						<td class="c-retable--tablet-hidden">황석환</td>
-					</tr>
-					<tr>
-						<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-						<td class="c-retable__title">
-							<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-							<img src="/assets/images/icon__new.png" alt="새글알림">
-							<div class="c-retable--tablet-visible">
-								<ul class="c-retable__tablet-list">
-									<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과" />홍수·가뭄</li>
-									<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자" />20190731 ~ 20190731</li>
-									<li><img src="/assets/images/icon__map.png" alt="조사위치" />서울시 양천구</li>
-									<li><img src="/assets/images/icon__user.png" alt="작성자" />황석환</li>
-								</ul>
-							</div>
-						</td>
-						<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-						<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-						<td class="c-retable--tablet-hidden">서울시 양천구</td>
-						<td class="c-retable--tablet-hidden">지하시설물</td>
-						<td class="c-retable--tablet-hidden">황석환</td>
-					</tr>
-					<tr>
-						<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-						<td class="c-retable__title">
-							<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-							<img src="/assets/images/icon__new.png" alt="새글알림">
-							<div class="c-retable--tablet-visible">
-								<ul class="c-retable__tablet-list">
-									<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과" />홍수·가뭄</li>
-									<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자" />20190731 ~ 20190731</li>
-									<li><img src="/assets/images/icon__map.png" alt="조사위치" />서울시 양천구</li>
-									<li><img src="/assets/images/icon__user.png" alt="작성자" />황석환</li>
-								</ul>
-							</div>
-						</td>
-						<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-						<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-						<td class="c-retable--tablet-hidden">서울시 양천구</td>
-						<td class="c-retable--tablet-hidden">지하시설물</td>
-						<td class="c-retable--tablet-hidden">황석환</td>
-					</tr>
-					<tr>
-						<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-						<td class="c-retable__title">
-							<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-							<img src="/assets/images/icon__new.png" alt="새글알림">
-							<div class="c-retable--tablet-visible">
-								<ul class="c-retable__tablet-list">
-									<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과" />홍수·가뭄</li>
-									<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자" />20190731 ~ 20190731</li>
-									<li><img src="/assets/images/icon__map.png" alt="조사위치" />서울시 양천구</li>
-									<li><img src="/assets/images/icon__user.png" alt="작성자" />황석환</li>
-								</ul>
-							</div>
-						</td>
-						<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-						<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-						<td class="c-retable--tablet-hidden">서울시 양천구</td>
-						<td class="c-retable--tablet-hidden">지하시설물</td>
-						<td class="c-retable--tablet-hidden">황석환</td>
-					</tr>
-					<tr>
-						<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-						<td class="c-retable__title">
-							<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-							<img src="/assets/images/icon__new.png" alt="새글알림">
-							<div class="c-retable--tablet-visible">
-								<ul class="c-retable__tablet-list">
-									<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과" />홍수·가뭄</li>
-									<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자" />20190731 ~ 20190731</li>
-									<li><img src="/assets/images/icon__map.png" alt="조사위치" />서울시 양천구</li>
-									<li><img src="/assets/images/icon__user.png" alt="작성자" />황석환</li>
-								</ul>
-							</div>
-						</td>
-						<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-						<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-						<td class="c-retable--tablet-hidden">서울시 양천구</td>
-						<td class="c-retable--tablet-hidden">지하시설물</td>
-						<td class="c-retable--tablet-hidden">황석환</td>
-					</tr>
-					<tr>
-						<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-						<td class="c-retable__title">
-							<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-							<img src="/assets/images/icon__new.png" alt="새글알림">
-							<div class="c-retable--tablet-visible">
-								<ul class="c-retable__tablet-list">
-									<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과" />홍수·가뭄</li>
-									<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자" />20190731 ~ 20190731</li>
-									<li><img src="/assets/images/icon__map.png" alt="조사위치" />서울시 양천구</li>
-									<li><img src="/assets/images/icon__user.png" alt="작성자" />황석환</li>
-								</ul>
-							</div>
-						</td>
-						<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-						<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-						<td class="c-retable--tablet-hidden">서울시 양천구</td>
-						<td class="c-retable--tablet-hidden">지하시설물</td>
-						<td class="c-retable--tablet-hidden">황석환</td>
-					</tr>
-					<tr>
-						<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-						<td class="c-retable__title">
-							<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-							<img src="/assets/images/icon__new.png" alt="새글알림">
-							<div class="c-retable--tablet-visible">
-								<ul class="c-retable__tablet-list">
-									<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과" />홍수·가뭄</li>
-									<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자" />20190731 ~ 20190731</li>
-									<li><img src="/assets/images/icon__map.png" alt="조사위치" />서울시 양천구</li>
-									<li><img src="/assets/images/icon__user.png" alt="작성자" />황석환</li>
-								</ul>
-							</div>
-						</td>
-						<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-						<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-						<td class="c-retable--tablet-hidden">서울시 양천구</td>
-						<td class="c-retable--tablet-hidden">지하시설물</td>
-						<td class="c-retable--tablet-hidden">황석환</td>
-					</tr>
+				<tbody id ="schList">
+
 				</tbody>
 			</table>
 			
@@ -258,13 +184,6 @@
 						Total
 					</div>
 					<div class="c-paging__total-group" id ="totalCnt">0</div>
-				</div>
-			</div>
-			
-			
-			<div class="c-function">
-				<div class="c-function__group c-function__group--right">
-					<div class="c-function__item"><button class="c-button">목록</button></div>
 				</div>
 			</div>
 		</article>
