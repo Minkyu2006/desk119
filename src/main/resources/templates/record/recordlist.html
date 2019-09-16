@@ -104,11 +104,20 @@
 						if (datecheck(value.modifyDateTime.substring(0,10)) =='new'){
 							html +='<img src="/assets/images/icon__new.png" alt="새글알림" />';
 						}
+						html += '<div class="c-retable--tablet-visible">';
+						html += '<ul class="c-retable__tablet-list">';
+						html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__branch.png" alt="재해·재난 분과" />' + echoNull2Blank(value.arFacItem) + '</li>'
+						html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__calendar--gray.png" alt="조사일자" />' + echoNull2Blank(value.arIntoStart) +' ~ '+ echoNull2Blank(value.arIntoEnd) + '</li>'
+						html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__map.png" alt="조사위치" />' + echoNull2Blank(value.arLocationCityType) +' '+ echoNull2Blank(value.arLocationAddressType) + '</li>'
+						html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__building.png" alt="조사시설물" />' + echoNull2Blank(value.arDisasterItem) + '</li>'
+						html += '<li><img src="/assets/images/icon__user.png" alt="작성자" />' + echoNull2Blank(value.arWriter) + '</li>';
+						html += '</ul>'
+						html += '</div>';
 						html += '</td>';
-						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arDisasterItem) +'</td>';
+						html += '<td class="c-retable--tablet-hidden c-retable__white-space">'+ echoNull2Blank(value.arFacItem) +'</td>';
 						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arIntoStart) +' ~ '+ echoNull2Blank(value.arIntoEnd) +'</td>';
 						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arLocationCityType) +' '+ echoNull2Blank(value.arLocationAddressType) +'</td>';
-						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arFacItem) +'</td>';
+						html += '<td class="c-retable--tablet-hidden c-retable__white-space">'+ echoNull2Blank(value.arDisasterItem) +'</td>';
 						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arWriter) +'</td>';
 						html += '</tr>';
 					});

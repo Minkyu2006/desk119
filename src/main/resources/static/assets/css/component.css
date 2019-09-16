@@ -2008,8 +2008,13 @@ input[type=text]:-ms-clear {
 }
 .c-retable__title {
 	width: 100%;
-	white-space: normal;
+	white-space: normal !important;
 	text-align: left;
+}
+.c-retable__white-space {
+	min-width: 150px;
+	width: 100%;
+	white-space: normal !important;
 }
 .c-retable__subject {
 	color: #333;
@@ -2156,8 +2161,7 @@ input[type=text]:-ms-clear {
 		white-space: normal;
 		text-align: left;
 	}
-	
-	
+		
 	.c-searchtext {
 		padding-top: 20px;
 	}
@@ -2175,4 +2179,12 @@ input[type=text]:-ms-clear {
 	}
 }
 
+@media(max-width: 720px) {
+	.c-retable__tablet-list li:nth-child(2n) {
+		text-align: left;
+	}
+	.c-retable__list--mobile {
+		width: 100% !important;
+	}
+}
 
