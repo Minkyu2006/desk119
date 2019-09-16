@@ -477,7 +477,7 @@
 			<tr>
 				<th>관련부처</th>
 				<td>
-					<div for="positionid" class="c-select">
+					<div for="arRelatedId" class="c-select">
 						<select class="c-select__input" name="arRelatedId" id="arRelatedId">
 							<option th:each ="arRelatedId : ${arRelatedIds}"
 									th:value="${arRelatedId.id}"
@@ -510,9 +510,7 @@
 					<div class="c-calendar-layout">
 						<div class="c-date">
 							<div class="c-date__input-box">
-								<div class="c-date__result"><input id="arIntoStart" name="arIntoStart"
-									   th:value="${record} ? ${record.arIntoStart} : ''"
-								/></div>
+								<input type="text" class="c-date__result" id="arIntoStart" name="arIntoStart" th:value="${record} ? ${record.arIntoStart} : ''" />
 								<button type="button" class="c-date__button">
 									<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
 								</button>
@@ -522,15 +520,14 @@
 						<span>-</span>
 						<div class="c-date">
 							<div class="c-date__input-box">
-								<div class="c-date__result"><input id="arIntoEnd" name="arIntoEnd"
-									   th:value="${record} ? ${record.arIntoEnd} : ''"
-								/></div>
+								<input type="text" class="c-date__result" id="arIntoEnd" name="arIntoEnd" th:value="${record} ? ${record.arIntoEnd} : ''" />
 								<button type="button" class="c-date__button">
 									<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
 								</button>
 							</div>
 							<div class="c-date__calendar"></div>
 						</div>
+						
 					</div>
 				</td>
 				<th>조사위치</th>

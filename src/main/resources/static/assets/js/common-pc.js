@@ -141,7 +141,7 @@ $(document).ready(function(){
     		$selected = $me.val(),
     		$parent = $me.parents('.c-date');
     	
-    	$parent.find('.c-date__result').children('span').html($selected);
+    	$parent.find('.c-date__result').val($selected);
     });
     
     /*
