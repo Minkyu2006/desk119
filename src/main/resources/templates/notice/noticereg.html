@@ -56,7 +56,7 @@
 			}).change();
 
 			//file add			
-			$('.c-file__control.add').on('click', function() {
+			$('.c-file__control.add').on('click', function(e) {
 				var last = $(this).parents('.c-file-list').children('li').last();
 				var clName = last.attr('class');
 				console.log(clName);
@@ -80,12 +80,16 @@
 					}
 					$(this).parent().prev('.c-file__input').val( txt.join() );
 				}).change();
+				
+				e.preventDefault();
 			})
 			
 			//file remove
-			$(document).on('click', '.c-file__control.remove', function() {
+			$(document).on('click', '.c-file__control.remove', function(e) {
 				var idx = $(this).parents('li');
 				idx.remove();
+				
+				e.preventDefault();
 			})
 
 	    });

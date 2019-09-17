@@ -2035,6 +2035,11 @@ input[type=text]:-ms-clear {
 	padding-top: 5px;
 	border-top: 1px dashed #efefef;
 }
+.c-retable__tablet-list.non-border {
+	margin: 0;
+	padding: 0;
+	border: 0 none;
+}
 .c-retable__tablet-list:before {
 	content: " ";
 	display: table;
@@ -2060,6 +2065,7 @@ input[type=text]:-ms-clear {
 	vertical-align: sub;
 	margin-right: 5px;
 }
+.c-retable__tr--tablet-visible,
 .c-retable--tablet-visible {
 	display: none;
 }
@@ -2144,9 +2150,13 @@ input[type=text]:-ms-clear {
 		white-space: normal;
 		font-size: 14px;
 	}
+	.c-retable__tr--tablet-visible {
+		display: table-row;
+	}
 	.c-retable--tablet-visible {
 		display: block;
 	}
+	.c-ratable__tr--tablet-hidden,
 	.c-retable--tablet-hidden {
 		display: none;
 	}
