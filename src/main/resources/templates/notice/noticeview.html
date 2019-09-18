@@ -34,19 +34,28 @@
 			<div class="notice-view">
 				<div class="notice-view__contents">
 					<table class="c-table">
-						<colgroup>
+						<!-- <colgroup>
 							<col style="width: 150px;" />
 							<col />
 							<col style="width: 150px;" />
 							<col />
 							<col style="width: 150px;" />
 							<col />
-						</colgroup>
+						</colgroup> -->
 						<tbody>
 							<tr>
 								<td colspan="6" class="align--center" th:text="${notice?.subject}"></td>
 							</tr>
-							<tr>
+							<tr class="c-retable__tr--tablet-visible">
+								<td colspan="6">
+									<ul class="c-retable__tablet-list non-border">
+										<li><img src="/assets/images/icon__user.png" alt="작성자"><span th:text="${notice?.modify_name}"></span></li>
+										<li class="c-retable__list--mobile"><img src="/assets/images/icon__calendar--gray.png" alt="게시일"><span th:text="${notice?.modifyDateTime}"></span></li>
+										<li class="c-retable__list--mobile"><img src="/assets/images/icon__show.png" alt="조회수"><span th:text="${notice?.hitCount}"></span></li>
+									</ul>
+								</td>
+							</tr>
+							<tr class="c-ratable__tr--tablet-hidden">
 								<th>작성자</th>
 								<td th:text="${notice?.modify_name}"></td>
 								<th>게시일</th>
@@ -61,7 +70,15 @@
 									</div>
 								</td>
 							</tr>
-							<tr>
+							<tr class="c-retable__tr--tablet-visible">
+								<td colspan="6">
+									<ul class="c-file-list">
+										<li th:each ="uploadfile : ${uploadFiles}"><img src="/assets/images/icon__file.png" alt="첨부파일" class="c-file-list__img" /><a th:href="@{/notice/download/{id}(id=${uploadfile.id})}"  th:text="${uploadfile.fileName}"></a></li>
+
+									</ul>
+								</td>
+							</tr>
+							<tr class="c-ratable__tr--tablet-hidden">
 								<th>첨부파일</th>
 								<td colspan="5">
 									<ul class="c-file-list">

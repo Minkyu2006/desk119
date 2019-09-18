@@ -65,3 +65,9 @@
 .note-frame ol {
 	list-style-type: decimal;
 }
+
+@media(max-width: 1200px) {
+	.note-frame img {
+		max-width: 100%;
+	}
+}

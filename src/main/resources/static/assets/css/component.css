@@ -57,7 +57,7 @@
     text-align: right;
 }
 .c-table td a {
-	display: inlinek;
+	display: inline;
 	color: #222;
 	font-size: 14px;
 	line-height: 1.4;
@@ -1793,6 +1793,14 @@ input[type=text]:-ms-clear {
 }
 .c-file-list li + li {
 	margin-top: 5px;
+}
+.c-file-list li a {
+	font-size: 12px;
+}
+.c-file-list__img {
+	height: 16px;
+	vertical-align: sub;
+	margin-right: 5px;
 }
 
 
