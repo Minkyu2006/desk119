@@ -106,7 +106,13 @@
 				</tr>
 				<tr>
 					<th>KICT 조사담당자</th>
-					<td colspan=3>황석환/국토보전연구본부 돌발홍수연구센터</td>
+					<td colspan=3>
+						<ul class="c-input-list" th:each ="responsibil : ${responsibils}">
+							<a th:text="${responsibil} ? ${responsibil.arEmployeeNumber} : ''"></a>
+							<a th:text="${responsibil} ? ${responsibil.arEmployeeName} : ''"></a>
+							<a th:text="${responsibil} ? ${responsibil.arDepartmentName} : ''"></a>
+						</ul>
+					</td>
 				</tr>
 				<tr>
 					<th>공동 참여기관</th>
@@ -139,9 +145,7 @@
 				</tr>
 				<tr>
 					<th>관련사진</th>
-					<td colspan=3>
-						<a th:href="${record} ? ${record.arPhoto} : ''"></a>
-					</td>
+					<td colspan=3></td>
 				</tr>
 			</tbody>
 		</table>

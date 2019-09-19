@@ -37,7 +37,6 @@ public class RecordViewDto {
     private String arOpinion; //검토의견
     private String arDisasterItem; //추가 재해재난분과 항목
     private String arFacItem; //추가 조사시설물 항목
-    private String arPhoto;
 
     public Long getId() {
         return id;
@@ -200,11 +199,4 @@ public class RecordViewDto {
         this.arFacItem = arFacItem;
     }
 
-    public String getArPhoto() {
-        return arPhoto;
-    }
-
-    public void setArPhoto(String arPhoto) {
-        this.arPhoto = arPhoto;
-    }
 }

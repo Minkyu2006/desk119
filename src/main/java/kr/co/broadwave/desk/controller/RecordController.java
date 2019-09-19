@@ -7,7 +7,7 @@ import kr.co.broadwave.desk.record.*;
 import kr.co.broadwave.desk.record.file.RecordImageService;
 import kr.co.broadwave.desk.record.file.RecordUploadFile;
 import kr.co.broadwave.desk.record.file.RecordUploadFileRepository;
-//import kr.co.broadwave.desk.record.responsibil.Responsibil;
+import kr.co.broadwave.desk.record.responsibil.Responsibil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -88,8 +88,8 @@ public class RecordController {
         List<RecordUploadFile> recorduploadFiles = recordimageService.recorduploadFileList(id);
         model.addAttribute("recorduploadFiles", recorduploadFiles);
 
-//        List<Responsibil> responsibils = recordService.recordRespon(id);
-//        model.addAttribute("responsibils", responsibils);
+        List<Responsibil> responsibils = recordService.recordRespon(id);
+        model.addAttribute("responsibils", responsibils);
 
         return "record/recordreg";
     }
@@ -106,8 +106,12 @@ public class RecordController {
         //데이터 가져오기
         RecordViewDto recordViewDto = recordService.findByIdView(id);
         List<RecordUploadFile> recorduploadFiles = recordimageService.recorduploadFileList(id);
+
         model.addAttribute("record", recordViewDto);
         model.addAttribute("recorduploadFiles", recorduploadFiles);
+
+        List<Responsibil> responsibils = recordService.recordRespon(id);
+        model.addAttribute("responsibils", responsibils);
 
         return "record/recordview";
     }

@@ -83,7 +83,6 @@ public class AccountRepositoryCustomImpl extends QuerydslRepositorySupport imple
                         account.role,
                         account.approvalType,
                         account.insertDateTime
-
                 ));
 
 

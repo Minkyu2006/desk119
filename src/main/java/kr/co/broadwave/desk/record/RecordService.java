@@ -1,9 +1,8 @@
 package kr.co.broadwave.desk.record;
 
 import kr.co.broadwave.desk.keygenerate.KeyGenerateService;
-
-//import kr.co.broadwave.desk.record.responsibil.Responsibil;
-//import kr.co.broadwave.desk.record.responsibil.ResponsibilRepository;
+import kr.co.broadwave.desk.record.responsibil.Responsibil;
+import kr.co.broadwave.desk.record.responsibil.ResponsibilRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -29,18 +29,18 @@ public class RecordService {
     private final ModelMapper modelMapper;
     private final RecordRepositoryCustom recordRepositoryCustom;
     private final KeyGenerateService keyGenerateService;
-//    private final ResponsibilRepository responsibilRepository;
+    private final ResponsibilRepository responsibilRepository;
     @Autowired
     public RecordService(RecordRepository recordRepository,
                          RecordRepositoryCustom recordRepositoryCustom,
                          KeyGenerateService keyGenerateService,
-//                         ResponsibilRepository responsibilRepository,
+                         ResponsibilRepository responsibilRepository,
                          ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
         this.recordRepository = recordRepository;
         this.recordRepositoryCustom = recordRepositoryCustom;
         this.keyGenerateService = keyGenerateService;
-//        this.responsibilRepository = responsibilRepository;
+        this.responsibilRepository = responsibilRepository;
     }
 
     // 출동일지 고유번호 저장 및 입력데이터저장
@@ -53,6 +53,12 @@ public class RecordService {
             record.setArNumber(arNumber);
         }
         return recordRepository.save(record);
+    }
+
+    public void recordResponSave(List<Responsibil> responsibil) {
+        for (Responsibil responsibils : responsibil) {
+            responsibilRepository.save(responsibils);
+        }
     }
 
     public Optional<Record> findByIdRecord(Long id){
@@ -86,15 +92,24 @@ public class RecordService {
         recordRepository.delete(record);
     }
 
-//    //조사담당자
-////    public List<Responsibil> recordRespon(Long record_id){
-////        log.info("조사담당자 내역 조회 / 출동일지 ID '" + record_id + "'");
-////        Optional<Record> optionalRecord = recordRepository.findById(record_id);
-////        if (optionalRecord.isPresent()){
-////            return responsibilRepository.findByRecord(optionalRecord.get());
-////        }else{
-////            return null;
-////        }
-////    }
+    //조사담당자 viewlist
+    public List<Responsibil> recordRespon(Long record_id){
+        Optional<Record> optionalRecord = recordRepository.findById(record_id);
+        if (optionalRecord.isPresent()){
+            return responsibilRepository.findByRecord(optionalRecord.get());
+        }else{
+            return null;
+        }
+    }
+
+    public int recordresponsibilDelete(Long rsid) {
+        Optional<Responsibil> optionalResponsibil = responsibilRepository.findById(rsid);
+        if (optionalResponsibil.isPresent()){
+            responsibilRepository.delete(optionalResponsibil.get());
+            return 1;
+        }else{
+            return -1;
+        }
+    }
 
 }

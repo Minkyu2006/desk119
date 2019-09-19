@@ -138,14 +138,13 @@ public class RecordImageService {
             String arWriter = recordSave.getArWriter(); // 작성자
 
             String afName = recordUploadFile.getAfFileName(); //파일이름
-            String afPath = recordUploadFile.getAfFilePath(); //파일경로
 
             String filename = arDisasterItem + "_" + arLocationCityType + "_" + arLocationAddressType + "_" + arIntoStart + "_" + arWriter + "_" + "순번 " + i + "_" + afName;
             recordUploadFile.setAfFileName(filename);
-            recordSave.setArPhoto(afPath);
 
             recordUploadFileRepository.save(recordUploadFile);
         }
+
     }
 
 }

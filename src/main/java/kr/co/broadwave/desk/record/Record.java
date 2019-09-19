@@ -128,8 +128,5 @@ public class Record {
     // 추가 조사시설물 항목들
     @Column(name="ar_fac_item")
     private String arFacItem;
-    // 추가 출동일지사진경로
-    @Column(length = 100000, name="ar_photo")
-    private String arPhoto;
 
 }

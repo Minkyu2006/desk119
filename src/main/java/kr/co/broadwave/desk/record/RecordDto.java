@@ -44,7 +44,6 @@ public class RecordDto {
 
     private String arDisasterItem; //추가 재해재난분과 항목
     private String arFacItem; //추가 조사시설물 항목
-    private String arPhoto; //추가 출동일지 사진경로
 
     //기본적인것
     private String modify_name;
@@ -284,11 +283,4 @@ public class RecordDto {
         this.arFacItem = arFacItem;
     }
 
-    public String getArPhoto() {
-        return arPhoto;
-    }
-
-    public void setArPhoto(String arPhoto) {
-        this.arPhoto = arPhoto;
-    }
 }

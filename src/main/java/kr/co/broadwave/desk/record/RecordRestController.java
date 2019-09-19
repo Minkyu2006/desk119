@@ -11,6 +11,7 @@ import kr.co.broadwave.desk.common.ResponseErrorCode;
 import kr.co.broadwave.desk.mastercode.MasterCode;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.record.file.RecordImageService;
+import kr.co.broadwave.desk.record.responsibil.Responsibil;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 
@@ -73,6 +74,7 @@ public class RecordRestController {
                                      HttpServletRequest request) throws Exception {
 
         Record record = modelMapper.map(recordDto,Record.class);
+
         Optional<MasterCode> optionalRelatedId = masterCodeService.findById(recordDto.getArRelatedId());
 
         String currentuserid = CommonUtils.getCurrentuser(request);
@@ -134,20 +136,25 @@ public class RecordRestController {
         //파일명 순번 채번하기
         recordImageService.makefileseq(recordSave);
 
-        //조사담당자 저장
-        List<String> repons;
+        //조사담당자
+        List<Responsibil> responsibil = new ArrayList<>();
+        String[] arEmployeeNumber = request.getParameterValues("arEmployeeNumber");
+        String[] arEmployeeName = request.getParameterValues("arEmployeeName");
+        String[] arDepartmentName = request.getParameterValues("arDepartmentName");
 
+        for (int i = 0; i < arEmployeeNumber.length; i++) {
+            Responsibil responsibils = Responsibil.builder()
+                                            .record(recordSave)
+                                            .arEmployeeNumber(arEmployeeNumber[i])
+                                            .arEmployeeName(arEmployeeName[i])
+                                            .arDepartmentName(arDepartmentName[i])
+                                            .build();
+            responsibil.add(responsibils);
+        }
+        System.out.println("responsibils : "+responsibil);
+        recordService.recordResponSave(responsibil);
 
         log.info("출동일지 저장 성공 : " + recordSave.toString() );
-        return ResponseEntity.ok(res.success());
-    }
-
-    // 조사담당자 배열받기
-    @PostMapping("respon")
-    public ResponseEntity<?> respon(@RequestParam(value="responList") List<String> respon) {
-        log.info("출동일지 조사담당자 배열: '" + respon + "'");
-
-
         return ResponseEntity.ok(res.success());
     }
 
@@ -245,11 +252,22 @@ public class RecordRestController {
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E015.getCode(), ResponseErrorCode.E015.getDesc()));
         }
         log.info("출동일지 첨부파일삭제 성공/ 파일ID : '" + fileid + "'");
-
         return ResponseEntity.ok(res.success());
     }
 
-
+    //조사담당자 삭제
+    @PostMapping("respondel")
+    public ResponseEntity respondelete(@RequestParam(value="rsid", defaultValue="") Long rsid){
+        System.out.println("삭제시작");
+        log.info("조사담당자 삭제 시작: '" + rsid + "'");
+        int resultValue = recordService.recordresponsibilDelete(rsid);
+        if (resultValue == -1){
+            log.info("출동일지 삭제시 에러발생('E015) fileID: '" + rsid + "'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E015.getCode(), ResponseErrorCode.E015.getDesc()));
+        }
+        log.info("조사담당자삭제 성공 : '" + rsid + "'");
+        return ResponseEntity.ok(res.success());
+    }
 
 
 
