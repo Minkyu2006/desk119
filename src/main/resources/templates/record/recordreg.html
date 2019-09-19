@@ -38,6 +38,7 @@
 				$(this).parent().prev('.c-file__input').val( txt.join("_") );
 			}).change();
 
+			// 파일 항목 추가
 			$('.c-file__control.add').on('click', function(e) {
 				var last = $(this).parents('.c-file-list').children('li').last();
 				var clName = last.attr('class');
@@ -69,9 +70,52 @@
 				}).change();
 				e.preventDefault();
 			});
-
+			// 파일 항목 삭제
 			$(document).on('click', '.c-file__control.remove', function(e) {
 				var idx = $(this).parents('li');
+				idx.remove();
+
+				e.preventDefault();
+			});
+			
+			// 조사담당자 항목 추가
+			$('#responsibilBtn').on('click', function(e) {
+				var last = $(this).parents('.c-file-list').children('li').last();
+				var clName = last.attr('class');
+				console.log(clName);
+				//var num = Number(clName.replace(/[^0-9]/g,''));
+				//var idx = num + 1;
+				//console.log(idx);
+				var filearea =
+					'<li class="c-file-list__item">' +
+					'<ul class="c-input-list">' +
+					'<li>' +
+					'<div class="c-text">' +
+					'<input type="text" class="c-text__input" name="arEmployeeNumber" placeholder="사번" />' +
+					'</div>' +
+					'</li>' +
+					'<li>' +
+					'<div class="c-text">' +
+					'<input type="text" class="c-text__input" name="arEmployeeName" placeholder="이름" />' +
+					'</div>' +
+					'</li>' +
+					'<li>' +
+					'<div class="c-text">' +
+					'<input type="text" class="c-text__input" name="arDepartmentName" placeholder="부서명" />' +
+					'</div>' +
+					'</li>' +
+					'<li>' +
+					'<input type="button" class="c-button remove" name="arDepartmentName" value="삭제" />' +
+					'</li>' +
+					'</ul>' +
+					'</li>';
+					
+				$(this).parents('.c-file-list').append(filearea);
+				e.preventDefault();
+			});
+			// 조사담당자 항목 삭제
+			$(document).on('click', '.c-button.remove', function(e) {
+				var idx = $(this).parents('.c-file-list__item');
 				idx.remove();
 
 				e.preventDefault();
@@ -858,78 +902,41 @@
 			<tr>
 				<th>조사담당자</th>
 				<td colspan="3">
-					<ul class="c-input-list">
+					<ul class="c-file-list">
 						<li>
-							<div class="c-text">
-								<input type="text" name="arEmployeeNumber" class="c-text__input" placeholder="사번" />
-							</div>
+							<ul class="c-input-list">
+								<li>
+									<div class="c-text">
+										<input type="text" name="arEmployeeNumber" class="c-text__input" placeholder="사번" />
+									</div>
+								</li>
+								<li>
+									<div class="c-text">
+										<input type="text" name="arEmployeeName" class="c-text__input" placeholder="이름" />
+									</div>
+								</li>
+								<li>
+									<div class="c-text">
+										<input type="text" name="arDepartmentName" class="c-text__input" placeholder="부서명" />
+									</div>
+								</li>
+								<li>
+									<input type="button" class="c-button" id="responsibilBtn" value="추가"/>
+		<!--							<button class="c-button">추가</button>-->
+								</li>
+							</ul>
 						</li>
-						<li>
-							<div class="c-text">
-								<input type="text" name="arEmployeeName" class="c-text__input" placeholder="이름" />
-							</div>
-						</li>
-						<li>
-							<div class="c-text">
-								<input type="text" name="arDepartmentName" class="c-text__input" placeholder="부서명" />
-							</div>
-						</li>
-						<li>
-							<input type="button" class="c-button" id="responsibilBtn" value="추가"/>
-<!--							<button class="c-button">추가</button>-->
-						</li>
-
-
-						<li>
-							<div class="c-text">
-								<input type="text" name="arEmployeeNumber" class="c-text__input" placeholder="사번" />
-							</div>
-						</li>
-						<li>
-							<div class="c-text">
-								<input type="text" name="arEmployeeName" class="c-text__input" placeholder="이름" />
-							</div>
-						</li>
-						<li>
-							<div class="c-text">
-								<input type="text" name="arDepartmentName" class="c-text__input" placeholder="부서명" />
-							</div>
-						</li>
-						<li>
-							<input type="button" class="c-button" value="삭제"/>
-						</li>
-
-
-
-						<li>
-							<div class="c-text">
-								<input type="text" name="arEmployeeNumber" class="c-text__input" placeholder="사번" />
-							</div>
-						</li>
-						<li>
-							<div class="c-text">
-								<input type="text" name="arEmployeeName" class="c-text__input" placeholder="이름" />
-							</div>
-						</li>
-						<li>
-							<div class="c-text">
-								<input type="text" name="arDepartmentName" class="c-text__input" placeholder="부서명" />
-							</div>
-						</li>
-						<li>
-							<input type="button" class="c-button" value="삭제"/>
-						</li>
-
 					</ul>
+					
 
 					<ul class="c-result-list" style="margin-top: 10px;">
 						<li th:each ="responsibil : ${responsibils}">
-							<ul class="c-input-list">
-								<a th:text="${responsibil.arEmployeeNumber}"></a>
-								<a th:text="${responsibil.arEmployeeName}"></a>
-								<a th:text="${responsibil.arDepartmentName}"></a>
+							<p class="c-input-list">
+								<span th:text="${responsibil.arEmployeeNumber}"></span>
+								<span th:text="${responsibil.arEmployeeName}"></span>
+								<span th:text="${responsibil.arDepartmentName}"></span>
 								<button type="button" class="c-button c-button--small" th:onclick="|javascript:responDelete(this,'${responsibil.getId()}')|">삭제</button>
-							</ul>
+							</p>
 						</li>
 					</ul>
 
