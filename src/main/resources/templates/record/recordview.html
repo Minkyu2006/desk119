@@ -47,7 +47,6 @@
 					<td>
 						<div class="c-text c-text--duo">
 						<input type="text" class="c-text__input only-child" readonly="readonly" th:value="${record} ? ${record.arNumber} : ''"/>
-						<button class="c-text__button" id="btn__report">검색</button>
 					</div>
 					</td>
 					<th>출동일지 제목</th>
@@ -140,7 +139,9 @@
 				</tr>
 				<tr>
 					<th>관련사진</th>
-					<td colspan=3></td>
+					<td colspan=3>
+						<a th:href="${record} ? ${record.arPhoto} : ''"></a>
+					</td>
 				</tr>
 			</tbody>
 		</table>

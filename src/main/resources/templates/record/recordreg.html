@@ -14,26 +14,165 @@
 <th:block layout:fragment="script">
 	<script>
 
-		$(function() {
 
+		$(function() {
 			//저장
 			$("#btnSave").on('click', function () {
 				save();
 			});
-
 			//삭제
 			$("#btnDel").on('click', function () {
 				del();
 			});
+
+			// $("#responsibilBtn").on("click",function(){
+			// 	var employeeNumber = $('#employeeNumber').val();
+			// 	var employeeName = $('#employeeName').val();
+			// 	var departmentName = $('#departmentName').val();
+			// 	var responList=[employeeNumber,employeeName,departmentName];
+			// 	$("input[name=arResponsibil]:checked").each(function() {
+			// 		var test = $(this).val();
+			// 		console.log(test);
+			// 		responList.push(test);
+			// 	});
+			// 	var data={"responList":responList}
+			// 	console.log(data)
+			// 	jQuery.ajaxSettings.traditional = true;
+			// 	$.ajax({
+			// 		type:'POST',
+			// 		url:"/api/record/respon",
+			// 		data:{
+			// 			'responList' : responList
+			// 		},
+			// 		error:function(request,status,error){
+			//			ajaxErrorMsg(request);
+					//alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			//		},
+			// 		success: function(){
+			// 			$('#employeeNumber').val("");
+			// 			$('#employeeName').val("");
+			// 			$('#departmentName').val("");
+			// 		}
+			// 	})
+			// });
+
+			$('.c-file__button input').change(function(){
+				var txt = [];
+				for(var i=0; i<this.files.length; i++){
+					txt.push($('#arDisasterItemfilename').val());
+					txt.push($("#arLocationCityType option:selected").text());
+					txt.push($("#arLocationAddressType option:selected").text());
+					txt.push($('#arIntoStart').val());
+					txt.push($('#arWriter').val());
+					txt.push(this.files[i].name);
+				}
+				$(this).parent().prev('.c-file__input').val( txt.join("_") );
+			}).change();
+
+			$('.c-file__control.add').on('click', function(e) {
+				var last = $(this).parents('.c-file-list').children('li').last();
+				var clName = last.attr('class');
+				console.log(clName);
+				var num = Number(clName.replace(/[^0-9]/g,''));
+				var idx = num + 1;
+				console.log(idx);
+				var filearea =
+					'<li class="c-file-list__item' + idx + '">' +
+					'<div class="c-file">' +
+					'<input type="text" readonly="readonly" class="c-file__input" id="file' + idx + '" name="file' + idx + '" />' +
+					'<label class="c-file__button">파일선택<input type="file" name="file' + idx + '" /></label>' +
+					'<a href="#" class="c-file__control remove">삭제</a>' +
+					'</div>' +
+					'</li>';
+				$(this).parents('.c-file-list').append(filearea);
+
+				$('.c-file__button input').change(function(){
+					var txt = [];
+					for(var i=0; i<this.files.length; i++){
+						txt.push($('#arDisasterItemfilename').val());
+						txt.push($("#arLocationCityType option:selected").text());
+						txt.push($("#arLocationAddressType option:selected").text());
+						txt.push($('#arIntoStart').val());
+						txt.push($('#arWriter').val());
+						txt.push(this.files[i].name);
+					}
+					$(this).parent().prev('.c-file__input').val( txt.join("_"));
+				}).change();
+				e.preventDefault();
+			});
+
+			$(document).on('click', '.c-file__control.remove', function(e) {
+				var idx = $(this).parents('li');
+				idx.remove();
+
+				e.preventDefault();
+			});
+
+
+			//html 에디트에서 이미지 포함시 파일업로드하는기능
+			// function sendFile(file, el) {
+			// 	var form_data = new FormData();
+			// 	form_data.append('file', file);
+			// 	var token = $("meta[name='_csrf']").attr("arPhoto");
+			// 	var header = $("meta[name='_csrf_header']").attr("arPhoto");
+			// 	$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+			//
+			// 	$.ajax({
+			// 		data: form_data,
+			// 		type: "POST",
+			// 		url: '/api/record/image',
+			// 		cache: false,
+			// 		contentType: false,
+			// 		enctype: 'multipart/form-data',
+			// 		processData: false,
+			// 		success: function(url) {
+			// 			$(el).file1('editor.insertImage', url);
+			//
+			// 		}
+			// 	});
+			// }
+
+
+			//첨부파일삭제
+			function fileDelete(th,fileid) {
+				var params = {
+					fileid:fileid
+				};
+				console.log("파일삭제시작");
+				var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
+				$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+
+				$.ajax({
+					url:'/api/record/filedel',
+					type : 'post',
+					//dataType: 'html',
+					data : params,
+					cache:false,
+					error:function(request,status,error){
+						ajaxErrorMsg(request);
+					},
+					success: function(res){
+						if (!Ajax.checkResult(res)) {
+							return;
+						}
+						//파일삭제 성공후 해당 라인 화면에서 제거
+						var obj = $(th).parent('li').parent('ul');
+						obj.remove();
+					}
+				});
+			}
 
 			//재해.재난.분과 체크박스 값넣기
 			$(".c-checkbox__input").change(function(){
 				if($("[name='branch']").is(":checked") == true) {
 					var listsArr = new Array(0, 0, 0, 0, 0, 0, 0);
 					var arDisasterArr = new Array();
+					var arDisasterArrFilename = new Array();
 					if ($("#branch01").is(":checked") == true) {
 						listsArr[0] = 1;
 						arDisasterArr[0] = $("#branch01").attr('value');
+						arDisasterArrFilename[0] = $("#branch01").attr('value');
 					} else {
 						listsArr[0] = 0;
 
@@ -41,6 +180,7 @@
 					if ($("#branch02" ).is(":checked") == true) {
 						listsArr[1] = 1;
 						arDisasterArr[1] = $("#branch02").attr('value');
+						arDisasterArrFilename[1] = $("#branch02").attr('value');
 					} else {
 						listsArr[1] = 0;
 
@@ -48,6 +188,7 @@
 					if ($("#branch03").is(":checked") == true) {
 						listsArr[2] = 1;
 						arDisasterArr[2] = $("#branch03").attr('value');
+						arDisasterArrFilename[2] = $("#branch03").attr('value');
 					} else {
 						listsArr[2] = 0;
 
@@ -55,29 +196,34 @@
 					if ($("#branch04").is(":checked") == true) {
 						listsArr[3] = 1;
 						arDisasterArr[3] = $("#branch04").attr('value');
+						arDisasterArrFilename[3] = $("#branch04").attr('value');
 					} else {
 						listsArr[3] = 0;
 					}
 					if ($("#branch05").is(":checked") == true) {
 						listsArr[4] = 1;
 						arDisasterArr[4] = $("#branch05").attr('value');
+						arDisasterArrFilename[4] = $("#branch05").attr('value');
 					} else {
 						listsArr[4] = 0;
 					}
 					if ($("#branch06").is(":checked") == true) {
 						listsArr[5] = 1;
 						arDisasterArr[5] = $("#branch06").attr('value');
+						arDisasterArrFilename[5] = $("#branch06").attr('value');
 					} else {
 						listsArr[5] = 0;
 					}
 					if ($("#branch07").is(":checked") == true) {
 						listsArr[6] = 1;
 						arDisasterArr[6] = $("#branch07").attr('value');
+						arDisasterArrFilename[6] = $("#branch07").attr('value');
 					} else {
 						listsArr[6] = 0;
 					}
 					arDisasterType.value = listsArr.join(",");
-					arDisasterItem.value = arDisasterArr.join(' ');
+					arDisasterItem.value = arDisasterArr.join(" ");
+					arDisasterItemfilename.value= arDisasterArrFilename.join("");
 				};
 			});
 
@@ -276,8 +422,6 @@
 
 			LocationSetting(); //행정구역 onchange실행
 
-
-
 		});
 
 		//출동일지 저장
@@ -345,8 +489,8 @@
 				contentType: false,
 				enctype: 'multipart/form-data',
 				cache: false,
-				error: function (request, status, error) {
-					alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+				error:function(request,status,error){
+					ajaxErrorMsg(request);
 				},
 				success: function (res) {
 					if (!Ajax.checkResult(res)) {
@@ -360,7 +504,7 @@
 
 		//삭제버튼 실행
 		function del() {
-			if ($("#arNumber").val() == '') {
+			if ($("#id").val() == '') {
 				alert("삭제하고자하는 출동일지를 선택하세요.");
 				return false;
 			}
@@ -369,7 +513,7 @@
 			}
 
 			var params = {
-				arNumber : $("#arNumber").val()
+				recordid : $("#id").val()
 			};
 
 			var token = $("meta[name='_csrf']").attr("content");
@@ -382,7 +526,7 @@
 				data : params,
 				cache:false,
 				error:function(request,status,error){
-					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+					ajaxErrorMsg(request);
 				},
 				success: function(res){
 					if (!Ajax.checkResult(res)) {
@@ -411,7 +555,7 @@
 				type: 'post',
 				data: params,
 				cache: false,
-				error: function (request) {
+				error:function(request,status,error){
 					ajaxErrorMsg(request);
 				},
 				success: function (res) {
@@ -423,7 +567,7 @@
 						html += '<option value ="' + echoNull2Blank(value.code) + '">' + echoNull2Blank(value.name)+ '</option>';
 					});
 					$schList.html(html);
-					if($("#addSel").val() !=''){
+					if($("#addSel").val() !==''){
 						var addressSelect = $("#addSel").val();
 						setarLocationAddressType(addressSelect);
 					}
@@ -453,16 +597,17 @@
 			<col style="width: 100px;" />
 			<col style="width: 400px;" />
 			<col style="width: 100px;" />
-			<col />
+		<col />
 		</colgroup>
 		<tbody>
 			<tr>
 				<th>출동일지 번호</th>
 				<td>
+					<input type="hidden"  readonly="readonly" id="id" name="id"
+						   th:value="${record} ? ${record.id} : ''" />
 					<div class="c-text c-text--duo">
 						<input type="text" class="c-text__input only-child" name="arNumber" id="arNumber"
-							   th:value="${record} ? ${record.arNumber} : ''"/>
-						<button class="c-text__button">검색</button>
+							   th:value="${record} ? ${record.arNumber} : ''" />
 					</div>
 				</td>
 				<th>출동일지 제목</th>
@@ -529,6 +674,7 @@
 							   th:value="${record} ? ${record.arDisasterType} : ''">
 						<input type="hidden" name="arDisasterItem" id="arDisasterItem" value=""
 							   th:value="${record} ? ${record.arDisasterItem} : ''">
+						<input type="hidden" name="arDisasterItemfilename" id="arDisasterItemfilename" value="">
 					</ul>
 				</td>
 			</tr>
@@ -568,7 +714,7 @@
 					<div class="c-calendar-layout">
 						<div class="c-date">
 							<div class="c-date__input-box">
-								<input type="text" class="c-date__result" id="arIntoStart" name="arIntoStart" th:value="${record} ? ${record.arIntoStart} : ''" />
+								<input type="text" class="c-date__result" id="arIntoStart" name="arIntoStart" th:value="${record} ? ${record.arIntoStart} : ''" readonly/>
 								<button type="button" class="c-date__button">
 									<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
 								</button>
@@ -578,7 +724,7 @@
 						<span>-</span>
 						<div class="c-date">
 							<div class="c-date__input-box">
-								<input type="text" class="c-date__result" id="arIntoEnd" name="arIntoEnd" th:value="${record} ? ${record.arIntoEnd} : ''" />
+								<input type="text" class="c-date__result" id="arIntoEnd" name="arIntoEnd" th:value="${record} ? ${record.arIntoEnd} : ''" readonly/>
 								<button type="button" class="c-date__button">
 									<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
 								</button>
@@ -720,34 +866,55 @@
 					<ul class="c-input-list">
 						<li>
 							<div class="c-text">
-								<input type="text" class="c-text__input" placeholder="사번" />
+								<input type="text" name="arEmployeeNumber" class="c-text__input" placeholder="사번" />
 							</div>
 						</li>
 						<li>
 							<div class="c-text">
-								<input type="text" class="c-text__input" placeholder="이름" />
+								<input type="text" name="arEmployeeName" class="c-text__input" placeholder="이름" />
 							</div>
 						</li>
 						<li>
 							<div class="c-text">
-								<input type="text" class="c-text__input" placeholder="부서명" />
+								<input type="text" name="arDepartmentName" class="c-text__input" placeholder="부서명" />
 							</div>
 						</li>
 						<li>
-							<button class="c-button">추가</button>
+							<input type="button" class="c-button" id="responsibilBtn" value="추가"/>
+<!--							<button class="c-button">추가</button>-->
 						</li>
-					</ul>
-					<ul class="c-result-list" style="margin-top: 10px;">
+
 						<li>
-							<ul class="c-input-list">
-								<li>0000001</li>
-								<li>최인석</li>
-								<li>소프트웨어팀</li>
-								<li>
-									<button class="c-button c-button--small">삭제</button>
-								</li>
-							</ul>
+							<div class="c-text">
+								<input type="text" name="arEmployeeNumber" class="c-text__input" placeholder="사번" />
+							</div>
 						</li>
+						<li>
+							<div class="c-text">
+								<input type="text" name="arEmployeeName" class="c-text__input" placeholder="이름" />
+							</div>
+						</li>
+						<li>
+							<div class="c-text">
+								<input type="text" name="arDepartmentName" class="c-text__input" placeholder="부서명" />
+							</div>
+						</li>
+						<li>
+							<div class="c-text">
+								<input type="text" name="arEmployeeNumber" class="c-text__input" placeholder="사번" />
+							</div>
+						</li>
+						<li>
+							<div class="c-text">
+								<input type="text" name="arEmployeeName" class="c-text__input" placeholder="이름" />
+							</div>
+						</li>
+						<li>
+							<div class="c-text">
+								<input type="text" name="arDepartmentName" class="c-text__input" placeholder="부서명" />
+							</div>
+						</li>
+
 					</ul>
 				</td>
 			</tr>
@@ -782,43 +949,41 @@
 			<tr>
 				<th>관련사진</th>
 				<td colspan="3">
-					<div class="c-file">
-						<input type="text" readonly="readonly" class="c-file__input" id="pickture2" name="picture2" />
-						<label class="c-file__button">파일선택<input type="file" name="picture1" id="picture1" /></label>
-					</div>
-					<ul class="c-result-list" style="margin-top: 10px;">
-						<li>
-							<ul class="c-input-list">
-								<li>재난재해분과_행정구역_조사시작일시_작성자명_사진이름_순번.jpg</li>
-								<li>
-									<button class="c-button c-button--small">삭제</button>
-								</li>
-							</ul>
+					<ul class="c-file-list">
+						<li class="c-file-list__item0">
+							<div class="c-file">
+								<input type="text" readonly="readonly" class="c-file__input" id="file0" name="file0">
+								<label class="c-file__button">파일선택<input type="file" name="file0" /></label>
+								<a href="#" class="c-file__control add">추가</a>
+							</div>
 						</li>
-						<li>
+					</ul>
+
+					<ul class="c-result-list" style="margin-top: 10px;" id ="">
+						<li th:each ="recorduploadFile : ${recorduploadFiles}">
 							<ul class="c-input-list">
-								<li>붕괴_서울특별시종로구_20190723_김지겸_붕괴사진_01.jpg</li>
+								<li >
+									<a th:href="@{/record/download/{id}(id=${recorduploadFile.getId()})}"
+									   th:text="${recorduploadFile.getAfFileName()}"></a>
+								</li>
 								<li>
-									<button class="c-button c-button--small">삭제</button>
+<!--									<button type="button" class="c-button c-button&#45;&#45;small" th:onclick="'javascript:fileDelete(this,'${recorduploadFile.getId()}')'">삭제</button>-->
 								</li>
 							</ul>
 						</li>
 					</ul>
+
 				</td>
 			</tr>
 		</tbody>
 	</table>
 	</form>
-	<div class="c-function">
+		<div class="c-function">
 			<div class="c-function__group c-function__group--right">
 				<div class="c-function__item"><button id="btnSave" class="c-button c-button--point">저장</button></div>
-<!--				<div class="c-function__item"><button class="c-button">임시저장</button></div>-->
 				<div class="c-function__item"><button id="btnDel" class="c-button c-button--point">삭제</button></div>
-<!--				<div class="c-function__item"><button class="c-button">작성취소</button></div>-->
 			</div>
 		</div>
-
-	
 </section>
 
 </div>

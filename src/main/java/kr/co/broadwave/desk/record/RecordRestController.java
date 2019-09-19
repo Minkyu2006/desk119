@@ -6,20 +6,25 @@ import kr.co.broadwave.desk.bscodes.CommonCode;
 import kr.co.broadwave.desk.bscodes.LocationAddressType;
 import kr.co.broadwave.desk.common.AjaxResponse;
 import kr.co.broadwave.desk.common.CommonUtils;
+import kr.co.broadwave.desk.common.MediaUtils;
 import kr.co.broadwave.desk.common.ResponseErrorCode;
 import kr.co.broadwave.desk.mastercode.MasterCode;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
+import kr.co.broadwave.desk.record.file.RecordImageService;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 
-import kr.co.broadwave.desk.notice.Notice;
-import kr.co.broadwave.desk.notice.file.UploadFile;
+import kr.co.broadwave.desk.record.file.RecordUploadFile;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,16 +47,22 @@ public class RecordRestController {
     private final AccountService accountService;
     private final MasterCodeService masterCodeService;
     private final ModelMapper modelMapper;
+    private final RecordRepository recordRepository;
+    private final RecordImageService recordImageService;
 
     @Autowired
     public RecordRestController(RecordService recordService,
                                 AccountService accountService,
                                 ModelMapper modelMapper,
+                                RecordRepository recordRepository,
+                                RecordImageService recordImageService,
                                 MasterCodeService masterCodeService) {
         this.recordService = recordService;
         this.accountService = accountService;
         this.modelMapper = modelMapper;
+        this.recordRepository = recordRepository;
         this.masterCodeService = masterCodeService;
+        this.recordImageService = recordImageService;
     }
 
     // 출동일지작성 저장기능
@@ -66,6 +77,8 @@ public class RecordRestController {
 
         String currentuserid = CommonUtils.getCurrentuser(request);
         Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
+
+        Optional<Record> optionalRecord = recordRepository.findByArNumber(record.getArNumber());
 
         if (!optionalAccount.isPresent()) {
             log.info("출동일지 저장한 사람 아이디 미존재 : '" + currentuserid + "'");
@@ -82,14 +95,13 @@ public class RecordRestController {
             record.setArRelatedId(optionalRelatedId.get());
         }
 
-        Optional<Record> savedRecord = recordService.findByArNumber(record.getArNumber());
-
-        if (savedRecord.isPresent()){
+        //신규 및 업데이트여부
+        if (optionalRecord.isPresent()){
             //수정
-            record.setId(savedRecord.get().getId());
-            record.setInsert_id(savedRecord.get().getInsert_id());
-            record.setInsert_name(savedRecord.get().getInsert_name());
-            record.setInsertDateTime(savedRecord.get().getInsertDateTime());
+            record.setId(optionalRecord.get().getId());
+            record.setInsert_id(optionalRecord.get().getInsert_id());
+            record.setInsert_name(optionalRecord.get().getInsert_name());
+            record.setInsertDateTime(optionalRecord.get().getInsertDateTime());
 
             record.setModify_id(currentuserid);
             record.setModify_name(optionalAccount.get().getUsername());
@@ -104,11 +116,38 @@ public class RecordRestController {
             record.setModifyDateTime(LocalDateTime.now());
         }
 
+        Record recordSave = recordService.save(record);
 
+        //파일저장
+        Iterator<String> files = multi.getFileNames();
+        System.out.println("files :"+files);
+        while(files.hasNext()) {
+            String recorduploadFile = files.next();
+            MultipartFile mFile = multi.getFile(recorduploadFile);
+            String fileName = mFile.getOriginalFilename();
+            //파일이 존재할때만
+            if (!mFile.isEmpty()) {
+                System.out.println("파일명 확인  : " + fileName);
+                recordImageService.store(mFile,recordSave);
+            }
+        }
+        //파일명 순번 채번하기
+        recordImageService.makefileseq(recordSave);
 
-        Record recordSave = this.recordService.save(record);
+        //조사담당자 저장
+        List<String> repons;
+
 
         log.info("출동일지 저장 성공 : " + recordSave.toString() );
+        return ResponseEntity.ok(res.success());
+    }
+
+    // 조사담당자 배열받기
+    @PostMapping("respon")
+    public ResponseEntity<?> respon(@RequestParam(value="responList") List<String> respon) {
+        log.info("출동일지 조사담당자 배열: '" + respon + "'");
+
+
         return ResponseEntity.ok(res.success());
     }
 
@@ -147,18 +186,68 @@ public class RecordRestController {
 
     // 출동일지 삭제
     @PostMapping("del")
-    public ResponseEntity recordDelete(@RequestParam(value="arNumber", defaultValue="") String arNumber){
-        log.info("출동일지 삭제 시작 / 고유번호 ID : '" + arNumber + "'");
-        Optional<Record> optionalRecord = recordService.findByArNumber(arNumber);
+    public ResponseEntity recordDelete(@RequestParam(value="recordid", defaultValue="") Long recordid){
+
+        log.info("출동일지 삭제 시작 / 고유번호 ID : '" + recordid + "'");
+
+        Optional<Record> optionalRecord = recordService.findByIdRecord(recordid);
+
         if (!optionalRecord.isPresent()){
-            log.info("출동일지 삭제 에러 데이터존재하지않습니다.('E003') fileID: '" + arNumber + "'");
+            log.info("출동일지 삭제 에러 데이터존재하지않습니다.('E003') fileID: '" + recordid + "'");
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E003.getCode(), ResponseErrorCode.E003.getDesc()));
         }
         recordService.delete(optionalRecord.get());
-        log.info("출동일지 삭제 성공 / 고유번호 ID : '" + arNumber + "'");
+        log.info("출동일지 삭제 성공 / 고유번호 ID : '" + recordid + "'");
         return ResponseEntity.ok(res.success());
     }
 
+    @GetMapping("/image/{fileId}")
+    @ResponseBody
+    public ResponseEntity<?> serveFile(@PathVariable Long fileId) {
+        try {
+            RecordUploadFile recorduploadedFile = recordImageService.load(fileId);
+            HttpHeaders headers = new HttpHeaders();
+            String fileName = recorduploadedFile.getAfFileName();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + new String(fileName.getBytes("UTF-8"), "ISO-8859-1") + "\"");
+            if (MediaUtils.containsImageMediaType(recorduploadedFile.getContentType())) {
+                headers.setContentType(MediaType.valueOf(recorduploadedFile.getContentType()));
+            } else {
+                headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            }
+            Resource resource = recordImageService.loadAsResource(recorduploadedFile.getAfSaveFileName());
+            return ResponseEntity.ok().headers(headers).body(resource);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // 이미지등록
+    @PostMapping("image")
+    public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) {
+        try {
+            RecordUploadFile uploadedFile = recordImageService.store(file,null);
+            return ResponseEntity.ok().body("/api/record/image/" + uploadedFile.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    //출동일지 파일삭제
+    @PostMapping("filedel")
+    public ResponseEntity filedelete(@RequestParam(value="fileid", defaultValue="") Long fileid){
+        System.out.println("파일삭제시작");
+        log.info("출동일지 첨부파일삭제 시작/ 파일ID : '" + fileid + "'");
+        int resultValue = recordImageService.recorduploadFileDelete(fileid);
+        if (resultValue == -1){
+            log.info("출동일지 삭제시 에러발생('E015) fileID: '" + fileid + "'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E015.getCode(), ResponseErrorCode.E015.getDesc()));
+        }
+        log.info("출동일지 첨부파일삭제 성공/ 파일ID : '" + fileid + "'");
+
+        return ResponseEntity.ok(res.success());
+    }
 
 
 

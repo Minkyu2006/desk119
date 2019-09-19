@@ -12,5 +12,4 @@ import java.util.Optional;
  */
 public interface RecordRepositoryCustom {
     Page<RecrodListDto> findAllBySearchStrings(String arNumber, String arTitle, String arWriter, Pageable pageable);
-
 }

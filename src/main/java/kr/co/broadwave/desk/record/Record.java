@@ -83,17 +83,13 @@ public class Record {
     @Column(name="ar_fac")
     private String arFac;
 
-    //조사시설물
+    //조사시설물 기타
     @Column(name="ar_gita")
     private String argita;
 
     //조사목적
     @Column(name="ar_purpose")
     private String arPurpose;
-
-    //조사담당자
-    @Column(name="ar_responsibil")
-    private String arResponsibil;
 
     //공동참여기관
     @Column(name="ar_engine")
@@ -132,4 +128,8 @@ public class Record {
     // 추가 조사시설물 항목들
     @Column(name="ar_fac_item")
     private String arFacItem;
+    // 추가 출동일지사진경로
+    @Column(length = 100000, name="ar_photo")
+    private String arPhoto;
+
 }
