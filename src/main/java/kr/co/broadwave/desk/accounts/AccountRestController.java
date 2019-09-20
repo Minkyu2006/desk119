@@ -127,7 +127,7 @@ public class AccountRestController {
 
         Account accountSave =  this.accountService.saveAccount(account);
 
-        log.info("사용자 저장 성공 : " + accountSave.toString() );
+        log.info("사용자 저장 성공 : '" + accountMapperDto.getUserid() +"'" );
         return ResponseEntity.ok(res.success());
 
     }
@@ -190,7 +190,7 @@ public class AccountRestController {
 
         Account accountSave =  this.accountService.saveAccount(account);
 
-        log.info("사용자 관리자(일반정보) 수정 성공 : " + accountSave.toString() );
+        log.info("사용자 관리자(일반정보) 수정 성공 '" + accountMapperDto.getUserid() +"'" );
         return ResponseEntity.ok(res.success());
 
     }
@@ -240,7 +240,7 @@ public class AccountRestController {
 
         Account accountSave =  this.accountService.saveAccount(account);
 
-        log.info("사용자 관리자(패스워드) 수정 성공 : " + accountSave.toString() );
+        log.info("사용자 관리자(패스워드) 수정 성공 '" + accountMapperDto.getUserid() +"'" );
         return ResponseEntity.ok(res.success());
 
     }
@@ -301,7 +301,7 @@ public class AccountRestController {
 
         Account accountSave =  this.accountService.saveAccount(account);
 
-        log.info("회원가입 저장 성공 : " + accountSave.toString() );
+        log.info("회원가입 저장 성공 : '" + accountMapperDto.getUserid() +"'" );
         return ResponseEntity.ok(res.success());
 
     }
@@ -327,7 +327,7 @@ public class AccountRestController {
 
         //수정일때
         if(!optionalAccount.isPresent()){
-            log.info("사용자정보(이메일)수정실패 : 사용자아이디: '" + account.getUserid() + "'");
+            log.info("사용자정보 수정실패 : 사용자아이디: '" + account.getUserid() + "'");
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E004.getCode(), ResponseErrorCode.E004.getDesc()));
         }else{
             account.setId(optionalAccount.get().getId());
@@ -349,7 +349,7 @@ public class AccountRestController {
 
         Account accountSave =  this.accountService.modifyAccount(account);
 
-        log.info("사용자 저장 성공 : " + accountSave.toString() );
+        log.info("사용자정보 수정 성공 : + " + accountMapperDto.getUserid() +"'" );
         return ResponseEntity.ok(res.success());
 
     }
@@ -377,7 +377,7 @@ public class AccountRestController {
 
         //수정일때
         if(!optionalAccount.isPresent()){
-            log.info("사용자정보(패스워드)수정실패 : 사용자아이디: '" + account.getUserid() + "'");
+            log.info("사용자정보(패스워드)수정 실패 : 사용자아이디: '" + account.getUserid() + "'");
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E004.getCode(), ResponseErrorCode.E004.getDesc()));
         }else{
             //현재암호비교
@@ -407,7 +407,7 @@ public class AccountRestController {
 
         Account accountSave =  this.accountService.saveAccount(account);
 
-        log.info("사용자 저장 성공 : " + accountSave.toString() );
+        log.info("사용자정보(패스워드)수정 성공 :  " + accountMapperDto.getUserid() +"'" );
         return ResponseEntity.ok(res.success());
 
     }

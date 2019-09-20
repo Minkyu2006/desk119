@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 public interface AccountRepository extends JpaRepository<Account,Long>,QuerydslPredicateExecutor<Account> {
 
-    //@EntityGraph(attributePaths = {"team"})
+    //@EntityGraph(attributePaths = {"team","position"})
     @Query("select a from Account a join fetch a.team join fetch a.position where a.userid = :userid")
     Optional<Account> findByUserid(@Param("userid") String userid);
 
