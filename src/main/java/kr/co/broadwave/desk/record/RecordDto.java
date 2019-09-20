@@ -44,6 +44,7 @@ public class RecordDto {
 
     private String arDisasterItem; //추가 재해재난분과 항목
     private String arFacItem; //추가 조사시설물 항목
+    private String arDisasterItemFilename; //추가 파일이름_띄어쓰기없음
 
     //기본적인것
     private String modify_name;
@@ -283,4 +284,11 @@ public class RecordDto {
         this.arFacItem = arFacItem;
     }
 
+    public String getArDisasterItemFilename() {
+        return arDisasterItemFilename;
+    }
+
+    public void setArDisasterItemFilename(String arDisasterItemFilename) {
+        this.arDisasterItemFilename = arDisasterItemFilename;
+    }
 }

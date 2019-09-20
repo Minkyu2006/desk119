@@ -129,7 +129,7 @@ public class RecordRestController {
             String fileName = mFile.getOriginalFilename();
             //파일이 존재할때만
             if (!mFile.isEmpty()) {
-                System.out.println("파일명 확인  : " + fileName);
+                //System.out.println("파일명 확인  : " + fileName);
                 recordImageService.store(mFile,recordSave);
             }
         }

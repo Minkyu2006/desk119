@@ -131,15 +131,23 @@ public class RecordImageService {
         int i = 0;
         for (RecordUploadFile recordUploadFile : recordUploadFiles) {
             i = i + 1;
-            String arDisasterItem = recordSave.getArDisasterItem(); //재해재난분과
+            //String afDisasterItemFilename = recordUploadFile.getAfDisasterItemFilename(); //재해재난분과
+            String arDisasterItemFilename = recordSave.getArDisasterItemFilename(); //재해재난분과
             String arLocationCityType = recordSave.getArLocationCityType().getDesc(); //시
             String arLocationAddressType = recordSave.getArLocationAddressType().getDesc(); //구
             String arIntoStart = recordSave.getArIntoStart(); // 시작일
             String arWriter = recordSave.getArWriter(); // 작성자
-
             String afName = recordUploadFile.getAfFileName(); //파일이름
+            System.out.println("arDisasterItemFilename: "+arDisasterItemFilename);
 
-            String filename = arDisasterItem + "_" + arLocationCityType + "_" + arLocationAddressType + "_" + arIntoStart + "_" + arWriter + "_" + "순번 " + i + "_" + afName;
+            // 확장자 구하기
+            String extensionName = afName.substring(afName.lastIndexOf("."));
+            // 파일이름
+            int pos = afName.lastIndexOf(".");
+            String realName = afName.substring(0,pos);
+
+            String filename = arDisasterItemFilename + "_" + arLocationCityType + "_" + arLocationAddressType + "_" + arIntoStart + "_" + arWriter + "_"+realName+"_"+ i + "_" + extensionName;
+
             recordUploadFile.setAfFileName(filename);
 
             recordUploadFileRepository.save(recordUploadFile);

@@ -105,9 +105,9 @@ public class RecordController {
 
         //데이터 가져오기
         RecordViewDto recordViewDto = recordService.findByIdView(id);
-        List<RecordUploadFile> recorduploadFiles = recordimageService.recorduploadFileList(id);
-
         model.addAttribute("record", recordViewDto);
+
+        List<RecordUploadFile> recorduploadFiles = recordimageService.recorduploadFileList(id);
         model.addAttribute("recorduploadFiles", recorduploadFiles);
 
         List<Responsibil> responsibils = recordService.recordRespon(id);

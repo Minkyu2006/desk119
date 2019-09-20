@@ -128,5 +128,8 @@ public class Record {
     // 추가 조사시설물 항목들
     @Column(name="ar_fac_item")
     private String arFacItem;
+    // 추가 파일이름_띄어쓰기없음
+    @Column(name="ar_disaster_item_filename")
+    private String arDisasterItemFilename;
 
 }

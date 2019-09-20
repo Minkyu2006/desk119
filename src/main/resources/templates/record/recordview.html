@@ -107,11 +107,11 @@
 				<tr>
 					<th>KICT 조사담당자</th>
 					<td colspan=3>
-						<ul class="c-input-list" th:each ="responsibil : ${responsibils}">
-							<a th:text="${responsibil} ? ${responsibil.arEmployeeNumber} : ''"></a>
-							<a th:text="${responsibil} ? ${responsibil.arEmployeeName} : ''"></a>
-							<a th:text="${responsibil} ? ${responsibil.arDepartmentName} : ''"></a>
-						</ul>
+						<p class="c-input-list" th:each ="responsibil : ${responsibils}">
+							<span th:text="${responsibil} ? ${responsibil.arEmployeeNumber} : ''"></span>
+							<span th:text="${responsibil} ? ${responsibil.arEmployeeName} : ''"></span>
+							<span th:text="${responsibil} ? ${responsibil.arDepartmentName} : ''"></span>
+						</p>
 					</td>
 				</tr>
 				<tr>
@@ -145,7 +145,20 @@
 				</tr>
 				<tr>
 					<th>관련사진</th>
-					<td colspan=3></td>
+					<td colspan=3>
+						<ul>
+							<p th:each ="recorduploadFile : ${recorduploadFiles}">
+								<a th:text="${recorduploadFile} ? ${recorduploadFile.afFilePath} : ''"></a>
+							</p>
+						</ul>
+
+<!--						<ul>-->
+<!--							<li th:each ="recorduploadFile : ${recorduploadFiles}">-->
+<!--								<img th:src="@{/api/record/image/}"  class="c-file-list__img" />-->
+<!--							</li>-->
+<!--						</ul>-->
+
+					</td>
 				</tr>
 			</tbody>
 		</table>
