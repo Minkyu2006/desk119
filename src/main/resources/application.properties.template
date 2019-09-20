@@ -10,8 +10,7 @@ logging.file.max-history=5
 logging.file=./logs/desk.log
 
 #FileUpload
-noticefile.upload.directory=C:/develop/desk/uploadfiles/noticeimages/
-recordfile.upload.directory=C:/develop/desk/uploadfiles/recordimages/
+base.upload.directory=C:/project/desk/uploadfiles/
 spring.servlet.multipart.enabled=true
 spring.servlet.multipart.max-file-size=50MB
 spring.servlet.multipart.max-request-size=50MB

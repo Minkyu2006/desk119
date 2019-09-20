@@ -36,10 +36,10 @@ public class ImageService {
     private final NoticeRepository noticeRepository;
 
     @Autowired
-    public ImageService(String uploadNoticePath, NoticeRepository noticeRepository) {
+    public ImageService(String uploadPath, NoticeRepository noticeRepository) {
         this.noticeRepository = noticeRepository;
-        logger.info("PATH :: " + uploadNoticePath);
-        this.rootLocation = Paths.get(uploadNoticePath);
+        logger.info("PATH :: " + uploadPath);
+        this.rootLocation = Paths.get(uploadPath + "noticeimages/");
     }
 
     @Autowired

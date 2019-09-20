@@ -35,12 +35,12 @@ public class RecordImageService {
 
 
     @Autowired
-    public RecordImageService(String uploadRecordPath, RecordRepository recordRepository, RecordUploadFileRepository recordUploadFileRepository) {
+    public RecordImageService(String uploadPath, RecordRepository recordRepository, RecordUploadFileRepository recordUploadFileRepository) {
         this.recordRepository = recordRepository;
         this.recordUploadFileRepository = recordUploadFileRepository;
 
-        logger.info("PATH :: " + uploadRecordPath);
-        this.rootLocation = Paths.get(uploadRecordPath);
+        logger.info("PATH :: " + uploadPath);
+        this.rootLocation = Paths.get(uploadPath + "recordimages");
     }
 
 

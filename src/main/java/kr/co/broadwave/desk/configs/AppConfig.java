@@ -17,8 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class AppConfig {
 
     //공지사항관련 업로드 파일 경로
-    @Value("${noticefile.upload.directory}")
-    String uploadNoticeFileDir;
+    @Value("${base.upload.directory}")
+    String uploadFileDir;
 
     @Bean
     public ModelMapper modelMapper() {
@@ -30,9 +30,9 @@ public class AppConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    @Bean(name = "uploadNoticePath")
-    public String uploadNoticePath() {
-        return uploadNoticeFileDir;
+    @Bean(name = "uploadPath")
+    public String uploadPath() {
+        return uploadFileDir;
     }
 
 }
