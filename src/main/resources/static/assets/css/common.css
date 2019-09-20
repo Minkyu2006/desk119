@@ -109,7 +109,7 @@ body {
     color: #f99d1c;
 }
 .header__inner .logo img {
-	vertical-align: text-bottom;
+	vertical-align: middle;
 }
 .header__inner .info {
     float: right;
