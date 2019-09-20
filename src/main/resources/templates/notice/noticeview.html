@@ -73,7 +73,8 @@
 							<tr class="c-retable__tr--tablet-visible">
 								<td colspan="6">
 									<ul class="c-file-list">
-										<li th:each ="uploadfile : ${uploadFiles}"><img src="/assets/images/icon__file.png" alt="첨부파일" class="c-file-list__img" /><a th:href="@{/notice/download/{id}(id=${uploadfile.id})}"  th:text="${uploadfile.fileName}"></a></li>
+										<li th:each ="uploadfile : ${uploadFiles}"><img src="/assets/images/icon__file.png" alt="첨부파일" class="c-file-list__img" />
+											<a th:href="@{/notice/download/{id}(id=${uploadfile.id})}"  th:text="${uploadfile.fileName}"></a></li>
 
 									</ul>
 								</td>

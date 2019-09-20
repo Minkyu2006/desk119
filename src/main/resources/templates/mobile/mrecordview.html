@@ -14,18 +14,16 @@
 <th:block layout:fragment="script">
 	<script>
 		$(function() {
-			$('#btn__report').on('click', function(e) {
-				$('#pop__report').addClass('open');
-				
-				e.preventDefault();
-			})
-			
-			$('.l-popup__close').on('click', function(e) {
-				$(this).parents('.l-popup').removeClass('open');
-				
-				e.preventDefault();
-			})
+
 		})
+
+		function linkList() {
+			location.href="/record/list";
+		}
+
+		function linkReg(id) {
+			location.href="/record/mreg/" + id;
+		}
 	</script>
 
 </th:block>
@@ -42,7 +40,6 @@
 						<h3 class="record__title">출동일지 번호</h3>
 						<div class="c-text c-text--duo">
 							<input type="text" class="c-text__input only-child" readonly="readonly" />
-							<button class="c-text__button" id="btn__report">검색</button>
 						</div>
 					</li>
 					<li>
@@ -126,313 +123,12 @@
 				</ul>
 				<div class="c-function">
 					<div class="c-function__group c-function__group--right">
-						<div class="c-function__item"><button class="c-button c-button--point">수정</button></div>
-						<div class="c-function__item"><button class="c-button">목록</button></div>
+						<div class="c-function__item"><button class="c-button c-button--point" sec:authorize = "hasRole('ROLE_ADMIN')" th:onclick="|javascript:linkReg('${record.id}')|">수정</button></div>
+						<div class="c-function__item"><button class="c-button" onclick="linkList();">목록</button></div>
 					</div>
 				</div>
 			</div>
 		</article>
-		
 	</section>
-	
-	
-	<div class="l-popup" id="pop__report">
-   		<div class="l-popup__container">
-   			<div class="l-popup__head">
-   				<h3 class="l-popup__heading">출동일지 조회</h3>
-   			</div>
-   			<div class="l-popup__content">
-   				<div class="l-popup__section">
-					<table class="c-retable">
-						<thead class="c-retable--tablet-hidden">
-							<tr>
-								<th scope="col">번호</th>
-								<th scope="col">보고서 제목</th>
-								<th scope="col">재해·재난 분과</th>
-								<th scope="col">조사일자</th>
-								<th scope="col">조사위치</th>
-								<th scope="col">조사시설물</th>
-								<th scope="col">작성자</th>
-								<th scope="col"></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-								<td class="c-retable__title">
-									<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-									<img src="/assets/images/icon__new.png" alt="새글알림">
-									<div class="c-retable--tablet-visible">
-										<ul class="c-retable__tablet-list">
-											<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과">홍수·가뭄</li>
-											<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자">20190731 ~ 20190731</li>
-											<li><img src="/assets/images/icon__map.png" alt="조사위치">서울시 양천구</li>
-											<li><img src="/assets/images/icon__user.png" alt="작성자">황석환</li>
-											<li></li>
-											<li>
-												<button class="c-button c-button--small c-button--point">선택</button>
-											</li>
-										</ul>
-									</div>
-								</td>
-								<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-								<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-								<td class="c-retable--tablet-hidden">서울시 양천구</td>
-								<td class="c-retable--tablet-hidden">지하시설물</td>
-								<td class="c-retable--tablet-hidden">황석환</td>
-								<td class="c-retable--tablet-hidden">
-									<button class="c-button c-button--point">선택</button>
-								</td>
-							</tr>
-							<tr>
-								<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-								<td class="c-retable__title">
-									<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-									<img src="/assets/images/icon__new.png" alt="새글알림">
-									<div class="c-retable--tablet-visible">
-										<ul class="c-retable__tablet-list">
-											<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과">홍수·가뭄</li>
-											<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자">20190731 ~ 20190731</li>
-											<li><img src="/assets/images/icon__map.png" alt="조사위치">서울시 양천구</li>
-											<li><img src="/assets/images/icon__user.png" alt="작성자">황석환</li>
-											<li></li>
-											<li>
-												<button class="c-button c-button--small c-button--point">선택</button>
-											</li>
-										</ul>
-									</div>
-								</td>
-								<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-								<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-								<td class="c-retable--tablet-hidden">서울시 양천구</td>
-								<td class="c-retable--tablet-hidden">지하시설물</td>
-								<td class="c-retable--tablet-hidden">황석환</td>
-								<td class="c-retable--tablet-hidden">
-									<button class="c-button c-button--point">선택</button>
-								</td>
-							</tr>
-							<tr>
-								<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-								<td class="c-retable__title">
-									<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-									<img src="/assets/images/icon__new.png" alt="새글알림">
-									<div class="c-retable--tablet-visible">
-										<ul class="c-retable__tablet-list">
-											<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과">홍수·가뭄</li>
-											<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자">20190731 ~ 20190731</li>
-											<li><img src="/assets/images/icon__map.png" alt="조사위치">서울시 양천구</li>
-											<li><img src="/assets/images/icon__user.png" alt="작성자">황석환</li>
-											<li></li>
-											<li>
-												<button class="c-button c-button--small c-button--point">선택</button>
-											</li>
-										</ul>
-									</div>
-								</td>
-								<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-								<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-								<td class="c-retable--tablet-hidden">서울시 양천구</td>
-								<td class="c-retable--tablet-hidden">지하시설물</td>
-								<td class="c-retable--tablet-hidden">황석환</td>
-								<td class="c-retable--tablet-hidden">
-									<button class="c-button c-button--point">선택</button>
-								</td>
-							</tr>
-							<tr>
-								<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-								<td class="c-retable__title">
-									<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-									<img src="/assets/images/icon__new.png" alt="새글알림">
-									<div class="c-retable--tablet-visible">
-										<ul class="c-retable__tablet-list">
-											<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과">홍수·가뭄</li>
-											<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자">20190731 ~ 20190731</li>
-											<li><img src="/assets/images/icon__map.png" alt="조사위치">서울시 양천구</li>
-											<li><img src="/assets/images/icon__user.png" alt="작성자">황석환</li>
-											<li></li>
-											<li>
-												<button class="c-button c-button--small c-button--point">선택</button>
-											</li>
-										</ul>
-									</div>
-								</td>
-								<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-								<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-								<td class="c-retable--tablet-hidden">서울시 양천구</td>
-								<td class="c-retable--tablet-hidden">지하시설물</td>
-								<td class="c-retable--tablet-hidden">황석환</td>
-								<td class="c-retable--tablet-hidden">
-									<button class="c-button c-button--point">선택</button>
-								</td>
-							</tr>
-							<tr>
-								<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-								<td class="c-retable__title">
-									<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-									<img src="/assets/images/icon__new.png" alt="새글알림">
-									<div class="c-retable--tablet-visible">
-										<ul class="c-retable__tablet-list">
-											<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과">홍수·가뭄</li>
-											<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자">20190731 ~ 20190731</li>
-											<li><img src="/assets/images/icon__map.png" alt="조사위치">서울시 양천구</li>
-											<li><img src="/assets/images/icon__user.png" alt="작성자">황석환</li>
-											<li></li>
-											<li>
-												<button class="c-button c-button--small c-button--point">선택</button>
-											</li>
-										</ul>
-									</div>
-								</td>
-								<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-								<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-								<td class="c-retable--tablet-hidden">서울시 양천구</td>
-								<td class="c-retable--tablet-hidden">지하시설물</td>
-								<td class="c-retable--tablet-hidden">황석환</td>
-								<td class="c-retable--tablet-hidden">
-									<button class="c-button c-button--point">선택</button>
-								</td>
-							</tr>
-							<tr>
-								<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-								<td class="c-retable__title">
-									<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-									<img src="/assets/images/icon__new.png" alt="새글알림">
-									<div class="c-retable--tablet-visible">
-										<ul class="c-retable__tablet-list">
-											<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과">홍수·가뭄</li>
-											<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자">20190731 ~ 20190731</li>
-											<li><img src="/assets/images/icon__map.png" alt="조사위치">서울시 양천구</li>
-											<li><img src="/assets/images/icon__user.png" alt="작성자">황석환</li>
-											<li></li>
-											<li>
-												<button class="c-button c-button--small c-button--point">선택</button>
-											</li>
-										</ul>
-									</div>
-								</td>
-								<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-								<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-								<td class="c-retable--tablet-hidden">서울시 양천구</td>
-								<td class="c-retable--tablet-hidden">지하시설물</td>
-								<td class="c-retable--tablet-hidden">황석환</td>
-								<td class="c-retable--tablet-hidden">
-									<button class="c-button c-button--point">선택</button>
-								</td>
-							</tr>
-							<tr>
-								<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-								<td class="c-retable__title">
-									<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-									<img src="/assets/images/icon__new.png" alt="새글알림">
-									<div class="c-retable--tablet-visible">
-										<ul class="c-retable__tablet-list">
-											<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과">홍수·가뭄</li>
-											<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자">20190731 ~ 20190731</li>
-											<li><img src="/assets/images/icon__map.png" alt="조사위치">서울시 양천구</li>
-											<li><img src="/assets/images/icon__user.png" alt="작성자">황석환</li>
-											<li></li>
-											<li>
-												<button class="c-button c-button--small c-button--point">선택</button>
-											</li>
-										</ul>
-									</div>
-								</td>
-								<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-								<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-								<td class="c-retable--tablet-hidden">서울시 양천구</td>
-								<td class="c-retable--tablet-hidden">지하시설물</td>
-								<td class="c-retable--tablet-hidden">황석환</td>
-								<td class="c-retable--tablet-hidden">
-									<button class="c-button c-button--point">선택</button>
-								</td>
-							</tr>
-							<tr>
-								<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-								<td class="c-retable__title">
-									<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-									<img src="/assets/images/icon__new.png" alt="새글알림">
-									<div class="c-retable--tablet-visible">
-										<ul class="c-retable__tablet-list">
-											<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과">홍수·가뭄</li>
-											<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자">20190731 ~ 20190731</li>
-											<li><img src="/assets/images/icon__map.png" alt="조사위치">서울시 양천구</li>
-											<li><img src="/assets/images/icon__user.png" alt="작성자">황석환</li>
-											<li></li>
-											<li>
-												<button class="c-button c-button--small c-button--point">선택</button>
-											</li>
-										</ul>
-									</div>
-								</td>
-								<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-								<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-								<td class="c-retable--tablet-hidden">서울시 양천구</td>
-								<td class="c-retable--tablet-hidden">지하시설물</td>
-								<td class="c-retable--tablet-hidden">황석환</td>
-								<td class="c-retable--tablet-hidden">
-									<button class="c-button c-button--point">선택</button>
-								</td>
-							</tr>
-							<tr>
-								<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-								<td class="c-retable__title">
-									<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-									<img src="/assets/images/icon__new.png" alt="새글알림">
-									<div class="c-retable--tablet-visible">
-										<ul class="c-retable__tablet-list">
-											<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과">홍수·가뭄</li>
-											<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자">20190731 ~ 20190731</li>
-											<li><img src="/assets/images/icon__map.png" alt="조사위치">서울시 양천구</li>
-											<li><img src="/assets/images/icon__user.png" alt="작성자">황석환</li>
-											<li></li>
-											<li>
-												<button class="c-button c-button--small c-button--point">선택</button>
-											</li>
-										</ul>
-									</div>
-								</td>
-								<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-								<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-								<td class="c-retable--tablet-hidden">서울시 양천구</td>
-								<td class="c-retable--tablet-hidden">지하시설물</td>
-								<td class="c-retable--tablet-hidden">황석환</td>
-								<td class="c-retable--tablet-hidden">
-									<button class="c-button c-button--point">선택</button>
-								</td>
-							</tr>
-							<tr>
-								<td class="c-retable__title"><span class="c-retable__span--tablet-visible">번호</span>000000001</td>
-								<td class="c-retable__title">
-									<a href="#" class="c-retable__subject">서울시 양천구 빗물저류배수시설 조사일지</a>
-									<img src="/assets/images/icon__new.png" alt="새글알림">
-									<div class="c-retable--tablet-visible">
-										<ul class="c-retable__tablet-list">
-											<li><img src="/assets/images/icon__branch.png" alt="재해·재난 분과">홍수·가뭄</li>
-											<li><img src="/assets/images/icon__calendar--gray.png" alt="조사일자">20190731 ~ 20190731</li>
-											<li><img src="/assets/images/icon__map.png" alt="조사위치">서울시 양천구</li>
-											<li><img src="/assets/images/icon__user.png" alt="작성자">황석환</li>
-											<li></li>
-											<li>
-												<button class="c-button c-button--small c-button--point">선택</button>
-											</li>
-										</ul>
-									</div>
-								</td>
-								<td class="c-retable--tablet-hidden">홍수·가뭄</td>
-								<td class="c-retable--tablet-hidden">20190731 ~ 20190731</td>
-								<td class="c-retable--tablet-hidden">서울시 양천구</td>
-								<td class="c-retable--tablet-hidden">지하시설물</td>
-								<td class="c-retable--tablet-hidden">황석환</td>
-								<td class="c-retable--tablet-hidden">
-									<button class="c-button c-button--point">선택</button>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-   			</div>
-   			<a href="#" class="l-popup__close">팝업닫기</a>
-   		</div>
-   	</div>
 </div>
 </html>

@@ -30,8 +30,6 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     //
     @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-
-
         String uploadfilesUrl = "file:///" + recordUploadFileRoot;
         registry.addResourceHandler("/uploadfiles/**").addResourceLocations(uploadfilesUrl).setCachePeriod(31536000);  // 유효기간을 초단위로 지정 (604800 = 7일)
         //registry.addResourceHandler("/assets/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS + "assets/").setCachePeriod(31536000);

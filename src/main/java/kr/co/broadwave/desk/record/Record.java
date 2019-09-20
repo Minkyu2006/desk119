@@ -45,7 +45,7 @@ public class Record {
     private String arDisasterType;
 
     //관련부처
-    @ManyToOne(targetEntity = MasterCode.class,fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = MasterCode.class,fetch = FetchType.EAGER)
     @JoinColumn(name="ar_related_id")
     private MasterCode arRelatedId;
 

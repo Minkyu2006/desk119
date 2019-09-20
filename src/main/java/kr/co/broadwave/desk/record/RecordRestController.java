@@ -12,6 +12,7 @@ import kr.co.broadwave.desk.mastercode.MasterCode;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.record.file.RecordImageService;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
+import kr.co.broadwave.desk.record.responsibil.ResponsibilRepository;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 
@@ -50,6 +51,7 @@ public class RecordRestController {
     private final ModelMapper modelMapper;
     private final RecordRepository recordRepository;
     private final RecordImageService recordImageService;
+    private final ResponsibilRepository responsibilRepository;
 
     @Autowired
     public RecordRestController(RecordService recordService,
@@ -57,6 +59,7 @@ public class RecordRestController {
                                 ModelMapper modelMapper,
                                 RecordRepository recordRepository,
                                 RecordImageService recordImageService,
+                                ResponsibilRepository responsibilRepository,
                                 MasterCodeService masterCodeService) {
         this.recordService = recordService;
         this.accountService = accountService;
@@ -64,6 +67,7 @@ public class RecordRestController {
         this.recordRepository = recordRepository;
         this.masterCodeService = masterCodeService;
         this.recordImageService = recordImageService;
+        this.responsibilRepository = responsibilRepository;
     }
 
     // 출동일지작성 저장기능
@@ -81,6 +85,8 @@ public class RecordRestController {
         Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
 
         Optional<Record> optionalRecord = recordRepository.findByArNumber(record.getArNumber());
+
+
 
         if (!optionalAccount.isPresent()) {
             log.info("출동일지 저장한 사람 아이디 미존재 : '" + currentuserid + "'");
@@ -131,27 +137,32 @@ public class RecordRestController {
             if (!mFile.isEmpty()) {
                 //System.out.println("파일명 확인  : " + fileName);
                 recordImageService.store(mFile,recordSave);
+                //파일명 순번 채번하기
+                recordImageService.makefileseq(recordSave);
             }
         }
-        //파일명 순번 채번하기
-        recordImageService.makefileseq(recordSave);
 
         //조사담당자
         List<Responsibil> responsibil = new ArrayList<>();
+
         String[] arEmployeeNumber = request.getParameterValues("arEmployeeNumber");
         String[] arEmployeeName = request.getParameterValues("arEmployeeName");
         String[] arDepartmentName = request.getParameterValues("arDepartmentName");
 
         for (int i = 0; i < arEmployeeNumber.length; i++) {
             Responsibil responsibils = Responsibil.builder()
-                                            .record(recordSave)
-                                            .arEmployeeNumber(arEmployeeNumber[i])
-                                            .arEmployeeName(arEmployeeName[i])
-                                            .arDepartmentName(arDepartmentName[i])
-                                            .build();
-            responsibil.add(responsibils);
+                    .record(recordSave)
+                    .arEmployeeNumber(arEmployeeNumber[i])
+                    .arEmployeeName(arEmployeeName[i])
+                    .arDepartmentName(arDepartmentName[i])
+                    .build();
+
+            if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty() || !arDepartmentName[i].isEmpty()){
+                responsibil.add(responsibils);
+            }
+
         }
-        System.out.println("responsibils : "+responsibil);
+        System.out.println("responsibils : " + responsibil);
         recordService.recordResponSave(responsibil);
 
         log.info("출동일지 저장 성공 : " + recordSave.toString() );
@@ -244,7 +255,6 @@ public class RecordRestController {
     //출동일지 파일삭제
     @PostMapping("filedel")
     public ResponseEntity filedelete(@RequestParam(value="fileid", defaultValue="") Long fileid){
-        System.out.println("파일삭제시작");
         log.info("출동일지 첨부파일삭제 시작/ 파일ID : '" + fileid + "'");
         int resultValue = recordImageService.recorduploadFileDelete(fileid);
         if (resultValue == -1){
@@ -258,12 +268,11 @@ public class RecordRestController {
     //조사담당자 삭제
     @PostMapping("respondel")
     public ResponseEntity respondelete(@RequestParam(value="rsid", defaultValue="") Long rsid){
-        System.out.println("삭제시작");
         log.info("조사담당자 삭제 시작: '" + rsid + "'");
         int resultValue = recordService.recordresponsibilDelete(rsid);
         if (resultValue == -1){
-            log.info("출동일지 삭제시 에러발생('E015) fileID: '" + rsid + "'");
-            return ResponseEntity.ok(res.fail(ResponseErrorCode.E015.getCode(), ResponseErrorCode.E015.getDesc()));
+            log.info("조사담당자 삭제시 에러발생('E015) fileID: '" + rsid + "'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E017.getCode(), ResponseErrorCode.E017.getDesc()));
         }
         log.info("조사담당자삭제 성공 : '" + rsid + "'");
         return ResponseEntity.ok(res.success());

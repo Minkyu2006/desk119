@@ -61,7 +61,7 @@ public class RecordRepositoryCustomImpl extends QuerydslRepositorySupport implem
             query.where(qRecord.arWriter.containsIgnoreCase(arWriter));
         }
 
-        query.orderBy(qRecord.modifyDateTime.desc());
+        query.orderBy(qRecord.arNumber.desc());
 
         final List<RecrodListDto> records = getQuerydsl().applyPagination(pageable, query).fetch();
         return new PageImpl<>(records, pageable, query.fetchCount());

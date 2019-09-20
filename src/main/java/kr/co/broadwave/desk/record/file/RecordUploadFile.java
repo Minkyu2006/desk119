@@ -29,6 +29,8 @@ public class RecordUploadFile {
     private Record record;
     @Column(name="af_filename")
     private String afFileName;
+    @Column(name="af_original_filename")
+    private String afOriginalFilename;
     @Column(name="af_save_filename")
     private String afSaveFileName;
     @Column(name="af_file_path")
@@ -37,8 +39,6 @@ public class RecordUploadFile {
     private String contentType;
     @Column(name="af_size")
     private Long size;
-//    @Column(name="af_disasterItem_filename")
-//    private String afDisasterItemFilename;
     @Column(name="insert_date")
     private LocalDateTime insertDateTime;
 }

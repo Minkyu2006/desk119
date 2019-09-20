@@ -28,14 +28,9 @@
 			$('.c-file__button input').change(function(){
 				var txt = [];
 				for(var i=0; i<this.files.length; i++){
-					txt.push($('#arDisasterItemFilename').val());
-					txt.push($("#arLocationCityType option:selected").text()) + txt.push($("#arLocationAddressType option:selected").text());
-					//txt.push($("#arLocationAddressType option:selected").text());
-					txt.push($('#arIntoStart').val());
-					txt.push($('#arWriter').val());
 					txt.push(this.files[i].name);
 				}
-				$(this).parent().prev('.c-file__input').val( txt.join("_") );
+				$(this).parent().prev('.c-file__input').val(txt.join("_"));
 			}).change();
 
 			// 파일 항목 추가
@@ -59,14 +54,9 @@
 				$('.c-file__button input').change(function(){
 					var txt = [];
 					for(var i=0; i<this.files.length; i++){
-						txt.push($('#arDisasterItemFilename').val());
-						txt.push($("#arLocationCityType option:selected").text());
-						txt.push($("#arLocationAddressType option:selected").text());
-						txt.push($('#arIntoStart').val());
-						txt.push($('#arWriter').val());
 						txt.push(this.files[i].name);
 					}
-					$(this).parent().prev('.c-file__input').val( txt.join("_"));
+					$(this).parent().prev('.c-file__input').val(txt.join(""));
 				}).change();
 				e.preventDefault();
 			});
@@ -133,8 +123,6 @@
 					}
 					if ($("#branch02" ).is(":checked") == true) {
 						listsArr[1] = 1;
-						var rep = $("#branch02").val;
-						console.log(rep);
 						arDisasterArr[1] = $("#branch02").attr('value');
 						arDisasterArrFilename[1] = $("#branch02").attr('value');
 					} else {
@@ -407,18 +395,7 @@
 				alert("끝난날짜를 설정해주세요.");
 				return;
 			}
-			if ($("[name='arEmployeeName']").val().trim() == ''){
-				alert("조사담당자 사번을 적어주세요.");
-				return;
-			}
-			if ($("[name='arEmployeeNumber']").val().trim() == ''){
-				alert("조사담당자 이름을 적어주세요.");
-				return;
-			}
-			if ($("[name='arDepartmentName']").val().trim() == ''){
-				alert("조사담당자 부서명을 적어주세요.");
-				return;
-			}
+
 			// 날짜저장 VIEW(YYYY-MM-DD) -> DATABASE(YYYYMMDD)
 			if($("input[name='arIntoStart']").val() != "" && $("input[name='arIntoEnd']").val() != "") {
 				var start = $('input[name=arIntoStart]').val();
@@ -552,7 +529,7 @@
 			var params = {
 				fileid:fileid
 			};
-			console.log("파일삭제시작");
+			console.log("파일 삭제시작");
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
@@ -582,11 +559,10 @@
 			var params = {
 				rsid:rsid
 			};
-			console.log("삭제시작");
+			console.log("조사담당자 삭제시작");
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
-
 			$.ajax({
 				url:'/api/record/respondel',
 				type : 'post',
@@ -599,8 +575,7 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					//파일삭제 성공후 해당 라인 화면에서 제거
-					var obj = $(th).parent('ul');
+					var obj = $(th).parent('p')
 					obj.remove();
 				}
 			});
@@ -634,8 +609,8 @@
 				<th>출동일지 제목</th>
 				<td>
 					<div class="c-text"><input name="arTitle" id="arTitle" type="text" class="c-text__input"
-							th:value="${record} ? ${record.arTitle} : ''"
-					/></div>
+							th:value="${record} ? ${record.arTitle} : ''" />
+					</div>
 
 				</td>
 			</tr>
@@ -643,8 +618,8 @@
 				<th>작성자</th>
 				<td>
 					<div class="c-text"><input name="arWriter" id="arWriter" type="text" class="c-text__input"
-							th:value="${record} ? ${record.arWriter} : ''"
-					/></div>
+							th:value="${record} ? ${record.arWriter} : ''"/>
+					</div>
 				</td>
 				<th>재해·재난 분과</th>
 				<td>
@@ -695,7 +670,8 @@
 							   th:value="${record} ? ${record.arDisasterType} : ''" readonly>
 						<input type="hidden" name="arDisasterItem" id="arDisasterItem" value=""
 							   th:value="${record} ? ${record.arDisasterItem} : ''" readonly>
-						<input type="hidden" name="arDisasterItemFilename" id="arDisasterItemFilename" value="" readonly>
+						<input type="hidden" name="arDisasterItemFilename" id="arDisasterItemFilename" value=""
+							   th:value="${record} ? ${record.arDisasterItemFilename} : ''" readonly>
 					</ul>
 				</td>
 			</tr>
@@ -792,7 +768,8 @@
 								<th>상세위치</th>
 								<td>
 									<div class="c-text"><input name="arLocationDetail" id="arLocationDetail" type="text" class="c-text__input"
-															   th:value="${record} ? ${record.arLocationDetail} : ''"/></div>
+															   th:value="${record} ? ${record.arLocationDetail} : ''"/>
+									</div>
 								</td>
 							</tr>
 						</tbody>
@@ -848,7 +825,7 @@
 						<li>
 							<div class="c-checkbox">
 								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan08" value="지만"/>
-								<label for="scan08" class="c-checkbox__label">지만</label>
+								<label for="scan08" class="c-checkbox__label">지반</label>
 							</div>
 						</li>
 						<li>

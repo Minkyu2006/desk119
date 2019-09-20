@@ -4,6 +4,7 @@ import kr.co.broadwave.desk.record.Record;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Minkyu
@@ -13,4 +14,6 @@ import java.util.List;
 public interface ResponsibilRepository extends JpaRepository<Responsibil,Long> {
 
     List<Responsibil> findByRecord(Record record);
+
+    Optional<Responsibil> findById(Long id);
 }

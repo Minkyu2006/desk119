@@ -60,7 +60,7 @@
 				</tr>
 				<tr>
 					<th>관련부처</th>
-<!--					<td colspan="3" th:text="${record} ? ${record.arRelatedId} : ''"></td>-->
+					<td colspan="3" th:text="${record} ? ${record.arRelatedId} : ''"></td>
 				</tr>
 				<tr>
 
@@ -148,16 +148,10 @@
 					<td colspan=3>
 						<ul>
 							<p th:each ="recorduploadFile : ${recorduploadFiles}">
-								<a th:text="${recorduploadFile} ? ${recorduploadFile.afFilePath} : ''"></a>
+<!--								<img th:src="@{'/uploadfiles/recordimages/'(${recorduploadFile} ? ${recorduploadFile.afSaveFileName} : '')}">-->
+								<img th:src="${recorduploadFile} ? '/uploadfiles/recordimages/'+${recorduploadFile.afSaveFileName} : ''">
 							</p>
 						</ul>
-
-<!--						<ul>-->
-<!--							<li th:each ="recorduploadFile : ${recorduploadFiles}">-->
-<!--								<img th:src="@{/api/record/image/}"  class="c-file-list__img" />-->
-<!--							</li>-->
-<!--						</ul>-->
-
 					</td>
 				</tr>
 			</tbody>

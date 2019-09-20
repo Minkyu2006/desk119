@@ -38,11 +38,9 @@ public class RecordImageService {
     public RecordImageService(String uploadPath, RecordRepository recordRepository, RecordUploadFileRepository recordUploadFileRepository) {
         this.recordRepository = recordRepository;
         this.recordUploadFileRepository = recordUploadFileRepository;
-
         logger.info("PATH :: " + uploadPath);
         this.rootLocation = Paths.get(uploadPath + "recordimages");
     }
-
 
     public List<RecordUploadFile> loadAll() {
         return recordUploadFileRepository.findAll();
@@ -50,6 +48,7 @@ public class RecordImageService {
     public RecordUploadFile load(Long fileId) {
         return recordUploadFileRepository.findById(fileId).get();
     }
+
     public Resource loadAsResource(String fileName) throws Exception {
         try {
             if (fileName.toCharArray()[0] == '/') {
@@ -85,6 +84,7 @@ public class RecordImageService {
                 saveFile.setRecord(record);
                 saveFile.setAfSaveFileName(saveFileName);
                 saveFile.setAfFileName(file.getOriginalFilename());
+                saveFile.setAfOriginalFilename(file.getOriginalFilename());
                 saveFile.setContentType(file.getContentType());
                 saveFile.setAfFilePath(rootLocation.toString().replace(File.separatorChar, '/') + File.separator + saveFileName);
                 saveFile.setSize(resource.contentLength());
@@ -131,13 +131,12 @@ public class RecordImageService {
         int i = 0;
         for (RecordUploadFile recordUploadFile : recordUploadFiles) {
             i = i + 1;
-            //String afDisasterItemFilename = recordUploadFile.getAfDisasterItemFilename(); //재해재난분과
             String arDisasterItemFilename = recordSave.getArDisasterItemFilename(); //재해재난분과
             String arLocationCityType = recordSave.getArLocationCityType().getDesc(); //시
             String arLocationAddressType = recordSave.getArLocationAddressType().getDesc(); //구
             String arIntoStart = recordSave.getArIntoStart(); // 시작일
             String arWriter = recordSave.getArWriter(); // 작성자
-            String afName = recordUploadFile.getAfFileName(); //파일이름
+            String afName = recordUploadFile.getAfOriginalFilename(); //파일이름
             System.out.println("arDisasterItemFilename: "+arDisasterItemFilename);
 
             // 확장자 구하기
@@ -151,8 +150,8 @@ public class RecordImageService {
             recordUploadFile.setAfFileName(filename);
 
             recordUploadFileRepository.save(recordUploadFile);
-        }
 
+        }
     }
 
 }
