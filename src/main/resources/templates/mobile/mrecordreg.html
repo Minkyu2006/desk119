@@ -349,31 +349,30 @@
 					$("#scan10").prop('checked', false);
 				}
 			};
-
-
+			
 			LocationSetting(); //행정구역 onchange실행
 
 		});
 
 		//출동일지 저장
 		function save() {
-			// if ($("#arTitle").val().trim() == '') {
-			// 	alert("제목을 입력하세요.");
-			// 	$("#arTitle").trigger('focus');
-			// 	return false;
-			// }
-			// if ($("#arWriter").val().trim() == '') {
-			// 	alert("작성자를 입력하세요.");
-			// 	return false;
-			// }
-			// if ($(":checkbox[name='branch']:checked").length == 0) {
-			// 	alert("재해.재난.분과 항목을 하나이상 체크해주세요.");
-			// 	return;
-			// }
-			// if ($(":checkbox[name='scan']:checked").length == 0) {
-			// 	alert("조사시시설물 항목을 하나이상 체크해주세요.");
-			// 	return;
-			// }
+			if ($("#arTitle").val().trim() == '') {
+				alert("제목을 입력하세요.");
+				$("#arTitle").trigger('focus');
+				return false;
+			}
+			if ($("#arWriter").val().trim() == '') {
+				alert("작성자를 입력하세요.");
+				return false;
+			}
+			if ($(":checkbox[name='branch']:checked").length == 0) {
+				alert("재해.재난.분과 항목을 하나이상 체크해주세요.");
+				return;
+			}
+			if ($(":checkbox[name='scan']:checked").length == 0) {
+				alert("조사시시설물 항목을 하나이상 체크해주세요.");
+				return;
+			}
 			if ($("#dateValue_arIntoStart").val().trim() == '') {
 				alert("시작날짜를 설정해주세요.");
 				return;
