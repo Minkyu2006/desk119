@@ -8,6 +8,17 @@ function ajaxErrorMsg(request) {
     }
 }
 
+//접속 장비가 모바일인지 체크
+function mobileCheck() {
+    if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
+        return true;
+    }else{
+        return false;
+    }
+
+}
+
+
 //20180328최인석 myoffice 에있는 js 추가함
 
 //JSON KEY to lowercase
