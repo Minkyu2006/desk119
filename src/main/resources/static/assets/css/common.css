@@ -270,7 +270,7 @@ body {
 	color: #f99d1c;
 }
 .nav__heading a img {
-	vertical-align: text-bottom
+	vertical-align: middle;
 }
 .nav__list {
 	width: 300px;
@@ -655,8 +655,8 @@ h4.article__heading {
 	box-sizing: border-box;
 	background-repeat: no-repeat;
 	background-position: center center;
-	-webkit-background-size: 154px 140px;
-	background-size: 154px 140px;
+	-webkit-background-size: contain;
+	background-size: contain;
 }
 
 .banner__item--write .banner__link {
@@ -699,8 +699,8 @@ h4.article__heading {
 .banner__item--table .banner__link {
 	background-repeat: no-repeat;
 	background-position: center center;
-	-webkit-background-size: 260px 128px;
-	background-size: 260px 128px;
+	-webkit-background-size: contain;
+	background-size: contain;
 }
 
 @media (max-width: 1024px) {

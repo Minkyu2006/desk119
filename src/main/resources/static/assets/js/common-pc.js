@@ -142,6 +142,7 @@ $(document).ready(function(){
     		$parent = $me.parents('.c-date');
     	
     	$parent.find('.c-date__result').val($selected);
+    	$parent.removeClass('open');
     });
     
     /*

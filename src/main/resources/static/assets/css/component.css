@@ -657,6 +657,9 @@
 	width: 100%;
 	background-color: #fff;
 	border-radius: 0;
+	-webkit-box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+	-moz-box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+	box-shadow: 0 0 10px rgba(0, 0, 0, .2);
 }
 .c-date.c-date--small {
 	max-height: 22px;
@@ -692,21 +695,22 @@
 }
 .c-date .ui-datepicker-prev,
 .c-date .ui-datepicker-next {
-	width: 20px;
-	height: 20px;
+	width: 16px;
+	height: 16px;
 	text-indent: 9999px;
 	border: 2px solid #fff;
 	border-radius: 100%;
 	cursor: pointer;
 	overflow: hidden;
-	margin-top: 12px;
+	margin-top: 15px;
 }
 .c-date .ui-datepicker-prev {
 	float: left;
-	margin-left: 12px;
+	position: relative;
+	margin-left: 4px;
 }
 .c-date .ui-datepicker-prev:after {
-	margin: -43px 0 0 8px;
+	margin: -46px 0 0 6px;
 	-webkit-transform: rotate(45deg);
 	-moz-transform: rotate(45deg);
 	-ms-transform: rotate(45deg);
@@ -715,10 +719,11 @@
 }
 .c-date .ui-datepicker-next {
 	float: right;
-	margin-right: 12px;
+	position: relative;
+	margin-right: 4px;
 }
 .c-date .ui-datepicker-next:after {
-	margin: -43px 0 0 6px;
+	margin: -46px 0 0 4px;
 	-webkit-transform: rotate(-135deg);
 	-moz-transform: rotate(-135deg);
 	-ms-transform: rotate(-135deg);
@@ -739,38 +744,42 @@
 	text-align: center;
 }
 .c-date .ui-datepicker-calendar {
-	width: 100%;
+	width: calc(100% - 10px);
+	margin: 5px;
 	text-align: center;
 }
 .c-date .ui-datepicker-calendar thead tr th,
 .c-date .ui-datepicker-calendar tbody tr td {
+	width: 20px;
+	height: auto;
 	padding: 0;
+	border: 1px solid #222 !important;
 }
 .c-date .ui-datepicker-calendar thead tr th span {
 	display: block;
 	width: 100%;
 	margin-bottom: 5px;
-	color: #ddd;
+	color: #222;
 	font-size: 13px;
 }
 .c-date .ui-state-default {
 	display: block;
-	width: 20px;
 	height: 20px;
 	text-decoration: none;
-	color: #b5b5b5;
+	color: #555;
 	line-height: 20px;
 	font-size: 12px;
 }
 .c-date .ui-state-default:hover {
-	background-color: rgba(0, 0, 0, 0.02);
+	color: #222;
+	background-color: #ddd;
 }
 .c-date .ui-state-highlight {
 	color: #68768a;
 }
 .c-date .ui-state-active {
-	color: #68768a;
-	background-color: rgba(131, 146, 167, 0.12);
+	color: #fff;
+	background-color: #888;
 }
 .c-date .ui-datepicker-unselectable .ui-state-default {
 	color: #eee;
