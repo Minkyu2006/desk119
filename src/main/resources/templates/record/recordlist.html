@@ -100,7 +100,12 @@
 					$.each(res.data.datalist, function(key, value){
 						html += '<tr>';
 						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arNumber) +'</td>';
-						html += '<td class="c-retable__title"><a href="/record/view/'+ echoNull2Blank(value.id) +'" class="c-retable__subject">'+ echoNull2Blank(value.arTitle) +'</a>';
+						html += '<td class="c-retable__title">';
+						if (navigator.userAgent.match(/iPad/) == null&&navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null){
+							html += '<a href="/record/mview/' + echoNull2Blank(value.id) + '" class="c-retable__subject">' + echoNull2Blank(value.arTitle) + '</a>';
+						}else{
+							html += '<a href="/record/view/' + echoNull2Blank(value.id) + '" class="c-retable__subject">' + echoNull2Blank(value.arTitle) + '</a>';
+						}
 						if (datecheck(value.modifyDateTime.substring(0,10)) =='new'){
 							html +='<img src="/assets/images/icon__new.png" alt="새글알림" />';
 						}
