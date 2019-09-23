@@ -47,12 +47,12 @@ public class RecordServiceTest {
 
         //when
 
-        RecordDto recordDto = recordService.findById(save1.getId());
+        RecordMapperDto recordMapperDto = recordService.findById(save1.getId());
         //List<Record> records = recordRepository.findAll();
         //recordRepository.findByArTitle();
 
         //then
-        assertThat(recordDto.getArTitle()).as("타이틀반환 테스트 [ expect 출동일지타이틀1] ")
+        assertThat(recordMapperDto.getArTitle()).as("타이틀반환 테스트 [ expect 출동일지타이틀1] ")
                 .isEqualTo("출동일지타이틀1");
 
         //assertThat(records.size()).as("출동일지 전부조회 [ expect 2] ").isEqualTo(1);

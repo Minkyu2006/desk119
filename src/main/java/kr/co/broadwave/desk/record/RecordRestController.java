@@ -72,21 +72,19 @@ public class RecordRestController {
 
     // 출동일지작성 저장기능
     @PostMapping("reg")
-    public ResponseEntity recordSave(@ModelAttribute RecordDto recordDto,
+    public ResponseEntity recordSave(@ModelAttribute RecordMapperDto recordMapperDto,
                                      MultipartHttpServletRequest multi,
                                      ModelMap model,
                                      HttpServletRequest request) throws Exception {
 
-        Record record = modelMapper.map(recordDto,Record.class);
+        Record record = modelMapper.map(recordMapperDto,Record.class);
 
-        Optional<MasterCode> optionalRelatedId = masterCodeService.findById(recordDto.getArRelatedId());
+        Optional<MasterCode> optionalRelatedId = masterCodeService.findById(recordMapperDto.getArRelatedId());
 
         String currentuserid = CommonUtils.getCurrentuser(request);
         Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
 
         Optional<Record> optionalRecord = recordRepository.findByArNumber(record.getArNumber());
-
-
 
         if (!optionalAccount.isPresent()) {
             log.info("출동일지 저장한 사람 아이디 미존재 : '" + currentuserid + "'");
@@ -96,7 +94,7 @@ public class RecordRestController {
 
         //관련부처가 존재하지않으면
         if (!optionalRelatedId.isPresent()) {
-            log.info(" 선택한 직급 DB 존재 여부 체크.  직급코드: '" + recordDto.getArRelatedId() +"'");
+            log.info(" 선택한 직급 DB 존재 여부 체크.  직급코드: '" + recordMapperDto.getArRelatedId() +"'");
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E016.getCode(),
                     ResponseErrorCode.E016.getDesc()));
         }else{

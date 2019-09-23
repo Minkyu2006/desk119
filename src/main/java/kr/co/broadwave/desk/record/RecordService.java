@@ -65,10 +65,10 @@ public class RecordService {
         return  recordRepository.findById(id);
     }
 
-    public RecordDto findById(Long id){
+    public RecordMapperDto findById(Long id){
         Optional<Record> optionalRecord = recordRepository.findById(id);
         if (optionalRecord.isPresent()) {
-            return modelMapper.map(optionalRecord.get(), RecordDto.class);
+            return modelMapper.map(optionalRecord.get(), RecordMapperDto.class);
         } else {
             return null;
         }

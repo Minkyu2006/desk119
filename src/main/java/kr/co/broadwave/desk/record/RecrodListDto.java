@@ -116,11 +116,13 @@ public class RecrodListDto {
         this.arLocationAddressType = arLocationAddressType;
     }
 
-    public LocalDateTime getModifyDateTime() {
-        return modifyDateTime;
+    public String getModifyDateTime() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return modifyDateTime.format(dateTimeFormatter);
     }
 
     public void setModifyDateTime(LocalDateTime modifyDateTime) {
         this.modifyDateTime = modifyDateTime;
     }
+
 }

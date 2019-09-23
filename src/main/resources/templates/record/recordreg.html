@@ -13,8 +13,6 @@
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
 	<script>
-
-
 		$(function() {
 			//저장
 			$("#btnSave").on('click', function () {
@@ -110,7 +108,7 @@
 
 			//재해.재난.분과 체크박스 값넣기
 			$(".c-checkbox__input").change(function(){
-				if($("[name='branch']").is(":checked") == true) {
+				if($("input[name=branch]").is(":checked") == true) {
 					var listsArr = new Array(0, 0, 0, 0, 0, 0, 0);
 					var arDisasterArr = new Array();
 					var arDisasterArrFilename = new Array();
@@ -173,7 +171,7 @@
 
 			//조사시설물 체크박스 값넣기
 			$(".c-checkbox__input").change(function(){
-				if($("[name='scan']").is(":checked") == true) {
+				if($("input[name=scan]").is(":checked") == true) {
 					var facArr = new Array(0, 0, 0, 0, 0, 0, 0);
 					var arFacItemArr = new Array();
 					if ($("#scan01").is(":checked") == true) {
@@ -245,8 +243,8 @@
 			});
 
 			//재해.재난.분과 체크박스 여부확인
-			if($("input[name='arDisasterType']").val() != "") {
-				var value = $('input[name=arDisasterType]').val();
+			if($("#arDisasterType").val() != "") {
+				var value = $('#arDisasterType').val();
 				var listsArr = value.split(',');
 
 				var zero = 0;
@@ -293,8 +291,8 @@
 			};
 
 			//조사시설물 체크박스 여부확인
-			if($("input[name='arFac']").val() != "") {
-				var value = $('input[name=arFac]').val();
+			if($("#arFac").val() != "") {
+				var value = $('#arFac').val();
 				var facArr = value.split(',');
 
 				var zero = 0;
@@ -353,9 +351,9 @@
 			};
 
 			// 날짜뷰 DATABASE(YYYYMMDD) -> VIEW(YYYY-MM-DD)
-			if($("input[name='arIntoStart']").val() != "" && $("input[name='arIntoEnd']").val() != "") {
-				var start = $('input[name=arIntoStart]').val();
-				var end = $('input[name=arIntoEnd]').val();
+			if($("#arIntoStart").val() != "" && $("#arIntoEnd").val() != "") {
+				var start = $('#arIntoStart').val();
+				var end = $('#arIntoEnd').val();
 				var start2 = [start[0],start[1],start[2],start[3],"-",start[4],start[5],"-",start[6],start[7]];
 				var end2 = [end[0],end[1],end[2],end[3],"-",end[4],end[5],"-",end[6],end[7]];
 				var startArray = start2.join('');
@@ -397,20 +395,22 @@
 			}
 
 			// 날짜저장 VIEW(YYYY-MM-DD) -> DATABASE(YYYYMMDD)
-			if($("input[name='arIntoStart']").val() != "" && $("input[name='arIntoEnd']").val() != "") {
-				var start = $('input[name=arIntoStart]').val();
-				var end = $('input[name=arIntoEnd]').val();
+			if($("#arIntoStart").val() != "" && $("#arIntoEnd").val() != "") {
+				var start = $('#arIntoStart').val();
+				var end = $('#arIntoEnd').val();
 				var startArray = start.split("");
 				var endArray = end.split("");
-				startArray.splice(startArray.indexOf("-"),1);
-				startArray.splice(startArray.indexOf("-"),1);
-				endArray.splice(endArray.indexOf("-"),1);
-				endArray.splice(endArray.indexOf("-"),1);
+				for(var i = 0; i<2; i++) {
+					 startArray.splice(startArray.indexOf("-"), 1);
+					 endArray.splice(endArray.indexOf("-"), 1);
+				}
 				var realstart = startArray.join("");
 				var realend = endArray.join("");
+
 				arIntoStart(realstart);
 				arIntoEnd(realend);
 			};
+
 
 			var formData = new FormData(document.getElementById('frmreg'));
 
@@ -575,7 +575,7 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					var obj = $(th).parent('p')
+					var obj = $(th).parent('p');
 					obj.remove();
 				}
 			});
@@ -599,7 +599,7 @@
 			<tr>
 				<th>출동일지 번호</th>
 				<td>
-					<input type="hidden"  readonly="readonly" id="id" name="id"
+					<input type="hidden" readonly="readonly" id="id" name="id"
 						   th:value="${record} ? ${record.id} : ''" />
 					<div class="c-text c-text--duo">
 						<input type="text" class="c-text__input only-child" name="arNumber" id="arNumber"
@@ -836,7 +836,7 @@
 						</li>
 						<li>
 							<div class="c-checkbox c-checkbox--input">
-								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan10" value="기타">
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan10" value="기타" />
 								<label for="scan10" class="c-checkbox__label">기타</label>
 								<div class="c-text c-text--small">
 									<input id="argita" name="argita" type="text" class="c-text__input"

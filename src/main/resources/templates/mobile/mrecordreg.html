@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko"
 	  xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layout/default">
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="layout/default">
+
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
 
@@ -24,14 +26,9 @@
 			$('.c-file__button input').change(function(){
 				var txt = [];
 				for(var i=0; i<this.files.length; i++){
-					txt.push($('#arDisasterItemFilename').val());
-					txt.push($("#arLocationCityType option:selected").text()) + txt.push($("#arLocationAddressType option:selected").text());
-					//txt.push($("#arLocationAddressType option:selected").text());
-					txt.push($('#arIntoStart').val());
-					txt.push($('#arWriter').val());
 					txt.push(this.files[i].name);
 				}
-				$(this).parent().prev('.c-file__input').val( txt.join("_") );
+				$(this).parent().prev('.c-file__input').val(txt.join("_"));
 			}).change();
 
 			// 파일 항목 추가
@@ -55,14 +52,9 @@
 				$('.c-file__button input').change(function(){
 					var txt = [];
 					for(var i=0; i<this.files.length; i++){
-						txt.push($('#arDisasterItemFilename').val());
-						txt.push($("#arLocationCityType option:selected").text());
-						txt.push($("#arLocationAddressType option:selected").text());
-						txt.push($('#arIntoStart').val());
-						txt.push($('#arWriter').val());
 						txt.push(this.files[i].name);
 					}
-					$(this).parent().prev('.c-file__input').val( txt.join("_"));
+					$(this).parent().prev('.c-file__input').val(txt.join(""));
 				}).change();
 				e.preventDefault();
 			});
@@ -76,34 +68,34 @@
 
 			// 조사담당자 항목 추가
 			$('#responsibilBtn').on('click', function(e) {
-				var last = $(this).parents('.c-input-list c-input-list--button-right').children('li').last();
+				var last = $(this).parents('.c-file-list').children('ul').last();
 				var clName = last.attr('class');
 				console.log(clName);
 				var filearea =
 						'<li class="c-file-list__item">' +
-						'<ul class="c-input-list c-input-list--button-right">' +
+						'<ul class="c-input-list">' +
 						'<li>' +
-						'<div class="c-text">' +
-						'<input type="text" class="m-text__input" name="arEmployeeNumber" placeholder="사번" />' +
+						'<div class="m-text">' +
+						'<input type="text" class="c-text__input" name="arEmployeeNumber" placeholder="사번" />' +
 						'</div>' +
 						'</li>' +
 						'<li>' +
-						'<div class="c-text">' +
-						'<input type="text" class="m-text__input" name="arEmployeeName" placeholder="이름" />' +
+						'<div class="m-text">' +
+						'<input type="text" class="c-text__input" name="arEmployeeName" placeholder="이름" />' +
 						'</div>' +
 						'</li>' +
 						'<li>' +
-						'<div class="c-text">' +
-						'<input type="text" class="m-text__input" name="arDepartmentName" placeholder="부서명" />' +
+						'<div class="m-text">' +
+						'<input type="text" class="c-text__input" name="arDepartmentName" placeholder="부서명" />' +
 						'</div>' +
 						'</li>' +
 						'<li>' +
-						'<input type="button" class="c-button remove" name="arDepartmentName" value="삭제" />' +
+						'<input type="button" class="c-button remove" value="삭제" />' +
 						'</li>' +
 						'</ul>' +
 						'</li>';
 
-				$(this).parents('.c-input-list c-input-list--button-right').append(filearea);
+				$(this).parents('.c-file-list').append(filearea);
 				e.preventDefault();
 			});
 			// 조사담당자 항목 삭제
@@ -116,7 +108,7 @@
 
 			//재해.재난.분과 체크박스 값넣기
 			$(".c-checkbox__input").change(function(){
-				if($("[name='branch']").is(":checked") == true) {
+				if($('input[name=branch]').is(":checked") == true) {
 					var listsArr = new Array(0, 0, 0, 0, 0, 0, 0);
 					var arDisasterArr = new Array();
 					var arDisasterArrFilename = new Array();
@@ -129,8 +121,6 @@
 					}
 					if ($("#branch02" ).is(":checked") == true) {
 						listsArr[1] = 1;
-						var rep = $("#branch02").val;
-						console.log(rep);
 						arDisasterArr[1] = $("#branch02").attr('value');
 						arDisasterArrFilename[1] = $("#branch02").attr('value');
 					} else {
@@ -181,7 +171,7 @@
 
 			//조사시설물 체크박스 값넣기
 			$(".c-checkbox__input").change(function(){
-				if($("[name='scan']").is(":checked") == true) {
+				if($('input[name=scan]').is(":checked") == true) {
 					var facArr = new Array(0, 0, 0, 0, 0, 0, 0);
 					var arFacItemArr = new Array();
 					if ($("#scan01").is(":checked") == true) {
@@ -253,8 +243,8 @@
 			});
 
 			//재해.재난.분과 체크박스 여부확인
-			if($("input[name='arDisasterType']").val() != "") {
-				var value = $('input[name=arDisasterType]').val();
+			if($("#arDisasterType").val() != "") {
+				var value = $("#arDisasterType").val();
 				var listsArr = value.split(',');
 
 				var zero = 0;
@@ -301,8 +291,8 @@
 			};
 
 			//조사시설물 체크박스 여부확인
-			if($("input[name='arFac']").val() != "") {
-				var value = $('input[name=arFac]').val();
+			if($("#arFac").val() != "") {
+				var value = $('#arFac').val();
 				var facArr = value.split(',');
 
 				var zero = 0;
@@ -360,17 +350,6 @@
 				}
 			};
 
-			// 날짜뷰 DATABASE(YYYYMMDD) -> VIEW(YYYY-MM-DD)
-			if($("input[name='arIntoStart']").val() != "" && $("input[name='arIntoEnd']").val() != "") {
-				var start = $('input[name=arIntoStart]').val();
-				var end = $('input[name=arIntoEnd]').val();
-				var start2 = [start[0],start[1],start[2],start[3],"-",start[4],start[5],"-",start[6],start[7]];
-				var end2 = [end[0],end[1],end[2],end[3],"-",end[4],end[5],"-",end[6],end[7]];
-				var startArray = start2.join('');
-				var endArray = end2.join('');
-				arIntoStart(startArray);
-				arIntoEnd(endArray);
-			};
 
 			LocationSetting(); //행정구역 onchange실행
 
@@ -378,58 +357,49 @@
 
 		//출동일지 저장
 		function save() {
-			if ($("#arTitle").val().trim() == '') {
-				alert("제목을 입력하세요.");
-				$("#arTitle").trigger('focus');
-				return false;
-			}
-			if ($("#arWriter").val().trim() == '') {
-				alert("작성자를 입력하세요.");
-				return false;
-			}
-			if ($(":checkbox[name='branch']:checked").length == 0) {
-				alert("재해.재난.분과 항목을 하나이상 체크해주세요.");
-				return;
-			}
-			if ($(":checkbox[name='scan']:checked").length == 0) {
-				alert("조사시시설물 항목을 하나이상 체크해주세요.");
-				return;
-			}
-			if ($("#arIntoStart").val().trim() == '') {
+			// if ($("#arTitle").val().trim() == '') {
+			// 	alert("제목을 입력하세요.");
+			// 	$("#arTitle").trigger('focus');
+			// 	return false;
+			// }
+			// if ($("#arWriter").val().trim() == '') {
+			// 	alert("작성자를 입력하세요.");
+			// 	return false;
+			// }
+			// if ($(":checkbox[name='branch']:checked").length == 0) {
+			// 	alert("재해.재난.분과 항목을 하나이상 체크해주세요.");
+			// 	return;
+			// }
+			// if ($(":checkbox[name='scan']:checked").length == 0) {
+			// 	alert("조사시시설물 항목을 하나이상 체크해주세요.");
+			// 	return;
+			// }
+			if ($("#dateValue_arIntoStart").val().trim() == '') {
 				alert("시작날짜를 설정해주세요.");
 				return;
 			}
-			if ($("#arIntoEnd").val().trim() == '') {
+			if ($("#dateValue_arIntoEnd").val().trim() == '') {
 				alert("끝난날짜를 설정해주세요.");
 				return;
 			}
-			if ($("[name='arEmployeeName']").val().trim() == ''){
-				alert("조사담당자 사번을 적어주세요.");
-				return;
-			}
-			if ($("[name='arEmployeeNumber']").val().trim() == ''){
-				alert("조사담당자 이름을 적어주세요.");
-				return;
-			}
-			if ($("[name='arDepartmentName']").val().trim() == ''){
-				alert("조사담당자 부서명을 적어주세요.");
-				return;
-			}
-			// 날짜저장 VIEW(YYYY-MM-DD) -> DATABASE(YYYYMMDD)
-			if($("input[name='arIntoStart']").val() != "" && $("input[name='arIntoEnd']").val() != "") {
-				var start = $('input[name=arIntoStart]').val();
-				var end = $('input[name=arIntoEnd]').val();
+
+			//날짜저장 VIEW(YYYY-MM-DD) -> DATABASE(YYYYMMDD)
+			if($("#dateValue_arIntoStart").val() != "" && $("#dateValue_arIntoEnd").val() != "") {
+				var start = $('#dateValue_arIntoStart').val();
+				var end = $('#dateValue_arIntoEnd').val();
 				var startArray = start.split("");
 				var endArray = end.split("");
-				startArray.splice(startArray.indexOf("-"),1);
-				startArray.splice(startArray.indexOf("-"),1);
-				endArray.splice(endArray.indexOf("-"),1);
-				endArray.splice(endArray.indexOf("-"),1);
+				for(var i = 0; i<2; i++) {
+					startArray.splice(startArray.indexOf("-"), 1);
+					endArray.splice(endArray.indexOf("-"), 1);
+				}
 				var realstart = startArray.join("");
 				var realend = endArray.join("");
 				arIntoStart(realstart);
 				arIntoEnd(realend);
 			};
+
+
 
 			var formData = new FormData(document.getElementById('frmreg'));
 
@@ -548,7 +518,7 @@
 			var params = {
 				fileid:fileid
 			};
-			console.log("파일삭제시작");
+			console.log("파일 삭제시작");
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
@@ -578,11 +548,10 @@
 			var params = {
 				rsid:rsid
 			};
-			console.log("삭제시작");
+			console.log("조사담당자 삭제시작");
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
-
 			$.ajax({
 				url:'/api/record/respondel',
 				type : 'post',
@@ -595,8 +564,7 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					//파일삭제 성공후 해당 라인 화면에서 제거
-					var obj = $(th).parent('ul');
+					var obj = $(th).parent('p');
 					obj.remove();
 				}
 			});
@@ -608,324 +576,332 @@
     	<section class="section">
     		<article class="article">
     			<h2 class="article__heading">모바일 출동일지 작성</h2>
-    			<div class="record">
-    				<ul>
-    					<li>
-    						<h3 class="record__title">출동일지 번호</h3>
-    						<div class="c-text c-text--duo">
-								<input type="hidden"  readonly="readonly" id="id" name="id"
-									   th:value="${record} ? ${record.id} : ''" />
-								<input type="text" class="c-text__input only-child" name="arNumber" id="arNumber"
-									   th:value="${record} ? ${record.arNumber} : ''" readonly/>
-							</div>
-    					</li>
-    					<li>
-    						<div class="m-text">
-	    						<label for="arTitle" class="m-text__label">출동일지 제목</label>
-	    						<input type="text" class="m-text__input" name="arTitle" id="arTitle"
-									   th:value="${record} ? ${record.arTitle} : ''"/>
-    						</div>
-    					</li>
-    					<li>
-    						<div class="m-text">
-    							<label for="arWriter" class="m-text__label">작성자</label>
-	    						<input type="text" class="m-text__input" name="arWriter" id="arWriter"
-									   th:value="${record} ? ${record.arWriter} : ''"/>
-    						</div>
-    					</li>
-    					<li>
-    						<h3 class="record__title">재해·재난 분과</h3>
-    						<ul class="c-input-list">
-    							<li>
-    								<div class="c-checkbox">
-	    								<input type="checkbox" class="c-checkbox__input" id="branch01" name="branch" />
-	    								<label for="branch01" class="c-checkbox__label">붕괴</label>
-    								</div>
-    							</li>
-    							<li>
-    								<div class="c-checkbox">
-	    								<input type="checkbox" class="c-checkbox__input" id="branch02" name="branch" />
-	    								<label for="branch02" class="c-checkbox__label">화재/폭발</label>
-    								</div>
-    							</li>
-    							<li>
-    								<div class="c-checkbox">
-	    								<input type="checkbox" class="c-checkbox__input" id="branch03" name="branch" />
-	    								<label for="branch03" class="c-checkbox__label">지진</label>
-    								</div>
-    							</li>
-    							<li>
-    								<div class="c-checkbox">
-	    								<input type="checkbox" class="c-checkbox__input" id="branch04" name="branch" />
-	    								<label for="branch04" class="c-checkbox__label">싱크홀</label>
-    								</div>
-    							</li>
-    							<li>
-    								<div class="c-checkbox">
-	    								<input type="checkbox" class="c-checkbox__input" id="branch05" name="branch" />
-	    								<label for="branch05" class="c-checkbox__label">교통사고</label>
-    								</div>
-    							</li>
-    							<li>
-    								<div class="c-checkbox">
-	    								<input type="checkbox" class="c-checkbox__input" id="branch06" name="branch" />
-	    								<label for="branch06" class="c-checkbox__label">홍수/가뭄</label>
-    								</div>
-    							</li>
-    							<li>
-    								<div class="c-checkbox">
-	    								<input type="checkbox" class="c-checkbox__input" id="branch07" name="branch" />
-	    								<label for="branch07" class="c-checkbox__label">환경오염</label>
-    								</div>
-    							</li>
-								<input type="text" name="arDisasterType" id="arDisasterType" value=""
-									   th:value="${record} ? ${record.arDisasterType} : ''" readonly>
-								<input type="text" name="arDisasterItem" id="arDisasterItem" value=""
-									   th:value="${record} ? ${record.arDisasterItem} : ''" readonly>
-								<input type="text" name="arDisasterItemFilename" id="arDisasterItemFilename" value="" readonly>
-    						</ul>
-    					</li>
-    					<li>
-    						<h3 class="record__title">관련부처</h3>
-    						<div class="c-select">
-	    						<select name="arRelatedId" id="arRelatedId" class="c-select__input">
-									<option th:each ="arRelatedId : ${arRelatedIds}"
-											th:value="${arRelatedId.id}"
-											th:text="${arRelatedId.name}"
-											th:selected="${arRelatedId.id} == (${record} ? ${record.arRelatedId} : '')"
-									></option>
-    							</select>
-   							</div>
-    					</li>
-    					<li>
-    						<div class="m-text">
-    							<label for="arRelatedDetail" class="m-text__label">관련부처 상세정보</label>
-	    						<input type="text" class="m-text__input" id="arRelatedDetail" name="arRelatedDetail" placeholder="관련부처를 입력하세요"
-									   th:value="${record} ? ${record.arRelatedDetail} : ''"/>
-    						</div>
-    					</li>
-    					<li>
-    						<h3 class="record__title">조사일자</h3>
-    						<div class="c-calendar-layout">
-	                            <div class="c-date">
-	                            	<div class="c-date__input-box">
-	                            		<input type="date" class="m-text__input" id="arIntoStart" name="arIntoStart" th:value="${record} ? ${record.arIntoStart} : ''"/>
-	                            	</div>
-	                            </div>
-	                            <span>-</span>
-	                            <div class="c-date">
-	                            	<div class="c-date__input-box">
-	                            		<input type="date" class="m-text__input" id="arIntoEnd" name="arIntoEnd" th:value="${record} ? ${record.arIntoEnd} : ''"/>
-	                            	</div>
-	                            </div>
-	                        </div>
-    					</li>
-    					
-    					<li>
-    						<h3 class="record__title">조사위치</h3>
-    						<ul>
-    							<li>
-    								<h4 class="record__title">행정구역</h4>
-    								<ul class="c-input-list">
-										<li>
-											<div class="c-select">
-												<select name="arLocationCityType" id="arLocationCityType" class="c-select__input" onchange="LocationSetting()">
-													<option th:each ="LocationCityType : ${LocationCityTypes}"
-															th:value="${LocationCityType.getCode()}"
-															th:text="${LocationCityType.getDesc()}"
-															th:selected="${LocationCityType} == (${record} ? ${record.arLocationCityType} : '')">
-													</option>
-												</select>
-											</div>
-										</li>
-										<li>
-											<div class="c-select">
-												<select name="arLocationAddressType" id="arLocationAddressType" class="c-select__input" th:value="${record} ? ${record.arLocationAddressType}: ''">
 
-												</select>
-											</div>
-										</li>
-									</ul>
-    							</li>
-    							<li>
-    								<div class="m-text">
-		    							<label for="arLocationDetail" class="m-text__label">상세위치</label>
-			    						<input type="text" class="m-text__input" name="arLocationDetail" id="arLocationDetail"
-											   th:value="${record} ? ${record.arLocationDetail} : ''" />
-		    						</div>
-    							</li>
-    						</ul>
-    					</li>
-    					<li>
-    						<h3 class="record__title">조사시설물</h3>
-    						<ul class="c-input-list">
-								<li>
-									<div class="c-checkbox">
-										<input type="checkbox" name="scan" class="c-checkbox__input" id="scan01" />
-										<label for="scan01" class="c-checkbox__label">교량</label>
-									</div>
-								</li>
-								<li>
-									<div class="c-checkbox">
-										<input type="checkbox" name="scan" class="c-checkbox__input" id="scan02" />
-										<label for="scan02" class="c-checkbox__label">옹벽</label>
-									</div>
-								</li>
-								<li>
-									<div class="c-checkbox">
-										<input type="checkbox" name="scan" class="c-checkbox__input" id="scan03" />
-										<label for="scan03" class="c-checkbox__label">비탈면</label>
-									</div>
-								</li>
-								<li>
-									<div class="c-checkbox">
-										<input type="checkbox" name="scan" class="c-checkbox__input" id="scan04" />
-										<label for="scan04" class="c-checkbox__label">터널</label>
-									</div>
-								</li>
-								<li>
-									<div class="c-checkbox">
-										<input type="checkbox" name="scan" class="c-checkbox__input" id="scan05" />
-										<label for="scan05" class="c-checkbox__label">도로</label>
-									</div>
-								</li>
-								<li>
-									<div class="c-checkbox">
-										<input type="checkbox" name="scan" class="c-checkbox__input" id="scan06" />
-										<label for="scan06" class="c-checkbox__label">기타도로시설물</label>
-									</div>
-								</li>
-								<li>
-									<div class="c-checkbox">
-										<input type="checkbox" name="scan" class="c-checkbox__input" id="scan07" />
-										<label for="scan07" class="c-checkbox__label">건축물</label>
-									</div>
-								</li>
-								<li>
-									<div class="c-checkbox">
-										<input type="checkbox" name="scan" class="c-checkbox__input" id="scan08" />
-										<label for="scan08" class="c-checkbox__label">지만</label>
-									</div>
-								</li>
-								<li>
-									<div class="c-checkbox">
-										<input type="checkbox" name="scan" class="c-checkbox__input" id="scan09" />
-										<label for="scan09" class="c-checkbox__label">지하시설물</label>
-									</div>
-								</li>
-								<li>
-									<div class="c-checkbox c-checkbox--input">
-										<input type="checkbox" name="scan" class="c-checkbox__input" id="scan10" />
-										<label for="scan10" class="c-checkbox__label">기타</label>
-										<div class="c-text c-text--small">
-											<input id="argita" name="argita" type="text" class="c-text__input"
-												   th:value="${record} ? ${record.argita} : ''" readonly/>
+    			<div class="record">
+					<form id ="frmreg" name="frmreg" enctype="multipart/form-data">
+						<ul>
+							<li>
+								<h3 class="record__title">출동일지 번호</h3>
+								<div class="c-text c-text--duo">
+									<input type="hidden" readonly="readonly" id="id" name="id"
+										   th:value="${record} ? ${record.id} : ''" />
+									<input type="text" class="c-text__input only-child" name="arNumber" id="arNumber"
+										   th:value="${record} ? ${record.arNumber} : ''" readonly/>
+								</div>
+							</li>
+							<li>
+								<div class="m-text">
+									<label for="arTitle" class="m-text__label">출동일지 제목</label>
+									<input type="text" class="m-text__input" name="arTitle" id="arTitle"
+										   th:value="${record} ? ${record.arTitle} : ''"/>
+								</div>
+							</li>
+							<li>
+								<div class="m-text">
+									<label for="arWriter" class="m-text__label">작성자</label>
+									<input type="text" class="m-text__input" name="arWriter" id="arWriter"
+										   th:value="${record} ? ${record.arWriter} : ''"/>
+								</div>
+							</li>
+							<li>
+								<h3 class="record__title">재해·재난 분과</h3>
+								<ul class="c-input-list">
+									<li>
+										<div class="c-checkbox">
+											<input type="checkbox" class="c-checkbox__input" name="branch" value="붕괴" id="branch01"/>
+											<label for="branch01" class="c-checkbox__label">붕괴</label>
+										</div>
+									</li>
+									<li>
+										<div class="c-checkbox">
+											<input type="checkbox" class="c-checkbox__input" name="branch" value="화재/폭발" id="branch02"/>
+											<label for="branch02" class="c-checkbox__label">화재/폭발</label>
+										</div>
+									</li>
+									<li>
+										<div class="c-checkbox">
+											<input type="checkbox" class="c-checkbox__input" name="branch" value="지진" id="branch03"/>
+											<label for="branch03" class="c-checkbox__label">지진</label>
+										</div>
+									</li>
+									<li>
+										<div class="c-checkbox">
+											<input type="checkbox" class="c-checkbox__input" name="branch" value="싱크홀" id="branch04"/>
+											<label for="branch04" class="c-checkbox__label">싱크홀</label>
+										</div>
+									</li>
+									<li>
+										<div class="c-checkbox">
+											<input type="checkbox" class="c-checkbox__input" name="branch" value="교통사고" id="branch05"/>
+											<label for="branch05" class="c-checkbox__label">교통사고</label>
+										</div>
+									</li>
+									<li>
+										<div class="c-checkbox">
+											<input type="checkbox" class="c-checkbox__input" name="branch" value="홍수/가뭄" id="branch06"/>
+											<label for="branch06" class="c-checkbox__label">홍수/가뭄</label>
+										</div>
+									</li>
+									<li>
+										<div class="c-checkbox">
+											<input type="checkbox" class="c-checkbox__input" name="branch" value="환경오염" id="branch07"/>
+											<label for="branch07" class="c-checkbox__label">환경오염</label>
+										</div>
+									</li>
+									<input type="hidden" name="arDisasterType" id="arDisasterType" value=""
+										   th:value="${record} ? ${record.arDisasterType} : ''" readonly />
+									<input type="hidden" name="arDisasterItem" id="arDisasterItem" value=""
+										   th:value="${record} ? ${record.arDisasterItem} : ''" readonly />
+									<input type="hidden" name="arDisasterItemFilename" id="arDisasterItemFilename" value=""
+										   th:value="${record} ? ${record.arDisasterItemFilename} : ''" readonly />
+								</ul>
+							</li>
+							<li>
+								<h3 class="record__title">관련부처</h3>
+								<div  for="arRelatedId" class="c-select">
+									<select name="arRelatedId" id="arRelatedId" class="c-select__input">
+										<option th:each ="arRelatedId : ${arRelatedIds}"
+												th:value="${arRelatedId.id}"
+												th:text="${arRelatedId.name}"
+												th:selected="${arRelatedId.id} == (${record} ? ${record.arRelatedId} : '')"
+										></option>
+									</select>
+								</div>
+							</li>
+							<li>
+								<div class="m-text">
+									<label for="arRelatedDetail" class="m-text__label">관련부처 상세정보</label>
+									<input type="text" class="m-text__input" id="arRelatedDetail" name="arRelatedDetail" placeholder="관련부처를 입력하세요"
+										   th:value="${record} ? ${record.arRelatedDetail} : ''"/>
+								</div>
+							</li>
+							<li>
+								<h3 class="record__title">조사일자</h3>
+								<div class="c-calendar-layout">
+									<div class="c-date">
+										<div class="c-date__input-box">
+											<input type="date" class="m-text__input" id="dateValue_arIntoStart" th:value="${record} ? ${record.arIntoStart} : ''"/>
+											<input type="hidden" class="m-text__input" id="arIntoStart" name="arIntoStart" />
 										</div>
 									</div>
-									<input type="text" name="arFac" id="arFac" value=""
-										   th:value="${record} ? ${record.arFac} : ''"/>
-									<input type="text" name="arFacItem" id="arFacItem" value=""
-										   th:value="${record} ? ${record.arFacItem} : ''"/>
-							</ul>
-    					</li>
-    					<li>
-    						<h3 class="record__title">조사목적</h3>
-							<textarea name="arPurpose" id="arPurpose" class="c-textarea"
-									  th:text="${record} ? ${record.arPurpose} : ''"></textarea>
-    					</li>
-    					<li>
-    						<h3 class="record__title">조사담당자</h3>
-    						<ul class="c-input-list c-input-list--button-right">
-    							<li>
-    								<div class="m-text">
-    									<input type="text" class="m-text__input" placeholder="사번" />
-    								</div>
-    							</li>
-    							<li>
-    								<div class="m-text">
-    									<input type="text" class="m-text__input" placeholder="이름" />
-    								</div>
-    							</li>
-    							<li>
-    								<div class="m-text">
-    									<input type="text" class="m-text__input" placeholder="부서명" />
-    								</div>
-    							</li>
-    							<li style="padding: 5px 0;">
-									<input type="button" class="c-button" id="responsibilBtn" value="추가"/>
-    							</li>
-    						</ul>
-							<ul class="c-result-list" style="margin-top: 10px;">
-								<li th:each ="responsibil : ${responsibils}">
-									<p class="c-input-list">
-										<span th:text="${responsibil.arEmployeeNumber}"></span>
-										<span th:text="${responsibil.arEmployeeName}"></span>
-										<span th:text="${responsibil.arDepartmentName}"></span>
-										<button type="button" class="c-button c-button--small" th:onclick="|javascript:responDelete(this,'${responsibil.getId()}')|">삭제</button>
-									</p>
-								</li>
-							</ul>
-    					</li>
-    					<li>
-    						<h3 class="record__title">공동참여기관</h3>
-							<textarea name="arEngine" id="arEngine" class="c-textarea"
-									  th:text="${record} ? ${record.arEngine} : ''"></textarea>
-    					</li>
-    					<li>
-    						<div class="m-text">
-    							<label for="arPapers" class="m-text__label">관련문서</label>
-	    						<input id="arPapers" name="arPapers" type="text" class="m-text__input" placeholder="공문명을 입력하세요"
-									   th:value="${record} ? ${record.arPapers} : ''"/>
-    						</div>
-    					</li>
-    					<li>
-    						<h3 class="record__title">현장개요</h3>
-							<textarea name="arOutline" id="arOutline" class="c-textarea"
-									  th:text="${record} ? ${record.arOutline} : ''"></textarea>
-    					</li>
-    					<li>
-    						<h3 class="record__title">조사·분석 결과</h3>
-							<textarea name="arResult" id="arResult" class="c-textarea"
-									  th:text="${record} ? ${record.arResult} : ''"></textarea>
-    					</li>
-    					<li>
-    						<h3 class="record__title">검토의견(대응방안)</h3>
-							<textarea name="arOpinion" id="arOpinion" class="c-textarea"
-									  th:text="${record} ? ${record.arOpinion} : ''"></textarea>
-    					</li>
-    					<li>
-    						<h3 class="record__title">관련사진</h3>
-							<ul class="c-file-list">
-								<li class="c-file-list__item0">
-									<div class="c-file">
-										<input type="text" readonly="readonly" class="c-file__input" id="file0" name="file0">
-										<label class="c-file__button">파일선택<input type="file" name="file0" /></label>
-										<a href="#" class="c-file__control add">추가</a>
+									<span>-</span>
+									<div class="c-date">
+										<div class="c-date__input-box">
+											<input type="date" class="m-text__input" id="dateValue_arIntoEnd" th:value="${record} ? ${record.arIntoEnd} : ''"/>
+											<input type="hidden" class="m-text__input" id="arIntoEnd" name="arIntoEnd" />
+										</div>
 									</div>
-								</li>
-							</ul>
-							<ul class="c-result-list" style="margin-top: 10px;" id ="">
-								<li th:each ="recorduploadFile : ${recorduploadFiles}">
-									<ul class="c-input-list">
-										<li >
-											<a th:href="@{/record/download/{id}(id=${recorduploadFile.getId()})}"
-											   th:text="${recorduploadFile.getAfFileName()}"></a>
-										</li>
-										<li>
-											<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile.getId()}')|">삭제</button>
-										</li>
-									</ul>
-								</li>
-							</ul>
-    					</li>
-    				</ul>
-    				<div class="c-function">
+								</div>
+							</li>
+
+							<li>
+								<h3 class="record__title">조사위치</h3>
+								<ul>
+									<li>
+										<h4 class="record__title">행정구역</h4>
+										<ul class="c-input-list">
+											<li>
+												<div class="c-select">
+													<select name="arLocationCityType" id="arLocationCityType" class="c-select__input" onchange="LocationSetting()">
+														<option th:each ="LocationCityType : ${LocationCityTypes}"
+																th:value="${LocationCityType.getCode()}"
+																th:text="${LocationCityType.getDesc()}"
+																th:selected="${LocationCityType} == (${record} ? ${record.arLocationCityType} : '')">
+														</option>
+													</select>
+												</div>
+											</li>
+											<li>
+												<input id="addSel" type="hidden" class="c-select__input" th:value="${record} ? ${record.arLocationAddressType}: ''"/>
+												<div class="c-select">
+													<select name="arLocationAddressType" id="arLocationAddressType" class="c-select__input" >
+													</select>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li>
+										<div class="m-text">
+											<label for="arLocationDetail" class="m-text__label">상세위치</label>
+											<input type="text" class="m-text__input" name="arLocationDetail" id="arLocationDetail"
+												   th:value="${record} ? ${record.arLocationDetail} : ''" />
+										</div>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<h3 class="record__title">조사시설물</h3>
+								<ul class="c-input-list">
+									<li>
+										<div class="c-checkbox">
+											<input type="checkbox" name="scan" class="c-checkbox__input" id="scan01" value="교량"/>
+											<label for="scan01" class="c-checkbox__label">교량</label>
+										</div>
+									</li>
+									<li>
+										<div class="c-checkbox">
+											<input type="checkbox" name="scan" class="c-checkbox__input" id="scan02" value="옹벽"/>
+											<label for="scan02" class="c-checkbox__label">옹벽</label>
+										</div>
+									</li>
+									<li>
+										<div class="c-checkbox">
+											<input type="checkbox" name="scan" class="c-checkbox__input" id="scan03" value="비탈면"/>
+											<label for="scan03" class="c-checkbox__label">비탈면</label>
+										</div>
+									</li>
+									<li>
+										<div class="c-checkbox">
+											<input type="checkbox" name="scan" class="c-checkbox__input" id="scan04" value="터널"/>
+											<label for="scan04" class="c-checkbox__label">터널</label>
+										</div>
+									</li>
+									<li>
+										<div class="c-checkbox">
+											<input type="checkbox" name="scan" class="c-checkbox__input" id="scan05" value="도로"/>
+											<label for="scan05" class="c-checkbox__label">도로</label>
+										</div>
+									</li>
+									<li>
+										<div class="c-checkbox">
+											<input type="checkbox" name="scan" class="c-checkbox__input" id="scan06" value="기타도로시설물"/>
+											<label for="scan06" class="c-checkbox__label">기타도로시설물</label>
+										</div>
+									</li>
+									<li>
+										<div class="c-checkbox">
+											<input type="checkbox" name="scan" class="c-checkbox__input" id="scan07" value="건축물"/>
+											<label for="scan07" class="c-checkbox__label">건축물</label>
+										</div>
+									</li>
+									<li>
+										<div class="c-checkbox">
+											<input type="checkbox" name="scan" class="c-checkbox__input" id="scan08" value="지만"/>
+											<label for="scan08" class="c-checkbox__label">지반</label>
+										</div>
+									</li>
+									<li>
+										<div class="c-checkbox">
+											<input type="checkbox" name="scan" class="c-checkbox__input" id="scan09" value="지하시설물"/>
+											<label for="scan09" class="c-checkbox__label">지하시설물</label>
+										</div>
+									</li>
+									<li>
+										<div class="c-checkbox c-checkbox--input">
+											<input type="checkbox" name="scan" class="c-checkbox__input" id="scan10" value="기타" />
+											<label for="scan10" class="c-checkbox__label">기타</label>
+											<div class="c-text c-text--small">
+												<input id="argita" name="argita" type="text" class="c-text__input"
+													   th:value="${record} ? ${record.argita} : ''" readonly/>
+											</div>
+										</div>
+									</li>
+										<input type="hidden" name="arFac" id="arFac" value=""
+											   th:value="${record} ? ${record.arFac} : ''"/>
+										<input type="hidden" name="arFacItem" id="arFacItem" value=""
+											   th:value="${record} ? ${record.arFacItem} : ''"/>
+								</ul>
+							</li>
+							<li>
+								<h3 class="record__title">조사목적</h3>
+								<textarea name="arPurpose" id="arPurpose" class="c-textarea"
+										  th:text="${record} ? ${record.arPurpose} : ''"></textarea>
+							</li>
+							<li>
+								<h3 class="record__title">조사담당자</h3>
+								<ul class="c-input-list c-input-list--button-right">
+									<li>
+										<div class="m-text">
+											<input type="text" name="arEmployeeNumber" class="m-text__input" placeholder="사번" />
+										</div>
+									</li>
+									<li>
+										<div class="m-text">
+											<input type="text" name="arEmployeeName" class="m-text__input" placeholder="이름" />
+										</div>
+									</li>
+									<li>
+										<div class="m-text">
+											<input type="text" name="arDepartmentName" class="m-text__input" placeholder="부서명" />
+										</div>
+									</li>
+									<li style="padding: 5px 0;">
+										<input type="button" class="c-button" id="responsibilBtn" value="추가"/>
+									</li>
+								</ul>
+								<ul class="c-result-list" style="margin-top: 10px;">
+									<li th:each ="responsibil : ${responsibils}">
+										<p class="c-input-list">
+											<span th:text="${responsibil.arEmployeeNumber}"></span>
+											<span th:text="${responsibil.arEmployeeName}"></span>
+											<span th:text="${responsibil.arDepartmentName}"></span>
+											<button type="button" class="c-button c-button--small" th:onclick="|javascript:responDelete(this,'${responsibil.getId()}')|">삭제</button>
+										</p>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<h3 class="record__title">공동참여기관</h3>
+								<textarea name="arEngine" id="arEngine" class="c-textarea"
+										  th:text="${record} ? ${record.arEngine} : ''"></textarea>
+							</li>
+							<li>
+								<div class="m-text">
+									<label for="arPapers" class="m-text__label">관련문서</label>
+									<input id="arPapers" name="arPapers" type="text" class="m-text__input" placeholder="공문명을 입력하세요"
+										   th:value="${record} ? ${record.arPapers} : ''"/>
+								</div>
+							</li>
+							<li>
+								<h3 class="record__title">현장개요</h3>
+								<textarea name="arOutline" id="arOutline" class="c-textarea"
+										  th:text="${record} ? ${record.arOutline} : ''"></textarea>
+							</li>
+							<li>
+								<h3 class="record__title">조사·분석 결과</h3>
+								<!--/*@thymesVar id="record" type=""*/-->
+								<textarea name="arResult" id="arResult" class="c-textarea"
+										  th:text="${record} ? ${record.arResult} : ''"></textarea>
+							</li>
+							<li>
+								<h3 class="record__title">검토의견(대응방안)</h3>
+								<textarea name="arOpinion" id="arOpinion" class="c-textarea"
+										  th:text="${record} ? ${record.arOpinion} : ''"></textarea>
+							</li>
+							<li>
+								<h3 class="record__title">관련사진</h3>
+								<ul class="c-file-list">
+									<li class="c-file-list__item0">
+										<div class="c-file">
+											<input type="text" readonly="readonly" class="c-file__input" id="file0" name="file0">
+											<label class="c-file__button">파일선택<input type="file" name="file0" /></label>
+											<a href="#" class="c-file__control add">추가</a>
+										</div>
+									</li>
+								</ul>
+								<ul class="c-result-list" style="margin-top: 10px;" id ="">
+									<li th:each ="recorduploadFile : ${recorduploadFiles}">
+										<ul class="c-input-list">
+											<li >
+												<a th:href="@{/record/download/{id}(id=${recorduploadFile.getId()})}"
+												   th:text="${recorduploadFile.getAfFileName()}"></a>
+											</li>
+											<li>
+												<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile.getId()}')|">삭제</button>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</form>
+					<div class="c-function">
 						<div class="c-function__group c-function__group--right">
 							<div class="c-function__item"><button id="btnSave" class="c-button c-button--point">저장</button></div>
 							<div class="c-function__item"><button id="btnDel" class="c-button c-button--point">삭제</button></div>
 						</div>
 					</div>
-    			</div>
+				</div>
     		</article>
     	</section>
 	</div>

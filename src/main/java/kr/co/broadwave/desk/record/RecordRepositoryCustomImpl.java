@@ -31,21 +31,17 @@ public class RecordRepositoryCustomImpl extends QuerydslRepositorySupport implem
                 .select(Projections.constructor(RecrodListDto.class,
 
                         qRecord.id,
-
                         qRecord.arNumber,
                         qRecord.arTitle,
                         qRecord.arWriter,
-
                         qRecord.arDisasterItem,
                         qRecord.arFacItem,
-
                         qRecord.arIntoStart,
                         qRecord.arIntoEnd,
-
                         qRecord.arLocationCityType,
                         qRecord.arLocationAddressType,
-
                         qRecord.modifyDateTime
+
 
                 ));
 

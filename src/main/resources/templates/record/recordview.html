@@ -148,7 +148,6 @@
 					<td colspan=3>
 						<ul>
 							<p th:each ="recorduploadFile : ${recorduploadFiles}">
-<!--								<img th:src="@{'/uploadfiles/recordimages/'(${recorduploadFile} ? ${recorduploadFile.afSaveFileName} : '')}">-->
 								<img th:src="${recorduploadFile} ? '/uploadfiles/recordimages/'+${recorduploadFile.afSaveFileName} : ''">
 							</p>
 						</ul>

@@ -101,9 +101,9 @@
 						html += '<tr>';
 						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arNumber) +'</td>';
 						html += '<td class="c-retable__title"><a href="/record/view/'+ echoNull2Blank(value.id) +'" class="c-retable__subject">'+ echoNull2Blank(value.arTitle) +'</a>';
-						// if (datecheck(value.modifyDateTime.substring(0,10)) =='new'){
-						// 	html +='<img src="/assets/images/icon__new.png" alt="새글알림" />';
-						// }
+						if (datecheck(value.modifyDateTime.substring(0,10)) =='new'){
+							html +='<img src="/assets/images/icon__new.png" alt="새글알림" />';
+						}
 						html += '<div class="c-retable--tablet-visible">';
 						html += '<ul class="c-retable__tablet-list">';
 						html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__branch.png" alt="재해·재난 분과" />' + echoNull2Blank(value.arFacItem) + '</li>'
