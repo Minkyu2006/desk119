@@ -23,11 +23,7 @@
 				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')" ><a href="/admin/noticereg" class="nav__link">공지사항등록</a></li>
 				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')" ><a href="/admin/mastercodereg" class="nav__link">마스터코드등록</a></li>
 
-
-
-
-
-				<li class="nav__item"><a href="/record/reg" class="nav__link">출동일지작성</a></li>
+				<li class="nav__item"><a href="javascript:void(0)" onclick="mobileCheckIndex();" class="nav__link">출동일지작성</a></li>
 				<li class="nav__item"><a href="/notice/noticelist" class="nav__link">공지사항조회</a></li>
 				<li class="nav__item"><a href="/record/list" class="nav__link">출동일지조회</a></li>
 			</ul>

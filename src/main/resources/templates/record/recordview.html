@@ -13,16 +13,20 @@
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
 	<script>
-		$(function() {
-
-		})
-
 		function linkList() {
 			location.href="/record/list";
 		}
 
 		function linkReg(id) {
 			location.href="/record/reg/" + id;
+		}
+
+		function mobileCheck(){
+			if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
+				return location.href = "/record/mreg";
+			}else{
+				return location.href = "/record/reg";
+			}
 		}
 	</script>
 

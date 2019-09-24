@@ -50,7 +50,6 @@
 
 		//리스트뽑기 및 페이징
 		function callList(page){
-
 			page = page - 1;
 			if (page < 0) page = 0
 
@@ -103,7 +102,7 @@
 						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arNumber) +'</td>';
 						html += '<td class="c-retable__title">';
 
-						if (navigator.userAgent.match(/iPad/) == null&&navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null){
+						if (mobileCheck()){
 							html += '<a href="/record/mview/' + echoNull2Blank(value.id) + '" class="c-retable__subject">' + echoNull2Blank(value.arTitle) + '</a>';
 						}else{
 							html += '<a href="/record/view/' + echoNull2Blank(value.id) + '" class="c-retable__subject">' + echoNull2Blank(value.arTitle) + '</a>';

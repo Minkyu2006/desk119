@@ -8,16 +8,23 @@ function ajaxErrorMsg(request) {
     }
 }
 
-//접속 장비가 모바일인지 체크
+//접속장비 확인하기
+//리스트페이지 -> 모바일인지 체크 // 2019.9.24 김민규추가
 function mobileCheck() {
     if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
         return true;
     }else{
         return false;
     }
-
 }
-
+//인덱스페이지 -> 모바일인지 체크
+function mobileCheckIndex() {
+    if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
+        return location.href = "/record/mreg";
+    }else{
+        return location.href = "/record/reg";
+    }
+}
 
 //20180328최인석 myoffice 에있는 js 추가함
 

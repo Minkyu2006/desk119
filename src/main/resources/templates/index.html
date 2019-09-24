@@ -12,8 +12,6 @@
 
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
-
-
 </th:block>
 
 
@@ -21,31 +19,6 @@
 <div layout:fragment="content" class="content">
 	
 	<div class="main">
-		<!-- div class="login-box">
-			<div class="login-box__inner" sec:authorize="!isAuthenticated()">
-				<form th:action="@{/login}" method="post">
-					<div class="login-box__input-box">
-						<label for="" class="login-box__label">ID</label>
-						<input type="text" class="login-box__input" name="username" required />
-					</div>				
-					<div class="login-box__input-box">
-						<label for="" class="login-box__label">P/w</label>
-						<input type="password" class="login-box__input" name="password" required />
-					</div>
-					<div class="c-checkbox">
-						<input type="checkbox" id="remember" class="c-checkbox__input" />
-					</div>
-					<div><input type="submit" class="login-box__button" value="로그인"/></div>
-
-				</form>
-			</div>
-			<div class="login-box__inner" sec:authorize="isAuthenticated()">
-				<a href="/mypage" class="login-box__text"><div sec:authentication="name"></div></a>
-				<form th:action="@{/logout}" method="post">
-					<input type="submit" class="login-box__button" value="로그아웃"/>
-				</form>
-			</div>
-		</div-->
 		<div class="main__text">
 			<p>KICT 건설119</p>
 			<p>"국민과 인프라의 안전 확보를 위하여 전문가로서 최선을 다하겠습니다."</p>
@@ -53,7 +26,7 @@
 		</div>
 		<div class="banner">
 			<ul class="banner__list">
-				<li class="banner__item banner__item--write"><a href="/record/reg" class="banner__link">출동일지작성</a></li>
+				<li class="banner__item banner__item--write"><a href="javascript:void(0);" onclick="mobileCheckIndex();" class="banner__link">출동일지작성</a></li>
 				<li class="banner__item banner__item--write-list"><a href="/record/list" class="banner__link">출동일지조회</a></li>
 				<li class="banner__item banner__item--line"><a href="about/lineup" class="banner__link">건설 119 출동대원 라인업</a></li>
 				<li class="banner__item banner__item--guide"><a href="" class="banner__link">건설 119 주요 활동 가이드라인</a></li>
