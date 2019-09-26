@@ -1484,6 +1484,25 @@ h4.article__heading {
 	font-weight: 700;
 	text-align: center;
 }
+.report__picture-list {
+	padding: 5px 0;
+}
+.report__picture-list li + li {
+	margin-top: 30px;
+}
+.report__picture {
+	position: relative;
+	width: 100%;
+	
+	text-align: center;
+}
+.report__picture img {
+	max-width: 100%;
+}
+.report__picture p {
+	margin-top: 10px;
+	font-size: 14px;
+}
 
 /* notice */
 
