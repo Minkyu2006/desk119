@@ -779,25 +779,30 @@ h4.article__heading {
 .record {
 	width: 100%;
 }
-.record form > ul > li {
+.record form > ul > li,
+.record.record--view > ul > li {
 	position: relative;
 	width: 100%;
 	padding: 20px 0;
 }
-.record form > ul >  li + li {
+.record form > ul >  li + li,
+.record.record--view > ul > li + li {
 	border-top: 2px dotted #ddd;
 }
-.record form > ul > li li + li {
+.record form > ul > li li + li
+.record.record--view > ul > li li + li {
 	margin-top: 10px;
 }
 .record__title {
 	font-size: 14px;
 	margin-bottom: 10px;
 }
-.record form > ul > li li .record__title {
+.record form > ul > li li .record__title,
+.record.record--view > ul > li li .record__title {
 	font-size: 12px;
 }
-.record form > ul > li li .m-text__label {
+.record form > ul > li li .m-text__label,
+.record.record--view > ul > li li .m-text__label {
 	font-size: 12px;
 }
 /*.record .c-file__input {
@@ -806,6 +811,20 @@ h4.article__heading {
 .record pre {
 	white-space: pre-wrap;
 	line-height: 1.4;
+}
+.record__result {
+	min-height: 30px;
+	padding: 5px 10px;
+	border: 1px solid #888;
+	border-radius: 3px;
+	color: #333;
+	font-size: 14px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.record__result + .record__result {
+	margin-top: 10px;
 }
 
 

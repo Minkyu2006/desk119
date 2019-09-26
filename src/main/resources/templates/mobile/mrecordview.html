@@ -41,30 +41,30 @@
 					</li>
 					<li>
 						<h3 class="record__title">출동일지 제목</h3>
-						<p th:text="${record} ? ${record.arTitle} : ''"></p>
+						<p class="record__result" th:text="${record} ? ${record.arTitle} : ''"></p>
 					</li>
 					<li>
 						<h3 class="record__title">작성자</h3>
-						<p th:text="${record} ? ${record.arWriter} : ''"></p>
+						<p class="record__result" th:text="${record} ? ${record.arWriter} : ''"></p>
 					</li>
 					<li>
 						<h3 class="record__title">재난·재해 분과</h3>
-						<p th:text="${record} ? ${record.arDisasterItem} : ''"></p>
+						<p class="record__result" th:text="${record} ? ${record.arDisasterItem} : ''"></p>
 					</li>
 					<li>
 						<h3 class="record__title">관련부처</h3>
-						<p colspan="3" th:text="${record} ? ${record.arRelatedId} : ''"></p>
+						<p class="record__result" th:text="${record} ? ${record.arRelatedId} : ''"></p>
 					</li>
 					<li>
 						<h3 class="record__title">조사일자</h3>
-						<p>
+						<p class="record__result">
 						<span th:text="${record} ? ${record.arIntoStart} : ''"></span> ~
 						<span th:text="${record} ? ${record.arIntoEnd} : ''"></span>
 						</p>
 					</li>
 					<li>
 						<h3 class="record__title">조사위치</h3>
-						<p>
+						<p class="record__result">
 							<span th:text="${record} ? ${record.arLocationCityType} : ''"></span>
 							<span th:text="${record} ? ${record.arLocationAddressType} : ''"></span>
 							<span th:text="${record} ? ${record.arLocationDetail} : ''"></span>
@@ -72,56 +72,59 @@
 					</li>
 					<li>
 						<h3 class="record__title">조사시설물</h3>
-						<p th:text="${record} ? ${record.arFacItem} : ''"></p>
-						<p th:text="${record} ? ${record.argita} : ''"></p>
+						<p class="record__result" th:text="${record} ? ${record.arFacItem} : ''"></p>
+						<p class="record__result" th:text="${record} ? ${record.argita} : ''"></p>
 					</li>
 					<li>
 						<h3 class="record__title">조사목적</h3>
-						<p colspan=3 th:text="${record} ? ${record.arPurpose} : ''"></p>
+						<p class="record__result" th:text="${record} ? ${record.arPurpose} : ''"></p>
 					</li>
 					<li>
 						<h3 class="record__title">KICT 조사담당자</h3>
-						<p class="c-input-list" th:each ="responsibil : ${responsibils}">
+						<p class="c-input-list record__result" th:each ="responsibil : ${responsibils}">
 							<span th:text="${responsibil} ? ${responsibil.arEmployeeNumber} : ''"></span>
 							<span th:text="${responsibil} ? ${responsibil.arEmployeeName} : ''"></span>
-							<span th:text="${responsibil} ? ${responsibil.arDepartmentName} : ''"></span>
+							<span th:text="${responsibil} ? ${responsibil.arDepartmentId} : ''"></span>
 						</p>
 					</li>
 					<li>
 						<h3 class="record__title">공동 참여기관</h3>
-						<p colspan=3 th:text="${record} ? ${record.arEngine} : ''"></p>
+						<p class="record__result" th:text="${record} ? ${record.arEngine} : ''"></p>
 					</li>
 					<li>
 						<h3 class="record__title">관련문서</h3>
-						<p colspan=3 th:text="${record} ? ${record.arPapers} : ''"></p>
+						<p class="record__result" th:text="${record} ? ${record.arPapers} : ''"></p>
 					</li>
 					<li>
 						<h3 class="record__title">현장개요</h3>
-						<div>
-							<pre colspan=3 th:text="${record} ? ${record.arOutline} : ''">
+						<div class="record__result">
+							<pre th:text="${record} ? ${record.arOutline} : ''">
 							</pre>
 						</div>
 					</li>
 					<li>
 						<h3 class="record__title">조사·분석 결과</h3>
-						<div>
-							<pre colspan=3 th:text="${record} ? ${record.arResult} : ''">
+						<div class="record__result">
+							<pre th:text="${record} ? ${record.arResult} : ''">
 							</pre>
 						</div>
 					</li>
 					<li>
 						<h3 class="record__title">검토의견(대응방안)</h3>
-						<div>
-							<pre colspan=3 th:text="${record} ? ${record.arOpinion} : ''">
+						<div class="record__result">
+							<pre th:text="${record} ? ${record.arOpinion} : ''">
 							</pre>
 						</div>
 					</li>
 					<li>
 						<h3 class="record__title">관련사진</h3>
-						<ul>
-							<p th:each ="recorduploadFile : ${recorduploadFiles}">
-								<img th:src="${recorduploadFile} ? '/uploadfiles/recordimages/'+${recorduploadFile.afSaveFileName} : ''">
-							</p>
+						<ul class="report__picture-list">
+							<li th:each ="recorduploadFile : ${recorduploadFiles}">
+								<div class="report__picture">
+									<img th:src="${recorduploadFile} ? '/uploadfiles/recordimages/'+${recorduploadFile.afSaveFileName} : ''">
+									<p>&lt;<span>사진 코멘트 입니다</span>&gt;</p>
+								</div>
+							</li>
 						</ul>
 					</li>
 				</ul>

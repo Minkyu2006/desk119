@@ -129,21 +129,21 @@
 				<tr>
 					<th>현장개요</th>
 					<td colspan=3>
-						<pre colspan=3 th:text="${record} ? ${record.arOutline} : ''">
+						<pre th:text="${record} ? ${record.arOutline} : ''">
 						</pre>						
 					</td>
 				</tr>
 				<tr>
 					<th>조사·분석 결과</th>
 					<td colspan=3>
-						<pre colspan=3 th:text="${record} ? ${record.arResult} : ''">
+						<pre th:text="${record} ? ${record.arResult} : ''">
 						</pre>
 				</td>
 				</tr>
 				<tr>
 					<th>검토의견(대응방안)</th>
 					<td colspan=3>
-						<pre colspan=3 th:text="${record} ? ${record.arOpinion} : ''">
+						<pre th:text="${record} ? ${record.arOpinion} : ''">
 						</pre>
 					</td>
 				</tr>
