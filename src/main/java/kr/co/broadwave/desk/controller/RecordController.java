@@ -1,6 +1,10 @@
 package kr.co.broadwave.desk.controller;
 
+import kr.co.broadwave.desk.accounts.Account;
+import kr.co.broadwave.desk.accounts.AccountRole;
+import kr.co.broadwave.desk.accounts.AccountService;
 import kr.co.broadwave.desk.bscodes.*;
+import kr.co.broadwave.desk.common.CommonUtils;
 import kr.co.broadwave.desk.mastercode.MasterCodeDto;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.record.*;
@@ -11,6 +15,7 @@ import kr.co.broadwave.desk.record.responsibil.Responsibil;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -18,10 +23,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +46,7 @@ public class RecordController {
     private final RecordUploadFileRepository recorduploadFileRepository;
     private final RecordImageService recordimageService;
     private final TeamService teamService;
+    private final AccountService accountService;
 
     @Autowired
     public RecordController(
@@ -45,8 +54,10 @@ public class RecordController {
             RecordService recordService,
             RecordImageService recordimageService,
             TeamService teamService,
+            AccountService accountService,
             RecordUploadFileRepository recorduploadFileRepository) {
         this.masterCodeService = masterCodeService;
+        this.accountService = accountService;
         this.recordService = recordService;
         this.recorduploadFileRepository = recorduploadFileRepository;
         this.recordimageService = recordimageService;
@@ -151,13 +162,31 @@ public class RecordController {
 
     // 출동일지 리스트
     @RequestMapping("/list")
-    public String recordList(){
+    public String recordList(HttpServletRequest request, HttpSession session){
+//        String currentuserid = CommonUtils.getCurrentuser(request);
+//        Optional<Account> account = accountService.findById(currentuserid);
+        //AccountRole userRole = account.get().getRole();
+        Enumeration<String> role = session.getAttributeNames();
+        System.out.println("유저 role : "+role);
+
+//        if(userRole.getDesc() == "관리자"){
+//            return "record/recordlist";
+//        }
+//
+//        if(userRole.getDesc() == "출동대원"){
+//            return "record/recordlist";
+//        }
+
         return "record/recordlist";
     }
 
     // 뷰페이지
     @RequestMapping("view/{id}")
-    public String recordView(Model model, @PathVariable Long id){
+    public String recordView(HttpServletRequest request,Model model, @PathVariable Long id){
+        String currentuserid = CommonUtils.getCurrentuser(request);
+        Optional<Account> account = accountService.findByUserid(currentuserid);
+        String userid = account.get().getUserid();
+        model.addAttribute("userid", userid);
 
         //데이터 가져오기
         RecordViewDto recordViewDto = recordService.findByIdView(id);

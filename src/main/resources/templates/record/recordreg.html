@@ -89,16 +89,17 @@
 					'</div>' +
 					'</li>' +
 					'<li>' +
-					'<div class="c-text">' +
-					'<input type="text" class="c-text__input" name="arDepartmentName" placeholder="부서명" />' +
+					'<div class="c-select">' +
+					'<select class="c-select__input" name="arDepartmentId"/>'+
+						'<option th:each=team:${teams} th:value=${team.teamcode} th:text=${team.teamname}></option>'+
+					'</select>'+
 					'</div>' +
 					'</li>' +
 					'<li>' +
-					'<input type="button" class="c-button remove" name="arDepartmentName" value="삭제" />' +
+					'<input type="button" class="c-button remove" name="arDepartmentId" value="삭제" />' +
 					'</li>' +
 					'</ul>' +
 					'</li>';
-					
 				$(this).parents('.c-file-list').append(filearea);
 				e.preventDefault();
 			});
@@ -422,26 +423,26 @@
 				$("#arTitle").trigger('focus');
 				return false;
 			}
-			if ($("#arWriter").val().trim() == '') {
-				alert("작성자를 입력하세요.");
-				return false;
-			}
-			if ($(":checkbox[name='branch']:checked").length == 0) {
-				alert("재해.재난.분과 항목을 하나이상 체크해주세요.");
-				return;
-			}
-			if ($(":checkbox[name='scan']:checked").length == 0) {
-				alert("조사시시설물 항목을 하나이상 체크해주세요.");
-				return;
-			}
-			if ($("#arIntoStart").val().trim() == '') {
-				alert("시작날짜를 설정해주세요.");
-				return;
-			}
-			if ($("#arIntoEnd").val().trim() == '') {
-				alert("끝난날짜를 설정해주세요.");
-				return;
-			}
+			// if ($("#arWriter").val().trim() == '') {
+			// 	alert("작성자를 입력하세요.");
+			// 	return false;
+			// }
+			// if ($(":checkbox[name='branch']:checked").length == 0) {
+			// 	alert("재해.재난.분과 항목을 하나이상 체크해주세요.");
+			// 	return;
+			// }
+			// if ($(":checkbox[name='scan']:checked").length == 0) {
+			// 	alert("조사시시설물 항목을 하나이상 체크해주세요.");
+			// 	return;
+			// }
+			// if ($("#arIntoStart").val().trim() == '') {
+			// 	alert("시작날짜를 설정해주세요.");
+			// 	return;
+			// }
+			// if ($("#arIntoEnd").val().trim() == '') {
+			// 	alert("끝난날짜를 설정해주세요.");
+			// 	return;
+			// }
 
 			// 날짜저장 VIEW(YYYY-MM-DD) -> DATABASE(YYYYMMDD)
 			if($("#arIntoStart").val() != "" && $("#arIntoEnd").val() != "") {
@@ -927,7 +928,7 @@
 								</li>
 								<li>
 									<div class="c-select">
-										<select name="arDepartmentName" id="arDepartmentName" class="c-select__input">
+										<select name="arDepartmentId" id="arDepartmentId" class="c-select__input">
 											<option th:each ="team : ${teams}"
 													th:value="${team.teamcode}"
 													th:text="${team.teamname}"></option>
@@ -947,7 +948,7 @@
 							<p class="c-input-list">
 								<span th:text="${responsibil.arEmployeeNumber}"></span>
 								<span th:text="${responsibil.arEmployeeName}"></span>
-								<span th:text="${responsibil.arDepartmentName}"></span>
+								<span th:text="${responsibil.arDepartmentId}"></span>
 								<button type="button" class="c-button c-button--small" th:onclick="|javascript:responDelete(this,'${responsibil.getId()}')|">삭제</button>
 							</p>
 						</li>

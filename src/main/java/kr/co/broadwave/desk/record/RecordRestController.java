@@ -89,9 +89,9 @@ public class RecordRestController {
         String currentuserid = CommonUtils.getCurrentuser(request);
 
         Record record = modelMapper.map(recordMapperDto,Record.class);
-        //Responsibil responsibil = modelMapper.map(responsibilMapperDto,Responsibil.class);
+        record.setArRecordState(1);
 
-        //Optional<Team> optionalTeamId = teamService.findById(responsibil.getArDepartmentName());
+        //Optional<Team> optionalTeamId = teamService.findById(responsibil.getArDepartmentId());
         Optional<MasterCode> optionalRelatedId = masterCodeService.findById(recordMapperDto.getArRelatedId());
         Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
         Optional<Record> optionalRecord = recordRepository.findByArNumber(record.getArNumber());
@@ -110,13 +110,14 @@ public class RecordRestController {
         }else{
             record.setArRelatedId(optionalRelatedId.get());
         }
-        //부서코드가 존재하지않으면
-//        if (!optionalTeam.isPresent()) {
-//            log.info(" 선택한 부서 DB 존재 여부 체크.  부서코드: '" + responsibilMapperDto.getArDepartmentName() +"'");
+
+//        //부서코드가 존재하지않으면
+//        if (!optionalTeamId.isPresent()) {
+//            log.info(" 선택한 부서 DB 존재 여부 체크.  부서코드: '" + responsibil.getArDepartmentId() +"'");
 //            return ResponseEntity.ok(res.fail(ResponseErrorCode.E005.getCode(), ResponseErrorCode.E005.getDesc()));
 //        }else{
-//            Team team = optionalTeam.get();
-//            responsibil.setArDepartmentName(team);
+////            Team team = optionalTeamId.get();
+////            responsibil.getArDepartmentId(team);
 //        }
 
         //신규 및 업데이트여부
@@ -167,33 +168,30 @@ public class RecordRestController {
         }
 
         //조사담당자
-        List<Responsibil> responsibils = new ArrayList<>();
+//        List<Responsibil> responsibils = new ArrayList<>();
+//
+//        String[] arEmployeeNumber = request.getParameterValues("arEmployeeNumber");
+//        String[] arEmployeeName = request.getParameterValues("arEmployeeName");
+//    //    String[] arDepartmentId = request.getParameterNames("arDepartmentId");
+//
+//        for (int i = 0; i < arEmployeeNumber.length; i++) {
+//            Responsibil responsibilss = Responsibil.builder()
+//                    .record(recordSave)
+//                    .arEmployeeNumber(arEmployeeNumber[i])
+//                    .arEmployeeName(arEmployeeName[i])
+//                    .arDepartmentId(arDepartmentId[i])
+//                    .build();
 
-        String[] arEmployeeNumber = request.getParameterValues("arEmployeeNumber");
-        String[] arEmployeeName = request.getParameterValues("arEmployeeName");
-//        String[] arDepartmentName = request.getParameterValues("arDepartmentName");
-
-        for (int i = 0; i < arEmployeeNumber.length; i++) {
-            Responsibil responsibilss = Responsibil.builder()
-                    .record(recordSave)
-                    .arEmployeeNumber(arEmployeeNumber[i])
-                    .arEmployeeName(arEmployeeName[i])
-//                    .arDepartment(arDepartmentName[i])
-                    .build();
-
-//            if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty() || !arDepartmentName[i].isEmpty()){
+//            if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty() || !arDepartmentId[i].isEmpty()){
 //                responsibils.add(responsibilss);
 //            }
 
-            if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty()){
-                responsibils.add(responsibilss);
-            }
-        }
-        recordService.recordResponSave(responsibils);
+//            if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty()){
+//                responsibils.add(responsibilss);
+//            }
+//        }
+//        recordService.recordResponSave(responsibils);
 
-        System.out.println("레코드스테이트번호 : "+record.getArRecordState());
-        record.setArRecordState(1);
-        System.out.println("레코드스테이트번호2 : "+record.getArRecordState());
         log.info("출동일지 저장 성공 : " + recordSave.toString() );
         return ResponseEntity.ok(res.success());
     }
@@ -207,7 +205,7 @@ public class RecordRestController {
         String currentuserid = CommonUtils.getCurrentuser(request);
 
         Record record = modelMapper.map(recordMapperDto,Record.class);
-
+        record.setArRecordState(0);
         Optional<MasterCode> optionalRelatedId = masterCodeService.findById(recordMapperDto.getArRelatedId());
         Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
         Optional<Record> optionalRecord = recordRepository.findByArNumber(record.getArNumber());
@@ -265,13 +263,6 @@ public class RecordRestController {
                 recordImageService.makefileseq(recordSave);
             }
         }
-
-
-
-        record.setArRecordState(0);
-
-
-
         log.info("출동일지 임시저장 성공 : " + recordSave.toString() );
         return ResponseEntity.ok(res.success());
     }

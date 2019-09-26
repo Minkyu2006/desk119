@@ -38,6 +38,8 @@ public class RecordViewDto {
     private String arDisasterItem; //추가 재해재난분과 항목
     private String arFacItem; //추가 조사시설물 항목
 
+    private String insert_id; // 작성자 아이디
+
     public Long getId() {
         return id;
     }
@@ -199,4 +201,11 @@ public class RecordViewDto {
         this.arFacItem = arFacItem;
     }
 
+    public String getInsert_id() {
+        return insert_id;
+    }
+
+    public void setInsert_id(String insert_id) {
+        this.insert_id = insert_id;
+    }
 }

@@ -145,7 +145,7 @@ public class RecordImageService {
             int pos = afName.lastIndexOf(".");
             String realName = afName.substring(0,pos);
 
-            String filename = arDisasterItemFilename + "_" + arLocationCityType + "_" + arLocationAddressType + "_" + arIntoStart + "_" + arWriter + "_"+realName+"_"+ i + "_" + extensionName;
+            String filename = arDisasterItemFilename + "_" + arLocationCityType + "" + arLocationAddressType + "_" + arIntoStart + "_" + arWriter + "_"+realName+"_"+ i + "_" + extensionName;
 
             recordUploadFile.setAfFileName(filename);
 
