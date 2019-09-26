@@ -36,14 +36,7 @@ public class Responsibil {
     private String arEmployeeName;
 
     @ManyToOne(targetEntity = Team.class,fetch = FetchType.LAZY)
-    @JoinColumn(name="ar_department_name")
-    private Long arDepartmentName;
+    @JoinColumn(name="ar_department_id")
+    private Long arDepartmentId;
 
-    public Long getArDepartmentName() {
-        return arDepartmentName;
-    }
-
-    public void setArDepartmentName(Long arDepartmentName) {
-        this.arDepartmentName = arDepartmentName;
-    }
 }

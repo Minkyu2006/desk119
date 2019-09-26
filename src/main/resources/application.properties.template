@@ -56,7 +56,7 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialec
 
 #EmailSend / KICT119
 spring.mail.jndi-name=desksystem119@gmail.com
-spring.mail.password=desk119123789
+spring.mail.password=*******
 spring.mail.host=smtp.gmail.com
 mail.smtp.auth=true
 mail.smtp.starttls.required=true
