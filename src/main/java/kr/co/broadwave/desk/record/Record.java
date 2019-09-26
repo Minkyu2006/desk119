@@ -131,5 +131,7 @@ public class Record {
     // 추가 파일이름_띄어쓰기없음
     @Column(name="ar_disaster_item_filename")
     private String arDisasterItemFilename;
-
+    // 추가 임시저장인지 아닌지 확인가능한 state값
+    @Column(name="ar_record_state")
+    private int arRecordState;
 }

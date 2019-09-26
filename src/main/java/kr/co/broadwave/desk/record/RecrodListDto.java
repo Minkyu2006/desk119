@@ -33,6 +33,8 @@ public class RecrodListDto {
     private LocationCityType arLocationCityType;//조사위치 시
     private LocationAddressType arLocationAddressType;//조사위치 구
 
+//    private int arRecordState;
+//    private String insert_id;
     private LocalDateTime modifyDateTime;
 
 
@@ -125,4 +127,19 @@ public class RecrodListDto {
         this.modifyDateTime = modifyDateTime;
     }
 
+//    public String getInsert_id() {
+//        return insert_id;
+//    }
+//
+//    public void setInsert_id(String insert_id) {
+//        this.insert_id = insert_id;
+//    }
+//
+//    public int getArRecordState() {
+//        return arRecordState;
+//    }
+//
+//    public void setArRecordState(int arRecordState) {
+//        this.arRecordState = arRecordState;
+//    }
 }

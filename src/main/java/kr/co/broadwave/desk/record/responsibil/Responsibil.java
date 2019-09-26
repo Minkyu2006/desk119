@@ -1,6 +1,7 @@
 package kr.co.broadwave.desk.record.responsibil;
 
 import kr.co.broadwave.desk.record.Record;
+import kr.co.broadwave.desk.teams.Team;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,10 +11,9 @@ import javax.persistence.*;
  * Date : 2019-09-19
  * Remark :
  */
-
-@Entity
 @Getter
 @Setter
+@Entity
 @EqualsAndHashCode(of = "id")
 @Builder
 @NoArgsConstructor
@@ -34,6 +34,16 @@ public class Responsibil {
     private String arEmployeeNumber;
     @Column(name="ar_employee_name") //이름
     private String arEmployeeName;
-    @Column(name="ar_department_name") //부서명
-    private String arDepartmentName;
+
+    @ManyToOne(targetEntity = Team.class,fetch = FetchType.LAZY)
+    @JoinColumn(name="ar_department_name")
+    private Long arDepartmentName;
+
+    public Long getArDepartmentName() {
+        return arDepartmentName;
+    }
+
+    public void setArDepartmentName(Long arDepartmentName) {
+        this.arDepartmentName = arDepartmentName;
+    }
 }

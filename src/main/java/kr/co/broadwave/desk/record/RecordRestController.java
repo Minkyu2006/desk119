@@ -2,17 +2,22 @@ package kr.co.broadwave.desk.record;
 
 import kr.co.broadwave.desk.accounts.Account;
 import kr.co.broadwave.desk.accounts.AccountService;
+import kr.co.broadwave.desk.bscodes.CodeType;
 import kr.co.broadwave.desk.bscodes.CommonCode;
 import kr.co.broadwave.desk.bscodes.LocationAddressType;
 import kr.co.broadwave.desk.common.AjaxResponse;
 import kr.co.broadwave.desk.common.CommonUtils;
 import kr.co.broadwave.desk.common.MediaUtils;
 import kr.co.broadwave.desk.common.ResponseErrorCode;
+import kr.co.broadwave.desk.mail.MailService;
 import kr.co.broadwave.desk.mastercode.MasterCode;
+import kr.co.broadwave.desk.mastercode.MasterCodeDto;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.record.file.RecordImageService;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
-import kr.co.broadwave.desk.record.responsibil.ResponsibilRepository;
+import kr.co.broadwave.desk.teams.Team;
+import kr.co.broadwave.desk.teams.TeamDto;
+import kr.co.broadwave.desk.teams.TeamService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 
@@ -30,8 +35,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.annotation.Repeatable;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author MinKyu
@@ -51,7 +58,8 @@ public class RecordRestController {
     private final ModelMapper modelMapper;
     private final RecordRepository recordRepository;
     private final RecordImageService recordImageService;
-    private final ResponsibilRepository responsibilRepository;
+    private final MailService mailService;
+    private final TeamService teamService;
 
     @Autowired
     public RecordRestController(RecordService recordService,
@@ -59,7 +67,8 @@ public class RecordRestController {
                                 ModelMapper modelMapper,
                                 RecordRepository recordRepository,
                                 RecordImageService recordImageService,
-                                ResponsibilRepository responsibilRepository,
+                                MailService mailService,
+                                TeamService teamService,
                                 MasterCodeService masterCodeService) {
         this.recordService = recordService;
         this.accountService = accountService;
@@ -67,7 +76,8 @@ public class RecordRestController {
         this.recordRepository = recordRepository;
         this.masterCodeService = masterCodeService;
         this.recordImageService = recordImageService;
-        this.responsibilRepository = responsibilRepository;
+        this.mailService = mailService;
+        this.teamService = teamService;
     }
 
     // 출동일지작성 저장기능
@@ -76,14 +86,130 @@ public class RecordRestController {
                                      MultipartHttpServletRequest multi,
                                      ModelMap model,
                                      HttpServletRequest request) throws Exception {
+        String currentuserid = CommonUtils.getCurrentuser(request);
+
+        Record record = modelMapper.map(recordMapperDto,Record.class);
+        //Responsibil responsibil = modelMapper.map(responsibilMapperDto,Responsibil.class);
+
+        //Optional<Team> optionalTeamId = teamService.findById(responsibil.getArDepartmentName());
+        Optional<MasterCode> optionalRelatedId = masterCodeService.findById(recordMapperDto.getArRelatedId());
+        Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
+        Optional<Record> optionalRecord = recordRepository.findByArNumber(record.getArNumber());
+
+        if (!optionalAccount.isPresent()) {
+            log.info("출동일지 저장한 사람 아이디 미존재 : '" + currentuserid + "'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E014.getCode(),
+                    ResponseErrorCode.E014.getDesc() + "'" + currentuserid + "'" ));
+        }
+
+        //관련부처가 존재하지않으면
+        if (!optionalRelatedId.isPresent()) {
+            log.info(" 선택한 직급 DB 존재 여부 체크.  직급코드: '" + recordMapperDto.getArRelatedId() +"'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E016.getCode(),
+                    ResponseErrorCode.E016.getDesc()));
+        }else{
+            record.setArRelatedId(optionalRelatedId.get());
+        }
+        //부서코드가 존재하지않으면
+//        if (!optionalTeam.isPresent()) {
+//            log.info(" 선택한 부서 DB 존재 여부 체크.  부서코드: '" + responsibilMapperDto.getArDepartmentName() +"'");
+//            return ResponseEntity.ok(res.fail(ResponseErrorCode.E005.getCode(), ResponseErrorCode.E005.getDesc()));
+//        }else{
+//            Team team = optionalTeam.get();
+//            responsibil.setArDepartmentName(team);
+//        }
+
+        //신규 및 업데이트여부
+        if (optionalRecord.isPresent()){
+            //수정
+            record.setId(optionalRecord.get().getId());
+            record.setInsert_id(optionalRecord.get().getInsert_id());
+            record.setInsert_name(optionalRecord.get().getInsert_name());
+            record.setInsertDateTime(optionalRecord.get().getInsertDateTime());
+
+            record.setModify_id(currentuserid);
+            record.setModify_name(optionalAccount.get().getUsername());
+            record.setModifyDateTime(LocalDateTime.now());
+        }else{
+            //신규
+            record.setInsert_id(currentuserid);
+            record.setInsert_name(optionalAccount.get().getUsername());
+            record.setInsertDateTime(LocalDateTime.now());
+            record.setModify_id(currentuserid);
+            record.setModify_name(optionalAccount.get().getUsername());
+            record.setModifyDateTime(LocalDateTime.now());
+        }
+
+        // 이메일전송
+//        List<MasterCodeDto> mailListLRaws = masterCodeService.findCodeList(CodeType.C0003);
+//        List<String> maillists = new ArrayList<>();
+//        for (MasterCodeDto masterCodeDto :mailListLRaws) {
+//            maillists.add(masterCodeDto.getName());
+//        }
+//        mailService.mailsend(maillists,record.getArNumber()+" 출동일지 입니다","작성자 : "+record.getArWriter());
+
+        Record recordSave = recordService.save(record);
+
+        //파일저장
+        Iterator<String> files = multi.getFileNames();
+        System.out.println("files :"+files);
+        while(files.hasNext()) {
+            String recorduploadFile = files.next();
+            MultipartFile mFile = multi.getFile(recorduploadFile);
+            String fileName = mFile.getOriginalFilename();
+            //파일이 존재할때만
+            if (!mFile.isEmpty()) {
+                //System.out.println("파일명 확인  : " + fileName);
+                recordImageService.store(mFile,recordSave);
+                //파일명 순번 채번하기
+                recordImageService.makefileseq(recordSave);
+            }
+        }
+
+        //조사담당자
+        List<Responsibil> responsibils = new ArrayList<>();
+
+        String[] arEmployeeNumber = request.getParameterValues("arEmployeeNumber");
+        String[] arEmployeeName = request.getParameterValues("arEmployeeName");
+//        String[] arDepartmentName = request.getParameterValues("arDepartmentName");
+
+        for (int i = 0; i < arEmployeeNumber.length; i++) {
+            Responsibil responsibilss = Responsibil.builder()
+                    .record(recordSave)
+                    .arEmployeeNumber(arEmployeeNumber[i])
+                    .arEmployeeName(arEmployeeName[i])
+//                    .arDepartment(arDepartmentName[i])
+                    .build();
+
+//            if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty() || !arDepartmentName[i].isEmpty()){
+//                responsibils.add(responsibilss);
+//            }
+
+            if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty()){
+                responsibils.add(responsibilss);
+            }
+        }
+        recordService.recordResponSave(responsibils);
+
+        System.out.println("레코드스테이트번호 : "+record.getArRecordState());
+        record.setArRecordState(1);
+        System.out.println("레코드스테이트번호2 : "+record.getArRecordState());
+        log.info("출동일지 저장 성공 : " + recordSave.toString() );
+        return ResponseEntity.ok(res.success());
+    }
+
+    // 출동일지작성 임시저장기능
+    @PostMapping("temreg")
+    public ResponseEntity recordTemSave(@ModelAttribute RecordMapperDto recordMapperDto,
+                                     MultipartHttpServletRequest multi,
+                                     ModelMap model,
+                                     HttpServletRequest request) throws Exception {
+        String currentuserid = CommonUtils.getCurrentuser(request);
 
         Record record = modelMapper.map(recordMapperDto,Record.class);
 
         Optional<MasterCode> optionalRelatedId = masterCodeService.findById(recordMapperDto.getArRelatedId());
-
-        String currentuserid = CommonUtils.getCurrentuser(request);
         Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
-
         Optional<Record> optionalRecord = recordRepository.findByArNumber(record.getArNumber());
 
         if (!optionalAccount.isPresent()) {
@@ -140,30 +266,13 @@ public class RecordRestController {
             }
         }
 
-        //조사담당자
-        List<Responsibil> responsibil = new ArrayList<>();
 
-        String[] arEmployeeNumber = request.getParameterValues("arEmployeeNumber");
-        String[] arEmployeeName = request.getParameterValues("arEmployeeName");
-        String[] arDepartmentName = request.getParameterValues("arDepartmentName");
 
-        for (int i = 0; i < arEmployeeNumber.length; i++) {
-            Responsibil responsibils = Responsibil.builder()
-                    .record(recordSave)
-                    .arEmployeeNumber(arEmployeeNumber[i])
-                    .arEmployeeName(arEmployeeName[i])
-                    .arDepartmentName(arDepartmentName[i])
-                    .build();
+        record.setArRecordState(0);
 
-            if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty() || !arDepartmentName[i].isEmpty()){
-                responsibil.add(responsibils);
-            }
 
-        }
-        System.out.println("responsibils : " + responsibil);
-        recordService.recordResponSave(responsibil);
 
-        log.info("출동일지 저장 성공 : " + recordSave.toString() );
+        log.info("출동일지 임시저장 성공 : " + recordSave.toString() );
         return ResponseEntity.ok(res.success());
     }
 

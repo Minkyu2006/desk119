@@ -44,6 +44,7 @@ public class RecordMapperDto {
     private String arDisasterItem; //추가 재해재난분과 항목
     private String arFacItem; //추가 조사시설물 항목
     private String arDisasterItemFilename; //추가 파일이름_띄어쓰기없음
+    private int arRecordState; //추가 임시저장인지 아닌지 확인하는 state값
 
     //기본적인것
     private String modify_name;
@@ -283,5 +284,13 @@ public class RecordMapperDto {
 
     public void setArDisasterItemFilename(String arDisasterItemFilename) {
         this.arDisasterItemFilename = arDisasterItemFilename;
+    }
+
+    public int getArState() {
+        return arRecordState;
+    }
+
+    public void setArState(int arState) {
+        this.arRecordState = arState;
     }
 }

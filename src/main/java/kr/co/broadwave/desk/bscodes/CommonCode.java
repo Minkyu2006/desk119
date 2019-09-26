@@ -18,5 +18,4 @@ import lombok.Setter;
 public class CommonCode {
     private String code;
     private String name;
-
 }

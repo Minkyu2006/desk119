@@ -29,7 +29,6 @@ public class RecordRepositoryCustomImpl extends QuerydslRepositorySupport implem
 
         JPQLQuery<RecrodListDto> query = from(qRecord)
                 .select(Projections.constructor(RecrodListDto.class,
-
                         qRecord.id,
                         qRecord.arNumber,
                         qRecord.arTitle,
@@ -41,8 +40,8 @@ public class RecordRepositoryCustomImpl extends QuerydslRepositorySupport implem
                         qRecord.arLocationCityType,
                         qRecord.arLocationAddressType,
                         qRecord.modifyDateTime
-
-
+//                        qRecord.arRecordState,
+//                        qRecord.insert_id
                 ));
 
         if (arNumber != null && !arNumber.isEmpty()){

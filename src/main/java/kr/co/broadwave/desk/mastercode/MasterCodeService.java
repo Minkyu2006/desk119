@@ -48,7 +48,6 @@ public class MasterCodeService {
     }
     public Optional<MasterCode> findById(Long id){
         return masterCodeRepository.findById(id);
-
     }
 
     public void delete(MasterCode masterCode) {
@@ -61,4 +60,6 @@ public class MasterCodeService {
                 .map(masterCode -> modelMapper.map(masterCode, MasterCodeDto.class)
                 ).collect(Collectors.toList());
     }
+
+
 }

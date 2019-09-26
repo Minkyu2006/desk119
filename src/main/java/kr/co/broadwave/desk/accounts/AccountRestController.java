@@ -249,11 +249,9 @@ public class AccountRestController {
     @PostMapping("signup")
     public ResponseEntity signup(@ModelAttribute AccountMapperDto accountMapperDto, HttpServletRequest request){
 
-
         Account account = modelMapper.map(accountMapperDto, Account.class);
         Optional<Team> optionalTeam = teamService.findByTeamcode(accountMapperDto.getTeamcode());
         Optional<MasterCode> optionalPositionCode = masterCodeService.findById(accountMapperDto.getPositionid());
-
 
         //패스워드를 입력하세요.
         if (accountMapperDto.getPassword() == null || accountMapperDto.getPassword().equals("")){

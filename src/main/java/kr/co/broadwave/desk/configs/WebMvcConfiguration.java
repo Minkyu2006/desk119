@@ -21,13 +21,11 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Value("${base.upload.directory}")
     private String recordUploadFileRoot;
 
-
     @Override // 본Config 파일을 추가하면 Pageable 관련 생성자 에러가나는부분을 해결하기위함
     protected void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(new PageableHandlerMethodArgumentResolver());
     }
 
-    //
     @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
         String uploadfilesUrl = "file:///" + recordUploadFileRoot;
@@ -35,6 +33,5 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         //registry.addResourceHandler("/assets/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS + "assets/").setCachePeriod(31536000);
         registry.addResourceHandler("/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS).setCachePeriod(31536000);
     }
-
 
 }

@@ -1,5 +1,6 @@
 package kr.co.broadwave.desk.teams;
 
+import kr.co.broadwave.desk.mastercode.MasterCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +30,13 @@ public class TeamService {
         return this.teamRepository.save(team);
 
     }
+    public Optional<Team> findById(Long id){
+        return teamRepository.findById(id);
 
+    }
+    public Optional<Team> findByTeamname(String teamname){
+        return teamRepository.findByTeamname(teamname);
+    }
     public Optional<Team> findByTeamcode(String teamcode){
         return teamRepository.findByTeamcode(teamcode);
     }

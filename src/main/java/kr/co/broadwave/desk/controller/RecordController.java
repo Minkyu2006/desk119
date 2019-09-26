@@ -8,6 +8,8 @@ import kr.co.broadwave.desk.record.file.RecordImageService;
 import kr.co.broadwave.desk.record.file.RecordUploadFile;
 import kr.co.broadwave.desk.record.file.RecordUploadFileRepository;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
+import kr.co.broadwave.desk.teams.TeamDto;
+import kr.co.broadwave.desk.teams.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,20 +37,20 @@ public class RecordController {
     private final RecordService recordService;
     private final RecordUploadFileRepository recorduploadFileRepository;
     private final RecordImageService recordimageService;
-    private final RecordRepository recordRepository;
+    private final TeamService teamService;
 
     @Autowired
     public RecordController(
             MasterCodeService masterCodeService,
             RecordService recordService,
             RecordImageService recordimageService,
-            RecordRepository recordRepository,
+            TeamService teamService,
             RecordUploadFileRepository recorduploadFileRepository) {
         this.masterCodeService = masterCodeService;
         this.recordService = recordService;
         this.recorduploadFileRepository = recorduploadFileRepository;
         this.recordimageService = recordimageService;
-        this.recordRepository = recordRepository;
+        this.teamService = teamService;
     }
 
     //모바일 작성페이지
@@ -118,11 +120,12 @@ public class RecordController {
     public String recordreg(Model model){
         System.out.println("등록화면호출");
         List<MasterCodeDto> arRelatedId = masterCodeService.findCodeList(CodeType.C0002);
+        List<TeamDto> team = teamService.findTeamList();
 
         model.addAttribute("LocationCityTypes", LocationCityType.values());
         model.addAttribute("LocationAddressTypes", LocationAddressType.values());
         model.addAttribute("arRelatedIds", arRelatedId);
-
+        model.addAttribute("teams", team);
         return "record/recordreg";
     }
 
