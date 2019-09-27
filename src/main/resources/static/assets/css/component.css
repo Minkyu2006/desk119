@@ -1358,6 +1358,17 @@
     transition: background-color .2s;
 }
 
+.c-file.c-file--comment .c-file__input {
+	width: calc(100% - 84px)
+}
+.c-file.c-file--comment .c-text__input {
+	float: left;
+	width: calc(100% - 50px);
+	margin-top: 5px;
+}
+.c-file.c-file--comment .c-file__control {
+	margin-top: 5px;
+}
 
 /* thumb */
 .c-thumb {
@@ -1799,8 +1810,10 @@ input[type=text]:-ms-clear {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
-.c-file-list li + li {
+.c-file-list > li + li {
 	margin-top: 5px;
+	padding-top: 5px;
+	border-top: 1px solid #efefef;
 }
 .c-file-list li a {
 	font-size: 12px;

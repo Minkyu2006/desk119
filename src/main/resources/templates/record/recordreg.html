@@ -39,15 +39,14 @@
 			$('.c-file__control.add').on('click', function(e) {
 				var last = $(this).parents('.c-file-list').children('li').last();
 				var clName = last.attr('class');
-				console.log(clName);
 				var num = Number(clName.replace(/[^0-9]/g,''));
 				var idx = num + 1;
-				console.log(idx);
 				var filearea =
 					'<li class="c-file-list__item' + idx + '">' +
-					'<div class="c-file">' +
+					'<div class="c-file c-file--comment">' +
 					'<input type="text" readonly="readonly" class="c-file__input" id="file' + idx + '" name="file' + idx + '" />' +
 					'<label class="c-file__button">파일선택<input type="file" name="file' + idx + '" /></label>' +
+					'<input type="text" class="c-text__input" placeholder="사진의 코멘트를 입력해주세요" />' +
 					'<a href="#" class="c-file__control remove">삭제</a>' +
 					'</div>' +
 					'</li>';
@@ -74,7 +73,6 @@
 			$('#responsibilBtn').on('click', function(e) {
 				var last = $(this).parents('.c-file-list').children('li').last();
 				var clName = last.attr('class');
-				console.log(clName);
 				var filearea =
 					'<li class="c-file-list__item">' +
 					'<ul class="c-input-list">' +
@@ -90,7 +88,7 @@
 					'</li>' +
 					'<li>' +
 						'<div class="c-select">' +
-							'<select class="c-select__input" name="arDepartmentId"/>'+
+							'<select class="c-select__input" name="arDepartmentId">'+
 								'<option th:each=team:${teams} th:value=${team.teamcode} th:text=${team.teamname}></option>'+
 							'</select>'+
 						'</div>' +
@@ -939,54 +937,6 @@
 									<input type="button" class="c-button" id="responsibilBtn" value="추가"/>
 								</li>
 							</ul>
-							<ul class="c-input-list">
-								<li>
-									<div class="c-text">
-										<input type="text" name="arEmployeeNumber" class="c-text__input" placeholder="사번" />
-									</div>
-								</li>
-								<li>
-									<div class="c-text">
-										<input type="text" name="arEmployeeName" class="c-text__input" placeholder="이름" />
-									</div>
-								</li>
-								<li>
-									<div class="c-select">
-										<select name="teamcode" class="c-select__input">
-											<option th:each ="team : ${teams}"
-													th:value="${team.teamcode}"
-													th:text="${team.teamname}"></option>
-										</select>
-									</div>
-								</li>
-								<li>
-									<input type="button" class="c-button" value="삭제"/>
-								</li>
-							</ul>
-							<ul class="c-input-list">
-								<li>
-									<div class="c-text">
-										<input type="text" name="arEmployeeNumber" class="c-text__input" placeholder="사번" />
-									</div>
-								</li>
-								<li>
-									<div class="c-text">
-										<input type="text" name="arEmployeeName" class="c-text__input" placeholder="이름" />
-									</div>
-								</li>
-								<li>
-									<div class="c-select">
-										<select name="teamcode" class="c-select__input">
-											<option th:each ="team : ${teams}"
-													th:value="${team.teamcode}"
-													th:text="${team.teamname}"></option>
-										</select>
-									</div>
-								</li>
-								<li>
-									<input type="button" class="c-button" value="삭제"/>
-								</li>
-							</ul>
 						</li>
 					</ul>
 					
@@ -1037,9 +987,10 @@
 				<td colspan="3">
 					<ul class="c-file-list">
 						<li class="c-file-list__item0">
-							<div class="c-file">
-								<input type="text" readonly="readonly" class="c-file__input" id="file0" name="file0">
+							<div class="c-file c-file--comment">
+								<input type="text" readonly="readonly" class="c-file__input" id="file0" name="file0" />
 								<label class="c-file__button">파일선택<input type="file" name="file0" /></label>
+								<input type="text" class="c-text__input" placeholder="사진의 코멘트를 입력해주세요" />
 								<a href="#" class="c-file__control add">추가</a>
 							</div>
 						</li>
