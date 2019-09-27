@@ -39,7 +39,9 @@ public class RecordRepositoryCustomImpl extends QuerydslRepositorySupport implem
                         qRecord.arIntoEnd,
                         qRecord.arLocationCityType,
                         qRecord.arLocationAddressType,
-                        qRecord.modifyDateTime
+                        qRecord.modifyDateTime,
+                        qRecord.insert_id,
+                        qRecord.arRecordState
                 ));
 
         if (arNumber != null && !arNumber.isEmpty()){

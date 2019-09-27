@@ -11,9 +11,10 @@ import javax.persistence.*;
  * Date : 2019-09-19
  * Remark :
  */
+
+@Entity
 @Getter
 @Setter
-@Entity
 @EqualsAndHashCode(of = "id")
 @Builder
 @NoArgsConstructor
@@ -34,9 +35,7 @@ public class Responsibil {
     private String arEmployeeNumber;
     @Column(name="ar_employee_name") //이름
     private String arEmployeeName;
-
     @ManyToOne(targetEntity = Team.class,fetch = FetchType.LAZY)
     @JoinColumn(name="ar_department_id")
-    private Long arDepartmentId;
-
+    private Team team;
 }

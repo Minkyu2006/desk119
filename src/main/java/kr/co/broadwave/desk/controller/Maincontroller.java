@@ -44,7 +44,10 @@ public class Maincontroller {
 
     //메인화면
     @RequestMapping("/")
-    public String main(){
+    public String main(Model model){
+
+
+
 
         return "index";
     }

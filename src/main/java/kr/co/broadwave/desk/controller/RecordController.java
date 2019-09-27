@@ -12,6 +12,7 @@ import kr.co.broadwave.desk.record.file.RecordImageService;
 import kr.co.broadwave.desk.record.file.RecordUploadFile;
 import kr.co.broadwave.desk.record.file.RecordUploadFileRepository;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
+import kr.co.broadwave.desk.record.responsibil.ResponsibilMapperDto;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,18 +129,18 @@ public class RecordController {
 
     //출동일지작성
     @RequestMapping("reg")
-    public String recordreg(Model model){
+    public String recordreg(Model model) {
         System.out.println("등록화면호출");
         List<MasterCodeDto> arRelatedId = masterCodeService.findCodeList(CodeType.C0002);
-        List<TeamDto> team = teamService.findTeamList();
+        List<TeamDto> teams = teamService.findTeamList();
 
+        model.addAttribute("teams", teams);
         model.addAttribute("LocationCityTypes", LocationCityType.values());
         model.addAttribute("LocationAddressTypes", LocationAddressType.values());
         model.addAttribute("arRelatedIds", arRelatedId);
-        model.addAttribute("teams", team);
+
         return "record/recordreg";
     }
-
     //출동일지수정
     @RequestMapping("reg/{id}")
     public String recrodReg(Model model, @PathVariable Long id){
@@ -162,20 +163,20 @@ public class RecordController {
 
     // 출동일지 리스트
     @RequestMapping("/list")
-    public String recordList(HttpServletRequest request, HttpSession session){
-//        String currentuserid = CommonUtils.getCurrentuser(request);
-//        Optional<Account> account = accountService.findById(currentuserid);
-        //AccountRole userRole = account.get().getRole();
-        Enumeration<String> role = session.getAttributeNames();
-        System.out.println("유저 role : "+role);
-
-//        if(userRole.getDesc() == "관리자"){
-//            return "record/recordlist";
-//        }
-//
-//        if(userRole.getDesc() == "출동대원"){
-//            return "record/recordlist";
-//        }
+    public String recordList(HttpServletRequest request,Model model){
+        HttpSession session = request.getSession();
+        System.out.println("로그인한 userid : " + session.getAttribute("userid"));
+        System.out.println("로그인한 Role : " + session.getAttribute("role"));
+        if(session.getAttribute("role") == "ROLE_ADMIN"){
+            return "record/recordlist";
+        }
+        else if(session.getAttribute("role") == "ROLE_USER"){
+            String currentuserid = CommonUtils.getCurrentuser(request);
+            Optional<Account> account = accountService.findByUserid(currentuserid);
+            String userid = account.get().getUserid();
+            model.addAttribute("userid", userid);
+            return "record/recordlist";
+        }
 
         return "record/recordlist";
     }

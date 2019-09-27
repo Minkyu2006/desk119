@@ -89,11 +89,11 @@
 					'</div>' +
 					'</li>' +
 					'<li>' +
-					'<div class="c-select">' +
-					'<select class="c-select__input" name="arDepartmentId"/>'+
-						'<option th:each=team:${teams} th:value=${team.teamcode} th:text=${team.teamname}></option>'+
-					'</select>'+
-					'</div>' +
+						'<div class="c-select">' +
+							'<select class="c-select__input" name="arDepartmentId"/>'+
+								'<option th:each=team:${teams} th:value=${team.teamcode} th:text=${team.teamname}></option>'+
+							'</select>'+
+						'</div>' +
 					'</li>' +
 					'<li>' +
 					'<input type="button" class="c-button remove" name="arDepartmentId" value="삭제" />' +
@@ -928,7 +928,7 @@
 								</li>
 								<li>
 									<div class="c-select">
-										<select name="arDepartmentId" id="arDepartmentId" class="c-select__input">
+										<select name="teamcode" class="c-select__input">
 											<option th:each ="team : ${teams}"
 													th:value="${team.teamcode}"
 													th:text="${team.teamname}"></option>
@@ -937,6 +937,54 @@
 								</li>
 								<li>
 									<input type="button" class="c-button" id="responsibilBtn" value="추가"/>
+								</li>
+							</ul>
+							<ul class="c-input-list">
+								<li>
+									<div class="c-text">
+										<input type="text" name="arEmployeeNumber" class="c-text__input" placeholder="사번" />
+									</div>
+								</li>
+								<li>
+									<div class="c-text">
+										<input type="text" name="arEmployeeName" class="c-text__input" placeholder="이름" />
+									</div>
+								</li>
+								<li>
+									<div class="c-select">
+										<select name="teamcode" class="c-select__input">
+											<option th:each ="team : ${teams}"
+													th:value="${team.teamcode}"
+													th:text="${team.teamname}"></option>
+										</select>
+									</div>
+								</li>
+								<li>
+									<input type="button" class="c-button" value="삭제"/>
+								</li>
+							</ul>
+							<ul class="c-input-list">
+								<li>
+									<div class="c-text">
+										<input type="text" name="arEmployeeNumber" class="c-text__input" placeholder="사번" />
+									</div>
+								</li>
+								<li>
+									<div class="c-text">
+										<input type="text" name="arEmployeeName" class="c-text__input" placeholder="이름" />
+									</div>
+								</li>
+								<li>
+									<div class="c-select">
+										<select name="teamcode" class="c-select__input">
+											<option th:each ="team : ${teams}"
+													th:value="${team.teamcode}"
+													th:text="${team.teamname}"></option>
+										</select>
+									</div>
+								</li>
+								<li>
+									<input type="button" class="c-button" value="삭제"/>
 								</li>
 							</ul>
 						</li>
@@ -948,7 +996,7 @@
 							<p class="c-input-list">
 								<span th:text="${responsibil.arEmployeeNumber}"></span>
 								<span th:text="${responsibil.arEmployeeName}"></span>
-								<span th:text="${responsibil.arDepartmentId}"></span>
+<!--								<span th:value="${responsibil.team}"></span>-->
 								<button type="button" class="c-button c-button--small" th:onclick="|javascript:responDelete(this,'${responsibil.getId()}')|">삭제</button>
 							</p>
 						</li>

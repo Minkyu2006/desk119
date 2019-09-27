@@ -35,6 +35,8 @@ public class RecrodListDto {
 
     private LocalDateTime modifyDateTime;
 
+    private String insert_id;
+    private int arRecordState;
 
     public Long getId() {
         return id;
@@ -125,4 +127,19 @@ public class RecrodListDto {
         this.modifyDateTime = modifyDateTime;
     }
 
+    public String getInsert_id() {
+        return insert_id;
+    }
+
+    public void setInsert_id(String insert_id) {
+        this.insert_id = insert_id;
+    }
+
+    public int getArRecordState() {
+        return arRecordState;
+    }
+
+    public void setArRecordState(int arRecordState) {
+        this.arRecordState = arRecordState;
+    }
 }

@@ -15,9 +15,11 @@ import kr.co.broadwave.desk.mastercode.MasterCodeDto;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.record.file.RecordImageService;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
+import kr.co.broadwave.desk.record.responsibil.ResponsibilMapperDto;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 
@@ -83,17 +85,21 @@ public class RecordRestController {
     // 출동일지작성 저장기능
     @PostMapping("reg")
     public ResponseEntity recordSave(@ModelAttribute RecordMapperDto recordMapperDto,
+                                     @ModelAttribute ResponsibilMapperDto responsibilMapperDto,
                                      MultipartHttpServletRequest multi,
                                      ModelMap model,
                                      HttpServletRequest request) throws Exception {
-        String currentuserid = CommonUtils.getCurrentuser(request);
 
         Record record = modelMapper.map(recordMapperDto,Record.class);
+        Responsibil responsibilteam = modelMapper.map(responsibilMapperDto, Responsibil.class);
         record.setArRecordState(1);
 
-        //Optional<Team> optionalTeamId = teamService.findById(responsibil.getArDepartmentId());
         Optional<MasterCode> optionalRelatedId = masterCodeService.findById(recordMapperDto.getArRelatedId());
+        Optional<Team> optionalTeam = teamService.findByTeamcode(responsibilMapperDto.getTeamcode());
+
+        String currentuserid = CommonUtils.getCurrentuser(request);
         Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
+
         Optional<Record> optionalRecord = recordRepository.findByArNumber(record.getArNumber());
 
         if (!optionalAccount.isPresent()) {
@@ -110,15 +116,14 @@ public class RecordRestController {
         }else{
             record.setArRelatedId(optionalRelatedId.get());
         }
-
-//        //부서코드가 존재하지않으면
-//        if (!optionalTeamId.isPresent()) {
-//            log.info(" 선택한 부서 DB 존재 여부 체크.  부서코드: '" + responsibil.getArDepartmentId() +"'");
-//            return ResponseEntity.ok(res.fail(ResponseErrorCode.E005.getCode(), ResponseErrorCode.E005.getDesc()));
-//        }else{
-////            Team team = optionalTeamId.get();
-////            responsibil.getArDepartmentId(team);
-//        }
+        //부서코드가 존재하지않으면
+        if (!optionalTeam.isPresent()) {
+            log.info(" 선택한 부서 DB 존재 여부 체크.  부서코드: '" + responsibilMapperDto.getTeamcode() +"'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E005.getCode(), ResponseErrorCode.E005.getDesc()));
+        }else{
+            Team team = optionalTeam.get();
+            responsibilteam.setTeam(team);
+        }
 
         //신규 및 업데이트여부
         if (optionalRecord.isPresent()){
@@ -141,14 +146,6 @@ public class RecordRestController {
             record.setModifyDateTime(LocalDateTime.now());
         }
 
-        // 이메일전송
-//        List<MasterCodeDto> mailListLRaws = masterCodeService.findCodeList(CodeType.C0003);
-//        List<String> maillists = new ArrayList<>();
-//        for (MasterCodeDto masterCodeDto :mailListLRaws) {
-//            maillists.add(masterCodeDto.getName());
-//        }
-//        mailService.mailsend(maillists,record.getArNumber()+" 출동일지 입니다","작성자 : "+record.getArWriter());
-
         Record recordSave = recordService.save(record);
 
         //파일저장
@@ -167,32 +164,41 @@ public class RecordRestController {
             }
         }
 
-        //조사담당자
-//        List<Responsibil> responsibils = new ArrayList<>();
-//
-//        String[] arEmployeeNumber = request.getParameterValues("arEmployeeNumber");
-//        String[] arEmployeeName = request.getParameterValues("arEmployeeName");
-//    //    String[] arDepartmentId = request.getParameterNames("arDepartmentId");
-//
-//        for (int i = 0; i < arEmployeeNumber.length; i++) {
-//            Responsibil responsibilss = Responsibil.builder()
-//                    .record(recordSave)
-//                    .arEmployeeNumber(arEmployeeNumber[i])
-//                    .arEmployeeName(arEmployeeName[i])
-//                    .arDepartmentId(arDepartmentId[i])
-//                    .build();
-
-//            if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty() || !arDepartmentId[i].isEmpty()){
-//                responsibils.add(responsibilss);
-//            }
-
-//            if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty()){
-//                responsibils.add(responsibilss);
-//            }
+        // 이메일전송
+//        List<MasterCodeDto> mailListLRaws = masterCodeService.findCodeList(CodeType.C0003);
+//        List<String> maillists = new ArrayList<>();
+//        for (MasterCodeDto masterCodeDto :mailListLRaws) {
+//            maillists.add(masterCodeDto.getName());
 //        }
-//        recordService.recordResponSave(responsibils);
+//        mailService.mailsend(maillists,record.getArNumber()+" 출동일지 입니다","작성자 : "+record.getArWriter());
+
+        //조사담당자
+        List<Responsibil> responsibil = new ArrayList<>();
+
+        String[] arEmployeeNumber = request.getParameterValues("arEmployeeNumber");
+        String[] arEmployeeName = request.getParameterValues("arEmployeeName");
+        String[] teamcode = request.getParameterValues("teamcode");
+
+        for (int i = 0; i < arEmployeeNumber.length; i++) {
+            Optional<Team> byTeamcode = teamService.findByTeamcode(teamcode[i]);
+            if (byTeamcode.isPresent()){
+                Responsibil responsibils = Responsibil.builder()
+                        .record(recordSave)
+                        .arEmployeeNumber(arEmployeeNumber[i])
+                        .arEmployeeName(arEmployeeName[i])
+                        .team(byTeamcode.get())
+                        .build();
+
+                if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty()){
+                    responsibil.add(responsibils);
+                }
+
+            }
+        }
+        recordService.recordResponSave(responsibil);
 
         log.info("출동일지 저장 성공 : " + recordSave.toString() );
+        log.info("조사담당자 저장 성공 : " + responsibil.toString() );
         return ResponseEntity.ok(res.success());
     }
 

@@ -101,7 +101,6 @@
 						html += '<tr>';
 						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arNumber) +'</td>';
 						html += '<td class="c-retable__title">';
-
 						if (mobileCheck()){
 							html += '<a href="/record/mview/' + echoNull2Blank(value.id) + '" class="c-retable__subject">' + echoNull2Blank(value.arTitle) + '</a>';
 						}else{
@@ -201,6 +200,8 @@
 					<div class="c-paging__total-group" id ="totalCnt">0</div>
 				</div>
 			</div>
+<!--			<input type="hidden" id="insertId" th:value="" readonly>-->
+<!--			<input type="hidden" id="userId" th:value="${userid} ? ${userid.toString()} : ''" readonly>-->
 		</article>
 	</section>
 </div>
