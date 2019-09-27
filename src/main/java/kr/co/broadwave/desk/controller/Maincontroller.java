@@ -6,10 +6,8 @@ import kr.co.broadwave.desk.common.CommonUtils;
 import kr.co.broadwave.desk.mastercode.MasterCodeDto;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.record.Record;
-import kr.co.broadwave.desk.record.RecordMapperDto;
+import kr.co.broadwave.desk.record.RecordDto;
 import kr.co.broadwave.desk.record.RecordService;
-import kr.co.broadwave.desk.record.responsibil.Responsibil;
-import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author InSeok
@@ -51,17 +50,22 @@ public class Maincontroller {
 
     //메인화면
     @RequestMapping("/")
-    public String main(){
+    public String main(Model model){
 
-        List<Record> record = recordService.findAll();
+        List<Record> records = recordService.findAll();
         List<String> arDisasterTypes = new ArrayList<>();
-        List<String> arFacs = new ArrayList<>();
-        for(int i =0; i<record.size(); i++){
-            arDisasterTypes.add(record.get(i).getArDisasterType());
-            arFacs.add(record.get(i).getArFac());
+        List<String> arFacTypes = new ArrayList<>();
+
+        for(int i =0; i<records.size(); i++) {
+            arDisasterTypes.add(records.get(i).getArDisasterType());
+            arFacTypes.add(records.get(i).getArFac());
         }
-        System.out.println("arDisasterTypes : "+arDisasterTypes);
-        System.out.println("arFacs : "+arFacs);
+
+        List<String> arDisasters = recordService.arDisaster(arDisasterTypes);
+        List<String> arFacs = recordService.arFac(arFacTypes);
+
+        model.addAttribute("arDisasters",arDisasters);
+        model.addAttribute("arFacs",arFacs);
 
         return "index";
     }

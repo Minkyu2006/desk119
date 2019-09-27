@@ -3,7 +3,6 @@ package kr.co.broadwave.desk.record;
 import kr.co.broadwave.desk.keygenerate.KeyGenerateService;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
 import kr.co.broadwave.desk.record.responsibil.ResponsibilRepository;
-import kr.co.broadwave.desk.teams.Team;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -59,6 +57,120 @@ public class RecordService {
     public List<Record> findAll() {
         return this.recordRepository.findAll();
     }
+
+    //재해재난붕괴 서비스
+   public List<String> arDisaster(List<String> arDisasterTypes){
+       int cnt1 = 0; int cnt2 = 0; int cnt3 = 0; int cnt4 = 0; int cnt5 = 0; int cnt6 = 0; int cnt7 = 0; int cntAll = 0;
+            for(int i=0; i<arDisasterTypes.size(); i++){
+                String a = arDisasterTypes.get(i).substring(0,1);
+                if(a.equals("1")){
+                    cnt1++;
+                }
+                String b = arDisasterTypes.get(i).substring(2,3);
+                if(b.equals("1")){
+                    cnt2++;
+                }
+                String c = arDisasterTypes.get(i).substring(4,5);
+                if(c.equals("1")){
+                    cnt3++;
+                }
+                String d = arDisasterTypes.get(i).substring(6,7);
+                if(d.equals("1")){
+                    cnt4++;
+                }
+                String e = arDisasterTypes.get(i).substring(8,9);
+                if(e.equals("1")){
+                    cnt5++;
+                }
+                String f = arDisasterTypes.get(i).substring(10,11);
+                if(f.equals("1")){
+                    cnt6++;
+                }
+                String g = arDisasterTypes.get(i).substring(12,13);
+                if(g.equals("1")){
+                    cnt7++;
+                }
+            }
+
+            cntAll = cnt1+cnt2+cnt3+cnt4+cnt5+cnt6+cnt7;
+
+           arDisasterTypes.clear();
+           arDisasterTypes. add(Integer.toString(cnt1));
+           arDisasterTypes. add(Integer.toString(cnt2));
+           arDisasterTypes. add(Integer.toString(cnt3));
+           arDisasterTypes. add(Integer.toString(cnt4));
+           arDisasterTypes. add(Integer.toString(cnt5));
+           arDisasterTypes. add(Integer.toString(cnt6));
+           arDisasterTypes. add(Integer.toString(cnt7));
+           arDisasterTypes. add(Integer.toString(cntAll));
+           return arDisasterTypes;
+       }
+
+
+        //조사시설물 서비스
+    public List<String> arFac(List<String> arFacTypes){
+        int cnt1 = 0; int cnt2 = 0; int cnt3 = 0; int cnt4 = 0; int cnt5 = 0; int cnt6 = 0; int cnt7 = 0;
+        int cnt8 = 0; int cnt9 = 0; int cnt10 = 0; int cntAll = 0;
+        for(int i=0; i<arFacTypes.size(); i++){
+            String a = arFacTypes.get(i).substring(0,1);
+            if(a.equals("1")){
+                cnt1++;
+            }
+            String b = arFacTypes.get(i).substring(2,3);
+            if(b.equals("1")){
+                cnt2++;
+            }
+            String c = arFacTypes.get(i).substring(4,5);
+            if(c.equals("1")){
+                cnt3++;
+            }
+            String d = arFacTypes.get(i).substring(6,7);
+            if(d.equals("1")){
+                cnt4++;
+            }
+            String e = arFacTypes.get(i).substring(8,9);
+            if(e.equals("1")){
+                cnt5++;
+            }
+            String f = arFacTypes.get(i).substring(10,11);
+            if(f.equals("1")){
+                cnt6++;
+            }
+            String g = arFacTypes.get(i).substring(12,13);
+            if(g.equals("1")){
+                cnt7++;
+            }
+            String h = arFacTypes.get(i).substring(14,15);
+            if(h.equals("1")){
+                cnt8++;
+            }
+            String k = arFacTypes.get(i).substring(16,17);
+            if(k.equals("1")){
+                cnt9++;
+            }
+            String l = arFacTypes.get(i).substring(18,19);
+            if(l.equals("1")){
+                cnt10++;
+            }
+        }
+        cntAll = cnt1+cnt2+cnt3+cnt4+cnt5+cnt6+cnt7+cnt8+cnt9+cnt10;
+
+        cnt2 += cnt3;
+        cnt5 += cnt6;
+        cnt8 += cnt9;
+
+        arFacTypes.clear();
+        arFacTypes. add(Integer.toString(cnt1));
+        arFacTypes. add(Integer.toString(cnt2));
+        arFacTypes. add(Integer.toString(cnt4));
+        arFacTypes. add(Integer.toString(cnt7));
+        arFacTypes. add(Integer.toString(cnt5));
+        arFacTypes. add(Integer.toString(cnt8));
+        arFacTypes. add(Integer.toString(cnt10));
+        arFacTypes. add(Integer.toString(cntAll));
+        return arFacTypes;
+    }
+
 
     public void recordResponSave(List<Responsibil> responsibil) {
         for (Responsibil responsibils : responsibil) {
