@@ -7,11 +7,19 @@
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
-
 </th:block>
 
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
+	<script src="/assets/js/bxslider/jquery.bxslider.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('.banner__slide').bxSlider({
+				controls: false,
+				pagerCustom: '.banner__slide-pager'
+			});
+		})
+	</script>
 </th:block>
 
 
@@ -31,7 +39,94 @@
 				<li class="banner__item banner__item--line"><a href="about/lineup" class="banner__link">건설 119 출동대원 라인업</a></li>
 				<li class="banner__item banner__item--guide"><a href="" class="banner__link">건설 119 주요 활동 가이드라인</a></li>
 				<li class="banner__item banner__item--notice"><a href="/notice/noticelist" class="banner__link">공지사항</a></li>
-				<li class="banner__item banner__item--table"><a href="#" class="banner__link">도표영역</a></li>
+				<li class="banner__item banner__item--table">
+					<div class="banner__stat">
+						<h3 class="banner__title">KICT 건설119 활동 통계</h3>
+						<div class="banner__slide">
+							<div class="banner__slide-item">
+								<span class="main-table__unit">단위: 건</span>
+								<table class="main-table">
+									<colgroup>
+										<col />
+										<col />
+										<col />
+										<col />
+									</colgroup>
+									<tbody>
+										<tr>
+											<th>붕괴</th>
+											<th>화재 &frasl; 폭발</th>
+											<th>지진</th>
+											<th>싱크홀</th>
+										</tr>
+										<tr>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+										</tr>
+										<tr>
+											<th>교통사고</th>
+											<th>홍수 &frasl; 가뭄</th>
+											<th>환경오염</th>
+											<th class="sum">합계</th>
+										</tr>
+										<tr>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="banner__slide-item">
+								<span class="main-table__unit">단위: 건</span>
+								<table class="main-table">
+									<colgroup>
+										<col />
+										<col />
+										<col />
+										<col />
+									</colgroup>
+									<tbody>
+										<tr>
+											<th>교량</th>
+											<th>옹벽 &frasl; 비탈면</th>
+											<th>터널</th>
+											<th>건축물</th>
+										</tr>
+										<tr>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+										</tr>
+										<tr>
+											<th>도로 &frasl; 시설물</th>
+											<th>지반 &frasl; 지하</th>
+											<th>기타</th>
+											<th>합계</th>
+										</tr>
+										<tr>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="banner__slide-pager">
+							<ul>
+								<li><a href="#" data-slide-index="0">1</a></li>
+								<li><a href="#" data-slide-index="1">2</a></li>
+							</ul>
+						</div>
+						<a href="#" class="banner__stat-link">상세보기&gt;&gt;</a>
+					</div>
+				</li>
 			</ul>
 		</div>
 	</div>
