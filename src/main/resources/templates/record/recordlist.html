@@ -100,6 +100,10 @@
 					$.each(res.data.datalist, function(key, value){
 						html += '<tr>';
 						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arNumber) +'</td>';
+
+						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arRecordState) +'</td>';
+						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.insert_id) +'</td>';
+
 						html += '<td class="c-retable__title">';
 						if (mobileCheck()){
 							html += '<a href="/record/mview/' + echoNull2Blank(value.id) + '" class="c-retable__subject">' + echoNull2Blank(value.arTitle) + '</a>';

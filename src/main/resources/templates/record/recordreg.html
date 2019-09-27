@@ -113,8 +113,8 @@
 
 			//재해.재난.분과 체크박스 값넣기
 			$(".c-checkbox__input").change(function(){
+				var listsArr = new Array(0, 0, 0, 0, 0, 0, 0);
 				if($("input[name=branch]").is(":checked") == true) {
-					var listsArr = new Array(0, 0, 0, 0, 0, 0, 0);
 					var arDisasterArr = new Array();
 					var arDisasterArrFilename = new Array();
 					if ($("#branch01").is(":checked") == true) {
@@ -176,8 +176,8 @@
 
 			//조사시설물 체크박스 값넣기
 			$(".c-checkbox__input").change(function(){
+				var facArr = new Array(0, 0, 0, 0, 0, 0, 0);
 				if($("input[name=scan]").is(":checked") == true) {
-					var facArr = new Array(0, 0, 0, 0, 0, 0, 0);
 					var arFacItemArr = new Array();
 					if ($("#scan01").is(":checked") == true) {
 						facArr[0] = 1;
@@ -423,18 +423,18 @@
 				$("#arTitle").trigger('focus');
 				return false;
 			}
-			// if ($("#arWriter").val().trim() == '') {
-			// 	alert("작성자를 입력하세요.");
-			// 	return false;
-			// }
-			// if ($(":checkbox[name='branch']:checked").length == 0) {
-			// 	alert("재해.재난.분과 항목을 하나이상 체크해주세요.");
-			// 	return;
-			// }
-			// if ($(":checkbox[name='scan']:checked").length == 0) {
-			// 	alert("조사시시설물 항목을 하나이상 체크해주세요.");
-			// 	return;
-			// }
+			if ($("#arWriter").val().trim() == '') {
+				alert("작성자를 입력하세요.");
+				return false;
+			}
+			if ($(":checkbox[name='branch']:checked").length == 0) {
+				alert("재해.재난.분과 항목을 하나이상 체크해주세요.");
+				return;
+			}
+			if ($(":checkbox[name='scan']:checked").length == 0) {
+				alert("조사시시설물 항목을 하나이상 체크해주세요.");
+				return;
+			}
 			// if ($("#arIntoStart").val().trim() == '') {
 			// 	alert("시작날짜를 설정해주세요.");
 			// 	return;
@@ -996,7 +996,7 @@
 							<p class="c-input-list">
 								<span th:text="${responsibil.arEmployeeNumber}"></span>
 								<span th:text="${responsibil.arEmployeeName}"></span>
-<!--								<span th:value="${responsibil.team}"></span>-->
+<!--								<span th:value="${teams.team}"></span>-->
 								<button type="button" class="c-button c-button--small" th:onclick="|javascript:responDelete(this,'${responsibil.getId()}')|">삭제</button>
 							</p>
 						</li>

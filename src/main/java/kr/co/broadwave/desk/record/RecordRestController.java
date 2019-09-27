@@ -95,7 +95,6 @@ public class RecordRestController {
         record.setArRecordState(1);
 
         Optional<MasterCode> optionalRelatedId = masterCodeService.findById(recordMapperDto.getArRelatedId());
-        Optional<Team> optionalTeam = teamService.findByTeamcode(responsibilMapperDto.getTeamcode());
 
         String currentuserid = CommonUtils.getCurrentuser(request);
         Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
@@ -107,7 +106,6 @@ public class RecordRestController {
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E014.getCode(),
                     ResponseErrorCode.E014.getDesc() + "'" + currentuserid + "'" ));
         }
-
         //관련부처가 존재하지않으면
         if (!optionalRelatedId.isPresent()) {
             log.info(" 선택한 직급 DB 존재 여부 체크.  직급코드: '" + recordMapperDto.getArRelatedId() +"'");
@@ -116,15 +114,6 @@ public class RecordRestController {
         }else{
             record.setArRelatedId(optionalRelatedId.get());
         }
-        //부서코드가 존재하지않으면
-        if (!optionalTeam.isPresent()) {
-            log.info(" 선택한 부서 DB 존재 여부 체크.  부서코드: '" + responsibilMapperDto.getTeamcode() +"'");
-            return ResponseEntity.ok(res.fail(ResponseErrorCode.E005.getCode(), ResponseErrorCode.E005.getDesc()));
-        }else{
-            Team team = optionalTeam.get();
-            responsibilteam.setTeam(team);
-        }
-
         //신규 및 업데이트여부
         if (optionalRecord.isPresent()){
             //수정
@@ -179,6 +168,8 @@ public class RecordRestController {
         String[] arEmployeeName = request.getParameterValues("arEmployeeName");
         String[] teamcode = request.getParameterValues("teamcode");
 
+        //Optional<Team> optionalTeam = teamService.findByTeamcode(responsibilMapperDto.getTeamcode());
+
         for (int i = 0; i < arEmployeeNumber.length; i++) {
             Optional<Team> byTeamcode = teamService.findByTeamcode(teamcode[i]);
             if (byTeamcode.isPresent()){
@@ -188,13 +179,20 @@ public class RecordRestController {
                         .arEmployeeName(arEmployeeName[i])
                         .team(byTeamcode.get())
                         .build();
-
                 if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty()){
                     responsibil.add(responsibils);
                 }
-
             }
         }
+        //부서코드가 존재하지않으면
+//        if (!optionalTeam.isPresent()) {
+//            log.info(" 선택한 부서 DB 존재 여부 체크.  부서코드: '" + responsibilMapperDto.getTeamcode() +"'");
+//            return ResponseEntity.ok(res.fail(ResponseErrorCode.E005.getCode(), ResponseErrorCode.E005.getDesc()));
+//        }else{
+//            Team team = optionalTeam.get();
+//            responsibilteam.setTeam(team);
+//        }
+
         recordService.recordResponSave(responsibil);
 
         log.info("출동일지 저장 성공 : " + recordSave.toString() );

@@ -117,7 +117,7 @@
 						<p class="c-input-list" th:each ="responsibil : ${responsibils}">
 							<span th:text="${responsibil} ? ${responsibil.arEmployeeNumber} : ''"></span>
 							<span th:text="${responsibil} ? ${responsibil.arEmployeeName} : ''"></span>
-<!--							<span th:text="${responsibil} ? ${responsibil.team} : ''"></span>-->
+<!--							<span th:value="${responsibil.team.teamname}"></span>-->
 						</p>
 					</td>
 				</tr>

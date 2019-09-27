@@ -13,6 +13,7 @@ import java.util.Optional;
  */
 public interface RecordRepository extends JpaRepository<Record,Long>, QuerydslPredicateExecutor<Record> {
     Optional<Record> findByArNumber(String arNumber);
+
 }
 
 

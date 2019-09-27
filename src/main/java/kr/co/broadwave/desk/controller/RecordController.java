@@ -81,7 +81,6 @@ public class RecordController {
 
     @RequestMapping("mreg/{id}")
     public String recordMUpdate(Model model, @PathVariable Long id){
-
         RecordMapperDto recordMapperDto = recordService.findById(id);
         List<MasterCodeDto> arRelatedId = masterCodeService.findCodeList(CodeType.C0002);
         List<RecordUploadFile> recorduploadFiles = recordimageService.recorduploadFileList(id);
@@ -157,6 +156,9 @@ public class RecordController {
 
         List<Responsibil> responsibils = recordService.recordRespon(id);
         model.addAttribute("responsibils", responsibils);
+
+        List<TeamDto> teams = teamService.findTeamList();
+        model.addAttribute("teams", teams);
 
         return "record/recordreg";
     }

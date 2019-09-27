@@ -5,6 +5,10 @@ import kr.co.broadwave.desk.bscodes.CodeType;
 import kr.co.broadwave.desk.common.CommonUtils;
 import kr.co.broadwave.desk.mastercode.MasterCodeDto;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
+import kr.co.broadwave.desk.record.Record;
+import kr.co.broadwave.desk.record.RecordMapperDto;
+import kr.co.broadwave.desk.record.RecordService;
+import kr.co.broadwave.desk.record.responsibil.Responsibil;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,10 +38,12 @@ public class Maincontroller {
     private final LoginlogService loginlogService;
     private final MasterCodeService masterCodeService;
     private final TeamService teamService;
+    private final RecordService recordService;
 
     @Autowired
-    public Maincontroller(AccountService accountService, LoginlogService loginlogService, MasterCodeService masterCodeService, TeamService teamService) {
+    public Maincontroller(AccountService accountService, RecordService recordService,LoginlogService loginlogService, MasterCodeService masterCodeService, TeamService teamService) {
         this.accountService = accountService;
+        this.recordService = recordService;
         this.loginlogService = loginlogService;
         this.masterCodeService = masterCodeService;
         this.teamService = teamService;
@@ -44,13 +51,21 @@ public class Maincontroller {
 
     //메인화면
     @RequestMapping("/")
-    public String main(Model model){
+    public String main(){
 
-
-
+        List<Record> record = recordService.findAll();
+        List<String> arDisasterTypes = new ArrayList<>();
+        List<String> arFacs = new ArrayList<>();
+        for(int i =0; i<record.size(); i++){
+            arDisasterTypes.add(record.get(i).getArDisasterType());
+            arFacs.add(record.get(i).getArFac());
+        }
+        System.out.println("arDisasterTypes : "+arDisasterTypes);
+        System.out.println("arFacs : "+arFacs);
 
         return "index";
     }
+
     @RequestMapping("/testwebpage")
     public String test(){
 
