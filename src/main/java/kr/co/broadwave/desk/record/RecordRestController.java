@@ -168,8 +168,6 @@ public class RecordRestController {
         String[] arEmployeeName = request.getParameterValues("arEmployeeName");
         String[] teamcode = request.getParameterValues("teamcode");
 
-        //Optional<Team> optionalTeam = teamService.findByTeamcode(responsibilMapperDto.getTeamcode());
-
         for (int i = 0; i < arEmployeeNumber.length; i++) {
             Optional<Team> byTeamcode = teamService.findByTeamcode(teamcode[i]);
             if (byTeamcode.isPresent()){
@@ -184,14 +182,16 @@ public class RecordRestController {
                 }
             }
         }
+
+        Optional<Team> optionalTeam = teamService.findByTeamcode(responsibilMapperDto.getTeamcode());
         //부서코드가 존재하지않으면
-//        if (!optionalTeam.isPresent()) {
-//            log.info(" 선택한 부서 DB 존재 여부 체크.  부서코드: '" + responsibilMapperDto.getTeamcode() +"'");
-//            return ResponseEntity.ok(res.fail(ResponseErrorCode.E005.getCode(), ResponseErrorCode.E005.getDesc()));
-//        }else{
-//            Team team = optionalTeam.get();
-//            responsibilteam.setTeam(team);
-//        }
+        if (!optionalTeam.isPresent()) {
+            log.info(" 선택한 부서 DB 존재 여부 체크.  부서코드: '" + responsibilMapperDto.getTeamcode() +"'");
+            return ResponseEntity.ok(res.fail(ResponseErrorCode.E005.getCode(), ResponseErrorCode.E005.getDesc()));
+        }else{
+            Team team = optionalTeam.get();
+            responsibilteam.setTeam(team);
+        }
 
         recordService.recordResponSave(responsibil);
 

@@ -1,13 +1,8 @@
 package kr.co.broadwave.desk.statistics;
 
-import kr.co.broadwave.desk.record.Record;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Minkyu
@@ -15,22 +10,22 @@ import java.util.List;
  * Remark :
  */
 
-@Slf4j
 @Controller
+@RequestMapping("/statistics")
 public class statisticsController {
 
     //통계화면
-    @RequestMapping("/statistics")
+    @RequestMapping("/statisticsview")
     public String statistics(){
 
-        return "statisticsPage";
+        return "/statistics/statisticsview";
     }
 
     //통계화면 테스트
     @RequestMapping("/statisticsTest")
     public String statisticsTest(){
 
-        return "statisticsTestPage";
+        return "/statistics/statisticsTest";
     }
 
 }
