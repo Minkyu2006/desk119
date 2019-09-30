@@ -134,4 +134,7 @@ public class Record {
     // 추가 임시저장인지 아닌지 확인가능한 state값
     @Column(name="ar_record_state")
     private int arRecordState;
+    // 추가 파일코멘트리스트
+    @Column(name="ar_comment")
+    private String arComment;
 }

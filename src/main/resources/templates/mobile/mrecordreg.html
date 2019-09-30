@@ -18,6 +18,10 @@
 			$("#btnSave").on('click', function () {
 				save();
 			});
+			//임시저장
+			$("#btnTemSave").on('click', function () {
+				temsave();
+			});
 			//삭제
 			$("#btnDel").on('click', function () {
 				del();
@@ -84,8 +88,13 @@
 						'</div>' +
 						'</li>' +
 						'<li>' +
-						'<div class="m-text">' +
-						'<input type="text" class="m-text__input" name="arDepartmentName" placeholder="부서명" />' +
+						'<div class="c-select">' +
+							'<select class="c-select__input" name="arDepartmentId">'+
+						'		<option th:each="team:${teams}" ' +
+											'th:value="${team.teamcode}" ' +
+											'th:text="${team.teamname}"' +
+								'></option>'+
+							'</select>'+
 						'</div>' +
 						'</li>' +
 						'<li>' +
@@ -352,6 +361,64 @@
 			LocationSetting(); //행정구역 onchange실행
 
 		});
+
+		//출동일지 임시저장
+		function temsave() {
+
+			// 날짜저장 VIEW(YYYY-MM-DD) -> DATABASE(YYYYMMDD)
+			if($("#arIntoStart").val() != "" && $("#arIntoEnd").val() != "") {
+				var start = $('#arIntoStart').val();
+				var end = $('#arIntoEnd').val();
+				var startArray = start.split("");
+				var endArray = end.split("");
+				for(var i = 0; i<2; i++) {
+					startArray.splice(startArray.indexOf("-"), 1);
+					endArray.splice(endArray.indexOf("-"), 1);
+				}
+				var realstart = startArray.join("");
+				var realend = endArray.join("");
+
+				arIntoStart(realstart);
+				arIntoEnd(realend);
+			};
+
+			if($("#arDisasterType").val() == "") {
+				var zeroType = "0,0,0,0,0,0,0";
+				$('#arDisasterType').val(zeroType);
+			}
+			if($("#arFac").val() == "") {
+				var zeroType2 = "0,0,0,0,0,0,0,0,0,0";
+				$('#arFac').val(zeroType2);
+			}
+
+			var formData = new FormData(document.getElementById('frmreg'));
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function (e, xhr, options) {
+				xhr.setRequestHeader(header, token);
+			});
+
+			$.ajax({
+				url: '/api/record/temreg',
+				type: 'post',
+				data: formData,
+				processData: false,
+				contentType: false,
+				enctype: 'multipart/form-data',
+				cache: false,
+				error:function(request,status,error){
+					ajaxErrorMsg(request);
+				},
+				success: function (res) {
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+					alert('임시저장이 되었습니다.');
+					location.href = "/record/list";
+				}
+			});
+		}
 
 		//출동일지 저장
 		function save() {
@@ -720,6 +787,7 @@
 									</li>
 									<li>
 										<div class="m-text">
+											<br/>
 											<label for="arLocationDetail" class="m-text__label">상세위치</label>
 											<input type="text" class="m-text__input" name="arLocationDetail" id="arLocationDetail"
 												   th:value="${record} ? ${record.arLocationDetail} : ''" />
@@ -821,8 +889,12 @@
 												</div>
 											</li>
 											<li>
-												<div class="m-text">
-													<input type="text" name="arDepartmentName" class="m-text__input" placeholder="부서명" />
+												<div class="c-select">
+													<select name="teamcode" class="c-select__input">
+														<option th:each ="team : ${teams}"
+																th:value="${team.teamcode}"
+																th:text="${team.teamname}"></option>
+													</select>
 												</div>
 											</li>
 											<li>
@@ -837,7 +909,7 @@
 										<p class="c-input-list">
 											<span th:text="${responsibil.arEmployeeNumber}"></span>
 											<span th:text="${responsibil.arEmployeeName}"></span>
-											<span th:text="${responsibil.arDepartmentName}"></span>
+											<span th:text="${responsibil.team.getId()}"></span>
 											<button type="button" class="c-button c-button--small" th:onclick="|javascript:responDelete(this,'${responsibil.getId()}')|">삭제</button>
 										</p>
 									</li>
@@ -900,7 +972,8 @@
 					</form>
 					<div class="c-function">
 						<div class="c-function__group c-function__group--right">
-							<div class="c-function__item"><button id="btnSave" class="c-button c-button--point">저장</button></div>
+							<div class="c-function__item"><button id="btnSave" class="c-button c-button--point">제출완료</button></div>
+							<div class="c-function__item"><button id="btnTemSave" class="c-button c-button--point">임시저장</button></div>
 							<div class="c-function__item"><button id="btnDel" class="c-button c-button--point">삭제</button></div>
 						</div>
 					</div>

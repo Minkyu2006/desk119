@@ -13,6 +13,7 @@ import kr.co.broadwave.desk.mail.MailService;
 import kr.co.broadwave.desk.mastercode.MasterCode;
 import kr.co.broadwave.desk.mastercode.MasterCodeDto;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
+import kr.co.broadwave.desk.notice.file.UploadFile;
 import kr.co.broadwave.desk.record.file.RecordImageService;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
 import kr.co.broadwave.desk.record.responsibil.ResponsibilMapperDto;
@@ -92,6 +93,7 @@ public class RecordRestController {
 
         Record record = modelMapper.map(recordMapperDto,Record.class);
         Responsibil responsibilteam = modelMapper.map(responsibilMapperDto, Responsibil.class);
+
         record.setArRecordState(1);
 
         Optional<MasterCode> optionalRelatedId = masterCodeService.findById(recordMapperDto.getArRelatedId());
@@ -101,6 +103,7 @@ public class RecordRestController {
 
         Optional<Record> optionalRecord = recordRepository.findByArNumber(record.getArNumber());
 
+        //아이디가 존재하지않으면
         if (!optionalAccount.isPresent()) {
             log.info("출동일지 저장한 사람 아이디 미존재 : '" + currentuserid + "'");
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E014.getCode(),
@@ -150,6 +153,8 @@ public class RecordRestController {
                 recordImageService.store(mFile,recordSave);
                 //파일명 순번 채번하기
                 recordImageService.makefileseq(recordSave);
+                //코멘트 달기
+                recordImageService.commentmake(recordSave);
             }
         }
 
@@ -214,6 +219,7 @@ public class RecordRestController {
         Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
         Optional<Record> optionalRecord = recordRepository.findByArNumber(record.getArNumber());
 
+        //아이디가 존재하지않으면
         if (!optionalAccount.isPresent()) {
             log.info("출동일지 저장한 사람 아이디 미존재 : '" + currentuserid + "'");
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E014.getCode(),

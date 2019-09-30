@@ -68,10 +68,10 @@ public class RecordController {
     //모바일 작성페이지
     @RequestMapping("/mreg")
     public String recordMReg(Model model){
-        System.out.println("등록화면호출");
-
         List<MasterCodeDto> arRelatedId = masterCodeService.findCodeList(CodeType.C0002);
+        List<TeamDto> teams = teamService.findTeamList();
 
+        model.addAttribute("teams", teams);
         model.addAttribute("LocationCityTypes", LocationCityType.values());
         model.addAttribute("LocationAddressTypes", LocationAddressType.values());
         model.addAttribute("arRelatedIds", arRelatedId);
@@ -85,6 +85,7 @@ public class RecordController {
         List<MasterCodeDto> arRelatedId = masterCodeService.findCodeList(CodeType.C0002);
         List<RecordUploadFile> recorduploadFiles = recordimageService.recorduploadFileList(id);
         List<Responsibil> responsibils = recordService.recordRespon(id);
+        List<TeamDto> teams = teamService.findTeamList();
 
         // 날짜 데이터변경(update)
         String into_start = recordMapperDto.getArIntoStart();
@@ -101,6 +102,7 @@ public class RecordController {
         recordMapperDto.setArIntoStart(startSet);
         recordMapperDto.setArIntoEnd(endSet);
 
+        model.addAttribute("teams", teams);
         model.addAttribute("arRelatedIds", arRelatedId);
         model.addAttribute("LocationCityTypes", LocationCityType.values());
         model.addAttribute("LocationAddressTypes", LocationAddressType.values());
@@ -114,7 +116,6 @@ public class RecordController {
     // 모바일 뷰페이지
     @RequestMapping("/mview/{id}")
     public String recordMView(Model model, @PathVariable Long id){
-
         RecordViewDto recordViewDto = recordService.findByIdView(id);
         List<RecordUploadFile> recorduploadFiles = recordimageService.recorduploadFileList(id);
         List<Responsibil> responsibils = recordService.recordRespon(id);
@@ -129,7 +130,6 @@ public class RecordController {
     //출동일지작성
     @RequestMapping("reg")
     public String recordreg(Model model) {
-        System.out.println("등록화면호출");
         List<MasterCodeDto> arRelatedId = masterCodeService.findCodeList(CodeType.C0002);
         List<TeamDto> teams = teamService.findTeamList();
 

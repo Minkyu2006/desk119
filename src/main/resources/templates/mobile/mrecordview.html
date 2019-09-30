@@ -84,7 +84,7 @@
 						<p class="c-input-list record__result" th:each ="responsibil : ${responsibils}">
 							<span th:text="${responsibil} ? ${responsibil.arEmployeeNumber} : ''"></span>
 							<span th:text="${responsibil} ? ${responsibil.arEmployeeName} : ''"></span>
-							<span th:text="${responsibil} ? ${responsibil.arDepartmentId} : ''"></span>
+							<span th:text="${responsibil} ? ${responsibil.team.getId()} : ''"></span>
 						</p>
 					</li>
 					<li>
@@ -122,7 +122,7 @@
 							<li th:each ="recorduploadFile : ${recorduploadFiles}">
 								<div class="report__picture">
 									<img th:src="${recorduploadFile} ? '/uploadfiles/recordimages/'+${recorduploadFile.afSaveFileName} : ''">
-									<p>&lt;<span>사진 코멘트 입니다</span>&gt;</p>
+									<p>&lt;<span th:text="${recorduploadFile.afComment}"></span>&gt;</p>
 								</div>
 							</li>
 						</ul>

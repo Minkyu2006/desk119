@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,6 +90,7 @@ public class RecordImageService {
                 saveFile.setAfFilePath(rootLocation.toString().replace(File.separatorChar, '/') + File.separator + saveFileName);
                 saveFile.setSize(resource.contentLength());
                 saveFile.setInsertDateTime(LocalDateTime.now());
+                saveFile.setAfComment(record.getArComment());
                 saveFile = recordUploadFileRepository.save(saveFile);
                 return saveFile;
         } catch (IOException e) {
@@ -129,6 +131,7 @@ public class RecordImageService {
         List<RecordUploadFile> recordUploadFiles = recordUploadFileRepository.findByRecord(recordSave);
 
         int i = 0;
+        int j = 0;
         for (RecordUploadFile recordUploadFile : recordUploadFiles) {
             i = i + 1;
             String arDisasterItemFilename = recordSave.getArDisasterItemFilename(); //재해재난분과
@@ -137,10 +140,16 @@ public class RecordImageService {
             String arIntoStart = recordSave.getArIntoStart(); // 시작일
             String arWriter = recordSave.getArWriter(); // 작성자
             String afName = recordUploadFile.getAfOriginalFilename(); //파일이름
-            System.out.println("arDisasterItemFilename: "+arDisasterItemFilename);
 
             // 확장자 구하기
             String extensionName = afName.substring(afName.lastIndexOf("."));
+
+            // 파일코멘트 저장
+            String comment = recordSave.getArComment();
+            String[] commentList = comment.split(",");
+            recordUploadFile.setAfComment(commentList[j]);
+            j++;
+
             // 파일이름
             int pos = afName.lastIndexOf(".");
             String realName = afName.substring(0,pos);
@@ -150,8 +159,13 @@ public class RecordImageService {
             recordUploadFile.setAfFileName(filename);
 
             recordUploadFileRepository.save(recordUploadFile);
-
         }
+
+    }
+
+    public void commentmake(Record recordSave) {
+        List<RecordUploadFile> recordUploadFiles = recordUploadFileRepository.findByRecord(recordSave);
+
     }
 
 }
