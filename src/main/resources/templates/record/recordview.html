@@ -157,7 +157,7 @@
 							<li th:each ="recorduploadFile : ${recorduploadFiles}">
 								<div class="report__picture">
 									<img th:src="${recorduploadFile} ? '/uploadfiles/recordimages/'+${recorduploadFile.afSaveFileName} : ''" />
-									<p>&lt;<span>사진 코멘트 입니다</span>&gt;</p>
+									<p>&lt;<span th:text="${recorduploadFile.afComment}"></span>&gt;</p>
 								</div>
 							</li>
 							

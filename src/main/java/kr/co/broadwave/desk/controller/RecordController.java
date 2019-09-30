@@ -167,19 +167,14 @@ public class RecordController {
     @RequestMapping("/list")
     public String recordList(HttpServletRequest request,Model model){
         HttpSession session = request.getSession();
-        System.out.println("로그인한 userid : " + session.getAttribute("userid"));
-        System.out.println("로그인한 Role : " + session.getAttribute("role"));
-        if(session.getAttribute("role") == "ROLE_ADMIN"){
-            return "record/recordlist";
-        }
-        else if(session.getAttribute("role") == "ROLE_USER"){
+        if(session.getAttribute("role") == "ROLE_ADMIN" || session.getAttribute("role") == "ROLE_USER") {
             String currentuserid = CommonUtils.getCurrentuser(request);
             Optional<Account> account = accountService.findByUserid(currentuserid);
             String userid = account.get().getUserid();
             model.addAttribute("userid", userid);
+            model.addAttribute("role", request.getSession().getAttribute("role"));
             return "record/recordlist";
         }
-
         return "record/recordlist";
     }
 

@@ -97,43 +97,79 @@
 					$totalCnt.text(totCnt);
 
 					var html = '';
-					$.each(res.data.datalist, function(key, value){
-						html += '<tr>';
-						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arNumber) +'</td>';
+                    $.each(res.data.datalist, function(key, value){
 
-						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arRecordState) +'</td>';
-						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.insert_id) +'</td>';
+                        if($("#role").val() =="ROLE_USER" || $("#role").val() =="ROLE_ADMIN" ) {
+                            if ($("#userId").val() == value.insert_id || $("#role").val() =="ROLE_ADMIN"){
+                                if(value.arRecordState == 0){
+                                    html += '<tr>';
+                                    html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arNumber) +'</td>';
 
-						html += '<td class="c-retable__title">';
-						if (mobileCheck()){
-							html += '<a href="/record/mview/' + echoNull2Blank(value.id) + '" class="c-retable__subject">' + echoNull2Blank(value.arTitle) + '</a>';
-						}else{
-							html += '<a href="/record/view/' + echoNull2Blank(value.id) + '" class="c-retable__subject">' + echoNull2Blank(value.arTitle) + '</a>';
-						}
-						if (datecheck(value.modifyDateTime.substring(0,10)) =='new'){
-							html +='<img src="/assets/images/icon__new.png" alt="새글알림" />';
-						}
-						html += '<div class="c-retable--tablet-visible">';
-						html += '<ul class="c-retable__tablet-list">';
-						html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__branch.png" alt="재해·재난 분과" />' + echoNull2Blank(value.arFacItem) + '</li>'
-						html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__calendar--gray.png" alt="조사일자" />' + echoNull2Blank(value.arIntoStart) +' ~ '+ echoNull2Blank(value.arIntoEnd) + '</li>'
-						html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__map.png" alt="조사위치" />' + echoNull2Blank(value.arLocationCityType) +' '+ echoNull2Blank(value.arLocationAddressType) + '</li>'
-						html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__building.png" alt="조사시설물" />' + echoNull2Blank(value.arDisasterItem) + '</li>'
-						html += '<li><img src="/assets/images/icon__user.png" alt="작성자" />' + echoNull2Blank(value.arWriter) + '</li>';
-						html += '</ul>'
-						html += '</div>';
-						html += '</td>';
-						html += '<td class="c-retable--tablet-hidden c-retable__white-space">'+ echoNull2Blank(value.arFacItem) +'</td>';
-						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arIntoStart) +' ~ '+ echoNull2Blank(value.arIntoEnd) +'</td>';
-						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arLocationCityType) +' '+ echoNull2Blank(value.arLocationAddressType) +'</td>';
-						html += '<td class="c-retable--tablet-hidden c-retable__white-space">'+ echoNull2Blank(value.arDisasterItem) +'</td>';
-						html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arWriter) +'</td>';
-						html += '</tr>';
-					});
-					$schList.html(html);
-				}
-			});
-		}
+                                    html += '<td class="c-retable__title">';
+                                    if (mobileCheck()) {
+                                        html += '<a href="/record/mview/' + echoNull2Blank(value.id) + '" class="c-retable__subject">' + echoNull2Blank(value.arTitle) + "(임시저장)" + '</a>';
+                                    } else {
+                                        html += '<a href="/record/view/' + echoNull2Blank(value.id) + '" class="c-retable__subject">' + echoNull2Blank(value.arTitle) + "(임시저장)" + '</a>';
+                                    }
+                                    if (datecheck(value.modifyDateTime.substring(0, 10)) == 'new') {
+                                        html += '<img src="/assets/images/icon__new.png" alt="새글알림" />';
+                                    }
+                                    html += '<div class="c-retable--tablet-visible">';
+                                    html += '<ul class="c-retable__tablet-list">';
+                                    html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__branch.png" alt="재해·재난 분과" />' + echoNull2Blank(value.arFacItem) + '</li>'
+                                    html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__calendar--gray.png" alt="조사일자" />' + echoNull2Blank(value.arIntoStart) + ' ~ ' + echoNull2Blank(value.arIntoEnd) + '</li>'
+                                    html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__map.png" alt="조사위치" />' + echoNull2Blank(value.arLocationCityType) + ' ' + echoNull2Blank(value.arLocationAddressType) + '</li>'
+                                    html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__building.png" alt="조사시설물" />' + echoNull2Blank(value.arDisasterItem) + '</li>'
+                                    html += '<li><img src="/assets/images/icon__user.png" alt="작성자" />' + echoNull2Blank(value.arWriter) + '</li>';
+                                    html += '</ul>'
+                                    html += '</div>';
+                                    html += '</td>';
+                                    html += '<td class="c-retable--tablet-hidden c-retable__white-space">' + echoNull2Blank(value.arFacItem) + '</td>';
+                                    html += '<td class="c-retable--tablet-hidden">' + echoNull2Blank(value.arIntoStart) + ' ~ ' + echoNull2Blank(value.arIntoEnd) + '</td>';
+                                    html += '<td class="c-retable--tablet-hidden">' + echoNull2Blank(value.arLocationCityType) + ' ' + echoNull2Blank(value.arLocationAddressType) + '</td>';
+                                    html += '<td class="c-retable--tablet-hidden c-retable__white-space">' + echoNull2Blank(value.arDisasterItem) + '</td>';
+                                    html += '<td class="c-retable--tablet-hidden">' + echoNull2Blank(value.arWriter) + '</td>';
+                                    html += '</tr>';
+
+                                    return;
+                                }
+                            }
+                        }
+                        if(value.arRecordState == 1) {
+                            html += '<tr>';
+
+                            html += '<td class="c-retable--tablet-hidden">' + echoNull2Blank(value.arNumber) + '</td>';
+                            html += '<td class="c-retable__title">';
+                            if (mobileCheck()) {
+                                html += '<a href="/record/mview/' + echoNull2Blank(value.id) + '" class="c-retable__subject">'  + echoNull2Blank(value.arTitle) + '</a>';
+                            } else {
+                                html += '<a href="/record/view/' + echoNull2Blank(value.id) + '" class="c-retable__subject">' + echoNull2Blank(value.arTitle) + '</a>';
+                            }
+                            if (datecheck(value.modifyDateTime.substring(0, 10)) == 'new') {
+                                html += '<img src="/assets/images/icon__new.png" alt="새글알림" />';
+                            }
+                            html += '<div class="c-retable--tablet-visible">';
+                            html += '<ul class="c-retable__tablet-list">';
+                            html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__branch.png" alt="재해·재난 분과" />' + echoNull2Blank(value.arFacItem) + '</li>'
+                            html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__calendar--gray.png" alt="조사일자" />' + echoNull2Blank(value.arIntoStart) + ' ~ ' + echoNull2Blank(value.arIntoEnd) + '</li>'
+                            html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__map.png" alt="조사위치" />' + echoNull2Blank(value.arLocationCityType) + ' ' + echoNull2Blank(value.arLocationAddressType) + '</li>'
+                            html += '<li class="c-retable__list--mobile"><img src="/assets/images/icon__building.png" alt="조사시설물" />' + echoNull2Blank(value.arDisasterItem) + '</li>'
+                            html += '<li><img src="/assets/images/icon__user.png" alt="작성자" />' + echoNull2Blank(value.arWriter) + '</li>';
+                            html += '</ul>'
+                            html += '</div>';
+                            html += '</td>';
+                            html += '<td class="c-retable--tablet-hidden c-retable__white-space">' + echoNull2Blank(value.arFacItem) + '</td>';
+                            html += '<td class="c-retable--tablet-hidden">' + echoNull2Blank(value.arIntoStart) + ' ~ ' + echoNull2Blank(value.arIntoEnd) + '</td>';
+                            html += '<td class="c-retable--tablet-hidden">' + echoNull2Blank(value.arLocationCityType) + ' ' + echoNull2Blank(value.arLocationAddressType) + '</td>';
+                            html += '<td class="c-retable--tablet-hidden c-retable__white-space">' + echoNull2Blank(value.arDisasterItem) + '</td>';
+                            html += '<td class="c-retable--tablet-hidden">' + echoNull2Blank(value.arWriter) + '</td>';
+                            html += '</tr>';
+                        }
+                    });
+                    $schList.html(html);
+                }
+            });
+        }
 
 	</script>
 
@@ -204,8 +240,8 @@
 					<div class="c-paging__total-group" id ="totalCnt">0</div>
 				</div>
 			</div>
-<!--			<input type="hidden" id="insertId" th:value="" readonly>-->
-<!--			<input type="hidden" id="userId" th:value="${userid} ? ${userid.toString()} : ''" readonly>-->
+            <input type="hidden" id="role" th:value="${role}" readonly>
+            <input type="hidden" id="userId" th:value="${userid} ? ${userid.toString()} : ''" readonly>
 		</article>
 	</section>
 </div>

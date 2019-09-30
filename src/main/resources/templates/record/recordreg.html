@@ -46,7 +46,7 @@
 					'<div class="c-file c-file--comment">' +
 					'<input type="text" readonly="readonly" class="c-file__input" id="file' + idx + '" name="file' + idx + '" />' +
 					'<label class="c-file__button">파일선택<input type="file" name="file' + idx + '" /></label>' +
-					'<input type="text" class="c-text__input" placeholder="사진의 코멘트를 입력해주세요" />' +
+					'<input type="text" class="c-text__input" name="afComment" placeholder="사진의 코멘트를 입력해주세요" />' +
 					'<a href="#" class="c-file__control remove">삭제</a>' +
 					'</div>' +
 					'</li>';
@@ -89,7 +89,10 @@
 					'<li>' +
 						'<div class="c-select">' +
 							'<select class="c-select__input" name="arDepartmentId">'+
-								'<option th:each=team:${teams} th:value=${team.teamcode} th:text=${team.teamname}></option>'+
+								'<option th:each="team:${teams}" ' +
+											'th:value="${team.teamcode}" ' +
+											'th:text="${team.teamname}"' +
+								'></option>'+
 							'</select>'+
 						'</div>' +
 					'</li>' +
@@ -385,6 +388,15 @@
 				arIntoStart(realstart);
 				arIntoEnd(realend);
 			};
+
+			if($("#arDisasterType").val() == "") {
+				var zeroType = "0,0,0,0,0,0,0";
+				$('#arDisasterType').val(zeroType);
+			}
+			if($("#arFac").val() == "") {
+				var zeroType2 = "0,0,0,0,0,0,0,0,0,0";
+				$('#arFac').val(zeroType2);
+			}
 
 			var formData = new FormData(document.getElementById('frmreg'));
 
@@ -990,7 +1002,7 @@
 							<div class="c-file c-file--comment">
 								<input type="text" readonly="readonly" class="c-file__input" id="file0" name="file0" />
 								<label class="c-file__button">파일선택<input type="file" name="file0" /></label>
-								<input type="text" class="c-text__input" placeholder="사진의 코멘트를 입력해주세요" />
+								<input type="text" class="c-text__input" name="afComment" placeholder="사진의 코멘트를 입력해주세요" />
 								<a href="#" class="c-file__control add">추가</a>
 							</div>
 						</li>

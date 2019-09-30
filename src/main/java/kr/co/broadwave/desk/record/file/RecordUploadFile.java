@@ -29,6 +29,8 @@ public class RecordUploadFile {
     private Record record;
     @Column(name="af_filename")
     private String afFileName;
+    @Column(name="af_comment")
+    private String afComment;
     @Column(name="af_original_filename")
     private String afOriginalFilename;
     @Column(name="af_save_filename")
