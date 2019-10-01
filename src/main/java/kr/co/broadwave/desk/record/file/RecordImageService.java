@@ -163,9 +163,4 @@ public class RecordImageService {
 
     }
 
-    public void commentmake(Record recordSave) {
-        List<RecordUploadFile> recordUploadFiles = recordUploadFileRepository.findByRecord(recordSave);
-
-    }
-
 }

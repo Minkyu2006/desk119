@@ -2,7 +2,6 @@ package kr.co.broadwave.desk.record;
 
 import kr.co.broadwave.desk.accounts.Account;
 import kr.co.broadwave.desk.accounts.AccountService;
-import kr.co.broadwave.desk.bscodes.CodeType;
 import kr.co.broadwave.desk.bscodes.CommonCode;
 import kr.co.broadwave.desk.bscodes.LocationAddressType;
 import kr.co.broadwave.desk.common.AjaxResponse;
@@ -11,7 +10,6 @@ import kr.co.broadwave.desk.common.MediaUtils;
 import kr.co.broadwave.desk.common.ResponseErrorCode;
 import kr.co.broadwave.desk.mail.MailService;
 import kr.co.broadwave.desk.mastercode.MasterCode;
-import kr.co.broadwave.desk.mastercode.MasterCodeDto;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.notice.file.UploadFile;
 import kr.co.broadwave.desk.record.file.RecordImageService;
@@ -20,7 +18,6 @@ import kr.co.broadwave.desk.record.responsibil.ResponsibilMapperDto;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 
@@ -32,7 +29,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -86,13 +82,10 @@ public class RecordRestController {
     // 출동일지작성 저장기능
     @PostMapping("reg")
     public ResponseEntity recordSave(@ModelAttribute RecordMapperDto recordMapperDto,
-                                     @ModelAttribute ResponsibilMapperDto responsibilMapperDto,
                                      MultipartHttpServletRequest multi,
-                                     ModelMap model,
                                      HttpServletRequest request) throws Exception {
 
         Record record = modelMapper.map(recordMapperDto,Record.class);
-        Responsibil responsibilteam = modelMapper.map(responsibilMapperDto, Responsibil.class);
 
         record.setArRecordState(1);
 
@@ -151,10 +144,8 @@ public class RecordRestController {
             if (!mFile.isEmpty()) {
                 //System.out.println("파일명 확인  : " + fileName);
                 recordImageService.store(mFile,recordSave);
-                //파일명 순번 채번하기
+                //파일명 순번 채번하기 , 코멘트추가
                 recordImageService.makefileseq(recordSave);
-                //코멘트 달기
-                recordImageService.commentmake(recordSave);
             }
         }
 
@@ -167,7 +158,7 @@ public class RecordRestController {
 //        mailService.mailsend(maillists,record.getArNumber()+" 출동일지 입니다","작성자 : "+record.getArWriter());
 
         //조사담당자
-        List<Responsibil> responsibil = new ArrayList<>();
+        List<Responsibil> responsibils = new ArrayList<>();
 
         String[] arEmployeeNumber = request.getParameterValues("arEmployeeNumber");
         String[] arEmployeeName = request.getParameterValues("arEmployeeName");
@@ -176,32 +167,32 @@ public class RecordRestController {
         for (int i = 0; i < arEmployeeNumber.length; i++) {
             Optional<Team> byTeamcode = teamService.findByTeamcode(teamcode[i]);
             if (byTeamcode.isPresent()){
-                Responsibil responsibils = Responsibil.builder()
+                Responsibil responsibils2 = Responsibil.builder()
                         .record(recordSave)
                         .arEmployeeNumber(arEmployeeNumber[i])
                         .arEmployeeName(arEmployeeName[i])
                         .team(byTeamcode.get())
                         .build();
                 if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty()){
-                    responsibil.add(responsibils);
+                    responsibils.add(responsibils2);
                 }
             }
         }
 
-        Optional<Team> optionalTeam = teamService.findByTeamcode(responsibilMapperDto.getTeamcode());
-        //부서코드가 존재하지않으면
-        if (!optionalTeam.isPresent()) {
-            log.info(" 선택한 부서 DB 존재 여부 체크.  부서코드: '" + responsibilMapperDto.getTeamcode() +"'");
-            return ResponseEntity.ok(res.fail(ResponseErrorCode.E005.getCode(), ResponseErrorCode.E005.getDesc()));
-        }else{
-            Team team = optionalTeam.get();
-            responsibilteam.setTeam(team);
-        }
+//        Optional<Team> optionalTeam = teamService.findByTeamcode(responsibil.get(0).getTeam().getTeamcode());
+//        //부서코드가 존재하지않으면
+//        if (!optionalTeam.isPresent()) {
+//            log.info(" 선택한 부서 DB 존재 여부 체크.  부서코드: '" + responsibil.get(0).getTeamcode() +"'");
+//            return ResponseEntity.ok(res.fail(ResponseErrorCode.E005.getCode(), ResponseErrorCode.E005.getDesc()));
+//        }else{
+//            Team team = optionalTeam.get();
+//            responsibilteam.setTeam(team);
+//        }
 
-        recordService.recordResponSave(responsibil);
+        recordService.recordResponSave(responsibils);
 
         log.info("출동일지 저장 성공 : " + recordSave.toString() );
-        log.info("조사담당자 저장 성공 : " + responsibil.toString() );
+        log.info("조사담당자 저장 성공 : " + responsibils.toString() );
         return ResponseEntity.ok(res.success());
     }
 
@@ -209,11 +200,11 @@ public class RecordRestController {
     @PostMapping("temreg")
     public ResponseEntity recordTemSave(@ModelAttribute RecordMapperDto recordMapperDto,
                                      MultipartHttpServletRequest multi,
-                                     ModelMap model,
                                      HttpServletRequest request) throws Exception {
         String currentuserid = CommonUtils.getCurrentuser(request);
 
         Record record = modelMapper.map(recordMapperDto,Record.class);
+
         record.setArRecordState(0);
         Optional<MasterCode> optionalRelatedId = masterCodeService.findById(recordMapperDto.getArRelatedId());
         Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
@@ -273,6 +264,31 @@ public class RecordRestController {
                 recordImageService.makefileseq(recordSave);
             }
         }
+
+        //조사담당자
+        List<Responsibil> responsibil = new ArrayList<>();
+
+        String[] arEmployeeNumber = request.getParameterValues("arEmployeeNumber");
+        String[] arEmployeeName = request.getParameterValues("arEmployeeName");
+        String[] teamcode = request.getParameterValues("teamcode");
+
+        for (int i = 0; i < arEmployeeNumber.length; i++) {
+            Optional<Team> byTeamcode = teamService.findByTeamcode(teamcode[i]);
+            if (!byTeamcode.isPresent()){
+                Responsibil responsibils = Responsibil.builder()
+                        .record(recordSave)
+                        .arEmployeeNumber(arEmployeeNumber[i])
+                        .arEmployeeName(arEmployeeName[i])
+                        .team(byTeamcode.get())
+                        .build();
+                if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty()){
+                    responsibil.add(responsibils);
+                }
+            }
+        }
+
+        recordService.recordResponSave(responsibil);
+
         log.info("출동일지 임시저장 성공 : " + recordSave.toString() );
         return ResponseEntity.ok(res.success());
     }
@@ -386,6 +402,15 @@ public class RecordRestController {
         return ResponseEntity.ok(res.success());
     }
 
+    // 조사담당자 select 추가
+    @PostMapping ("recordteam")
+    public ResponseEntity recordteam(){
+        List<TeamDto> teams = teamService.findTeamList();
+        data.clear();
+        data.put("teamdata",teams);
+        res.addResponse("data",data);
+        return ResponseEntity.ok(res.success());
+    }
 
 
 

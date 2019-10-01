@@ -88,19 +88,22 @@ public class RecordController {
         List<TeamDto> teams = teamService.findTeamList();
 
         // 날짜 데이터변경(update)
-        String into_start = recordMapperDto.getArIntoStart();
-        String into_end = recordMapperDto.getArIntoEnd();
-
-        StringBuffer start = new StringBuffer(into_start);
-        StringBuffer end = new StringBuffer(into_end);
-        start.insert(4,"-");
-        start.insert(7,"-");
-        end.insert(4,"-");
-        end.insert(7,"-");
-        String startSet = start.toString();
-        String endSet = end.toString();
-        recordMapperDto.setArIntoStart(startSet);
-        recordMapperDto.setArIntoEnd(endSet);
+        String intoStart = recordMapperDto.getArIntoStart();
+        String intoEnd = recordMapperDto.getArIntoEnd();
+        if(!intoStart.equals("")) {
+            StringBuffer start = new StringBuffer(intoStart);
+            start.insert(4, "-");
+            start.insert(7, "-");
+            String startSet = start.toString();
+            recordMapperDto.setArIntoStart(startSet);
+        }
+        if(!intoEnd.equals("")) {
+            StringBuffer end = new StringBuffer(intoEnd);
+            end.insert(4, "-");
+            end.insert(7, "-");
+            String endSet = end.toString();
+            recordMapperDto.setArIntoEnd(endSet);
+        }
 
         model.addAttribute("teams", teams);
         model.addAttribute("arRelatedIds", arRelatedId);
@@ -115,14 +118,24 @@ public class RecordController {
 
     // 모바일 뷰페이지
     @RequestMapping("/mview/{id}")
-    public String recordMView(Model model, @PathVariable Long id){
-        RecordViewDto recordViewDto = recordService.findByIdView(id);
-        List<RecordUploadFile> recorduploadFiles = recordimageService.recorduploadFileList(id);
-        List<Responsibil> responsibils = recordService.recordRespon(id);
+    public String recordMView(HttpServletRequest request,Model model, @PathVariable Long id){
+        String currentuserid = CommonUtils.getCurrentuser(request);
+        Optional<Account> account = accountService.findByUserid(currentuserid);
+        String userid = account.get().getUserid();
+        model.addAttribute("userid", userid);
 
+        //데이터 가져오기
+        RecordViewDto recordViewDto = recordService.findByIdView(id);
         model.addAttribute("record", recordViewDto);
+
+        List<RecordUploadFile> recorduploadFiles = recordimageService.recorduploadFileList(id);
         model.addAttribute("recorduploadFiles", recorduploadFiles);
+
+        List<Responsibil> responsibils = recordService.recordRespon(id);
         model.addAttribute("responsibils", responsibils);
+
+        List<TeamDto> teams = teamService.findTeamList();
+        model.addAttribute("teams", teams);
 
         return "mobile/mrecordview";
     }

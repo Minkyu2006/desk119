@@ -26,6 +26,10 @@
 			$("#btnDel").on('click', function () {
 				del();
 			});
+			//조사담당자 추가버튼
+			$("#responsibilBtn").on('click', function () {
+				responsibiladd();
+			});
 
 			$('.c-file__button input').change(function(){
 				var txt = [];
@@ -70,40 +74,42 @@
 			});
 			
 			// 조사담당자 항목 추가
-			$('#responsibilBtn').on('click', function(e) {
-				var last = $(this).parents('.c-file-list').children('li').last();
-				var clName = last.attr('class');
-				var filearea =
-					'<li class="c-file-list__item">' +
-					'<ul class="c-input-list">' +
-					'<li>' +
-					'<div class="c-text">' +
-					'<input type="text" class="c-text__input" name="arEmployeeNumber" placeholder="사번" />' +
-					'</div>' +
-					'</li>' +
-					'<li>' +
-					'<div class="c-text">' +
-					'<input type="text" class="c-text__input" name="arEmployeeName" placeholder="이름" />' +
-					'</div>' +
-					'</li>' +
-					'<li>' +
-						'<div class="c-select">' +
-							'<select class="c-select__input" name="arDepartmentId">'+
-								'<option th:each="team:${teams}" ' +
-											'th:value="${team.teamcode}" ' +
-											'th:text="${team.teamname}"' +
-								'></option>'+
-							'</select>'+
-						'</div>' +
-					'</li>' +
-					'<li>' +
-					'<input type="button" class="c-button remove" name="arDepartmentId" value="삭제" />' +
-					'</li>' +
-					'</ul>' +
-					'</li>';
-				$(this).parents('.c-file-list').append(filearea);
-				e.preventDefault();
-			});
+			// $('#responsibilBtn').on('click', function(e) {
+			// 	var last = $(this).parents('.c-file-list').children('li').last();
+			// 	var clName = last.attr('class');
+			// 	var filearea =
+			// 		'<li class="c-file-list__item">' +
+			// 		'<ul class="c-input-list">' +
+			// 		'<li>' +
+			// 		'<div class="c-text">' +
+			// 		'<input type="text" class="c-text__input" name="arEmployeeNumber" placeholder="사번" />' +
+			// 		'</div>' +
+			// 		'</li>' +
+			// 		'<li>' +
+			// 		'<div class="c-text">' +
+			// 		'<input type="text" class="c-text__input" name="arEmployeeName" placeholder="이름" />' +
+			// 		'</div>' +
+			// 		'</li>' +
+			// 		'<li>' +
+			// 			'<div class="c-select">' +
+			// 				'<select class="c-select__input" name="teamcode">'+
+			// 					'<option ' +
+			// 			'					 th:each="team:${teams}" 			' +
+			// 			' 					 th:value="${team.teamcode}"		' +
+			// 			'					 th:text="${team.teamname}"		' +
+			// 					'></option>'+
+			// 				'</select>'+
+			// 			'</div>' +
+			// 		'</li>' +
+			// 		'<li>' +
+			// 		'<input type="button" class="c-button remove" name="arDepartmentId" value="삭제" />' +
+			// 		'</li>' +
+			// 		'</ul>' +
+			// 		'</li>';
+			// 	$(this).parents('.c-file-list').append(filearea);
+			// 	e.preventDefault();
+			// });
+
 			// 조사담당자 항목 삭제
 			$(document).on('click', '.c-button.remove', function(e) {
 				var idx = $(this).parents('.c-file-list__item');
@@ -369,10 +375,58 @@
 
 		});
 
+		// 조사담당자 추가버튼
+		function responsibiladd() {
+			var $responAdd = $('#responAdd');
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function (e, xhr, options) {
+				xhr.setRequestHeader(header, token);
+			});
+
+			$.ajax({
+				url: '/api/record/recordteam',
+				type: 'post',
+				cache: false,
+				error:function(request){
+					ajaxErrorMsg(request);
+				},
+				success: function (res) {
+					var html = '';
+					html += '<li>'
+					html += '<ul class="c-input-list">'
+					html += '<li>'
+					html += '<div class="c-text">'
+					html += '<input type="text" class="c-text__input" name="arEmployeeNumber" placeholder="사번" />'
+					html += '</div>'
+					html += '</li>'
+					html += '<li>'
+					html += '<div class="c-text">'
+					html += '<input type="text" class="c-text__input" name="arEmployeeName" placeholder="이름" />'
+					html += '</div>'
+					html += '</li>'
+					html += '<li>'
+					html += '<div class="c-select">'
+					html += '<select name="teamcode" class="c-select__input">'
+					$.each(res.data.teamdata, function (key,value) {
+						html += '<option value="'+ value.teamcode +'">' + value.teamname + '</option>'
+					});
+					html += '</select>'
+					html += '</div>'
+					html += '</li>'
+					html += '<li>'
+					html += '<input type="button" class="c-button remove" value="삭제" />'
+					html += '</li>'
+					html += '</ul>'
+					html += '</li>'
+					$responAdd.append(html);
+				}
+			});
+		}
+
 		//출동일지 임시저장
 		function temsave() {
-
-			// 날짜저장 VIEW(YYYY-MM-DD) -> DATABASE(YYYYMMDD)
 			if($("#arIntoStart").val() != "" && $("#arIntoEnd").val() != "") {
 				var start = $('#arIntoStart').val();
 				var end = $('#arIntoEnd').val();
@@ -389,6 +443,7 @@
 				arIntoEnd(realend);
 			};
 
+			// 체크값이없으면 0으로 반환
 			if($("#arDisasterType").val() == "") {
 				var zeroType = "0,0,0,0,0,0,0";
 				$('#arDisasterType').val(zeroType);
@@ -445,14 +500,14 @@
 				alert("조사시시설물 항목을 하나이상 체크해주세요.");
 				return;
 			}
-			// if ($("#arIntoStart").val().trim() == '') {
-			// 	alert("시작날짜를 설정해주세요.");
-			// 	return;
-			// }
-			// if ($("#arIntoEnd").val().trim() == '') {
-			// 	alert("끝난날짜를 설정해주세요.");
-			// 	return;
-			// }
+			if ($("#arIntoStart").val().trim() == '') {
+				alert("시작날짜를 설정해주세요.");
+				return;
+			}
+			if ($("#arIntoEnd").val().trim() == '') {
+				alert("끝난날짜를 설정해주세요.");
+				return;
+			}
 
 			// 날짜저장 VIEW(YYYY-MM-DD) -> DATABASE(YYYYMMDD)
 			if($("#arIntoStart").val() != "" && $("#arIntoEnd").val() != "") {
@@ -923,7 +978,8 @@
 			<tr>
 				<th>조사담당자</th>
 				<td colspan="3">
-					<ul class="c-file-list">
+
+					<ul class="c-file-list" id="responAdd">
 						<li>
 							<ul class="c-input-list">
 								<li>
@@ -951,14 +1007,13 @@
 							</ul>
 						</li>
 					</ul>
-					
 
 					<ul class="c-result-list" style="margin-top: 10px;">
-						<li th:each ="responsibil : ${responsibils}">
-							<p class="c-input-list">
-								<span th:text="${responsibil.arEmployeeNumber}"></span>
-								<span th:text="${responsibil.arEmployeeName}"></span>
-								<span th:value="${responsibil.team.getId()}"></span>
+						<li>
+							<p class="c-input-list"  th:each ="responsibil : ${responsibils}">
+								<span th:text="${responsibil} ? ${responsibil.arEmployeeNumber} : ''"></span>
+								<span th:text="${responsibil} ? ${responsibil.arEmployeeName} : ''"></span>
+								<span th:text="${responsibil} ? ${responsibil.team.getTeamname()} : ''"></span>
 								<button type="button" class="c-button c-button--small" th:onclick="|javascript:responDelete(this,'${responsibil.getId()}')|">삭제</button>
 							</p>
 						</li>

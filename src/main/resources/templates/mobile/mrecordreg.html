@@ -89,7 +89,7 @@
 						'</li>' +
 						'<li>' +
 						'<div class="c-select">' +
-							'<select class="c-select__input" name="arDepartmentId">'+
+							'<select class="c-select__input" name="teamcode">'+
 						'		<option th:each="team:${teams}" ' +
 											'th:value="${team.teamcode}" ' +
 											'th:text="${team.teamname}"' +
@@ -891,9 +891,11 @@
 											<li>
 												<div class="c-select">
 													<select name="teamcode" class="c-select__input">
-														<option th:each ="team : ${teams}"
-																th:value="${team.teamcode}"
-																th:text="${team.teamname}"></option>
+														<option
+																	th:each ="team : ${teams}"
+																	th:value="${team.teamcode}"
+																	th:text="${team.teamname}"
+														></option>
 													</select>
 												</div>
 											</li>
@@ -909,7 +911,7 @@
 										<p class="c-input-list">
 											<span th:text="${responsibil.arEmployeeNumber}"></span>
 											<span th:text="${responsibil.arEmployeeName}"></span>
-											<span th:text="${responsibil.team.getId()}"></span>
+											<span th:text="${responsibil} ? ${responsibil.team.getTeamname()} : ''"></span>
 											<button type="button" class="c-button c-button--small" th:onclick="|javascript:responDelete(this,'${responsibil.getId()}')|">삭제</button>
 										</p>
 									</li>

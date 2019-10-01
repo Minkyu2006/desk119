@@ -13,6 +13,13 @@
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
 	<script>
+		$(function() {
+			if($('#insertId').val() == $('#userId').val()){
+				$('#updateId').show()
+			}else{
+				$('#updateId').hide()
+			}
+		});
 
 		function linkList() {
 			location.href="/record/list";
@@ -84,7 +91,7 @@
 						<p class="c-input-list record__result" th:each ="responsibil : ${responsibils}">
 							<span th:text="${responsibil} ? ${responsibil.arEmployeeNumber} : ''"></span>
 							<span th:text="${responsibil} ? ${responsibil.arEmployeeName} : ''"></span>
-							<span th:text="${responsibil} ? ${responsibil.team.getId()} : ''"></span>
+							<span th:text="${responsibil} ? ${responsibil.team.getTeamname()} : ''"></span>
 						</p>
 					</li>
 					<li>
@@ -130,6 +137,9 @@
 				</ul>
 				<div class="c-function">
 					<div class="c-function__group c-function__group--right">
+						<input type="hidden" id="insertId" th:value="${record} ? ${record.insert_id} : ''" readonly>
+						<input type="hidden" id="userId" th:value="${userid} ? ${userid.toString()} : ''" readonly>
+						<div class="c-function__item"><button id="updateId" class="c-button c-button--point" sec:authorize = "hasRole('ROLE_USER')" th:onclick="|javascript:linkReg('${record.id}')|">수정</button></div>
 						<div class="c-function__item"><button class="c-button c-button--point" sec:authorize = "hasRole('ROLE_ADMIN')" th:onclick="|javascript:linkReg('${record.id}')|">수정</button></div>
 						<div class="c-function__item"><button class="c-button" onclick="linkList();">목록</button></div>
 					</div>

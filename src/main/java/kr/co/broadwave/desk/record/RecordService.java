@@ -29,6 +29,7 @@ public class RecordService {
     private final RecordRepositoryCustom recordRepositoryCustom;
     private final KeyGenerateService keyGenerateService;
     private final ResponsibilRepository responsibilRepository;
+
     @Autowired
     public RecordService(RecordRepository recordRepository,
                          RecordRepositoryCustom recordRepositoryCustom,
