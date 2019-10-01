@@ -65,56 +65,18 @@
 				}).change();
 				e.preventDefault();
 			});
+
 			// 파일 항목 삭제
 			$(document).on('click', '.c-file__control.remove', function(e) {
 				var idx = $(this).parents('li');
 				idx.remove();
-
 				e.preventDefault();
 			});
-			
-			// 조사담당자 항목 추가
-			// $('#responsibilBtn').on('click', function(e) {
-			// 	var last = $(this).parents('.c-file-list').children('li').last();
-			// 	var clName = last.attr('class');
-			// 	var filearea =
-			// 		'<li class="c-file-list__item">' +
-			// 		'<ul class="c-input-list">' +
-			// 		'<li>' +
-			// 		'<div class="c-text">' +
-			// 		'<input type="text" class="c-text__input" name="arEmployeeNumber" placeholder="사번" />' +
-			// 		'</div>' +
-			// 		'</li>' +
-			// 		'<li>' +
-			// 		'<div class="c-text">' +
-			// 		'<input type="text" class="c-text__input" name="arEmployeeName" placeholder="이름" />' +
-			// 		'</div>' +
-			// 		'</li>' +
-			// 		'<li>' +
-			// 			'<div class="c-select">' +
-			// 				'<select class="c-select__input" name="teamcode">'+
-			// 					'<option ' +
-			// 			'					 th:each="team:${teams}" 			' +
-			// 			' 					 th:value="${team.teamcode}"		' +
-			// 			'					 th:text="${team.teamname}"		' +
-			// 					'></option>'+
-			// 				'</select>'+
-			// 			'</div>' +
-			// 		'</li>' +
-			// 		'<li>' +
-			// 		'<input type="button" class="c-button remove" name="arDepartmentId" value="삭제" />' +
-			// 		'</li>' +
-			// 		'</ul>' +
-			// 		'</li>';
-			// 	$(this).parents('.c-file-list').append(filearea);
-			// 	e.preventDefault();
-			// });
 
 			// 조사담당자 항목 삭제
 			$(document).on('click', '.c-button.remove', function(e) {
-				var idx = $(this).parents('.c-file-list__item');
+				var idx = $(this).parents('.c-input-list');
 				idx.remove();
-
 				e.preventDefault();
 			});
 
@@ -393,6 +355,9 @@
 					ajaxErrorMsg(request);
 				},
 				success: function (res) {
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
 					var html = '';
 					html += '<li>'
 					html += '<ul class="c-input-list">'
