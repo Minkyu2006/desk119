@@ -1,6 +1,26 @@
 $(document).ready(function() {
 
+	// pie chart
+	var pie = c3.generate({
+		bindto: "#pie_chart",
+		data: {
+			columns: [
+				['정부·지자체', 5],
+				['타 기관', 3],
+				['KICT 자체', 13]
+			],
+			type: 'pie'
+		},
+		tooltip: {
+			format: {
+				value: function(value, ratio, id) {
+					return value + '건';
+				}
+			}
+		}
+	})
 	
+	/*
 	var ctx = document.getElementById('myChart');
 	var myChart = new Chart(ctx, {
 		type: 'line',
@@ -195,5 +215,6 @@ $(document).ready(function() {
 	        }
 	    }
 	});
+	*/
 
 })

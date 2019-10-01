@@ -1625,7 +1625,37 @@ h4.article__heading {
 	font-size: 14px;
 }
 
-/* notice */
+/* statistics */
+.stat {
+	position: relative;
+}
+.stat__dual {
+	position: relative;
+	width: 100%;
+}
+.stat__dual:before {
+	content: " ";
+	display: table;
+}
+.stat__dual:after {
+	content: " ";
+	display: table;
+	clear: both;
+}
+.stat__dual-item {
+	float: left;
+	width: 50%;
+	padding-right: 10px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.stat__dual-item:nth-child(2n) {
+	padding-right: 0;
+	padding-left: 10px;
+}
+
+
 
 
 
