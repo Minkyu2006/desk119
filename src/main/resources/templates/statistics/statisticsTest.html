@@ -93,6 +93,18 @@
 				}
 			})
 		}
+		
+		$(document).ready(function() {
+			$('.stat__map-tab').on('click', 'a.stat__tab-link', function(e) {
+				var $parent = $(this).parent();
+				var _index = $parent.index();
+				var $content = $('.stat__tab-content li').eq(_index);
+				
+				$parent.add($content).addClass('active').siblings().removeClass('active');
+				
+				e.preventDefault();
+			}).find('.stat__tab-link').eq(1).trigger('click');
+		})
 
 	</script>
 </th:block>
@@ -107,8 +119,165 @@
 				</div>
 				<div class="stat__dual-item">
 					<h3 class="stat__title">출동지역</h3>
-					<div class="stat__map"></div>
-					<div class="stat__local-table"></div>
+					<div class="stat__map-area">
+						<div class="stat__map-tab">
+							<ul>
+								<li>
+									<a href="#" class="stat__tab-link">2018</a>
+								</li>
+								<li>
+									<a href="#" class="stat__tab-link">2019</a>
+								</li>
+							</ul>
+						</div>
+						<div class="stat__map">
+							<img src="/assets/images/map.png" alt="" />
+							<ul class="stat__tab-content">
+								<li>
+									<span class="stat__map-point seoul" title="서울특별시">1</span>
+									<span class="stat__map-point busan" title="부산광역시">2</span>
+									<span class="stat__map-point daegu" title="대구광역시">3</span>
+									<span class="stat__map-point incheon" title="인천광역시">4</span>
+									<span class="stat__map-point gwangju" title="광주광역시">5</span>
+									<span class="stat__map-point daejeon" title="대전광역시">6</span>
+									<span class="stat__map-point ulsan" title="울산광역시">7</span>
+									<span class="stat__map-point sejong" title="세종특별자치시">8</span>
+									<span class="stat__map-point gyenggi" title="경기도">9</span>
+									<span class="stat__map-point gangwon" title="강원도">10</span>
+									<span class="stat__map-point chungnam" title="충청남도">11</span>
+									<span class="stat__map-point chungbuk" title="충청북도">12</span>
+									<span class="stat__map-point jeonnam" title="전라남도">13</span>
+									<span class="stat__map-point jeonbuk" title="전라북도">14</span>
+									<span class="stat__map-point gyeongnam" title="경상남도">15</span>
+									<span class="stat__map-point gyeongbuk" title="경상북도">16</span>
+									<span class="stat__map-point jeju" title="제주특별자치도">17</span>
+								</li>
+								<li>
+									<span class="stat__map-point seoul" title="서울특별시">17</span>
+									<span class="stat__map-point busan" title="부산광역시">16</span>
+									<span class="stat__map-point daegu" title="대구광역시">15</span>
+									<span class="stat__map-point incheon" title="인천광역시">14</span>
+									<span class="stat__map-point gwangju" title="광주광역시">13</span>
+									<span class="stat__map-point daejeon" title="대전광역시">12</span>
+									<span class="stat__map-point ulsan" title="울산광역시">11</span>
+									<span class="stat__map-point sejong" title="세종특별자치시">10</span>
+									<span class="stat__map-point gyenggi" title="경기도">9</span>
+									<span class="stat__map-point gangwon" title="강원도">8</span>
+									<span class="stat__map-point chungnam" title="충청남도">7</span>
+									<span class="stat__map-point chungbuk" title="충청북도">6</span>
+									<span class="stat__map-point jeonnam" title="전라남도">5</span>
+									<span class="stat__map-point jeonbuk" title="전라북도">4</span>
+									<span class="stat__map-point gyeongnam" title="경상남도">3</span>
+									<span class="stat__map-point gyeongbuk" title="경상북도">2</span>
+									<span class="stat__map-point jeju" title="제주특별자치도">1</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="stat__local-table">
+						<div class="stat__unit">단위: 건</div>
+						<table class="c-table c-table--small">
+							<colgroup>
+								<col />
+								<col style="width: 50px;" />
+								<col style="width: 50px;" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th></th>
+									<th>2018</th>
+									<th>2019</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>서울특별시</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>부산광역시</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>대구광역시</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>인천광역시</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>광주광역시</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>대전광역시</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>울산광역시</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>세종특별자치시</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>경기도</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>강원도</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>충청남도</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>충청북도</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>전라남도</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>전라북도</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>경상남도</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>경상북도</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>제주특별자치도</th>
+									<td></td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 			<div class="stat__dual">

@@ -1,5 +1,45 @@
 @charset "utf-8";
 
+/* nanum-gothic-regular - korean */
+@font-face {
+  font-family: 'Nanum Gothic';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/assets/font/nanumgothic/nanum-gothic-v17-korean-regular.eot'); /* IE9 Compat Modes */
+  src: local('NanumGothic'),
+       url('/assets/font/nanumgothic/nanum-gothic-v17-korean-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('/assets/font/nanumgothic/nanum-gothic-v17-korean-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('/assets/font/nanumgothic/nanum-gothic-v17-korean-regular.woff') format('woff'), /* Modern Browsers */
+       url('/assets/font/nanumgothic/nanum-gothic-v17-korean-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('/assets/font/nanumgothic/nanum-gothic-v17-korean-regular.svg#NanumGothic') format('svg'); /* Legacy iOS */
+}
+/* nanum-gothic-700 - korean */
+@font-face {
+  font-family: 'Nanum Gothic';
+  font-style: normal;
+  font-weight: 700;
+  src: url('/assets/font/nanumgothic/nanum-gothic-v17-korean-700.eot'); /* IE9 Compat Modes */
+  src: local('NanumGothic Bold'), local('NanumGothic-Bold'),
+       url('/assets/font/nanumgothic/nanum-gothic-v17-korean-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('/assets/font/nanumgothic/nanum-gothic-v17-korean-700.woff2') format('woff2'), /* Super Modern Browsers */
+       url('/assets/font/nanumgothic/nanum-gothic-v17-korean-700.woff') format('woff'), /* Modern Browsers */
+       url('/assets/font/nanumgothic/nanum-gothic-v17-korean-700.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('/assets/font/nanumgothic/nanum-gothic-v17-korean-700.svg#NanumGothic') format('svg'); /* Legacy iOS */
+}
+/* nanum-gothic-800 - korean */
+@font-face {
+  font-family: 'Nanum Gothic';
+  font-style: normal;
+  font-weight: 800;
+  src: url('/assets/font/nanumgothic/nanum-gothic-v17-korean-800.eot'); /* IE9 Compat Modes */
+  src: local('NanumGothic ExtraBold'), local('NanumGothic-ExtraBold'),
+       url('/assets/font/nanumgothic/nanum-gothic-v17-korean-800.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('/assets/font/nanumgothic/nanum-gothic-v17-korean-800.woff2') format('woff2'), /* Super Modern Browsers */
+       url('/assets/font/nanumgothic/nanum-gothic-v17-korean-800.woff') format('woff'), /* Modern Browsers */
+       url('/assets/font/nanumgothic/nanum-gothic-v17-korean-800.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('/assets/font/nanumgothic/nanum-gothic-v17-korean-800.svg#NanumGothic') format('svg'); /* Legacy iOS */
+}
+
 /* reset */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p,
@@ -17,7 +57,7 @@ time, mark, audio, video {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-family: 'Malgun Gothic', sans-serif;
+	font-family: 'Nanum Gothic', sans-serif !important;
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
@@ -715,7 +755,7 @@ h4.article__heading {
 }
 .banner__stat-link {
 	position: absolute;
-	bottom: 20px;
+	top: 160px;
 	right: 20px;
 	color: #fff;
 	font-size: 14px;
@@ -1644,6 +1684,7 @@ h4.article__heading {
 }
 .stat__dual-item {
 	float: left;
+	position: relative;
 	width: 50%;
 	padding-right: 10px;
 	-webkit-box-sizing: border-box;
@@ -1654,8 +1695,178 @@ h4.article__heading {
 	padding-right: 0;
 	padding-left: 10px;
 }
-
-
+.stat__dual-item:nth-child(2n):before {
+	content: " ";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 1px;
+	height: 100%;
+	background-color: #ddd;
+}
+.stat__title {
+	margin-bottom: 10px;
+	font-size: 24px;
+	font-weight: 700;
+	text-align: center;
+}
+.stat__map-area {
+	float: left;
+	width: 50%;
+	padding-top: 17px;
+}
+.stat__map {
+	position: relative;
+	background-color: #ff8c26;
+}
+.stat__map img {
+	width: 100%;
+}
+.stat__map-tab:before {
+	content: " ";
+	display: table;
+}
+.stat__map-tab:after {
+	content: " ";
+	display: table;
+	clear: both;
+}
+.stat__map-tab ul li {
+	float: left;
+	display: block;
+	width: calc(50% - 1px);
+	border: 2px solid #ff8c26;
+	border-bottom: 0 none;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.stat__map-tab ul li + li {
+	margin-left: 2px;
+}
+.stat__tab-link {
+	display: block;
+	padding: 10px 0;
+	color: #ff8c26;
+	font-size: 16px;
+	font-weight: 700;
+	text-align: center;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.stat__map-tab ul li.active .stat__tab-link {
+	background-color: #ff8c26;
+	color: #fff;
+}
+.stat__tab-content {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+.stat__tab-content li {
+	display: none;
+}
+.stat__tab-content li.active {
+	display: block;
+}
+.stat__local-table {
+	float: left;
+	width: 50%;
+	padding-left: 10px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.stat__unit {
+	margin-bottom: 5px;
+	font-size: 12px;
+	text-align: right;
+}
+.stat__map-point {
+	display: block;
+	position: absolute;
+	min-width: 24px;
+	height: 24px;
+	background-color: rgba(79, 100, 125, .8);
+	color: #fff;
+	font-size: 14px;
+	line-height: 24px;
+	text-align: center;
+	-webkit-border-radius: 24px;
+	-moz-border-radius: 24px;
+	border-radius: 24px; 
+}
+.stat__map-point.seoul {
+	top: 20%;
+	left: 25%;
+}
+.stat__map-point.busan {
+	top: 64%;
+	left: 64%;
+}
+.stat__map-point.daegu {
+	top: 51%;
+	left: 55%;
+}
+.stat__map-point.incheon {
+	top: 22%;
+	left: 15%;
+}
+.stat__map-point.gwangju {
+	top: 63%;
+	left: 22%;
+}
+.stat__map-point.daejeon {
+	top: 42%;
+	left: 33%;
+}
+.stat__map-point.ulsan {
+	top: 56%;
+	left: 69%;
+}
+.stat__map-point.sejong {
+	top: 35%;
+	left: 33%;
+}
+.stat__map-point.gyenggi {
+	top: 24%;
+	left: 34%;
+}
+.stat__map-point.gangwon {
+	top: 18%;
+	left: 50%;
+}
+.stat__map-point.chungnam {
+	top: 37%;
+	left: 21%;
+}
+.stat__map-point.chungbuk {
+	top: 30%;
+	left: 43%;
+}
+.stat__map-point.jeonnam {
+	top: 72%;
+	left: 20%;
+}
+.stat__map-point.jeonbuk {
+	top: 53%;
+	left: 28%;
+}
+.stat__map-point.gyeongnam {
+	top: 60%;
+	left: 47%;
+}
+.stat__map-point.gyeongbuk {
+	top: 40%;
+	left: 60%;
+}
+.stat__map-point.jeju {
+	top: 87%;
+	left: 17%;
+}
 
 
 

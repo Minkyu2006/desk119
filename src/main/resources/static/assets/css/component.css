@@ -107,6 +107,19 @@
 	text-align: center;
 }
 
+.c-table.c-table--small {
+	
+}
+.c-table.c-table--small th {
+	padding: 4px 5px;
+	font-size: 12px;
+}
+.c-table.c-table--small td {
+	height: auto;
+	padding: 4px 5px;
+	font-size: 12px;
+}
+
 /* table scroll */
 .table-scroll {
 	width: 100%;
