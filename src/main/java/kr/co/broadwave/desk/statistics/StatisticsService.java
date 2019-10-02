@@ -32,50 +32,13 @@ public class StatisticsService {
 
 
 
-    public List<String> relatedName(List<String> relatedIds) {
-
-
-
-
-        return relatedIds;
-    }
-
-    public List<String> relatedCnt(List<String> relatedMasterCodes) {
-//        int cnt1 = 0; int cnt2 = 0; int cnt3 = 0;
-        List<String> masterCode = new ArrayList<>();
-        List<MasterCodeDto> masterCodes = masterCodeService.findCodeList(CodeType.C0002);
-        for(int i=0; i<masterCodes.size(); i++) {
-            masterCode.add(masterCodes.get(i).getName());
-        }
-        System.out.println("마스터코드들 : "+masterCode);
-        for(int i=0; i<relatedMasterCodes.size(); i++) {
-            String cnt = relatedMasterCodes.get(i);
-            if(cnt.matches("ㅇ")){
-                //cnt1++;
-            }else if(cnt.equals("타 기관")){
-                //cnt2++;
-            }else{
-                //cnt3++;
-            }
-        }
-
-        relatedMasterCodes.clear();
-//        relatedIdCounts.add(Integer.toString(cnt1));
-//        relatedIdCounts.add(Integer.toString(cnt2));
-//        relatedIdCounts.add(Integer.toString(cnt3));
-
-        return relatedMasterCodes;
-    }
-
-
-    public List<String> localyear(List<String> city2019s, List<Integer> modefyDate, int year) {
-        List<Record> records = recordService.findAll();
+    // 2019년도 지역통계
+    public List<String> localyear(List<Record> records,List<String> city2019s, List<Integer> modefyDate, int year) {
         for(int i=0; i<records.size(); i++) {
             if (modefyDate.get(i).equals(year)) {
                 city2019s.add(records.get(i).getArLocationCityType().getDesc());
             }
         }
-
         Stream<String> l01 = city2019s.stream().filter(x -> x.contains("서울특별시"));
         Stream<String> l02 = city2019s.stream().filter(x -> x.contains("인천광역시"));
         Stream<String> l03 = city2019s.stream().filter(x -> x.contains("대구광역시"));
@@ -134,9 +97,8 @@ public class StatisticsService {
         return city2019s;
     }
 
-    public List<String> localyear2(List<String> city2018s, List<Integer> modefyDate, int year2) {
-
-        List<Record> records = recordService.findAll();
+    // 2018년도 지역통계
+    public List<String> localyear2(List<Record> records,List<String> city2018s, List<Integer> modefyDate, int year2) {
         for(int i=0; i<records.size(); i++) {
             if (modefyDate.get(i).equals(year2)) {
                 city2018s.add(records.get(i).getArLocationCityType().getDesc());

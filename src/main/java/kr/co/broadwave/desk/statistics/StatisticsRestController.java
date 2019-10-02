@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
 /**
  * @author Minkyu
@@ -44,31 +43,57 @@ public class StatisticsRestController {
 
     @PostMapping("circleGraph")
     public ResponseEntity circleGraph(){
+        LocalDate currentDate = LocalDate.now();
+        int year = currentDate.getYear();
+        int year2 = currentDate.getYear()-1;
+        System.out.println("현재년도 : "+year);
+        System.out.println("제작년도 : "+year2);
+
         List<Record> records = recordService.findAll();
-        List<MasterCodeDto> masterCodes = masterCodeService.findCodeList(CodeType.C0002);
-        System.out.println("전체 레코드: "+records);
-        System.out.println("전체 마스터코드 "+masterCodes);
-        List<String> masterCodeNames = new ArrayList<>();
-        for (int i=0; i<masterCodes.size(); i++){
-            masterCodeNames.add(masterCodes.get(i).getName());
-        }
-        System.out.println("전체 관련부처 "+masterCodeNames);
 
+        // 2차원리스트 그래프데이터
         List<List<String>> graphDataColumns = new ArrayList<>();
-        List<String> relatedCodeLists = new ArrayList<>();
-        List<String> relatedMasterCodes = new ArrayList<>();
-        for(int i=0; i<records.size(); i++){
-            relatedCodeLists.add(records.get(i).getArRelatedId().getCode());
-            relatedMasterCodes.add(records.get(i).getArRelatedId().getName());
+
+        List<String> masters = new ArrayList<>();
+        List<String> mastersSize = new ArrayList<>();
+        List<String> masterCodeNames = new ArrayList<>();
+
+        records.forEach(x -> masters.add(x.getArRelatedId().getName()));
+
+        for(int i=0; i<masters.size(); i++){
+            if(!mastersSize.contains(masters.get(i))){
+                mastersSize.add(masters.get(i));
+            }
         }
-        System.out.println("relatedMasterCodes : "+relatedMasterCodes);
-        List<String> relatedIds = statisticsService.relatedName(relatedCodeLists);
-        List<String> relatedIdCounts = statisticsService.relatedCnt(relatedMasterCodes);
-        System.out.println("relatedCodeLists : "+relatedCodeLists);
-        System.out.println("relatedIdCounts 바뀌기 후 : "+relatedIdCounts);
+        System.out.println("mastersSize 데이터 : "+mastersSize);
 
-        System.out.println("graphDataColumns : "+graphDataColumns);
+        int count = 0;
+        for(int j=0; j<mastersSize.size(); j++) {
+            String master = mastersSize.get(j);
+            masterCodeNames.clear();
+            for (int i = 0; i < mastersSize.size(); i++) {
+                if (!masterCodeNames.contains(master)) {
+                    masterCodeNames.add(master);
+                    break;
+                }
+            }
+            for (int i = 0; i < masters.size(); i++) {
+                if (masterCodeNames.contains(masters.get(i))) {
+                    count++;
+                }
+            }
+            masterCodeNames.add(Integer.toString(count));
 
+            System.out.println("masterCodeNames 데이터 : "+masterCodeNames);
+            System.out.println("건수 : "+count);
+
+            int cnt = 0;
+            int cnt2 = 1;
+            graphDataColumns.add(Arrays.asList(masterCodeNames.get(cnt),masterCodeNames.get(cnt2)));
+            count = 0;
+        }
+
+        System.out.println("graphDataColumns 데이터 : "+graphDataColumns);
 
         data.clear();
         data.put("datacolumns",graphDataColumns);

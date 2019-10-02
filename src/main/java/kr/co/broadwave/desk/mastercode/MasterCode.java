@@ -1,7 +1,6 @@
 package kr.co.broadwave.desk.mastercode;
 
 import kr.co.broadwave.desk.bscodes.CodeType;
-import kr.co.broadwave.desk.teams.Team;
 import lombok.*;
 
 import javax.persistence.*;
