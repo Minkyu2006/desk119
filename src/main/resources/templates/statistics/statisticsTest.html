@@ -14,7 +14,6 @@
 <th:block layout:fragment="script">
 	<script>
 		$(function(){
-
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
@@ -32,8 +31,9 @@
 						return;
 					}
 					circle_graph_call(res.data.datacolumns);
+					bar_graph_call(res.data.datacolumns);
 				}
-			});
+			})
 		});
 
 		// 원형 차트
@@ -54,6 +54,46 @@
 				}
 			})
 		}
+
+		function bar_graph_call(data_columns){
+			var a = new Array(0, 0, 0, 0, 0, 0, 0);
+			var bar = c3.generate({
+				bindto: "#pie_chart2",
+				data: {
+					columns: [
+							['정부·지자체', 5],
+							['타 기관', 3],
+							['KICT 자체', 13]
+					],
+					//columns: data_columns,
+					type: 'bar'
+				},
+				bar: {
+					width: {
+						ratio: .3
+					}
+				},
+				axis: {
+					x: {
+						type: 'category',
+					},
+					y: {
+						label: {
+							position: 'outer-middle'
+						}
+					}
+				},
+				grid: {
+					y: {
+						show: true
+					}
+				},
+				legend: {
+					position: 'bottom'
+				}
+			})
+		}
+
 	</script>
 </th:block>
 
@@ -69,6 +109,12 @@
 					<h3 class="stat__title">출동지역</h3>
 					<div class="stat__map"></div>
 					<div class="stat__local-table"></div>
+				</div>
+			</div>
+			<div class="stat__dual">
+				<div class="stat__dual-item">
+					<h3 class="stat__title">막대그래프</h3>
+					<div class="stat__circle" id="pie_chart2"></div>
 				</div>
 			</div>
 		</div>

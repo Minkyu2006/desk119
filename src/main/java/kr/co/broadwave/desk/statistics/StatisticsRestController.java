@@ -44,12 +44,30 @@ public class StatisticsRestController {
 
     @PostMapping("circleGraph")
     public ResponseEntity circleGraph(){
-        System.out.println("레스트컨트롤러 진입!");
         List<Record> records = recordService.findAll();
+        List<MasterCodeDto> masterCodes = masterCodeService.findCodeList(CodeType.C0002);
         System.out.println("전체 레코드: "+records);
+        System.out.println("전체 마스터코드 "+masterCodes);
+        List<String> masterCodeNames = new ArrayList<>();
+        for (int i=0; i<masterCodes.size(); i++){
+            masterCodeNames.add(masterCodes.get(i).getName());
+        }
+        System.out.println("전체 관련부처 "+masterCodeNames);
 
-        List<List<Integer>> graphDataColumns = new ArrayList<>();
+        List<List<String>> graphDataColumns = new ArrayList<>();
+        List<String> relatedCodeLists = new ArrayList<>();
+        List<String> relatedMasterCodes = new ArrayList<>();
+        for(int i=0; i<records.size(); i++){
+            relatedCodeLists.add(records.get(i).getArRelatedId().getCode());
+            relatedMasterCodes.add(records.get(i).getArRelatedId().getName());
+        }
+        System.out.println("relatedMasterCodes : "+relatedMasterCodes);
+        List<String> relatedIds = statisticsService.relatedName(relatedCodeLists);
+        List<String> relatedIdCounts = statisticsService.relatedCnt(relatedMasterCodes);
+        System.out.println("relatedCodeLists : "+relatedCodeLists);
+        System.out.println("relatedIdCounts 바뀌기 후 : "+relatedIdCounts);
 
+        System.out.println("graphDataColumns : "+graphDataColumns);
 
 
         data.clear();
