@@ -76,4 +76,10 @@ public class StatisticsRestController {
         return ResponseEntity.ok(res.success());
     }
 
+    @PostMapping("mapGraph")
+    public ResponseEntity mapGraph(){
+
+
+        return ResponseEntity.ok(res.success());
+    }
 }
