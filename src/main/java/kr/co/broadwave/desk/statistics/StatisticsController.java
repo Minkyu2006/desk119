@@ -1,5 +1,6 @@
 package kr.co.broadwave.desk.statistics;
 
+import kr.co.broadwave.desk.bscodes.LocationCityType;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.record.Record;
 import kr.co.broadwave.desk.record.RecordService;
@@ -46,22 +47,25 @@ public class StatisticsController {
     public String statisticsTest(Model model){
         List<Record> records = recordService.findAll();
         List<Integer> modefyDate = new ArrayList<>();
-        List<String> city2019s = new ArrayList<>();
-        List<String> city2018s = new ArrayList<>();
+        List<String> nowYears = new ArrayList<>();
+        List<String> productionYears = new ArrayList<>();
+
+        LocalDate currentDate = LocalDate.now();
+        int nowYear = currentDate.getYear();
+        int productionYear = currentDate.getYear()-1;
 
         records.forEach(x -> modefyDate.add(x.getModifyDateTime().getYear()));
 
-        LocalDate currentDate = LocalDate.now();
-        int year = currentDate.getYear();
-        int year2 = currentDate.getYear()-1;
+        List<String> nowYearCitys = statisticsService.localyear(records,nowYears,modefyDate,nowYear);
+        List<String> productionYearCitys = statisticsService.localyear2(records,productionYears,modefyDate,productionYear);
 
-        List<String> localyears = statisticsService.localyear(records,city2019s,modefyDate,year);
-        List<String> localyears2 = statisticsService.localyear2(records,city2018s,modefyDate,year2);
+        // 현재/제작년도
+        model.addAttribute("nowYear",nowYear);
+        model.addAttribute("productionYear",productionYear);
 
-        model.addAttribute("year",year);
-        model.addAttribute("year2",year2);
-        model.addAttribute("localyears",localyears);
-        model.addAttribute("localyears2",localyears2);
+        // 현재/제작년 지역별 건수
+        model.addAttribute("nowYearCitys",nowYearCitys);
+        model.addAttribute("productionYearCitys",productionYearCitys);
 
         return "/statistics/statisticsTest";
     }

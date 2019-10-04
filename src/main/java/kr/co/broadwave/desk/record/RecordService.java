@@ -62,7 +62,7 @@ public class RecordService {
 
     //재해재난붕괴 서비스
    public List<String> arDisaster(List<String> arDisasterTypes){
-       int cnt1 = 0; int cnt2 = 0; int cnt3 = 0; int cnt4 = 0; int cnt5 = 0; int cnt6 = 0; int cnt7 = 0; int cntAll = 0;
+       int cnt1 = 0; int cnt2 = 0; int cnt3 = 0; int cnt4 = 0; int cnt5 = 0; int cnt6 = 0; int cnt7 = 0; int cntAll;
             for(int i=0; i<arDisasterTypes.size(); i++){
                 String a = arDisasterTypes.get(i).substring(0,1);
                 if(a.equals("1")){
@@ -112,7 +112,7 @@ public class RecordService {
         //조사시설물 서비스
     public List<String> arFac(List<String> arFacTypes){
         int cnt1 = 0; int cnt2 = 0; int cnt3 = 0; int cnt4 = 0; int cnt5 = 0; int cnt6 = 0; int cnt7 = 0;
-        int cnt8 = 0; int cnt9 = 0; int cnt10 = 0; int cntAll = 0;
+        int cnt8 = 0; int cnt9 = 0; int cnt10 = 0; int cntAll;
         for(int i=0; i<arFacTypes.size(); i++){
             String a = arFacTypes.get(i).substring(0,1);
             if(a.equals("1")){
