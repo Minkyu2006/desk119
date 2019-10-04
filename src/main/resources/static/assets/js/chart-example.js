@@ -18,7 +18,110 @@ $(document).ready(function() {
 				}
 			}
 		}
-	})
+	});
+	
+	// bar chart type: 년도별 유형
+	var chart = c3.generate({
+		bindto: "#bar_chart",
+		data: {
+			columns: [
+				['2018', 1, 1, 1, 1, 1, 1, 1],
+				['2019', 5, 5, 3, 1, 1, 1, 1]
+			],
+			type: 'bar'
+		},
+	    axis: {
+	        x: {
+	            type: 'category',
+	            categories: ['붕괴', '화재/폭발', '지진', '싱크홀', '교통사고', '홍수/가뭄', '환경오염']
+	        }
+	    },
+		tooltip: {
+			format: {
+				value: function(value, ratio, id) {
+					return value + '건';
+				}
+			}
+		}
+	});
+	
+	// 부서별 출동 현황
+	var chart2 = c3.generate({
+		bindto: "#bar_team",
+		data: {
+			columns: [
+				[5, 5, 3, 1, 1, 1, 1, 1, 1]
+			],
+			type: 'bar'
+		},
+		axis: {
+			x: {
+				type: 'category',
+				categories: ['노후인프라센터', '인프라안전연구본부', '국토보전연구본부', '미래융합연구본부', '국민생활연구본부', '화재안전연구소', '연구전략기획본부', '스마트시티연구센터', '기타']
+			}
+		},
+		tooltip: {
+			format: {
+				value: function(value, ratio, id) {
+					return value + '건';
+				}
+			}
+		},
+		legend: {
+			hide: true
+		}
+	});
+	
+	
+	
+	
+	var chart2 = c3.generate({
+		bindto: "#bar_chart2",
+		data: {
+			columns: [
+				['2018', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+				['2019', 5, 5, 3, 1, 1, 1, 1, 1, 1, 1]
+			],
+			type: 'bar'
+		},
+	    axis: {
+	        x: {
+	            type: 'category',
+	            categories: ['교량', '옹벽', '비탈면', '터널', '도로', '기타도로시설', '건축물', '지반', '지하시설물', '기타']
+	        }
+	    },
+		tooltip: {
+			format: {
+				value: function(value, ratio, id) {
+					return value + '건';
+				}
+			}
+		}
+	});
+	
+	var chart3 = c3.generate({
+		bindto: "#bar_chart3",
+		data: {
+			columns: [
+				['2018', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+				['2019', 1, 2, 3, 4, 5, 6, 6, 5, 4, 3, 2, 1]
+			],
+			type: 'bar'
+		},
+	    axis: {
+	        x: {
+	            type: 'category',
+	            categories: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+	        }
+	    },
+		tooltip: {
+			format: {
+				value: function(value, ratio, id) {
+					return value + '건';
+				}
+			}
+		}
+	});
 	
 	/*
 	var ctx = document.getElementById('myChart');
@@ -96,7 +199,6 @@ $(document).ready(function() {
 	        }
 	    }
 	});
-
 	
 	var ctx3 = document.getElementById('myChart3');
 	var myChart3 = new Chart(ctx3, {

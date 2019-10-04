@@ -12,6 +12,7 @@
 
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
+	<script src="/assets/js/chart-example.js"></script>
 	<script>
 		$(function(){
 			var token = $("meta[name='_csrf']").attr("content");
@@ -31,7 +32,6 @@
 						return;
 					}
 					circle_graph_call(res.data.datacolumns);
-					bar_graph_call(res.data.datacolumns);
 				}
 			})
 
@@ -51,9 +51,8 @@
 		// 원형 차트
 		function circle_graph_call(data_columns) {
 			var pie = c3.generate({
-				bindto: "#pie_chart",
+				bindto: "#pie_chart1",
 				data: {
-					//columns: [["정부·지자체", "5"], ["타 기관", "3"], ["KICT 자체", "13"]],
 					columns: data_columns,
 					type: 'pie'
 				},
@@ -67,36 +66,6 @@
 			})
 		}
 
-		function bar_graph_call(data_columns){
-			var bar = c3.generate({
-				bindto: "#pie_chart2",
-				data: {
-					columns: [
-							['정부·지자체', 5],
-							['타 기관', 3],
-							['KICT 자체', 13]
-					],
-					//columns: array,
-					type: 'bar'
-				},
-				bar: {
-					width: {
-						ratio: .3
-					}
-				},
-				grid: {
-					y: {
-						show: true
-					},
-					x: {
-						show: true
-					}
-				},
-				legend: {
-					position: 'bottom'
-				}
-			})
-		}
 
 
 	</script>
@@ -108,7 +77,7 @@
 			<div class="stat__dual">
 				<div class="stat__dual-item">
 					<h3 class="stat__title">출동요청기관</h3>
-					<div class="stat__circle" id="pie_chart"></div>
+					<div class="stat__circle" id="pie_chart1"></div>
 				</div>
 				<div class="stat__dual-item">
 					<h3 class="stat__title">출동지역</h3>
@@ -273,11 +242,21 @@
 					</div>
 				</div>
 			</div>
-			<div class="stat__dual">
-				<div class="stat__dual-item">
-					<h3 class="stat__title">막대그래프</h3>
-					<div class="stat__circle" id="pie_chart2"></div>
-				</div>
+			<div class="stat__item">
+				<h3 class="stat__title">재해·재난 유형</h3>
+				<div class="stat__chart" id="bar_chart"></div>
+			</div>
+			<div class="stat__item">
+				<h3 class="stat__title">조사시설물</h3>
+				<div class="stat__chart" id="bar_chart2"></div>
+			</div>
+			<div class="stat__item">
+				<h3 class="stat__title">부서별 출동 현황</h3>
+				<div class="stat__chart" id="bar_team"></div>
+			</div>
+			<div class="stat__item">
+				<h3 class="stat__title">월별 출동 현황</h3>
+				<div class="stat__chart" id="bar_chart3"></div>
 			</div>
 		</div>
 	</section>

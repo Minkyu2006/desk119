@@ -1800,36 +1800,36 @@ h4.article__heading {
 	border-radius: 24px; 
 }
 .stat__map-point.seoul {
-	top: 20%;
-	left: 25%;
+	top: 21%;
+	left: 27%;
 }
 .stat__map-point.busan {
 	top: 64%;
 	left: 64%;
 }
 .stat__map-point.daegu {
-	top: 51%;
-	left: 55%;
+	top: 52%;
+	left: 56%;
 }
 .stat__map-point.incheon {
 	top: 22%;
 	left: 15%;
 }
 .stat__map-point.gwangju {
-	top: 63%;
-	left: 22%;
+	top: 65%;
+	left: 23%;
 }
 .stat__map-point.daejeon {
-	top: 42%;
-	left: 33%;
+	top: 43%;
+	left: 34%;
 }
 .stat__map-point.ulsan {
 	top: 56%;
 	left: 69%;
 }
 .stat__map-point.sejong {
-	top: 35%;
-	left: 33%;
+	top: 37%;
+	left: 34%;
 }
 .stat__map-point.gyenggi {
 	top: 24%;
@@ -1844,7 +1844,7 @@ h4.article__heading {
 	left: 21%;
 }
 .stat__map-point.chungbuk {
-	top: 30%;
+	top: 32%;
 	left: 43%;
 }
 .stat__map-point.jeonnam {
@@ -1864,12 +1864,57 @@ h4.article__heading {
 	left: 60%;
 }
 .stat__map-point.jeju {
-	top: 87%;
+	top: 88%;
 	left: 17%;
 }
+.stat__item {
+	position: relative;
+	width: 100%;
+}
+.stat__dual + .stat__item,
+.stat__item + .stat__item {
+	padding-top: 20px;
+	margin-top: 20px;
+	border-top: 1px solid #ddd;
+}
 
+@media (max-width: 1024px) {
+	.stat__dual-item {
+		width: 100%;
+		padding: 0;
+	}
+	.stat__dual-item:nth-child(2n) {
+		padding: 0;
+	}
+	.stat__dual-item:nth-child(2n):before {
+		display: none;
+	}
+	.stat__dual-item + .stat__dual-item {
+		padding-top: 20px;
+		margin-top: 20px;
+		border-top: 1px solid #ddd;
+	}
+	.stat__map-area {
+		width: 279px;
+	}
+	.stat__local-table {
+		width: calc(100% - 279px); 
+	}
+}
 
-
+@media (max-width: 768px) {
+	.stat__map-area {
+		float: none;
+		width: 100%;
+		max-width: 279px;
+		margin: 0 auto;		
+	}
+	.stat__local-table {
+		float: none;
+		width: 100%;
+		margin-top: 10px;
+	}
+}
 
 
 
