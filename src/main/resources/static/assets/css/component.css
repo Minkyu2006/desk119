@@ -1723,6 +1723,11 @@
 .m-text__input {
 	width: 100%;
 }
+.m-text__input[type=date] {
+	-webkit-appearance: textfield;
+	-moz-appearance: textfield;
+	appearance: textfield;
+}
 
 input[type=text]:-ms-clear {
     display: none;
@@ -2143,6 +2148,12 @@ input[type=text]:-ms-clear {
 	width: 60px;
 	white-space: normal;
 	text-align: left;
+}
+@media (max-width: 768px) {
+	.c-searchtable__button {
+		width: 61px;
+		padding: 5px !important;
+	}
 }
 
 .c-searchtext {

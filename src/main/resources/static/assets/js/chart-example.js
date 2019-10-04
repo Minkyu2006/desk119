@@ -50,7 +50,7 @@ $(document).ready(function() {
 		bindto: "#bar_team",
 		data: {
 			columns: [
-				[5, 5, 3, 1, 1, 1, 1, 1, 1]
+				[' ', 5, 5, 3, 1, 1, 1, 1, 1, 1]
 			],
 			type: 'bar'
 		},
