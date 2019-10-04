@@ -5,6 +5,7 @@ import kr.co.broadwave.desk.teams.Team;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 
 /**
  * @author Minkyu

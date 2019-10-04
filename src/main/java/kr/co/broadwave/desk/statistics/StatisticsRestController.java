@@ -6,6 +6,10 @@ import kr.co.broadwave.desk.mastercode.MasterCodeDto;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.record.Record;
 import kr.co.broadwave.desk.record.RecordService;
+import kr.co.broadwave.desk.record.responsibil.Responsibil;
+import kr.co.broadwave.desk.record.responsibil.ResponsibilRepository;
+import kr.co.broadwave.desk.record.responsibil.ResponsibilService;
+import kr.co.broadwave.desk.teams.Team;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
@@ -32,21 +37,28 @@ public class StatisticsRestController {
 
     private final RecordService recordService;
     private final StatisticsService statisticsService;
+    private final ResponsibilRepository responsibilRepository;
     private final MasterCodeService masterCodeService;
+    private final ResponsibilService responsibilService;
 
     @Autowired
     public StatisticsRestController(RecordService recordService,
-                                MasterCodeService masterCodeService,
-                                StatisticsService statisticsService) {
+                                    MasterCodeService masterCodeService,
+                                    ResponsibilRepository responsibilRepository,
+                                    ResponsibilService responsibilService,
+                                    StatisticsService statisticsService) {
         this.recordService = recordService;
         this.masterCodeService = masterCodeService;
         this.statisticsService = statisticsService;
+        this.responsibilService = responsibilService;
+        this.responsibilRepository = responsibilRepository;
     }
 
     @PostMapping("dataGraph")
     public ResponseEntity dataGraph(){
 
         List<Record> records = recordService.findAll();
+
         List<List<String>> circleDataColumns = new ArrayList<>(); // 원형 그래프데이터
 
         List<String> masters = new ArrayList<>();
@@ -88,8 +100,6 @@ public class StatisticsRestController {
             count = 0;
         }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         List<List<String>> disastergraphDataColumns = new ArrayList<>();  // 재해재난 그래프데이터
         List<List<String>> facgraphDataColumns = new ArrayList<>();  // 조사시설물 그래프데이터
         List<List<String>> monthgraphDataColumns = new ArrayList<>(); // 월별 출동현황 그래프데이터
@@ -100,7 +110,7 @@ public class StatisticsRestController {
         String now = Integer.toString(nowYear);
         String production = Integer.toString(productionYear);
         System.out.println("현재년도 : "+now);
-        System.out.println("제작년도 : "+production);
+        System.out.println("재작년도 : "+production);
 
         List<String> disasters = new ArrayList<>();
         List<String> facs = new ArrayList<>();
@@ -108,9 +118,9 @@ public class StatisticsRestController {
         records.forEach(x -> disasters.add(x.getArDisasterType()));
         records.forEach(x -> facs.add(x.getArFac()));
         records.forEach(x -> monthDate.add(x.getArIntoEnd()));
-        System.out.println("재해분난 : "+disasters);
-        System.out.println("조사시설물 : "+facs);
-        System.out.println("월별건수 : "+monthDate);
+//        System.out.println("재해분난 : "+disasters);
+//        System.out.println("조사시설물 : "+facs);
+//        System.out.println("월별건수 : "+monthDate);
 
         List<String> years = new ArrayList<>();
         List<String> months = new ArrayList<>();
@@ -128,8 +138,8 @@ public class StatisticsRestController {
                 months.add(strmonth);
             }
         }
-        System.out.println("년 : "+years);
-        System.out.println("월 : "+months);
+//        System.out.println("년 : "+years);
+//        System.out.println("월 : "+months);
 
         List<String> nowDisastersCnt = new ArrayList<>();
         List<String> productionDisastersCnt = new ArrayList<>();
@@ -211,8 +221,8 @@ public class StatisticsRestController {
         productionDisastersCnt.add(Integer.toString(productioncnt06));
         productionDisastersCnt.add(Integer.toString(productioncnt07));
 
-        System.out.println("2019 재해분난 카운트 : "+nowDisastersCnt);
-        System.out.println("2018 재해분난 카운트 : "+productionDisastersCnt);
+//        System.out.println("2019 재해분난 카운트 : "+nowDisastersCnt);
+//        System.out.println("2018 재해분난 카운트 : "+productionDisastersCnt);
 
         disastergraphDataColumns.add(nowDisastersCnt);
         disastergraphDataColumns.add(productionDisastersCnt);
@@ -317,8 +327,8 @@ public class StatisticsRestController {
         productionFacCnt.add(Integer.toString(productioncnt09));
         productionFacCnt.add(Integer.toString(productioncnt10));
 
-        System.out.println("2019 조사시설물 카운트 : "+nowFacCnt);
-        System.out.println("2018 조사시설물 카운트 : "+productionFacCnt);
+//        System.out.println("2019 조사시설물 카운트 : "+nowFacCnt);
+//        System.out.println("2018 조사시설물 카운트 : "+productionFacCnt);
 
         facgraphDataColumns.add(nowFacCnt);
         facgraphDataColumns.add(productionFacCnt);
@@ -423,8 +433,8 @@ public class StatisticsRestController {
         productionCnt.add(Integer.toString(productioncnt11));
         productionCnt.add(Integer.toString(productioncnt12));
 
-        System.out.println("현재 카운트 : "+nowCnt);
-        System.out.println("작년 카운트 : "+productionCnt);
+//        System.out.println("현재 카운트 : "+nowCnt);
+//        System.out.println("작년 카운트 : "+productionCnt);
 
         monthgraphDataColumns.add(nowCnt);
         monthgraphDataColumns.add(productionCnt);
@@ -435,11 +445,57 @@ public class StatisticsRestController {
         System.out.println("월별 출동 현황 데이터 : "+monthgraphDataColumns);
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-        List<String> teamgraphDataColumns = new ArrayList<>();  // 부서별 출동현황 그래프데이터
-        List<String> teamsData = new ArrayList<>();  // 부서별 출동현황 그래프데이터
+//        List<Responsibil> responsibils = responsibilRepository.findByAll();
+//
+//        System.out.println("조사담당자 : "+responsibils);
+
+        List<String> teamgraphDataColumns = new ArrayList<>();
+        List<String> teamsData = new ArrayList<>();
+
+        List<String> teamNames = new ArrayList<>();
+        List<String> teamName = new ArrayList<>();
+
+
+//        responsibils.forEach(x -> teamNames.add(x.getTeam().getTeamname()));
+//        System.out.println("팀이름들 : "+teamNames);
+//
+//        for(int i=0; i<teamNames.size(); i++){
+//                if(!teamName.contains(teamNames.get(i))){
+//                    teamName.add(teamNames.get(i));
+//                }
+//        }
+//        System.out.println("팀이름들2 : "+teamName);
+
+        //System.out.println("mastersSize 데이터 : "+mastersSize);
+
+//        int count = 0;
+//        for(int j=0; j<mastersSize.size(); j++) {
+//            String master = mastersSize.get(j);
+//            masterCodeNames.clear();
+//            for (int i = 0; i < mastersSize.size(); i++) {
+//                if (!masterCodeNames.contains(master)) {
+//                    masterCodeNames.add(master);
+//                }
+//            }
+//            for (int i = 0; i < masters.size(); i++) {
+//                if (masterCodeNames.contains(masters.get(i))) {
+//                    count++;
+//                }
+//            }
+//            masterCodeNames.add(Integer.toString(count));
+//
+////            System.out.println("masterCodeNames 데이터 : "+masterCodeNames);
+////            System.out.println("건수 : "+count);
+//
+//            int cnt = 0;
+//            int cnt2 = 1;
+//            circleDataColumns.add(Arrays.asList(masterCodeNames.get(cnt),masterCodeNames.get(cnt2)));
+//            count = 0;
+//        }
 
         data.clear();
 

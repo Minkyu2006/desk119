@@ -4,6 +4,8 @@ import kr.co.broadwave.desk.bscodes.LocationCityType;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.record.Record;
 import kr.co.broadwave.desk.record.RecordService;
+import kr.co.broadwave.desk.record.responsibil.Responsibil;
+import kr.co.broadwave.desk.record.responsibil.ResponsibilService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,14 +27,11 @@ public class StatisticsController {
 
     private final RecordService recordService;
     private final StatisticsService statisticsService;
-    private final MasterCodeService masterCodeService;
 
     @Autowired
     public StatisticsController(RecordService recordService,
-                                MasterCodeService masterCodeService,
                                 StatisticsService statisticsService) {
         this.recordService = recordService;
-        this.masterCodeService = masterCodeService;
         this.statisticsService = statisticsService;
     }
 

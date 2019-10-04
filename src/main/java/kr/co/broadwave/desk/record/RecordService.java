@@ -8,7 +8,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -58,6 +61,10 @@ public class RecordService {
 
     public List<Record> findAll() {
         return this.recordRepository.findAll();
+    }
+
+    public List<Responsibil> responsibilfindAll() {
+        return this.responsibilRepository.findAll();
     }
 
     //재해재난붕괴 서비스
