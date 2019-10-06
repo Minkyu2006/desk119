@@ -12,20 +12,7 @@
 
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
-	<script src="/assets/js/chart-example.js"></script>
-	<script>
-		$(document).ready(function() {
-			$('.stat__map-tab').on('click', 'a.stat__tab-link', function(e) {
-				var $parent = $(this).parent();
-				var _index = $parent.index();
-				var $content = $('.stat__tab-content li').eq(_index);
-				
-				$parent.add($content).addClass('active').siblings().removeClass('active');
-				
-				e.preventDefault();
-			}).find('.stat__tab-link').eq(1).trigger('click');
-		})
-	</script>
+		<script src="/assets/js/statisticsGraph.js"></script>
 </th:block>
 <div layout:fragment="content" class="content">
 	<section class="section">
@@ -33,7 +20,7 @@
 			<div class="stat__dual">
 				<div class="stat__dual-item">
 					<h3 class="stat__title">출동요청기관</h3>
-					<div class="stat__circle" id="pie_chart"></div>
+					<div class="stat__circle" id="pie_chart1"></div>
 				</div>
 				<div class="stat__dual-item">
 					<h3 class="stat__title">출동지역</h3>
@@ -41,10 +28,10 @@
 						<div class="stat__map-tab">
 							<ul>
 								<li>
-									<a href="#" class="stat__tab-link">2018</a>
+									<a href="#" class="stat__tab-link" th:text="${productionYear}"></a>
 								</li>
 								<li>
-									<a href="#" class="stat__tab-link">2019</a>
+									<a href="#" class="stat__tab-link" th:text="${nowYear}"></a>
 								</li>
 							</ul>
 						</div>
@@ -52,42 +39,44 @@
 							<img src="/assets/images/map.png" alt="" />
 							<ul class="stat__tab-content">
 								<li>
-									<span class="stat__map-point seoul" title="서울특별시">1</span>
-									<span class="stat__map-point busan" title="부산광역시">2</span>
-									<span class="stat__map-point daegu" title="대구광역시">3</span>
-									<span class="stat__map-point incheon" title="인천광역시">4</span>
-									<span class="stat__map-point gwangju" title="광주광역시">5</span>
-									<span class="stat__map-point daejeon" title="대전광역시">6</span>
-									<span class="stat__map-point ulsan" title="울산광역시">7</span>
-									<span class="stat__map-point sejong" title="세종특별자치시">8</span>
-									<span class="stat__map-point gyenggi" title="경기도">9</span>
-									<span class="stat__map-point gangwon" title="강원도">10</span>
-									<span class="stat__map-point chungnam" title="충청남도">11</span>
-									<span class="stat__map-point chungbuk" title="충청북도">12</span>
-									<span class="stat__map-point jeonnam" title="전라남도">13</span>
-									<span class="stat__map-point jeonbuk" title="전라북도">14</span>
-									<span class="stat__map-point gyeongnam" title="경상남도">15</span>
-									<span class="stat__map-point gyeongbuk" title="경상북도">16</span>
-									<span class="stat__map-point jeju" title="제주특별자치도">17</span>
+									<!--/*@thymesVar id="productionYearCitys" type=""*/-->
+									<span class="stat__map-point seoul" title="서울특별시" th:text="${productionYearCitys} ? ${productionYearCitys[0]} : ''"></span>
+									<span class="stat__map-point busan" title="부산광역시" th:text="${productionYearCitys} ? ${productionYearCitys[3]} : ''"></span>
+									<span class="stat__map-point daegu" title="대구광역시" th:text="${productionYearCitys} ? ${productionYearCitys[2]} : ''"></span>
+									<span class="stat__map-point incheon" title="인천광역시" th:text="${productionYearCitys} ? ${productionYearCitys[1]} : ''"></span>
+									<span class="stat__map-point gwangju" title="광주광역시" th:text="${productionYearCitys} ? ${productionYearCitys[6]} : ''"></span>
+									<span class="stat__map-point daejeon" title="대전광역시" th:text="${productionYearCitys} ? ${productionYearCitys[4]} : ''"></span>
+									<span class="stat__map-point ulsan" title="울산광역시" th:text="${productionYearCitys} ? ${productionYearCitys[5]} : ''"></span>
+									<span class="stat__map-point sejong" title="세종특별자치시" th:text="${productionYearCitys} ? ${productionYearCitys[16]} : ''"></span>
+									<span class="stat__map-point gyenggi" title="경기도" th:text="${productionYearCitys} ? ${productionYearCitys[7]} : ''"></span>
+									<span class="stat__map-point gangwon" title="강원도" th:text="${productionYearCitys} ? ${productionYearCitys[8]} : ''"></span>
+									<span class="stat__map-point chungnam" title="충청남도" th:text="${productionYearCitys} ? ${productionYearCitys[10]} : ''"></span>
+									<span class="stat__map-point chungbuk" title="충청북도" th:text="${productionYearCitys} ? ${productionYearCitys[9]} : ''"></span>
+									<span class="stat__map-point jeonnam" title="전라남도" th:text="${productionYearCitys} ? ${productionYearCitys[12]} : ''"></span>
+									<span class="stat__map-point jeonbuk" title="전라북도" th:text="${productionYearCitys} ? ${productionYearCitys[11]} : ''"></span>
+									<span class="stat__map-point gyeongnam" title="경상남도" th:text="${productionYearCitys} ? ${productionYearCitys[14]} : ''"></span>
+									<span class="stat__map-point gyeongbuk" title="경상북도" th:text="${productionYearCitys} ? ${productionYearCitys[13]} : ''"></span>
+									<span class="stat__map-point jeju" title="제주특별자치도" th:text="${productionYearCitys} ? ${productionYearCitys[15]} : ''"></span>
 								</li>
 								<li>
-									<span class="stat__map-point seoul" title="서울특별시">17</span>
-									<span class="stat__map-point busan" title="부산광역시">16</span>
-									<span class="stat__map-point daegu" title="대구광역시">15</span>
-									<span class="stat__map-point incheon" title="인천광역시">14</span>
-									<span class="stat__map-point gwangju" title="광주광역시">13</span>
-									<span class="stat__map-point daejeon" title="대전광역시">12</span>
-									<span class="stat__map-point ulsan" title="울산광역시">11</span>
-									<span class="stat__map-point sejong" title="세종특별자치시">10</span>
-									<span class="stat__map-point gyenggi" title="경기도">9</span>
-									<span class="stat__map-point gangwon" title="강원도">8</span>
-									<span class="stat__map-point chungnam" title="충청남도">7</span>
-									<span class="stat__map-point chungbuk" title="충청북도">6</span>
-									<span class="stat__map-point jeonnam" title="전라남도">5</span>
-									<span class="stat__map-point jeonbuk" title="전라북도">4</span>
-									<span class="stat__map-point gyeongnam" title="경상남도">3</span>
-									<span class="stat__map-point gyeongbuk" title="경상북도">2</span>
-									<span class="stat__map-point jeju" title="제주특별자치도">1</span>
+									<!--/*@thymesVar id="nowYearCitys" type=""*/-->
+									<span class="stat__map-point seoul" title="서울특별시" th:text="${nowYearCitys} ? ${nowYearCitys[0]} : ''"></span>
+									<span class="stat__map-point busan" title="부산광역시" th:text="${nowYearCitys} ? ${nowYearCitys[3]} : ''"></span>
+									<span class="stat__map-point daegu" title="대구광역시" th:text="${nowYearCitys} ? ${nowYearCitys[2]} : ''"></span>
+									<span class="stat__map-point incheon" title="인천광역시" th:text="${nowYearCitys} ? ${nowYearCitys[1]} : ''"></span>
+									<span class="stat__map-point gwangju" title="광주광역시" th:text="${nowYearCitys} ? ${nowYearCitys[6]} : ''"></span>
+									<span class="stat__map-point daejeon" title="대전광역시" th:text="${nowYearCitys} ? ${nowYearCitys[4]} : ''"></span>
+									<span class="stat__map-point ulsan" title="울산광역시" th:text="${nowYearCitys} ? ${nowYearCitys[5]} : ''"></span>
+									<span class="stat__map-point sejong" title="세종특별자치시" th:text="${nowYearCitys} ? ${nowYearCitys[16]} : ''"></span>
+									<span class="stat__map-point gyenggi" title="경기도" th:text="${nowYearCitys} ? ${nowYearCitys[7]} : ''"></span>
+									<span class="stat__map-point gangwon" title="강원도" th:text="${nowYearCitys} ? ${nowYearCitys[8]} : ''"></span>
+									<span class="stat__map-point chungnam" title="충청남도" th:text="${nowYearCitys} ? ${nowYearCitys[10]} : ''"></span>
+									<span class="stat__map-point chungbuk" title="충청북도" th:text="${nowYearCitys} ? ${nowYearCitys[9]} : ''"></span>
+									<span class="stat__map-point jeonnam" title="전라남도" th:text="${nowYearCitys} ? ${nowYearCitys[12]} : ''"></span>
+									<span class="stat__map-point jeonbuk" title="전라북도" th:text="${nowYearCitys} ? ${nowYearCitys[11]} : ''"></span>
+									<span class="stat__map-point gyeongnam" title="경상남도" th:text="${nowYearCitys} ? ${nowYearCitys[14]} : ''"></span>
+									<span class="stat__map-point gyeongbuk" title="경상북도" th:text="${nowYearCitys} ? ${nowYearCitys[13]} : ''"></span>
+									<span class="stat__map-point jeju" title="제주특별자치도" th:text="${nowYearCitys} ? ${nowYearCitys[15]} : ''"></span>
 								</li>
 							</ul>
 						</div>
@@ -101,98 +90,98 @@
 								<col style="width: 50px;" />
 							</colgroup>
 							<thead>
-								<tr>
-									<th></th>
-									<th>2018</th>
-									<th>2019</th>
-								</tr>
+							<tr>
+								<th></th>
+								<th th:text="${productionYear}"></th>
+								<th th:text="${nowYear}"></th>
+							</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<th>서울특별시</th>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<th>부산광역시</th>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<th>대구광역시</th>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<th>인천광역시</th>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<th>광주광역시</th>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<th>대전광역시</th>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<th>울산광역시</th>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<th>세종특별자치시</th>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<th>경기도</th>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<th>강원도</th>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<th>충청남도</th>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<th>충청북도</th>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<th>전라남도</th>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<th>전라북도</th>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<th>경상남도</th>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<th>경상북도</th>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<th>제주특별자치도</th>
-									<td></td>
-									<td></td>
-								</tr>
+							<tr>
+								<th>서울특별시</th>
+								<td th:text="${productionYearCitys[0]}"></td>
+								<td th:text="${nowYearCitys[0]}"></td>
+							</tr>
+							<tr>
+								<th>부산광역시</th>
+								<td th:text="${productionYearCitys[3]}"></td>
+								<td th:text="${nowYearCitys[3]}"></td>
+							</tr>
+							<tr>
+								<th>대구광역시</th>
+								<td th:text="${productionYearCitys[2]}"></td>
+								<td th:text="${nowYearCitys[2]}"></td>
+							</tr>
+							<tr>
+								<th>인천광역시</th>
+								<td th:text="${productionYearCitys[1]}"></td>
+								<td th:text="${nowYearCitys[1]}"></td>
+							</tr>
+							<tr>
+								<th>광주광역시</th>
+								<td th:text="${productionYearCitys[6]}"></td>
+								<td th:text="${nowYearCitys[6]}"></td>
+							</tr>
+							<tr>
+								<th>대전광역시</th>
+								<td th:text="${productionYearCitys[4]}"></td>
+								<td th:text="${nowYearCitys[4]}"></td>
+							</tr>
+							<tr>
+								<th>울산광역시</th>
+								<td th:text="${productionYearCitys[5]}"></td>
+								<td th:text="${nowYearCitys[5]}"></td>
+							</tr>
+							<tr>
+								<th>세종특별자치시</th>
+								<td th:text="${productionYearCitys[16]}"></td>
+								<td th:text="${nowYearCitys[16]}"></td>
+							</tr>
+							<tr>
+								<th>경기도</th>
+								<td th:text="${productionYearCitys[7]}"></td>
+								<td th:text="${nowYearCitys[7]}"></td>
+							</tr>
+							<tr>
+								<th>강원도</th>
+								<td th:text="${productionYearCitys[8]}"></td>
+								<td th:text="${nowYearCitys[8]}"></td>
+							</tr>
+							<tr>
+								<th>충청남도</th>
+								<td th:text="${productionYearCitys[10]}"></td>
+								<td th:text="${nowYearCitys[10]}"></td>
+							</tr>
+							<tr>
+								<th>충청북도</th>
+								<td th:text="${productionYearCitys[9]}"></td>
+								<td th:text="${nowYearCitys[9]}"></td>
+							</tr>
+							<tr>
+								<th>전라남도</th>
+								<td th:text="${productionYearCitys[12]}"></td>
+								<td th:text="${nowYearCitys[12]}"></td>
+							</tr>
+							<tr>
+								<th>전라북도</th>
+								<td th:text="${productionYearCitys[11]}"></td>
+								<td th:text="${nowYearCitys[11]}"></td>
+							</tr>
+							<tr>
+								<th>경상남도</th>
+								<td th:text="${productionYearCitys[14]}"></td>
+								<td th:text="${nowYearCitys[14]}"></td>
+							</tr>
+							<tr>
+								<th>경상북도</th>
+								<td th:text="${productionYearCitys[13]}"></td>
+								<td th:text="${nowYearCitys[13]}"></td>
+							</tr>
+							<tr>
+								<th>제주특별자치도</th>
+								<td th:text="${productionYearCitys[15]}"></td>
+								<td th:text="${nowYearCitys[15]}"></td>
+							</tr>
 							</tbody>
 						</table>
 					</div>
@@ -200,7 +189,7 @@
 			</div>
 			<div class="stat__item">
 				<h3 class="stat__title">재해·재난 유형</h3>
-				<div class="stat__chart" id="bar_chart"></div>
+				<div class="stat__chart" id="bar_chart1"></div>
 			</div>
 			<div class="stat__item">
 				<h3 class="stat__title">조사시설물</h3>
@@ -216,6 +205,6 @@
 			</div>
 		</div>
 	</section>
-	
+
 </div>
 </html>

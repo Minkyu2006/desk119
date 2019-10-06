@@ -37,13 +37,7 @@ public class StatisticsController {
 
     //통계화면
     @RequestMapping("/statisticsview")
-    public String statistics(){
-        return "/statistics/statisticsview";
-    }
-
-    //통계화면 테스트
-    @RequestMapping("/statisticsTest")
-    public String statisticsTest(Model model){
+    public String statistics(Model model){
         List<Record> records = recordService.findAll();
         List<Integer> modefyDate = new ArrayList<>();
         List<String> nowYears = new ArrayList<>();
@@ -66,7 +60,7 @@ public class StatisticsController {
         model.addAttribute("nowYearCitys",nowYearCitys);
         model.addAttribute("productionYearCitys",productionYearCitys);
 
-        return "/statistics/statisticsTest";
+        return "/statistics/statisticsview";
     }
 
 }
