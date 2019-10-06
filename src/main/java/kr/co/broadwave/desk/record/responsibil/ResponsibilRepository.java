@@ -17,9 +17,6 @@ public interface ResponsibilRepository extends JpaRepository<Responsibil,Long> {
     @Query("select a from Responsibil a join fetch a.team where a.record = :record")
     List<Responsibil> findByRecord(Record record);
 
-//    @Query("select a from Responsibil a join fetch a.team")
-//    List<Responsibil> findByAll();
-
     Optional<Responsibil> findById(Long id);
 
 }

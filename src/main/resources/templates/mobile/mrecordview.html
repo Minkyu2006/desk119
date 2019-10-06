@@ -2,8 +2,8 @@
 <html lang="ko"
 	  xmlns:th="http://www.thymeleaf.org"
 	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layout/default">
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="layout/default">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -18,6 +18,11 @@
 				$('#updateId').show()
 			}else{
 				$('#updateId').hide()
+			}
+			if($('#gita').text()!='기타 내용: '){
+				$('#gita').show()
+			}else{
+				$('#gita').hide()
 			}
 		});
 
@@ -65,8 +70,8 @@
 					<li>
 						<h3 class="record__title">조사일자</h3>
 						<p class="record__result">
-						<span th:text="${record} ? ${record.arIntoStart} : ''"></span> ~
-						<span th:text="${record} ? ${record.arIntoEnd} : ''"></span>
+							<span th:text="${record} ? ${record.arIntoStart} : ''"></span> ~
+							<span th:text="${record} ? ${record.arIntoEnd} : ''"></span>
 						</p>
 					</li>
 					<li>
@@ -80,7 +85,7 @@
 					<li>
 						<h3 class="record__title">조사시설물</h3>
 						<p class="record__result" th:text="${record} ? ${record.arFacItem} : ''"></p>
-						<p class="record__result" th:text="${record} ? ${record.argita} : ''"></p>
+						<p class="record__result" id="gita" th:text="${record}? '기타 내용:'+${record.argita} : ''"></p>
 					</li>
 					<li>
 						<h3 class="record__title">조사목적</h3>
@@ -105,22 +110,22 @@
 					<li>
 						<h3 class="record__title">현장개요</h3>
 						<div class="record__result">
-							<pre th:text="${record} ? ${record.arOutline} : ''">
-							</pre>
+                     <pre th:text="${record} ? ${record.arOutline} : ''">
+                     </pre>
 						</div>
 					</li>
 					<li>
 						<h3 class="record__title">조사·분석 결과</h3>
 						<div class="record__result">
-							<pre th:text="${record} ? ${record.arResult} : ''">
-							</pre>
+                     <pre th:text="${record} ? ${record.arResult} : ''">
+                     </pre>
 						</div>
 					</li>
 					<li>
 						<h3 class="record__title">검토의견(대응방안)</h3>
 						<div class="record__result">
-							<pre th:text="${record} ? ${record.arOpinion} : ''">
-							</pre>
+                     <pre th:text="${record} ? ${record.arOpinion} : ''">
+                     </pre>
 						</div>
 					</li>
 					<li>

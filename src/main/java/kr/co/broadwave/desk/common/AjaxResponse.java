@@ -1,10 +1,7 @@
 package kr.co.broadwave.desk.common;
 
-import kr.co.broadwave.desk.record.responsibil.Responsibil;
-
 import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -49,5 +46,4 @@ public class AjaxResponse {
 
         return this.res;
     }
-
 }

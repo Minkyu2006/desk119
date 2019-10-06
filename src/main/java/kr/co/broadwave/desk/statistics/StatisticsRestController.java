@@ -54,6 +54,7 @@ public class StatisticsRestController {
         this.responsibilRepository = responsibilRepository;
     }
 
+    @Transactional
     @PostMapping("dataGraph")
     public ResponseEntity dataGraph(){
 
@@ -138,8 +139,6 @@ public class StatisticsRestController {
                 months.add(strmonth);
             }
         }
-//        System.out.println("년 : "+years);
-//        System.out.println("월 : "+months);
 
         List<String> nowDisastersCnt = new ArrayList<>();
         List<String> productionDisastersCnt = new ArrayList<>();
@@ -147,6 +146,7 @@ public class StatisticsRestController {
         List<String> nowFacCnt = new ArrayList<>();
         List<String> productionFacCnt = new ArrayList<>();
 
+        //재해·재난 유형
         int nowcnt01 = 0; int nowcnt02 = 0; int nowcnt03 = 0;
         int nowcnt04 = 0; int nowcnt05 = 0; int nowcnt06 = 0;
         int nowcnt07 = 0;
@@ -227,6 +227,7 @@ public class StatisticsRestController {
         disastergraphDataColumns.add(nowDisastersCnt);
         disastergraphDataColumns.add(productionDisastersCnt);
 
+        //조사시설물 현황
         nowcnt01 = 0; nowcnt02 = 0; nowcnt03 = 0;
         nowcnt04 = 0; nowcnt05 = 0; nowcnt06 = 0;
         nowcnt07 = 0; int nowcnt08 = 0; int nowcnt09 = 0;
@@ -333,6 +334,7 @@ public class StatisticsRestController {
         facgraphDataColumns.add(nowFacCnt);
         facgraphDataColumns.add(productionFacCnt);
 
+        //월별 출동 현황
         nowcnt01 = 0; nowcnt02 = 0; nowcnt03 = 0;
         nowcnt04 = 0; nowcnt05 = 0; nowcnt06 = 0;
         nowcnt07 = 0; nowcnt08 = 0; nowcnt09 = 0;
@@ -400,8 +402,6 @@ public class StatisticsRestController {
             }
         }
 
-
-
         List<String> nowCnt = new ArrayList<>();
         List<String> productionCnt = new ArrayList<>();
 
@@ -444,61 +444,43 @@ public class StatisticsRestController {
         System.out.println("조사시설물 데이터 : "+facgraphDataColumns);
         System.out.println("월별 출동 현황 데이터 : "+monthgraphDataColumns);
 
+        // 부서별 출동 현황
+        List<Responsibil> responsibils = responsibilRepository.findAll();
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-//        List<Responsibil> responsibils = responsibilRepository.findByAll();
-//
-//        System.out.println("조사담당자 : "+responsibils);
-
-        List<String> teamgraphDataColumns = new ArrayList<>();
         List<String> teamsData = new ArrayList<>();
+        List<String> teamgraphDataColumns = new ArrayList<>();
 
         List<String> teamNames = new ArrayList<>();
         List<String> teamName = new ArrayList<>();
 
+        responsibils.forEach(x -> teamNames.add(x.getTeam().getTeamname()));
+        System.out.println("팀이름들 : "+teamNames);
 
-//        responsibils.forEach(x -> teamNames.add(x.getTeam().getTeamname()));
-//        System.out.println("팀이름들 : "+teamNames);
-//
-//        for(int i=0; i<teamNames.size(); i++){
-//                if(!teamName.contains(teamNames.get(i))){
-//                    teamName.add(teamNames.get(i));
-//                }
-//        }
-//        System.out.println("팀이름들2 : "+teamName);
+        //배열 맨앞 빈칸채우기
+        teamgraphDataColumns.add(" ");
 
-        //System.out.println("mastersSize 데이터 : "+mastersSize);
+        //등록된 중복부서 중복되지않게 정렬
+        for(int i=0; i<teamNames.size(); i++){
+            if(!teamsData.contains(teamNames.get(i))){
+                teamsData.add(teamNames.get(i));
+            }
+        }
 
-//        int count = 0;
-//        for(int j=0; j<mastersSize.size(); j++) {
-//            String master = mastersSize.get(j);
-//            masterCodeNames.clear();
-//            for (int i = 0; i < mastersSize.size(); i++) {
-//                if (!masterCodeNames.contains(master)) {
-//                    masterCodeNames.add(master);
-//                }
-//            }
-//            for (int i = 0; i < masters.size(); i++) {
-//                if (masterCodeNames.contains(masters.get(i))) {
-//                    count++;
-//                }
-//            }
-//            masterCodeNames.add(Integer.toString(count));
-//
-////            System.out.println("masterCodeNames 데이터 : "+masterCodeNames);
-////            System.out.println("건수 : "+count);
-//
-//            int cnt = 0;
-//            int cnt2 = 1;
-//            circleDataColumns.add(Arrays.asList(masterCodeNames.get(cnt),masterCodeNames.get(cnt2)));
-//            count = 0;
-//        }
+        for(int j=0; j<teamsData.size(); j++) {
+            String team = teamsData.get(j);
+            teamName.clear();
+            for (int i = 0; i < teamsData.size(); i++) {
+                if (!teamName.contains(team)) {
+                    teamName.add(team);
+                }
+            }
+            teamgraphDataColumns.add(Long.toString(teamNames.stream().filter(x -> x.contains(team)).count()));
+        }
+
+        System.out.println("등록된 팀당 건수 team_data_columns : "+teamgraphDataColumns);
+        System.out.println("등록된 부서팀 teamsData : "+teamsData);
 
         data.clear();
-
         // 원형 그래프데이터
         data.put("circle_data_columns",circleDataColumns);
         // 재해재난 그래프데이터

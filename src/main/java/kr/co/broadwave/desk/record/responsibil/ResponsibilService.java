@@ -27,5 +27,9 @@ public class ResponsibilService {
         this.responsibilRepository = responsibilRepository;
     }
 
+    @Query("select a from Responsibil a join fetch a.team")
+    public List<Responsibil> findAll() {
+        return responsibilRepository.findAll();
+    }
 
 }
