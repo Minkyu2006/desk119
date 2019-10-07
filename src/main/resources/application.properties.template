@@ -11,6 +11,8 @@ logging.file=./logs/desk.log
 
 #FileUpload
 base.upload.directory=C:/project/desk/uploadfiles/
+base.securityfiles.directory=C:/develop/desk/securityfiles/
+
 spring.servlet.multipart.enabled=true
 spring.servlet.multipart.max-file-size=50MB
 spring.servlet.multipart.max-request-size=50MB
