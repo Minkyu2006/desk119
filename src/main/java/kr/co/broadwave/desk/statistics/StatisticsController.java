@@ -60,7 +60,7 @@ public class StatisticsController {
         model.addAttribute("nowYearCitys",nowYearCitys);
         model.addAttribute("productionYearCitys",productionYearCitys);
 
-        return "/statistics/statisticsview";
+        return "statistics/statisticsview";
     }
 
 }
