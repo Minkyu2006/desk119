@@ -456,7 +456,7 @@ public class StatisticsRestController {
         List<String> teamName = new ArrayList<>();
 
         responsibils.forEach(x -> teamNames.add(x.getTeam().getTeamname()));
-        System.out.println("팀이름들 : "+teamNames);
+//        System.out.println("팀이름들 : "+teamNames);
 
         //배열 맨앞 빈칸채우기
         teamgraphDataColumns.add(" ");
@@ -479,8 +479,8 @@ public class StatisticsRestController {
             teamgraphDataColumns.add(Long.toString(teamNames.stream().filter(x -> x.contains(team)).count()));
         }
 
-        System.out.println("등록된 팀당 건수 team_data_columns : "+teamgraphDataColumns);
-        System.out.println("등록된 부서팀 teamsData : "+teamsData);
+//        System.out.println("등록된 팀당 건수 team_data_columns : "+teamgraphDataColumns);
+//        System.out.println("등록된 부서팀 teamsData : "+teamsData);
 
         data.clear();
         // 원형 그래프데이터

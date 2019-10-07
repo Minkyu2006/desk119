@@ -14,17 +14,17 @@ function ajaxErrorMsg(request) {
 //리스트페이지 -> 모바일인지 체크 // 2019.9.24 김민규추가
 function mobileCheck() {
         if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
-            return true;
+            return location.href = "/record/mreg";
         }else{
-            return false;
+            return location.href = "/record/reg";
         }
 }
 //인덱스페이지 -> 모바일인지 체크
 function mobileCheckIndex() {
         if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
-            return true;
+            return location.href = "/record/mreg";
         }else{
-            return false;
+            return location.href = "/record/reg";
         }
 }
 

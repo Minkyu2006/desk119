@@ -169,7 +169,7 @@ public class Maincontroller {
     private String securityfile;
 
     // 파일다운로드 컨트롤러
-    @RequestMapping("/guidelinedownload")
+    @RequestMapping("/guidelinedown")
     @ResponseBody
     public byte[] securityfiledown(HttpServletResponse response,Model model) throws IOException {
         String guidelineFilename = "건설119_주요_활동_가이드라인.pdf";
@@ -177,13 +177,10 @@ public class Maincontroller {
         System.out.println("파일경로securityfileUrl : "+securityfileUrl);
 
         String filePath = securityfileUrl;
-        String filename = URLEncoder.encode(securityfileUrl,"UTF-8").replaceAll("\\+", "%20");
+//        String filename = URLEncoder.encode(securityfileUrl,"UTF-8").replaceAll("\\+", "%20");
         File file = new File(filePath);
         byte[] bytes = FileCopyUtils.copyToByteArray(file);
 
-        response.setHeader("Content-Disposition",
-                "attachment;filename=\"" + filename + "\"");
-        response.setContentLength(bytes.length);
         return bytes;
     }
 
