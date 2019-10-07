@@ -39,7 +39,6 @@
 							<img src="/assets/images/map.png" alt="" />
 							<ul class="stat__tab-content">
 								<li>
-									<!--/*@thymesVar id="productionYearCitys" type=""*/-->
 									<span class="stat__map-point seoul" title="서울특별시" th:text="${productionYearCitys} ? ${productionYearCitys[0]} : ''"></span>
 									<span class="stat__map-point busan" title="부산광역시" th:text="${productionYearCitys} ? ${productionYearCitys[3]} : ''"></span>
 									<span class="stat__map-point daegu" title="대구광역시" th:text="${productionYearCitys} ? ${productionYearCitys[2]} : ''"></span>
@@ -59,7 +58,6 @@
 									<span class="stat__map-point jeju" title="제주특별자치도" th:text="${productionYearCitys} ? ${productionYearCitys[15]} : ''"></span>
 								</li>
 								<li>
-									<!--/*@thymesVar id="nowYearCitys" type=""*/-->
 									<span class="stat__map-point seoul" title="서울특별시" th:text="${nowYearCitys} ? ${nowYearCitys[0]} : ''"></span>
 									<span class="stat__map-point busan" title="부산광역시" th:text="${nowYearCitys} ? ${nowYearCitys[3]} : ''"></span>
 									<span class="stat__map-point daegu" title="대구광역시" th:text="${nowYearCitys} ? ${nowYearCitys[2]} : ''"></span>

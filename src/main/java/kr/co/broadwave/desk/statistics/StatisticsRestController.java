@@ -36,21 +36,12 @@ public class StatisticsRestController {
     HashMap<String, Object> data = new HashMap<>();
 
     private final RecordService recordService;
-    private final StatisticsService statisticsService;
     private final ResponsibilRepository responsibilRepository;
-    private final MasterCodeService masterCodeService;
-    private final ResponsibilService responsibilService;
 
     @Autowired
     public StatisticsRestController(RecordService recordService,
-                                    MasterCodeService masterCodeService,
-                                    ResponsibilRepository responsibilRepository,
-                                    ResponsibilService responsibilService,
-                                    StatisticsService statisticsService) {
+                                    ResponsibilRepository responsibilRepository) {
         this.recordService = recordService;
-        this.masterCodeService = masterCodeService;
-        this.statisticsService = statisticsService;
-        this.responsibilService = responsibilService;
         this.responsibilRepository = responsibilRepository;
     }
 
@@ -65,12 +56,16 @@ public class StatisticsRestController {
         List<String> masters = new ArrayList<>();
         List<String> mastersSize = new ArrayList<>();
         List<String> masterCodeNames = new ArrayList<>();
+        List<Integer> arState  = new ArrayList<>();
 
+        records.forEach(x -> arState.add(x.getArRecordState()));
         records.forEach(x -> masters.add(x.getArRelatedId().getName()));
 
         for(int i=0; i<masters.size(); i++){
-            if(!mastersSize.contains(masters.get(i))){
-                mastersSize.add(masters.get(i));
+            if(arState.get(i) == 1) {
+                if (!mastersSize.contains(masters.get(i))) {
+                    mastersSize.add(masters.get(i));
+                }
             }
         }
 
@@ -110,15 +105,22 @@ public class StatisticsRestController {
         int productionYear = currentDate.getYear()-1;
         String now = Integer.toString(nowYear);
         String production = Integer.toString(productionYear);
-        System.out.println("현재년도 : "+now);
-        System.out.println("재작년도 : "+production);
+//        System.out.println("현재년도 : "+now);
+//        System.out.println("재작년도 : "+production);
+//        System.out.println("스테이트값 : "+arState);
 
         List<String> disasters = new ArrayList<>();
         List<String> facs = new ArrayList<>();
         List<String> monthDate = new ArrayList<>();
-        records.forEach(x -> disasters.add(x.getArDisasterType()));
-        records.forEach(x -> facs.add(x.getArFac()));
-        records.forEach(x -> monthDate.add(x.getArIntoEnd()));
+
+        for (int i=0; i<records.size(); i++){
+            if(arState.get(i) == 1) {
+                disasters.add(records.get(i).getArDisasterType());
+                facs.add(records.get(i).getArFac());
+                monthDate.add(records.get(i).getArIntoEnd());
+            }
+        }
+
 //        System.out.println("재해분난 : "+disasters);
 //        System.out.println("조사시설물 : "+facs);
 //        System.out.println("월별건수 : "+monthDate);
@@ -139,6 +141,8 @@ public class StatisticsRestController {
                 months.add(strmonth);
             }
         }
+//        System.out.println("years : "+years);
+//        System.out.println("months : "+months);
 
         List<String> nowDisastersCnt = new ArrayList<>();
         List<String> productionDisastersCnt = new ArrayList<>();
@@ -155,7 +159,7 @@ public class StatisticsRestController {
         int productioncnt04 = 0; int productioncnt05 = 0; int productioncnt06 = 0;
         int productioncnt07 = 0;
 
-        for(int i=0; i<records.size(); i++) {
+        for(int i=0; i<disasters.size(); i++) {
             if (years.get(i).equals(now)) {
                 if(disasters.get(i).substring(0,1).equals("1")){
                     nowcnt01++;
@@ -238,7 +242,7 @@ public class StatisticsRestController {
         productioncnt07 = 0; int productioncnt08 = 0; int productioncnt09 = 0;
         int productioncnt10 = 0;
 
-        for(int i=0; i<records.size(); i++) {
+        for(int i=0; i<facs.size(); i++) {
             if (years.get(i).equals(now)) {
                 if(facs.get(i).substring(0,1).equals("1")){
                     nowcnt01++;
@@ -345,9 +349,8 @@ public class StatisticsRestController {
         productioncnt07 = 0; productioncnt08 = 0; productioncnt09 = 0;
         productioncnt10 = 0; int productioncnt11 = 0; int productioncnt12 = 0;
 
-        for(int i=0; i<records.size(); i++) {
+        for(int i=0; i<months.size(); i++) {
             if (years.get(i).equals(now)) {
-
                 if (months.get(i).equals("01")) {
                     nowcnt01++;
                 } else if (months.get(i).equals("02")) {
@@ -439,10 +442,10 @@ public class StatisticsRestController {
         monthgraphDataColumns.add(nowCnt);
         monthgraphDataColumns.add(productionCnt);
 
-        System.out.println("출동요청기관 데이터 : "+circleDataColumns);
-        System.out.println("재해재난유형 데이터 : "+disastergraphDataColumns);
-        System.out.println("조사시설물 데이터 : "+facgraphDataColumns);
-        System.out.println("월별 출동 현황 데이터 : "+monthgraphDataColumns);
+//        System.out.println("출동요청기관 데이터 : "+circleDataColumns);
+//        System.out.println("재해재난유형 데이터 : "+disastergraphDataColumns);
+//        System.out.println("조사시설물 데이터 : "+facgraphDataColumns);
+//        System.out.println("월별 출동 현황 데이터 : "+monthgraphDataColumns);
 
         // 부서별 출동 현황
         List<Responsibil> responsibils = responsibilRepository.findAll();
