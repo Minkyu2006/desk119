@@ -3,7 +3,6 @@ $(function(){
 	var header = $("meta[name='_csrf_header']").attr("content");
 	$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
 
-	console.log("그래프 실행")
 	$.ajax({
 		url:'/api/statistics/dataGraph',
 		type : 'post',
@@ -23,7 +22,6 @@ $(function(){
 		}
 	})
 
-	console.log("지도그래프 실행")
 	$('.stat__map-tab').on('click', 'a.stat__tab-link', function(e) {
 		var $parent = $(this).parent();
 		var _index = $parent.index();
