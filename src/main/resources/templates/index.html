@@ -14,9 +14,32 @@
 	<script src="/assets/js/bxslider/jquery.bxslider.min.js"></script>
 	<script>
 		$(document).ready(function() {
-			$('.banner__slide').bxSlider({
-				controls: false,
-				pagerCustom: '.banner__slide-pager'
+			var slider = $('.banner__slide').bxSlider({
+							controls: false,
+							pagerCustom: '.banner__slide-pager'
+						});
+			
+			$(window).load(function() {
+				var width_size = window.outerWidth;
+				var height_size = window.outerHeight;
+				
+				if(width_size >768 && height_size <= 990) {
+					slider.reloadSlider();
+				} else if(width_size > 768 && height_size > 990) {
+					slider.destroySlider();
+				}
+			});
+
+			
+			$(window).resize(function () {
+				var width_size = window.outerWidth;
+				var height_size = window.outerHeight;
+				
+				if(width_size >768 && height_size <= 990) {
+					slider.reloadSlider();
+				} else if(width_size > 768 && height_size > 990) {
+					slider.destroySlider();
+				}
 			});
 		})
 	</script>
@@ -42,9 +65,9 @@
 				<li class="banner__item banner__item--table">
 					<div class="banner__stat">
 						<h3 class="banner__title">KICT 건설119 활동 통계</h3>
+						<span class="main-table__unit">단위: 건</span>
 						<div class="banner__slide">
 							<div class="banner__slide-item">
-								<span class="main-table__unit">단위: 건</span>
 								<table class="main-table">
 									<colgroup>
 										<col />
@@ -81,7 +104,6 @@
 								</table>
 							</div>
 							<div class="banner__slide-item">
-								<span class="main-table__unit">단위: 건</span>
 								<table class="main-table">
 									<colgroup>
 										<col />
