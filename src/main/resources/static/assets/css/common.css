@@ -337,10 +337,13 @@ body {
 .nav__link:hover {
 	background-color: #4F647D;
 }
+.nav__link.toggle.show {
+	background-color: #4f647d;
+}
 .nav__list-depth {
 	overflow: hidden;
 	display: none;
-	background-color: #555;
+	background-color: #96a8bc;
 }
 .nav__list-depth.show {
 	/* display: block; */

@@ -859,6 +859,11 @@
     cursor: pointer;
     transition: all .2s;
 }
+a.c-button {
+	min-height: 28px;
+	line-height: 28px;
+	padding: 0 10px;
+}
 .c-button:hover {
     /* background-color: #888 */
     color: #555;

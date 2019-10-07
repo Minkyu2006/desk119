@@ -16,15 +16,46 @@
 		<nav class="nav" sec:authorize="isAuthenticated()">
 			<h2 class="nav__heading"><a href="/"><img src="/assets/images/logo--w.png" alt="KICT 건설 119" /></a></h2>
 			<ul class="nav__list">
-				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')" ><a href="/admin/teamreg" class="nav__link">부서등록</a></li>
+				<!-- <li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')" ><a href="/admin/teamreg" class="nav__link">부서등록</a></li>
 				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')" ><a href="/admin/accountreg" class="nav__link">사용자관리</a></li>
 				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')" ><a href="/admin/accountapproval" class="nav__link">사용자승인</a></li>
 				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')" ><a href="/admin/noticereg" class="nav__link">공지사항등록</a></li>
-				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')" ><a href="/admin/mastercodereg" class="nav__link">마스터코드등록</a></li>
+				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')" ><a href="/admin/mastercodereg" class="nav__link">마스터코드등록</a></li> -->
 
-				<li class="nav__item"><a href="javascript:void(0);" onclick="mobileCheckIndex();" class="nav__link">출동일지작성</a></li>
-				<li class="nav__item"><a href="/notice/noticelist" class="nav__link">공지사항조회</a></li>
-				<li class="nav__item"><a href="/record/list" class="nav__link">출동일지조회</a></li>
+				
+				
+				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')">
+					<a href="#" class="nav__link toggle">공지사항 관리</a>
+					<ul class="nav__list-depth">
+						<li><a href="/admin/noticereg" class="nav__link">공지사항등록</a></li>
+						<li><a href="/notice/noticelist" class="nav__link">공지사항조회</a></li>
+					</ul>
+				</li>
+				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')">
+					<a href="" class="nav__link toggle">출동일지관리</a>
+					<ul class="nav__list-depth">
+						<li><a href="javascript:void(0);" onclick="mobileCheckIndex();" class="nav__link">출동일지작성</a></li>
+						<li><a href="/record/list" class="nav__link">출동일지조회</a></li>
+					</ul>
+				</li>
+				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')">
+					<a href="" class="nav__link toggle">사용자관리</a>
+					<ul class="nav__list-depth">
+						<li><a href="/admin/accountapproval" class="nav__link">사용자승인</a></li>
+						<li><a href="/admin/accountreg" class="nav__link">사용자관리</a></li>
+					</ul>
+				</li>
+				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')">
+					<a href="#" class="nav__link toggle">플랫폼 관리</a>
+					<ul class="nav__list-depth">
+						<li><a href="/admin/teamreg" class="nav__link">부서등록</a></li>
+						<li><a href="/admin/mastercodereg" class="nav__link">마스터코드등록</a></li>
+					</ul>
+				</li>
+				
+				<li class="nav__item" sec:authorize = "hasRole('ROLE_USER')"><a href="javascript:void(0);" onclick="mobileCheckIndex();" class="nav__link">출동일지작성</a></li>
+				<li class="nav__item" sec:authorize = "hasRole('ROLE_USER')"><a href="/notice/noticelist" class="nav__link">공지사항조회</a></li>
+				<li class="nav__item" sec:authorize = "hasRole('ROLE_USER')"><a href="/record/list" class="nav__link">출동일지조회</a></li>
 				<li class="nav__item"><a href="/statistics/statisticsview" class="nav__link">통계조회</a></li>
 			</ul>
 		</nav>

@@ -131,11 +131,13 @@ $(document).ready(function(){
         var $this = $(this);
 
         if ($this.next().hasClass('show')) {
+        	$this.removeClass('show');
             $this.next().removeClass('show');
             $this.next().slideUp(350);
         } else {
             $this.parent().parent().find('li .nav__list-depth').removeClass('show');
             $this.parent().parent().find('li .nav__list-depth').slideUp(350);
+            $this.toggleClass('show');
             $this.next().toggleClass('show');
             $this.next().slideToggle(350);
         }
