@@ -8,7 +8,6 @@ import kr.co.broadwave.desk.record.Record;
 import kr.co.broadwave.desk.record.RecordService;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
 import kr.co.broadwave.desk.record.responsibil.ResponsibilRepository;
-import kr.co.broadwave.desk.record.responsibil.ResponsibilService;
 import kr.co.broadwave.desk.teams.Team;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

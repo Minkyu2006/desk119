@@ -1,12 +1,7 @@
 package kr.co.broadwave.desk.controller;
 
-import com.google.common.primitives.Ints;
-import kr.co.broadwave.desk.bscodes.LocationCityType;
-import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.record.Record;
 import kr.co.broadwave.desk.record.RecordService;
-import kr.co.broadwave.desk.record.responsibil.Responsibil;
-import kr.co.broadwave.desk.record.responsibil.ResponsibilService;
 import kr.co.broadwave.desk.statistics.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -41,6 +41,7 @@
 					slider.destroySlider();
 				}
 			});
+
 		})
 	</script>
 </th:block>
@@ -60,7 +61,8 @@
 				<li class="banner__item banner__item--write"><a href="javascript:void(0);" onclick="mobileCheckIndex();" class="banner__link">출동일지작성</a></li>
 				<li class="banner__item banner__item--write-list"><a href="/record/list" class="banner__link">출동일지조회</a></li>
 				<li class="banner__item banner__item--line"><a href="about/lineup" class="banner__link">건설 119 출동대원 라인업</a></li>
-				<li class="banner__item banner__item--guide"><a href="" class="banner__link">건설 119 주요 활동 가이드라인</a></li>
+				<li class="banner__item banner__item--guide"><a th:href="@{/guidelinedownload}" download class="banner__link">건설 119 주요 활동 가이드라인</a></li>
+<!--				<li class="banner__item banner__item&#45;&#45;guide"><a href="건설119_주요_활동_가이드라인.pdf" download class="banner__link">건설 119 주요 활동 가이드라인</a></li>-->
 				<li class="banner__item banner__item--notice"><a href="/notice/noticelist" class="banner__link">공지사항</a></li>
 				<li class="banner__item banner__item--table">
 					<div class="banner__stat">

@@ -2,6 +2,7 @@ package kr.co.broadwave.desk.record;
 
 import kr.co.broadwave.desk.accounts.Account;
 import kr.co.broadwave.desk.accounts.AccountService;
+import kr.co.broadwave.desk.bscodes.CodeType;
 import kr.co.broadwave.desk.bscodes.CommonCode;
 import kr.co.broadwave.desk.bscodes.LocationAddressType;
 import kr.co.broadwave.desk.common.AjaxResponse;
@@ -10,11 +11,11 @@ import kr.co.broadwave.desk.common.MediaUtils;
 import kr.co.broadwave.desk.common.ResponseErrorCode;
 import kr.co.broadwave.desk.mail.MailService;
 import kr.co.broadwave.desk.mastercode.MasterCode;
+import kr.co.broadwave.desk.mastercode.MasterCodeDto;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.notice.file.UploadFile;
 import kr.co.broadwave.desk.record.file.RecordImageService;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
-import kr.co.broadwave.desk.record.responsibil.ResponsibilMapperDto;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
@@ -150,12 +151,13 @@ public class RecordRestController {
         }
 
         // 이메일전송
-//        List<MasterCodeDto> mailListLRaws = masterCodeService.findCodeList(CodeType.C0003);
-//        List<String> maillists = new ArrayList<>();
-//        for (MasterCodeDto masterCodeDto :mailListLRaws) {
-//            maillists.add(masterCodeDto.getName());
-//        }
-//        mailService.mailsend(maillists,record.getArNumber()+" 출동일지 입니다","작성자 : "+record.getArWriter());
+        List<MasterCodeDto> mailListLRaws = masterCodeService.findCodeList(CodeType.C0003);
+        List<String> maillists = new ArrayList<>();
+        for (MasterCodeDto masterCodeDto :mailListLRaws) {
+            maillists.add(masterCodeDto.getName());
+        }
+
+        mailService.mailsend(maillists,record.getArNumber()+" 출동일지 입니다","작성자 : "+record.getArWriter());
 
         //조사담당자
         List<Responsibil> responsibils = new ArrayList<>();
@@ -178,16 +180,6 @@ public class RecordRestController {
                 }
             }
         }
-
-//        Optional<Team> optionalTeam = teamService.findByTeamcode(responsibil.get(0).getTeam().getTeamcode());
-//        //부서코드가 존재하지않으면
-//        if (!optionalTeam.isPresent()) {
-//            log.info(" 선택한 부서 DB 존재 여부 체크.  부서코드: '" + responsibil.get(0).getTeamcode() +"'");
-//            return ResponseEntity.ok(res.fail(ResponseErrorCode.E005.getCode(), ResponseErrorCode.E005.getDesc()));
-//        }else{
-//            Team team = optionalTeam.get();
-//            responsibilteam.setTeam(team);
-//        }
 
         recordService.recordResponSave(responsibils);
 

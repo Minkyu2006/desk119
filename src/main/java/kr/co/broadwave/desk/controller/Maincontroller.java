@@ -8,16 +8,25 @@ import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.record.Record;
 import kr.co.broadwave.desk.record.RecordDto;
 import kr.co.broadwave.desk.record.RecordService;
+import kr.co.broadwave.desk.record.file.RecordUploadFile;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -51,14 +60,17 @@ public class Maincontroller {
     //메인화면
     @RequestMapping("/")
     public String main(Model model){
-
         List<Record> records = recordService.findAll();
         List<String> arDisasterTypes = new ArrayList<>();
         List<String> arFacTypes = new ArrayList<>();
+        List<Integer> arState  = new ArrayList<>();
+        records.forEach(x -> arState.add(x.getArRecordState()));
 
         for(int i =0; i<records.size(); i++) {
-            arDisasterTypes.add(records.get(i).getArDisasterType());
-            arFacTypes.add(records.get(i).getArFac());
+            if(arState.get(i) == 1){
+                arDisasterTypes.add(records.get(i).getArDisasterType());
+                arFacTypes.add(records.get(i).getArFac());
+            }
         }
 
         List<String> arDisasters = recordService.arDisaster(arDisasterTypes);
@@ -152,4 +164,27 @@ public class Maincontroller {
 
         return "signup";
     }
+
+    @Value("${base.securityfiles.directory}")
+    private String securityfile;
+
+    // 파일다운로드 컨트롤러
+    @RequestMapping("/guidelinedownload")
+    @ResponseBody
+    public byte[] securityfiledown(HttpServletResponse response,Model model) throws IOException {
+        String guidelineFilename = "건설119_주요_활동_가이드라인.pdf";
+        String securityfileUrl = "file:///"+ securityfile +guidelineFilename;
+        System.out.println("파일경로securityfileUrl : "+securityfileUrl);
+
+        String filePath = securityfileUrl;
+        String filename = URLEncoder.encode(securityfileUrl,"UTF-8").replaceAll("\\+", "%20");
+        File file = new File(filePath);
+        byte[] bytes = FileCopyUtils.copyToByteArray(file);
+
+        response.setHeader("Content-Disposition",
+                "attachment;filename=\"" + filename + "\"");
+        response.setContentLength(bytes.length);
+        return bytes;
+    }
+
 }

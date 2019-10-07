@@ -12,7 +12,6 @@ import kr.co.broadwave.desk.record.file.RecordImageService;
 import kr.co.broadwave.desk.record.file.RecordUploadFile;
 import kr.co.broadwave.desk.record.file.RecordUploadFileRepository;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
-import kr.co.broadwave.desk.record.responsibil.ResponsibilMapperDto;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
