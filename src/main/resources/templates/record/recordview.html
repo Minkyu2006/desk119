@@ -28,11 +28,11 @@
 		function linkReg(id) {
 			location.href="/record/reg/" + id;
 		}
-		
-		function popWin(url, width, height, scroll) {
+
+		function popWin(id, width, height, scroll) {
 			var newWindow;
 			var setting = "width=" + width + ", height=" + height + ", top=5, left=20, scrollbars=" + scroll;
-			newWindow = window.open (url, "", setting);
+			newWindow = window.open ("/print/view/"+id , "", setting);
 			newWindow.focus();
 		}
 
@@ -165,7 +165,6 @@
 									<p>&lt;<span th:text="${recorduploadFile.afComment}"></span>&gt;</p>
 								</div>
 							</li>
-							
 						</ul>
 					</td>
 				</tr>
@@ -175,7 +174,7 @@
 			<div class="c-function__group c-function__group--right">
 				<input type="hidden" id="insertId" th:value="${record} ? ${record.insert_id} : ''" readonly>
 				<input type="hidden" id="userId" th:value="${userid} ? ${userid.toString()} : ''" readonly>
-				<div class="c-function__item"><a href="javascript:popWin('http://localhost:8080/print/view', 1024, 800, 'yes');" id="print" class="c-button c-button--point">인쇄</a></div>
+				<div class="c-function__item"><a th:href="|javascript:popWin('${record.id}', 1044, 800, 'yes');|" class="c-button c-button--point">인쇄</a></div>
  				<div class="c-function__item"><button id="updateId" class="c-button c-button--point" sec:authorize = "hasRole('ROLE_USER')" th:onclick="|javascript:linkReg('${record.id}')|">수정</button></div>
 				<div class="c-function__item"><button class="c-button c-button--point" sec:authorize = "hasRole('ROLE_ADMIN')" th:onclick="|javascript:linkReg('${record.id}')|">수정</button></div>
 				<div class="c-function__item"><button class="c-button" onclick="linkList();">목록</button></div>
