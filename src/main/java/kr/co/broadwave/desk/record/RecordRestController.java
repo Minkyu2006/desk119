@@ -91,20 +91,6 @@ public class RecordRestController {
         // State값 넣기(제출완료 : 1 , 임시저장 : 0)
         record.setArRecordState(1);
 
-        // 이메일전송
-        List<MasterCodeDto> mailListLRaws = masterCodeService.findCodeList(CodeType.C0003);
-        List<String> maillists = new ArrayList<>();
-
-        for (MasterCodeDto masterCodeDto : mailListLRaws) {
-            maillists.add(masterCodeDto.getName());
-        }
-
-        mailService.mailsend(maillists,
-                "출동일지 <"+record.getArNumber() + "> 가 등록(제출완료) 되었습니다",
-                "작성자 : " + record.getArWriter()+"\r\n",
-                "출동일지제목 : "+record.getArTitle()+"\r\n",
-                " 조사일자 : "+record.getArIntoStart()+" ~ ",record.getArIntoEnd());
-
         Optional<MasterCode> optionalRelatedId = masterCodeService.findById(recordMapperDto.getArRelatedId());
 
         String currentuserid = CommonUtils.getCurrentuser(request);
@@ -145,6 +131,7 @@ public class RecordRestController {
             record.setModify_id(currentuserid);
             record.setModify_name(optionalAccount.get().getUsername());
             record.setModifyDateTime(LocalDateTime.now());
+
         }
 
         Record recordSave = recordService.save(record);
@@ -163,6 +150,22 @@ public class RecordRestController {
                 //파일명 순번 채번하기 , 코멘트추가
                 recordImageService.makefileseq(recordSave);
             }
+        }
+
+        // 이메일전송
+        if (!optionalRecord.isPresent()) {
+            List<MasterCodeDto> mailListLRaws = masterCodeService.findCodeList(CodeType.C0003);
+            List<String> maillists = new ArrayList<>();
+
+            for (MasterCodeDto masterCodeDto : mailListLRaws) {
+                maillists.add(masterCodeDto.getName());
+            }
+
+            mailService.mailsend(maillists,
+                    "출동일지 <" + record.getArNumber() + "> 가 등록(제출완료) 되었습니다",
+                    "작성자 : " + record.getArWriter() + "\r\n",
+                    "출동일지제목 : " + record.getArTitle() + "\r\n",
+                    " 조사일자 : " + record.getArIntoStart() + " ~ ", record.getArIntoEnd());
         }
 
         //조사담당자

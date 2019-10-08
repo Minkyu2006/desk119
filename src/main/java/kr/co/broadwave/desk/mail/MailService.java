@@ -32,7 +32,7 @@ public class MailService {
         return emailPattern;
     }
 
-    public void mailsend(List<String> maillists, String title, String content,String recordtitle,String recordstart,String recordend){
+    public void mailsend(List<String> maillists, String title, String writer,String recordtitle,String recordstart,String recordend){
         String mail = maillists.stream()
                 .map(n -> String.valueOf(n))
                 .collect(Collectors.joining(";"));
@@ -40,17 +40,17 @@ public class MailService {
         for(int i=0; i<addressSplit.length; i++) {
             if (isEmail(addressSplit[i])) {
                 MailService es = new MailService(javaMailSender);
-                es.sendSimpleMessage(addressSplit[i], title, content,recordtitle,recordstart,recordend);
+                es.sendSimpleMessage(addressSplit[i],title,writer,recordtitle,recordstart,recordend);
             }
         }
     }
 
-    public void sendSimpleMessage(String to, String subject, String text, String recordtitle, String recordstart, String recordend) {
+    public void sendSimpleMessage(String maillists, String title, String writer, String recordtitle, String recordstart, String recordend) {
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);//보낼 대상
-        message.setSubject(subject);//제목
-        message.setText(text+recordtitle+recordstart+recordend);//작성자,출동일지제목,시작날짜,끝난날짜
+        message.setTo(maillists);//보낼 대상
+        message.setSubject(title);//제목
+        message.setText(writer+recordtitle+recordstart+recordend);//작성자,출동일지제목,시작날짜,끝난날짜
 
         try{//예외처리
             javaMailSender.send(message);
