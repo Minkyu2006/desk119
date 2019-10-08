@@ -88,7 +88,22 @@ public class RecordRestController {
 
         Record record = modelMapper.map(recordMapperDto,Record.class);
 
+        // State값 넣기(제출완료 : 1 , 임시저장 : 0)
         record.setArRecordState(1);
+
+        // 이메일전송
+        List<MasterCodeDto> mailListLRaws = masterCodeService.findCodeList(CodeType.C0003);
+        List<String> maillists = new ArrayList<>();
+
+        for (MasterCodeDto masterCodeDto : mailListLRaws) {
+            maillists.add(masterCodeDto.getName());
+        }
+
+        mailService.mailsend(maillists,
+                "출동일지 <"+record.getArNumber() + "> 가 등록(제출완료) 되었습니다",
+                "작성자 : " + record.getArWriter()+"\r\n",
+                "출동일지제목 : "+record.getArTitle()+"\r\n",
+                " 조사일자 : "+record.getArIntoStart()+" ~ ",record.getArIntoEnd());
 
         Optional<MasterCode> optionalRelatedId = masterCodeService.findById(recordMapperDto.getArRelatedId());
 
@@ -149,15 +164,6 @@ public class RecordRestController {
                 recordImageService.makefileseq(recordSave);
             }
         }
-
-        // 이메일전송
-        List<MasterCodeDto> mailListLRaws = masterCodeService.findCodeList(CodeType.C0003);
-        List<String> maillists = new ArrayList<>();
-        for (MasterCodeDto masterCodeDto :mailListLRaws) {
-            maillists.add(masterCodeDto.getName());
-        }
-
-        mailService.mailsend(maillists,record.getArNumber()+" 출동일지 입니다","작성자 : "+record.getArWriter());
 
         //조사담당자
         List<Responsibil> responsibils = new ArrayList<>();

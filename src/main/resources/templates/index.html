@@ -12,6 +12,7 @@
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
 	<script src="/assets/js/bxslider/jquery.bxslider.min.js"></script>
+	<script src="/assets/js/sweetalert/sweetalert2.all.js"></script>
 	<script>
 		$(document).ready(function() {
 			var slider = $('.banner__slide').bxSlider({
@@ -43,7 +44,17 @@
 			});
 
 		})
+
+		function sweetalertclick() {
+			Swal.fire(
+					'권한이 필요합니다',
+					'로그인해주시길 바랍니다',
+					'question'
+			)
+		}
+
 	</script>
+	
 </th:block>
 
 
@@ -58,11 +69,19 @@
 		</div>
 		<div class="banner">
 			<ul class="banner__list">
-				<li class="banner__item banner__item--write"><a href="javascript:void(0);" onclick="mobileCheckIndex();" class="banner__link">출동일지작성</a></li>
-				<li class="banner__item banner__item--write-list"><a href="/record/list" class="banner__link">출동일지조회</a></li>
-				<li class="banner__item banner__item--line"><a href="about/lineup" class="banner__link">건설 119 출동대원 라인업</a></li>
-				<li class="banner__item banner__item--guide"><a href="/guidelinedown" download="건설 119 주요 활동 가이드라인" class="banner__link">건설 119 주요 활동 가이드라인</a></li>
-				<li class="banner__item banner__item--notice"><a href="/notice/noticelist" class="banner__link">공지사항</a></li>
+
+				<li class="banner__item banner__item--write" sec:authorize="isAuthenticated()"><a href="javascript:void(0);" onclick="mobileCheckIndex();" class="banner__link">출동일지작성</a></li>
+				<li class="banner__item banner__item--write-list" sec:authorize="isAuthenticated()"><a href="/record/list" class="banner__link">출동일지조회</a></li>
+				<li class="banner__item banner__item--line" sec:authorize="isAuthenticated()"><a href="about/lineup" class="banner__link">건설 119 출동대원 라인업</a></li>
+				<li class="banner__item banner__item--guide" sec:authorize="isAuthenticated()"><a href="/record/GuideLine" class="banner__link">건설 119 주요 활동 가이드라인</a></li>
+				<li class="banner__item banner__item--notice" sec:authorize="isAuthenticated()"><a href="/notice/noticelist" class="banner__link">공지사항</a></li>
+
+				<li class="banner__item banner__item--write" sec:authorize="!isAuthenticated()"><a style="cursor:pointer" onclick="sweetalertclick()" class="banner__link">출동일지작성</a></li>
+				<li class="banner__item banner__item--write-list" sec:authorize="!isAuthenticated()"><a href="/record/list" class="banner__link">출동일지조회</a></li>
+				<li class="banner__item banner__item--line" sec:authorize="!isAuthenticated()"><a style="cursor:pointer" onclick="sweetalertclick()" class="banner__link">건설 119 출동대원 라인업</a></li>
+				<li class="banner__item banner__item--guide" sec:authorize="!isAuthenticated()"><a style="cursor:pointer" onclick="sweetalertclick()" class="banner__link">건설 119 주요 활동 가이드라인</a></li>
+				<li class="banner__item banner__item--notice" sec:authorize="!isAuthenticated()" ><a style="cursor:pointer" onclick="sweetalertclick()" class="banner__link">공지사항</a></li>
+
 				<li class="banner__item banner__item--table">
 					<div class="banner__stat">
 						<h3 class="banner__title">KICT 건설119 활동 통계</h3>

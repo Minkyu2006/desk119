@@ -15,19 +15,23 @@ import kr.co.broadwave.desk.record.responsibil.Responsibil;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.server.Session;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.List;
@@ -227,6 +231,31 @@ public class RecordController {
                 "attachment;filename=\"" + filename + "\"");
         response.setContentLength(bytes.length);
         return bytes;
+    }
+
+    // 파일다운로드 컨트롤러
+    @Value("${base.securityfiles.directory}")
+    private String securityfile;
+    private static final String APPLICATION_PDF = "application/pdf";
+
+    @RequestMapping(value ="/GuideLine", method = RequestMethod.GET, produces = APPLICATION_PDF)
+    public @ResponseBody void downloadA(HttpServletResponse response) throws IOException {
+        File file = getFile();
+        InputStream in = new FileInputStream(file);
+        response.setContentType(APPLICATION_PDF);
+        response.setHeader("Content-Disposition", "attachment; filename=" + file.getName());
+        response.setHeader("Content-Length", String.valueOf(file.length()));
+        FileCopyUtils.copy(in, response.getOutputStream());
+    }
+
+    private File getFile() throws FileNotFoundException {
+        String FILE_PATH= securityfile+"GuideLine.pdf";
+        File file = new File(FILE_PATH);
+        //파일이 틀렸으면
+        if (!file.exists()){
+            throw new FileNotFoundException("file with path: " + FILE_PATH + " was not found.");
+        }
+        return file;
     }
 
 }

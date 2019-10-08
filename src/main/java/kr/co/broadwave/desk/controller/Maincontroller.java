@@ -6,31 +6,19 @@ import kr.co.broadwave.desk.common.CommonUtils;
 import kr.co.broadwave.desk.mastercode.MasterCodeDto;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.record.Record;
-import kr.co.broadwave.desk.record.RecordDto;
 import kr.co.broadwave.desk.record.RecordService;
-import kr.co.broadwave.desk.record.file.RecordUploadFile;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author InSeok
@@ -93,7 +81,6 @@ public class Maincontroller {
         String userid = CommonUtils.getCurrentuser(request);
         Account account = accountService.findByUserid(userid).get();
 
-
         model.addAttribute("account",account);
         return "mypage";
     }
@@ -101,8 +88,6 @@ public class Maincontroller {
 
     @RequestMapping("/loginsuccess")
     public String loginsuccess(HttpServletRequest request){
-
-
 
         //Security 로그인정보가져와서 세션에 저장하자
         HttpSession session = request.getSession();
@@ -135,7 +120,6 @@ public class Maincontroller {
             log.info("=====================================");
         }
 
-
         return "redirect:/";
     }
 
@@ -147,8 +131,6 @@ public class Maincontroller {
 
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("prevPage", referrer);
-
-
 
         return "login";
     }
@@ -163,25 +145,6 @@ public class Maincontroller {
         model.addAttribute("teams", teams);
 
         return "signup";
-    }
-
-    @Value("${base.securityfiles.directory}")
-    private String securityfile;
-
-    // 파일다운로드 컨트롤러
-    @RequestMapping("/guidelinedown")
-    @ResponseBody
-    public byte[] securityfiledown(HttpServletResponse response,Model model) throws IOException {
-        String guidelineFilename = "건설119_주요_활동_가이드라인.pdf";
-        String securityfileUrl = "file:///"+ securityfile +guidelineFilename;
-        System.out.println("파일경로securityfileUrl : "+securityfileUrl);
-
-        String filePath = securityfileUrl;
-//        String filename = URLEncoder.encode(securityfileUrl,"UTF-8").replaceAll("\\+", "%20");
-        File file = new File(filePath);
-        byte[] bytes = FileCopyUtils.copyToByteArray(file);
-
-        return bytes;
     }
 
 }

@@ -58,17 +58,21 @@ public class StatisticsRestController {
         List<Integer> arState  = new ArrayList<>();
 
         records.forEach(x -> arState.add(x.getArRecordState()));
-        records.forEach(x -> masters.add(x.getArRelatedId().getName()));
 
-        for(int i=0; i<masters.size(); i++){
+        for(int i=0; i<records.size(); i++){
             if(arState.get(i) == 1) {
-                if (!mastersSize.contains(masters.get(i))) {
-                    mastersSize.add(masters.get(i));
-                }
+                masters.add(records.get(i).getArRelatedId().getName());
             }
         }
+//        System.out.println("스테이트번호 arState :"+arState);
+//        System.out.println("스테이트번호1번인 masters :"+masters);
 
-        //System.out.println("mastersSize 데이터 : "+mastersSize);
+        for(int i=0; i<masters.size(); i++){
+            if (!mastersSize.contains(masters.get(i))) {
+                mastersSize.add(masters.get(i));
+            }
+        }
+//        System.out.println("스테이트번호1번인 mastersSize :"+mastersSize);
 
         int count = 0;
         for(int j=0; j<mastersSize.size(); j++) {
