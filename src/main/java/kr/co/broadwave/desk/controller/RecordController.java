@@ -238,14 +238,27 @@ public class RecordController {
     private String securityfile;
     private static final String APPLICATION_PDF = "application/pdf";
 
-    @RequestMapping(value ="/GuideLine", method = RequestMethod.GET, produces = APPLICATION_PDF)
-    public @ResponseBody void downloadA(HttpServletResponse response) throws IOException {
+    // 다운로드
+//    @RequestMapping(value ="/GuideLine", method = RequestMethod.GET, produces = APPLICATION_PDF)
+//    public @ResponseBody void guideLine(HttpServletResponse response) throws IOException {
+//        File file = getFile();
+//        InputStream in = new FileInputStream(file);
+//        response.setContentType(APPLICATION_PDF);
+//        response.setHeader("Content-Disposition", "attachment; filename=" + file.getName());
+//        response.setHeader("Content-Length", String.valueOf(file.length()));
+//        FileCopyUtils.copy(in, response.getOutputStream());
+//    }
+
+    // 바로링크
+    @RequestMapping(value = "/GuideLine", method = RequestMethod.GET, produces = APPLICATION_PDF)
+    public @ResponseBody HttpEntity<byte[]> guideLine() throws IOException {
         File file = getFile();
-        InputStream in = new FileInputStream(file);
-        response.setContentType(APPLICATION_PDF);
-        response.setHeader("Content-Disposition", "attachment; filename=" + file.getName());
-        response.setHeader("Content-Length", String.valueOf(file.length()));
-        FileCopyUtils.copy(in, response.getOutputStream());
+        byte[] document = FileCopyUtils.copyToByteArray(file);
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(new MediaType("application", "pdf"));
+        header.set("Content-Disposition", "inline; filename=" + file.getName());
+        header.setContentLength(document.length);
+        return new HttpEntity<byte[]>(document, header);
     }
 
     private File getFile() throws FileNotFoundException {
