@@ -1,10 +1,189 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>프린트 뷰페이지</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Print</title>
+    
+    <!-- 공통으로 쓰이는 css파일을넣는다.-->
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    <link rel="stylesheet" href="/assets/css/component.css" />
+    <link rel="stylesheet" href="/assets/css/common.css" />
+    
+    <!-- 공통으로 쓰이는 js파일을넣는다.-->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.min.js"></script>
+    <script src="/assets/js/broadwave.common.js"></script>
+    <script src="/assets/js/common-pc.js"></script>
+    
+    <script>
+    	$(document).ready(function() {
+    		$('#print').on('click', function() {
+    			window.print();
+    		});
+    	})
+    </script>
 </head>
 <body>
-    <h1>프린트 뷰페이지입니다.</h1>
+    <section class="report print">
+		<h2 class="report__heading">재난·재해 발생현장 조사 및 분석결과보고서</h2>
+		
+		<table class="c-input-table">
+			<colgroup>
+				<col style="width: 140px;" />
+				<col style="width: 340px;" />
+				<col style="width: 140px;" />
+				<col />
+			</colgroup>
+			<tbody>
+				<tr class="print--none">
+					<th>출동일지 번호</th>
+					<td>
+						<div class="c-text c-text--duo">
+						<input type="text" class="c-text__input only-child" readonly="readonly" />
+					</div>
+					</td>
+					<th>출동일지 제목</th>
+					<td>인쇄 테스트</td>
+				</tr>
+				<tr>
+					<th>작성자</th>
+					<td>테스트</td>
+					<th>재해·재난 분과</th>
+					<td>붕괴 화재/폭발 지진 싱크홀</td>
+				</tr>
+				<tr>
+					<th>관련부처</th>
+					<td colspan="3">KICT 자체</td>
+				</tr>
+				<tr>
+
+					<th>조사일시</th>
+					<td>
+						<span>20191001</span> ~
+						<span>20191015</span>
+					</td>
+
+					<th>조사위치</th>
+					<td class="c-input-table__non-padding">
+						<table class="c-input-table c-input-table--inner">
+							<colgroup>
+								<col style="width: 100px;" />
+								<col />
+							</colgroup>
+							<tbody>
+								<tr>
+									<th>행정구역</th>
+									<td>
+										<span>서울특별시 강남구</span>
+										<span></span>
+									</td>
+								</tr>
+								<tr>
+									<th>상세위치</th>
+									<td>12345</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<th>조사시설물</th>
+					<td colspan=3>
+						<span>기타도로시설물 건축물 지반 지하시설물</span>
+						<span></span>
+					</td>
+				</tr>
+				<tr>
+					<th>조사목적</th>
+					<td colspan=3>테스트용도</td>
+				</tr>
+				<tr>
+					<th>KICT 조사담당자</th>
+					<td colspan=3>
+						<p class="c-input-list">
+							<span>1234</span>
+							<span>테스트</span>
+							<span>복합재난대응연구단</span>
+						</p>
+						<p class="c-input-list">
+							<span>5678 </span>
+							<span>테스트2</span>
+							<span>국민생활연구본부</span>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th>공동 참여기관</th>
+					<td colspan=3>브로드웨이브</td>
+				</tr>
+				<tr>
+					<th>관련문서</th>
+					<td colspan=3></td>
+				</tr>
+				<tr>
+					<th>현장개요</th>
+					<td colspan=3>
+						<pre>
+- 지난 2010년 9월 집중호우로 인해 강서구 화곡동과 양천구 신월동 일대가 많은 침수피해를 입었었고, 서울시에서는 이러한 자연재해를 대비하기 위해 국내 최초로 지하 50m 지점에 직경 5.5~10m2, 강서구 가로공원로~양천구 신월동 ~양천구 목동펌프장에 이르는 총연장 4.7km의 대규모 터널형 빗물저류배수시설인 신월빗물저류배수시설 건설
+
+- 2019년 7월 31일 오전 8시 24분 경 작업자 3명이 지하배수시설(터널) 내부 점검 진입 후 폭우로 인해 지하배수시설 상류 지하저류시설 수문이 개방되어 사망 사고 발생. 2명 작업 위해 먼저 진입하였고, 1명은 직후 수문 개방 소식 전달 위해 진입하였다 미처 대피 하지 못하여 사고 발생
+						</pre>						
+					</td>
+				</tr>
+				<tr>
+					<th>조사·분석 결과</th>
+					<td colspan=3>
+						<pre>
+1. 결과 1: 오전 7시10분께 현대건설 협력업체 직원 2명이 시설점검을 위해 유지관리 수직구를 통해 지하터널로 내려감
+
+2. 결과 2: 오전 7시30분 호우주의보가 발효되자 양천구청 측은 오전 7시38분 현대건설 측에 수문 개방이 이뤄질 예정이라고 전함 
+
+3. 결과 3: 이후 호우주의보가 발효되면서 터널 상류쪽인 수문이 열린다는 소식이 전해지자 오전 7시50분 현대건설 1인이 들어갔고, 오전 8시10분 출구인 수문이 닫히면서 3명이 고립
+						</pre>
+				</td>
+				</tr>
+				<tr>
+					<th>검토의견(대응방안)</th>
+					<td colspan=3>
+						<pre>
+1. 의견 1: 현재 기상청 호우주의보, 호우경보 기준으로 시공간적으로 정확한 홍수 위험을 전달하기엔 역부족
+
+2. 의견 2: 국가가 구축·관리하고 지자체가 운영하는 전국 단위 국가돌발홍수예보(위험 예보) 시스템 구축 운영 필요
+
+3. 의견 3: 돌발홍수위험 예보가 발령된 지역, 시간 내에서는 현장 작업 중지 등을 강제할 수 있는 제도화 작업 필요
+
+4. 의견 4: 기상홍수정보의 웹페이지 공지 등 수동적인 정보 제공 체계에서 일반인에 능동적으로 제공하는 PUSH 방식의 정보제공 체계로 전환 필요
+						</pre>
+					</td>
+				</tr>
+				<tr>
+					<th>관련사진</th>
+					<td colspan=3>
+						<ul class="report__picture-list">
+							<li>
+								<div class="report__picture">
+									<img src="/uploadfiles/recordimages/2019/10/07/92ca0614750045a791b9de310069d7b7.png" />
+									<p>&lt;<span>테스트용 사진 1</span>&gt;</p>
+								</div>
+							</li>
+							<li>
+								<div class="report__picture">
+									<img src="/uploadfiles/recordimages/2019/10/07/4a0ae6f00f634f04adeea8cc9419a581.png" />
+									<p>&lt;<span>테스트용 사진 2</span>&gt;</p>
+								</div>
+							</li>
+						</ul>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="c-function print--none">
+			<div class="c-function__group c-function__group--right">
+				<div class="c-function__item"><a href="#" id="print" class="c-button c-button--point">인쇄</a></div>
+			</div>
+		</div>
+	</section>
 </body>
 </html>
