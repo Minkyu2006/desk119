@@ -1755,6 +1755,33 @@ h4.article__heading {
 .report.print .report__picture p {
 	font-size: 18px;
 }
+.print__btn {
+	display: block;
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	width: 60px;
+	height: 60px;
+	background: #ff8c26 url(/assets/images/icon__print.png) no-repeat;
+	background-position: center center;
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+	text-indent: -9999px;
+	-webkit-box-shadow: 0 5px 5px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 0 5px 5px rgba(0, 0, 0, .2);
+	box-shadow: 0 5px 5px rgba(0, 0, 0, .2);
+	-webkit-transition: box-shadow .2s;
+	-moz-transition: box-shadow .2s;
+	-ms-transition: box-shadow .2s;
+	-o-transition: box-shadow .2s;
+	transition: box-shadow .2s;
+}
+.print__btn:hover {
+	-webkit-box-shadow: 0 10px 10px rgba(0, 0, 0, .4);
+	-moz-box-shadow: 0 10px 10px rgba(0, 0, 0, .4);
+	box-shadow: 0 10px 10px rgba(0, 0, 0, .4);
+}
 
 /* statistics */
 .stat {
