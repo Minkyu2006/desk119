@@ -1521,6 +1521,19 @@ h4.article__heading {
 	color: #3e4046;
 }
 
+@media (max-height: 860px) {
+	.join__box {
+		position: relative;
+		top: auto;
+		lefT: auto;
+		margin: 20px auto;
+		-webkit-transform: none;
+		-moz-transform: none;
+		-ms-transform: none;
+		-o-transform: none;
+		transform: none;
+	}
+}
 @media (max-width: 767px) {
 	.join__box {
 		position: relative;
