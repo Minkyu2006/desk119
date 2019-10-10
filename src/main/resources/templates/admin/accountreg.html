@@ -59,12 +59,12 @@
 		function del() {
 
 			if ($("#userid").attr("readonly") != "readonly") {
-				Swal.fire({html:"삭제하고자하는 사용자를<br>하단에서 선택 후 삭제하세요.");
+				Swal.fire({html:"삭제하고자하는 사용자를<br>하단에서 선택 후 삭제하세요."});
 				return false;
 			}
 
 			if ($("#userid").val().trim() == '') {
-				Swal.fire({html:"삭제하고자하는 사용자를<br>하단에서 선택 후 삭제하세요.");
+				Swal.fire({html:"삭제하고자하는 사용자를<br>하단에서 선택 후 삭제하세요."});
 				$("#userid").trigger('focus');
 				return false;
 			}
