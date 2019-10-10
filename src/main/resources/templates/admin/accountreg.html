@@ -49,67 +49,65 @@
 				
 				e.preventDefault();
 			});
-
-
-
 		})
 
 		function cancel() {
 			$('.l-popup').removeClass('open');
 			init();
-
-
 		}
 
-		function del(){
+		function del() {
 
-			if ($("#userid").attr("readonly") != "readonly"){
-
-				alert("삭제하고자하는 사용자를 하단에서 선택 후 삭제하세요.");
+			if ($("#userid").attr("readonly") != "readonly") {
+				Swal.fire({html:"삭제하고자하는 사용자를<br>하단에서 선택 후 삭제하세요.");
 				return false;
 			}
 
 			if ($("#userid").val().trim() == '') {
-				alert("삭제하고자하는 사용자를를 하단에서 선택 후 삭제하세요.");
+				Swal.fire({html:"삭제하고자하는 사용자를<br>하단에서 선택 후 삭제하세요.");
 				$("#userid").trigger('focus');
 				return false;
 			}
 
+			Swal.fire({
+				text: '정말 삭제하시겠습니까?.',
+				type: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'OK'
+			}).then(function (result) {
+				if (result.value) {
 
+					var params = {
+						userid: $("#userid").val()
+					};
 
-			var params = {
-				userid:$("#userid").val()
-			};
+					var token = $("meta[name='_csrf']").attr("content");
+					var header = $("meta[name='_csrf_header']").attr("content");
+					$(document).ajaxSend(function (e, xhr, options) {
+						xhr.setRequestHeader(header, token);
+					});
 
-
-			var token = $("meta[name='_csrf']").attr("content");
-			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
-
-			$.ajax({
-				url:'/api/account/del',
-				type : 'post',
-				//dataType: 'html',
-				data : params,
-				cache:false,
-				error:function(request,status,error){
-					ajaxErrorMsg(request);
-					//alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-				},
-				success: function(res){
-					if (!Ajax.checkResult(res)) {
-						return;
-					}
-					alert('삭제되었습니다. ');
-					init();
-					callList(1);
-
-
-
+					$.ajax({
+						url: '/api/account/del',
+						type: 'post',
+						data: params,
+						cache: false,
+						error: function (request, status, error) {
+							ajaxErrorMsg(request);
+						},
+						success: function (res) {
+							if (!Ajax.checkResult(res)) {
+								return;
+							}
+							Swal.fire({text:'삭제되었습니다. '});
+							init();
+							callList(1);
+						}
+					})
 				}
-
 			});
-
 		}
 
 		function init(){
@@ -125,16 +123,14 @@
 		}
 
 		function save1(){
-
-
 			if ($("#userid").val().trim() == '') {
-				alert("수정할 아이디를 먼저 선택하세요.");
+				Swal.fire({text:"수정할 아이디를 먼저 선택하세요."});
 				$("#userid").trigger('focus');
 				return false;
 			}
 
 			if ($("#username").val().trim() == '') {
-				alert("이름을 입력하세요.");
+				Swal.fire({text:"이름을 입력하세요."});
 				$("#username").trigger('focus');
 				return false;
 			}
@@ -152,48 +148,38 @@
 			$.ajax({
 				url:'/api/account/modifyReg',
 				type : 'post',
-				//dataType: 'html',
 				data : params,
 				cache:false,
-				error:function(request,status,error){
+				error:function(request){
 					ajaxErrorMsg(request);
-					//alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 				},
 				success: function(res){
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					alert('수정되었습니다. ');
-					$('.l-popup').removeClass('open');
-					init();
-					callList(1);
-
-
-
+					Swal.fire({
+						text: '수정되었습니다.',
+						type: "success"
+					}).then(function () {
+						$('.l-popup').removeClass('open');
+						init();
+						callList(1);
+					})
 				}
-
 			});
-
-
-
-
-
 		}
 
 		function savepassword(){
-
-
 			if ($("#userid").val().trim() == '') {
-				alert("수정할 아이디를 먼저 선택하세요.");
+				Swal.fire({text:"수정할 아이디를 먼저 선택하세요."});
 				return false;
 			}
 
 			if ($("#password").val().trim() == '') {
-				alert("수정할 패스워드를 입력하세요.");
+				Swal.fire({text:"수정할 패스워드를 입력하세요."});
 				$("#password").trigger('focus');
 				return false;
 			}
-
 
 			var $form = $('form[name="frmreg"]');
 
@@ -202,7 +188,7 @@
 
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
 
 			$.ajax({
 				url:'/api/account/modifyAdminPassword',
@@ -210,7 +196,7 @@
 				//dataType: 'html',
 				data : params,
 				cache:false,
-				error:function(request,status,error){
+				error:function(request){
 					ajaxErrorMsg(request);
 					//alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 				},
@@ -218,31 +204,23 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					alert('수정되었습니다. ');
-					$('.l-popup').removeClass('open');
-					init();
-					callList(1);
-
-
-
+					Swal.fire({
+						text: '수정되었습니다.',
+						type: "success"
+					}).then(function () {
+						$('.l-popup').removeClass('open');
+						init();
+						callList(1);
+					})
 				}
-
 			});
-
-
-
-
-
 		}
 
 		function searchclear(){
 			$("#s_userid").val('');
 			$("#s_username").val('');
 			$("#s_email").val('');
-
-
 		}
-
 
 		function callList(page){
 
@@ -252,8 +230,6 @@
 			var perPage = 10;
 			var perArea = 5;
 			var totCnt = 0;
-
-
 
 			var $schList = $('#schList');
 			var $totalCnt = $('#totalCnt');
@@ -274,10 +250,9 @@
 			$.ajax({
 				url:'/api/account/list?size='+ perPage + '&page=' + page,
 				type : 'post',
-				//dataType: json,
 				data : params,
 				cache:false,
-				error:function(request,status,error){
+				error:function(request){
 					ajaxErrorMsg(request);
 					//alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 				},
@@ -297,10 +272,8 @@
 
 					$totalCnt.text(totCnt);
 
-
 					var html = '';
 					$.each(res.data.datalist, function(key, value){
-						// html += '<tr onclick="javascript:callinfo(\''+ echoNull2Blank(value.userid) +'\');">';
 						html += '<tr>';
 						html += '<td >'+ echoNull2Blank(value.userid) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.username) +'</td>';
@@ -309,7 +282,6 @@
 						html += '<td >'+ echoNull2Blank(value.cellphone) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.email) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.role) +'</td>';
-
 
 						html += '<td ><button class="c-button c-button--point btn__member" onclick="javascript:callinfo(\''+ echoNull2Blank(value.userid) +'\');">수정</button></td>';
 
@@ -340,7 +312,6 @@
 			$.ajax({
 				url:'/api/account/account',
 				type : 'post',
-				//dataType: 'html',
 				data : params,
 				cache:false,
 				error:function(request,status,error){
@@ -348,7 +319,6 @@
 					//alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 				},
 				success: function(res){
-
 					$("#userid").val(res.data.datarow.userid);
 					$("#username").val(res.data.datarow.username);
 					$("#password").val('');
@@ -357,15 +327,8 @@
 					$("#role").val(res.data.datarow.role);
 					$("#teamcode").val(res.data.datarow.team.teamcode);
 					$("#positionid").val(res.data.datarow.position.id);
-
-
-
-
-
 				}
-
 			});
-
 		}
 
 

@@ -44,7 +44,6 @@
 			var header = $("meta[name='_csrf_header']").attr("content");
 			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
 
-
 			$.ajax({
 				url:'/api/account/approvallist?size='+ perPage + '&page=' + page,
 				type : 'post',
@@ -70,7 +69,6 @@
 
 					$totalCnt.text(totCnt);
 
-
 					var html = '';
 					$.each(res.data.datalist, function(key, value){
 						html += '<tr >';
@@ -88,37 +86,29 @@
 						html += '</tr>';
 					});
 					$schList.html(html);
-
 				}
-
 			});
-
-
-
 		}
 
 		function callApproval(userid,approvaltype) {
 			//alert (userid + '/' + approvaltype);
 			if (($("#okbtn_"+userid).html() != "승인") && ($("#rebtn_"+userid).html() != "거절") ){
-				alert("이미 승인(반려) 처리가 완료되었습니다.");
+				Swal.fire({html:"이미 승인(반려) <br> 처리가 완료되었습니다."});
 				return false;
 			}
 
 			if (approvaltype=='AT02') {
-				$("#okbtn_"+userid).html("승인완료");
-				$("#rebtn_"+userid).html("승인완료");
+				$("#okbtn_"+userid).html("승인 완료");
+				$("#rebtn_"+userid).html("승인 완료");
 			}else{
-				$("#okbtn_"+userid).html("거절완료");
-				$("#rebtn_"+userid).html("거절완료");
+				$("#okbtn_"+userid).html("거절 완료");
+				$("#rebtn_"+userid).html("거절 완료");
 			}
-
-
 
 			var params = {
 				userid:userid,
 				approvaltype:approvaltype
 			};
-
 
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
@@ -137,20 +127,11 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-
-
-
-
-
 				}
-
 			});
-
 		}
 
 	</script>
-
-
 </th:block>
 
 

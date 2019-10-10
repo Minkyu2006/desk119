@@ -166,6 +166,7 @@ public class RecordRestController {
                     "작성자 : " + record.getArWriter() + "\r\n",
                     "출동일지제목 : " + record.getArTitle() + "\r\n",
                     " 조사일자 : " + record.getArIntoStart() + " ~ ", record.getArIntoEnd());
+            System.out.println("메일전송성공");
         }
 
         //조사담당자
@@ -192,8 +193,8 @@ public class RecordRestController {
 
         recordService.recordResponSave(responsibils);
 
-        log.info("출동일지 저장 성공 : " + recordSave.toString() );
-        log.info("조사담당자 저장 성공 : " + responsibils.toString() );
+//        log.info("출동일지 저장 성공 : " + recordSave.toString() );
+//        log.info("조사담당자 저장 성공 : " + responsibils.toString() );
         return ResponseEntity.ok(res.success());
     }
 
@@ -290,7 +291,7 @@ public class RecordRestController {
 
         recordService.recordResponSave(responsibil);
 
-        log.info("출동일지 임시저장 성공 : " + recordSave.toString() );
+//        log.info("출동일지 임시저장 성공 : " + recordSave.toString() );
         return ResponseEntity.ok(res.success());
     }
 
@@ -321,7 +322,7 @@ public class RecordRestController {
                                      @RequestParam(value="arNumber", defaultValue="") String arNumber,
                                      Pageable pageable){
 
-        log.info("출동일지 조회 / 조회조건 : arTitle / '" + arTitle + "' arWriter / '" + arWriter + "'"+ "' arNumber / '" + arNumber + "'");
+//        log.info("출동일지 조회 / 조회조건 : arTitle / '" + arTitle + "' arWriter / '" + arWriter + "'"+ "' arNumber / '" + arNumber + "'");
 
         Page<RecrodListDto> records = recordService.findAllBySearchStrings(arNumber, arTitle, arWriter, pageable);
         return CommonUtils.ResponseEntityPage(records);
@@ -331,16 +332,16 @@ public class RecordRestController {
     @PostMapping("del")
     public ResponseEntity recordDelete(@RequestParam(value="recordid", defaultValue="") Long recordid){
 
-        log.info("출동일지 삭제 시작 / 고유번호 ID : '" + recordid + "'");
+//        log.info("출동일지 삭제 시작 / 고유번호 ID : '" + recordid + "'");
 
         Optional<Record> optionalRecord = recordService.findByIdRecord(recordid);
 
         if (!optionalRecord.isPresent()){
-            log.info("출동일지 삭제 에러 데이터존재하지않습니다.('E003') fileID: '" + recordid + "'");
+//            log.info("출동일지 삭제 에러 데이터존재하지않습니다.('E003') fileID: '" + recordid + "'");
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E003.getCode(), ResponseErrorCode.E003.getDesc()));
         }
         recordService.delete(optionalRecord.get());
-        log.info("출동일지 삭제 성공 / 고유번호 ID : '" + recordid + "'");
+//        log.info("출동일지 삭제 성공 / 고유번호 ID : '" + recordid + "'");
         return ResponseEntity.ok(res.success());
     }
 
@@ -380,26 +381,26 @@ public class RecordRestController {
     //출동일지 파일삭제
     @PostMapping("filedel")
     public ResponseEntity filedelete(@RequestParam(value="fileid", defaultValue="") Long fileid){
-        log.info("출동일지 첨부파일삭제 시작/ 파일ID : '" + fileid + "'");
+//        log.info("출동일지 첨부파일삭제 시작/ 파일ID : '" + fileid + "'");
         int resultValue = recordImageService.recorduploadFileDelete(fileid);
         if (resultValue == -1){
-            log.info("출동일지 삭제시 에러발생('E015) fileID: '" + fileid + "'");
+//            log.info("출동일지 삭제시 에러발생('E015) fileID: '" + fileid + "'");
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E015.getCode(), ResponseErrorCode.E015.getDesc()));
         }
-        log.info("출동일지 첨부파일삭제 성공/ 파일ID : '" + fileid + "'");
+//        log.info("출동일지 첨부파일삭제 성공/ 파일ID : '" + fileid + "'");
         return ResponseEntity.ok(res.success());
     }
 
     //조사담당자 삭제
     @PostMapping("respondel")
     public ResponseEntity respondelete(@RequestParam(value="rsid", defaultValue="") Long rsid){
-        log.info("조사담당자 삭제 시작: '" + rsid + "'");
+//        log.info("조사담당자 삭제 시작: '" + rsid + "'");
         int resultValue = recordService.recordresponsibilDelete(rsid);
         if (resultValue == -1){
-            log.info("조사담당자 삭제시 에러발생('E015) fileID: '" + rsid + "'");
+//            log.info("조사담당자 삭제시 에러발생('E015) fileID: '" + rsid + "'");
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E017.getCode(), ResponseErrorCode.E017.getDesc()));
         }
-        log.info("조사담당자삭제 성공 : '" + rsid + "'");
+//        log.info("조사담당자삭제 성공 : '" + rsid + "'");
         return ResponseEntity.ok(res.success());
     }
 

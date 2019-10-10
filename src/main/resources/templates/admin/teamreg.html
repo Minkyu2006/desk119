@@ -47,51 +47,61 @@
 		function del(){
 
 			if ($("#teamcode").attr("readonly") != "readonly"){
-
-				alert("삭제하고자하는 부서를 하단에서 선택 후 삭제하세요.");
+				Swal.fire({html:"삭제하고자하는 부서를 <br> 하단에서 선택 후 삭제하세요."});
 				return false;
 			}
 
 			if ($("#teamcode").val().trim() == '') {
-				alert("삭제하고자하는 부서를 하단에서 선택 후 삭제하세요.");
+				Swal.fire({html:"삭제하고자하는 부서를 <br> 하단에서 선택 후 삭제하세요."});
 				$("#teamcode").trigger('focus');
 				return false;
 			}
 
+			Swal.fire({
+				title: '부서를 삭제하시겠습니까?',
+				type: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'OK'
+			}).then(function (result) {
+				if (result.value) {
+
+					var params = {
+						teamcode: $("#teamcode").val()
+					};
 
 
-			var params = {
-				teamcode:$("#teamcode").val()
-			};
+					var token = $("meta[name='_csrf']").attr("content");
+					var header = $("meta[name='_csrf_header']").attr("content");
+					$(document).ajaxSend(function (e, xhr, options) {
+						xhr.setRequestHeader(header, token);
+					});
 
-
-			var token = $("meta[name='_csrf']").attr("content");
-			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
-
-			$.ajax({
-				url:'/api/team/del',
-				type : 'post',
-				//dataType: 'html',
-				data : params,
-				cache:false,
-				error:function(request,status,error){
-					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-				},
-				success: function(res){
-					if (!Ajax.checkResult(res)) {
-						return;
-					}
-					alert('삭제되었습니다. ');
-					init();
-					callList(1);
-
-
-
+					$.ajax({
+						url: '/api/team/del',
+						type: 'post',
+						//dataType: 'html',
+						data: params,
+						cache: false,
+						error: function (request, status, error) {
+							alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+						},
+						success: function (res) {
+							if (!Ajax.checkResult(res)) {
+								return;
+							}
+							Swal.fire({
+								title: '부서가 삭제되었습니다. ',
+								type: "success"
+							}).then(function () {
+								init();
+								callList(1);
+							})
+						}
+					})
 				}
-
 			});
-
 		}
 		function init(){
 			//화면 초기화
@@ -107,13 +117,13 @@
 
 
 			if ($("#teamcode").val().trim() == '') {
-				alert("부서코드를 입력하세요. 부서코드는 중복되지 않도록 확인 후 입력하세요");
+				Swal.fire({html:"부서코드를 입력하세요.<br/>부서코드는 중복되지 않도록 확인 후 입력하세요."});
 				$("#teamcode").trigger('focus');
 				return false;
 			}
 
 			if ($("#teamname").val().trim() == '') {
-				alert("부서명을 입력하세요.");
+				Swal.fire({text:"부서명을 입력하세요."});
 				$("#teamname").trigger('focus');
 				return false;
 			}
@@ -140,19 +150,16 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					alert('저장되었습니다. ');
-					init();
-					callList(1);
-
-
+					Swal.fire({
+						title: '저장되었습니다.',
+						text: '팀 조회에서 확인해주세요.',
+						type: "success"
+					}).then(function () {
+						init();
+						callList(1);
+					})
 				}
-
 			});
-
-
-
-
-
 		}
 
 
@@ -218,13 +225,10 @@
 						html += '</tr>';
 					});
 					$schList.html(html);
-
 				}
-
 			});
-
-
 		}
+
 		function callinfo(teamcode) {
 
 			var params = {
@@ -253,14 +257,8 @@
 					$("#remark").val(res.data.datarow.remark);
 					$("#mode").val('U');
 					$("#teamcode").attr("readonly",true);
-
-
-
-
 				}
-
 			});
-
 		}
 
 	</script>
