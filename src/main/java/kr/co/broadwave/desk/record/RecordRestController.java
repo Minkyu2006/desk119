@@ -131,7 +131,6 @@ public class RecordRestController {
             record.setModify_id(currentuserid);
             record.setModify_name(optionalAccount.get().getUsername());
             record.setModifyDateTime(LocalDateTime.now());
-
         }
 
         Record recordSave = recordService.save(record);
@@ -162,11 +161,11 @@ public class RecordRestController {
             }
 
             mailService.mailsend(maillists,
-                    "출동일지 <" + record.getArNumber() + "> 가 등록(제출완료) 되었습니다",
-                    "작성자 : " + record.getArWriter() + "\r\n",
-                    "출동일지제목 : " + record.getArTitle() + "\r\n",
-                    " 조사일자 : " + record.getArIntoStart() + " ~ ", record.getArIntoEnd());
-            System.out.println("메일전송성공");
+                    "출동일지 <" + record.getArNumber() + ">가 등록(제출완료) 되었습니다",
+                    "작성자 : " + record.getArWriter() + "\r\n\n",
+                    "출동일지제목 : " + record.getArTitle() + "\r\n\n",
+                    " 조사일자 : " + record.getArIntoStart() + " ~ ", record.getArIntoEnd()+"\r\n\n",
+                    "해당글 보러가기 : https://kict119.broadwave.co.kr/record/view/"+record.getId());
         }
 
         //조사담당자

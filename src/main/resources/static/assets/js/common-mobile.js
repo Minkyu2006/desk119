@@ -13,7 +13,7 @@ function ajaxErrorMsg(request) {
 //접속장비 확인하기
 //리스트페이지 -> 모바일인지 체크 // 2019.9.24 김민규추가
 function mobileCheck() {
-        if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
+        if (navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
             return true;
         }else{
             return false;
@@ -21,20 +21,34 @@ function mobileCheck() {
 }
 //인덱스페이지 -> 모바일인지 체크
 function mobileCheckIndex() {
-        if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
+        if (navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
             return location.href = "/record/mreg";
         }else{
             return location.href = "/record/reg";
         }
 }
-//모바일알터,웹알터 구분  // 2019.10.10 김민규추가
-function mobileAlert() {
-    if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
-        return true;
-    }else{
-        return false;
-    }
-}
+
+// function mobileAlert(mobileId) {
+//     if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
+//         Swal.fire({text:"모바일에서 이용가능합니다."});
+//         return false;
+//     }else{
+//         if(mobileId==1){
+//             return location.href = "/admin/accountapproval";
+//         }else if(mobileId==2) {
+//             return location.href = "/admin/accountreg";
+//         }else if(mobileId==3){
+//             return location.href = "/admin/noticereg";
+//         }else if(mobileId==4){
+//             return location.href = "/admin/teamreg";
+//         }else if(mobileId==5){
+//             return location.href = "/admin/mastercodereg";
+//         }else{
+//             Swal.fire({text:"잘못된 접근입니다."});
+//             false;
+//         }
+//     }
+// }
 
 //20180328최인석 myoffice 에있는 js 추가함
 
@@ -141,49 +155,49 @@ $(document).ready(function(){
         }
     });
 
-    // $('.c-progress-pie').each(function(){
-    //     var $ppc = $(this),
-    //         percent = 0,
-    //         deg = 0,
-    //     _total = $ppc.data('total'),
-    //     _value = $ppc.data('value');
-    //     _total = typeof _total !== 'undefined' ? _total : 0;
-    //     _value = typeof _value !== 'undefined' ? _value : 0;
-    //     percent = _total > 0 ? (_value/_total) * 100 : 0;
-    //     deg = percent > 0 ? (_value/_total) * 360 : 0;
-    //     if (percent > 50) {
-    //         $ppc.addClass('gt-50')
-    //     }
-    //
-    //     $ppc.find('.c-progress-pie__fill').css('transform','rotate('+ deg +'deg)');
-    //     $ppc.find('.c-progress-pie__percent span').html(Math.floor(percent) +'%');
-    //     $ppc.find('.c-progress-pie__range').html(_value + ' / ' +_total);
-    // });
-    //
-    // $('.c-progress-bar__base').each(function() {
-    //     var $progressBar = $(this),
-    //         percent = parseInt($progressBar.data('percent'))
-    //
-    //     $progressBar.find('.c-progress-bar__percent').css('margin-left', percent + '%');
-    //     $progressBar.find('.c-progress-bar__range').html(percent + '%');
-    // });
+// $('.c-progress-pie').each(function(){
+//     var $ppc = $(this),
+//         percent = 0,
+//         deg = 0,
+//     _total = $ppc.data('total'),
+//     _value = $ppc.data('value');
+//     _total = typeof _total !== 'undefined' ? _total : 0;
+//     _value = typeof _value !== 'undefined' ? _value : 0;
+//     percent = _total > 0 ? (_value/_total) * 100 : 0;
+//     deg = percent > 0 ? (_value/_total) * 360 : 0;
+//     if (percent > 50) {
+//         $ppc.addClass('gt-50')
+//     }
+//
+//     $ppc.find('.c-progress-pie__fill').css('transform','rotate('+ deg +'deg)');
+//     $ppc.find('.c-progress-pie__percent span').html(Math.floor(percent) +'%');
+//     $ppc.find('.c-progress-pie__range').html(_value + ' / ' +_total);
+// });
+//
+// $('.c-progress-bar__base').each(function() {
+//     var $progressBar = $(this),
+//         percent = parseInt($progressBar.data('percent'))
+//
+//     $progressBar.find('.c-progress-bar__percent').css('margin-left', percent + '%');
+//     $progressBar.find('.c-progress-bar__range').html(percent + '%');
+// });
 
-    $('.c-progress-pie').each(function() {
-        var $this = $(this),
-            percent = 0,
-            _total = $this.data('total'),
-            _value = $this.data('value');
+$('.c-progress-pie').each(function() {
+    var $this = $(this),
+        percent = 0,
+        _total = $this.data('total'),
+        _value = $this.data('value');
 
-            _total = typeof _total !== 'undefined' ? _total : 0;
-            _value = typeof _value !== 'undefined' ? _value : 0;
-            percent = _total > 0 ? (_value/_total) * 100 : 0;
+        _total = typeof _total !== 'undefined' ? _total : 0;
+        _value = typeof _value !== 'undefined' ? _value : 0;
+        percent = _total > 0 ? (_value/_total) * 100 : 0;
 
-            $(this).find('.c-progress-pie__base').attr('data-percent', Math.floor(percent));
-            $(this).find('.c-progress-pie__percent span').html(Math.floor(percent) +'%');
-            $(this).find('.c-progress-pie__range').html(_value + ' / ' +_total);
-    })
+        $(this).find('.c-progress-pie__base').attr('data-percent', Math.floor(percent));
+        $(this).find('.c-progress-pie__percent span').html(Math.floor(percent) +'%');
+        $(this).find('.c-progress-pie__range').html(_value + ' / ' +_total);
+})
 
-    $('.c-progress-pie__base').percircle();
+$('.c-progress-pie__base').percircle();
 
 
 });

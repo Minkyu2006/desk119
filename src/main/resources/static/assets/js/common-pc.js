@@ -25,22 +25,28 @@ function mobileCheckIndex() {
             return location.href = "/record/reg";
         }
 }
-//모바일알터,웹알터 구분  // 2019.10.10 김민규추가
-function mobileAlert() {
-    if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
-        return true;
-    }else{
-        return false;
-    }
-}
-//모바일알터,웹알터 구분  // 2019.10.10 김민규추가
-function mobileAlert() {
-    if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
-        return true;
-    }else{
-        return false;
-    }
-}
+
+// function mobileAlert(mobileId) {
+//     if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
+//         Swal.fire({text:"모바일에서 이용가능합니다."});
+//         return false;
+//     }else{
+//         if(mobileId==1){
+//             return location.href = "/admin/accountapproval";
+//         }else if(mobileId==2) {
+//             return location.href = "/admin/accountreg";
+//         }else if(mobileId==3){
+//             return location.href = "/admin/noticereg";
+//         }else if(mobileId==4){
+//             return location.href = "/admin/teamreg";
+//         }else if(mobileId==5){
+//             return location.href = "/admin/mastercodereg";
+//         }else{
+//             Swal.fire({text:"잘못된 접근입니다."});
+//             false;
+//         }
+//     }
+// }
 
 //20180328최인석 myoffice 에있는 js 추가함
 
@@ -180,7 +186,7 @@ $(document).ready(function(){
     	$parent.find('.c-date__result').val($selected);
     	$parent.removeClass('open');
     });
-    
+
     /*
     $.datepicker.regional['en'] = {
         prevText: '이전달',
