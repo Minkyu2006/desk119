@@ -30,7 +30,7 @@ function mobileCheckIndex() {
 
 // function mobileAlert(mobileId) {
 //     if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
-//         Swal.fire({text:"모바일에서 이용가능합니다."});
+//         Swal.fire({text:"PC에서 이용가능합니다."});
 //         return false;
 //     }else{
 //         if(mobileId==1){
