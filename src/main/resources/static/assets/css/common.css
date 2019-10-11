@@ -1675,6 +1675,7 @@ h4.article__heading {
 	text-indent: -9999px;
 }
 
+
 @media (max-width: 1024px) {
 	.l-popup__container {
 		width: 90%;
@@ -1688,6 +1689,12 @@ h4.article__heading {
 @media (max-width: 768px) {
 	.l-popup__content {
 		max-height: 580px;
+	}
+}
+@media (max-height: 860px) {
+	.l-popup__content {
+		overflow-y: auto;
+		max-height: 400px;
 	}
 }
 @media (max-width: 640px) {
