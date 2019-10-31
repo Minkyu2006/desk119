@@ -238,7 +238,7 @@ public class RecordController {
     private String securityfile;
     private static final String APPLICATION_PDF = "application/pdf";
 
-    // 다운로드
+//    // 다운로드
 //    @RequestMapping(value ="/GuideLine", method = RequestMethod.GET, produces = APPLICATION_PDF)
 //    public @ResponseBody void guideLine(HttpServletResponse response) throws IOException {
 //        File file = getFile();

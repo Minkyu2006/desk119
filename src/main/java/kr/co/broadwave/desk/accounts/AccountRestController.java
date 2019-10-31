@@ -188,7 +188,7 @@ public class AccountRestController {
 
 
 
-        Account accountSave =  this.accountService.saveAccount(account);
+        Account accountSave =  this.accountService.updateAccount(account);
 
         log.info("사용자 관리자(일반정보) 수정 성공 '" + accountMapperDto.getUserid() +"'" );
         return ResponseEntity.ok(res.success());

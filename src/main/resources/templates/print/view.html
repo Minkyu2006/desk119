@@ -40,11 +40,7 @@
 			<tbody>
 				<tr class="print--none">
 					<th>출동일지 번호</th>
-					<td>
-						<div class="c-text c-text--duo">
-							<input type="text" class="c-text__input only-child" readonly="readonly" th:value="${record} ? ${record.arNumber} : ''"/>
-					</div>
-					</td>
+					<td class="c-text c-text--duo" th:text="${record} ? ${record.arNumber} : ''"></td>
 					<th>출동일지 제목</th>
 					<td th:text="${record} ? ${record.arTitle} : ''"></td>
 				</tr>

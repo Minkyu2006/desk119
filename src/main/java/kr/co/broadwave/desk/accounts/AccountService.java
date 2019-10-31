@@ -40,7 +40,9 @@ public class AccountService implements UserDetailsService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
-
+    public Account updateAccount(Account account){
+        return this.accountRepository.save(account);
+    }
     public Account saveAccount(Account account){
         //password encoding
         account.setPassword(passwordEncoder.encode(account.getPassword()));
