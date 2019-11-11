@@ -850,25 +850,25 @@
 								<th>행정구역</th>
 								<td>
 									<ul class="c-input-list">
-										<li>
-											<div class="c-select" style="width: 110px;">
-												<select name="arLocationCityType" id="arLocationCityType" class="c-select__input" onchange="LocationSetting()">
+									<li>
+										<div class="c-select" style="width: 110px;">
+											<select name="arLocationCityType" id="arLocationCityType" class="c-select__input" onchange="LocationSetting()">
 												<option th:each ="LocationCityType : ${LocationCityTypes}"
 														th:value="${LocationCityType.getCode()}"
 														th:text="${LocationCityType.getDesc()}"
 														th:selected="${LocationCityType} == (${record} ? ${record.arLocationCityType} : '')">
 												</option>
 											</select>
-											</div>
-										</li>
-										<li>
-											<input id="addSel" type="hidden" class="c-select__input" th:value="${record} ? ${record.arLocationAddressType}: ''"/>
-											<div class="c-select" style="width: 100px;">
-												<select name="arLocationAddressType" id="arLocationAddressType" class="c-select__input" >
-												</select>
-											</div>
-										</li>
-									</ul>
+										</div>
+									</li>
+									<li>
+										<input id="addSel" type="hidden" class="c-select__input" th:value="${record} ? ${record.arLocationAddressType}: ''"/>
+										<div class="c-select" style="width: 100px;">
+											<select name="arLocationAddressType" id="arLocationAddressType" class="c-select__input" >
+											</select>
+										</div>
+									</li>
+								</ul>
 								</td>
 							</tr>
 							<tr>
