@@ -166,7 +166,7 @@ public class RecordRestController {
 //                    " 조사일자 : " + record.getArIntoStart() + " ~ ", record.getArIntoEnd()+"\r\n\n",
 //                    "해당글 보러가기 : https://kict119.broadwave.co.kr/record/view/"+record.getId());
             mailService.mailsend(maillists,
-                    "html"+"출동일지 <" + record.getArNumber() + ">가 등록(제출완료) 되었습니다",
+                    "출동일지 <" + record.getArNumber() + ">가 등록(제출완료) 되었습니다",
                     "작성자 : " + record.getArWriter() + "\r\n\n",
                     "출동일지제목 : " + record.getArTitle() + "\r\n\n",
                     " 조사일자 : " + record.getArIntoStart() + " ~ ", record.getArIntoEnd()+"\r\n\n",
