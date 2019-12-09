@@ -94,6 +94,7 @@ public class NoticeRestControllerTest {
         //when then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/notice/reg")
                 .with((csrf()))
+                .param("noticeid","1")
                 .param("subject","RestControllerTest-테스트공지사항제목")
                 .param("content","<p>컨텐츠<p>")
         )
