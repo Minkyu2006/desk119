@@ -96,7 +96,7 @@ public class NoticeRestController {
     public ResponseEntity noticeSave(MultipartHttpServletRequest multi,HttpServletRequest request) throws Exception {
         //Notice notice = modelMapper.map(noticeMapperDto, Notice.class);
 
-
+        String noticeid = multi.getParameter("noticeid");
         String subject = multi.getParameter("subject");
         String content = multi.getParameter("content");
         Notice notice = Notice.builder()
@@ -119,6 +119,10 @@ public class NoticeRestController {
         notice.setModify_name(optionalAccount.get().getUsername());
         notice.setModifyDateTime(LocalDateTime.now());
         notice.setHitCount(0);
+        //기존수정이면 저장
+        if(!noticeid.isEmpty()){
+            notice.setId(Long.parseLong(noticeid));
+        }
 
         Notice noticeSave = noticeService.save(notice);
 
