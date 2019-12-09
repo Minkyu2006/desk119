@@ -64,15 +64,18 @@ public class StatisticsRestController {
                 masters.add(records.get(i).getArRelatedId().getName());
             }
         }
-//        System.out.println("스테이트번호 arState :"+arState);
-//        System.out.println("스테이트번호1번인 masters :"+masters);
+        System.out.println("스테이트번호 arState :"+arState);
+        System.out.println("스테이트번호1번인 masters :"+masters);
 
         for(int i=0; i<masters.size(); i++){
             if (!mastersSize.contains(masters.get(i))) {
                 mastersSize.add(masters.get(i));
             }
         }
-//        System.out.println("스테이트번호1번인 mastersSize :"+mastersSize);
+        System.out.println("스테이트번호1번인 mastersSize :"+mastersSize);
+
+        log.info("mastersSize.size() :"+mastersSize.size());
+        log.info("masters.size() :"+masters.size());
 
         int count = 0;
         for(int j=0; j<mastersSize.size(); j++) {
@@ -90,8 +93,8 @@ public class StatisticsRestController {
             }
             masterCodeNames.add(Integer.toString(count));
 
-//            System.out.println("masterCodeNames 데이터 : "+masterCodeNames);
-//            System.out.println("건수 : "+count);
+            System.out.println("masterCodeNames 데이터 : "+masterCodeNames);
+            System.out.println("건수 : "+count);
 
             int cnt = 0;
             int cnt2 = 1;

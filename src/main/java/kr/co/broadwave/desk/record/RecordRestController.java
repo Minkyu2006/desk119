@@ -16,6 +16,7 @@ import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.notice.file.UploadFile;
 import kr.co.broadwave.desk.record.file.RecordImageService;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
+import kr.co.broadwave.desk.record.responsibil.ResponsibilService;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
@@ -60,9 +61,11 @@ public class RecordRestController {
     private final RecordImageService recordImageService;
     private final MailService mailService;
     private final TeamService teamService;
+    private final ResponsibilService responsibilService;
 
     @Autowired
     public RecordRestController(RecordService recordService,
+                                ResponsibilService responsibilService,
                                 AccountService accountService,
                                 ModelMapper modelMapper,
                                 RecordRepository recordRepository,
@@ -70,6 +73,7 @@ public class RecordRestController {
                                 MailService mailService,
                                 TeamService teamService,
                                 MasterCodeService masterCodeService) {
+        this.responsibilService = responsibilService;
         this.recordService = recordService;
         this.accountService = accountService;
         this.modelMapper = modelMapper;
@@ -134,9 +138,11 @@ public class RecordRestController {
 
         Record recordSave = recordService.save(record);
 
+        String filecomment = recordMapperDto.getArComment();
+        String[] filecommentList = filecomment.split(",");
+        int j =0;
         //파일저장
         Iterator<String> files = multi.getFileNames();
-        System.out.println("files :"+files);
         while(files.hasNext()) {
             String recorduploadFile = files.next();
             MultipartFile mFile = multi.getFile(recorduploadFile);
@@ -144,9 +150,10 @@ public class RecordRestController {
             //파일이 존재할때만
             if (!mFile.isEmpty()) {
                 //System.out.println("파일명 확인  : " + fileName);
-                recordImageService.store(mFile,recordSave);
-                //파일명 순번 채번하기 , 코멘트추가
-                recordImageService.makefileseq(recordSave);
+                recordImageService.store(mFile,recordSave,filecommentList[j]);
+                j++;
+                //파일명 순번 채번하기
+                recordImageService.makefilenew(recordSave);
             }
         }
 
@@ -255,24 +262,28 @@ public class RecordRestController {
 
         Record recordSave = recordService.save(record);
 
+        String filecomment = recordMapperDto.getArComment();
+        String[] filecommentList = filecomment.split(",");
+        int j =0;
         //파일저장
         Iterator<String> files = multi.getFileNames();
         System.out.println("files :"+files);
         while(files.hasNext()) {
             String recorduploadFile = files.next();
             MultipartFile mFile = multi.getFile(recorduploadFile);
-            String fileName = mFile.getOriginalFilename();
+//            String fileName = mFile.getOriginalFilename();
             //파일이 존재할때만
             if (!mFile.isEmpty()) {
                 //System.out.println("파일명 확인  : " + fileName);
-                recordImageService.store(mFile,recordSave);
+                recordImageService.store(mFile,recordSave,filecommentList[j]);
+                j++;
                 //파일명 순번 채번하기
-                recordImageService.makefileseq(recordSave);
+                recordImageService.makefilenew(recordSave);
             }
         }
 
         //조사담당자
-        List<Responsibil> responsibil = new ArrayList<>();
+        List<Responsibil> responsibils = new ArrayList<>();
 
         String[] arEmployeeNumber = request.getParameterValues("arEmployeeNumber");
         String[] arEmployeeName = request.getParameterValues("arEmployeeName");
@@ -280,20 +291,20 @@ public class RecordRestController {
 
         for (int i = 0; i < arEmployeeNumber.length; i++) {
             Optional<Team> byTeamcode = teamService.findByTeamcode(teamcode[i]);
-            if (!byTeamcode.isPresent()){
-                Responsibil responsibils = Responsibil.builder()
+            if (byTeamcode.isPresent()){
+                Responsibil responsibils2 = Responsibil.builder()
                         .record(recordSave)
                         .arEmployeeNumber(arEmployeeNumber[i])
                         .arEmployeeName(arEmployeeName[i])
                         .team(byTeamcode.get())
                         .build();
                 if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty()){
-                    responsibil.add(responsibils);
+                    responsibils.add(responsibils2);
                 }
             }
         }
 
-        recordService.recordResponSave(responsibil);
+        recordService.recordResponSave(responsibils);
 
 //        log.info("출동일지 임시저장 성공 : " + recordSave.toString() );
         return ResponseEntity.ok(res.success());
@@ -336,16 +347,20 @@ public class RecordRestController {
     @PostMapping("del")
     public ResponseEntity recordDelete(@RequestParam(value="recordid", defaultValue="") Long recordid){
 
-//        log.info("출동일지 삭제 시작 / 고유번호 ID : '" + recordid + "'");
+        log.info("출동일지 삭제 시작 / 고유번호 ID : '" + recordid + "'");
 
         Optional<Record> optionalRecord = recordService.findByIdRecord(recordid);
+//        List<Responsibil> optionalResponsibil = recordService.recordRespon(recordid);
 
         if (!optionalRecord.isPresent()){
-//            log.info("출동일지 삭제 에러 데이터존재하지않습니다.('E003') fileID: '" + recordid + "'");
+            log.info("출동일지 삭제 에러 데이터존재하지않습니다.('E003') fileID: '" + recordid + "'");
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E003.getCode(), ResponseErrorCode.E003.getDesc()));
         }
+
         recordService.delete(optionalRecord.get());
-//        log.info("출동일지 삭제 성공 / 고유번호 ID : '" + recordid + "'");
+
+        log.info("출동일지 삭제 성공 / 고유번호 ID : '" + recordid + "'");
+
         return ResponseEntity.ok(res.success());
     }
 
@@ -374,7 +389,7 @@ public class RecordRestController {
     @PostMapping("image")
     public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) {
         try {
-            RecordUploadFile uploadedFile = recordImageService.store(file,null);
+            RecordUploadFile uploadedFile = recordImageService.store(file,null,null);
             return ResponseEntity.ok().body("/api/record/image/" + uploadedFile.getId());
         } catch (Exception e) {
             e.printStackTrace();

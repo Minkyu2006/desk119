@@ -2,18 +2,23 @@ package kr.co.broadwave.desk.record.file;
 
 import kr.co.broadwave.desk.common.UploadFileUtils;
 import kr.co.broadwave.desk.record.Record;
+import kr.co.broadwave.desk.record.RecordMapperDto;
 import kr.co.broadwave.desk.record.RecordRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.xmlbeans.impl.xb.xsdschema.All;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -73,7 +78,7 @@ public class RecordImageService {
         return rootLocation.resolve(fileName);
     }
 
-    public RecordUploadFile store(MultipartFile file, Record record) throws Exception {
+    public RecordUploadFile store(MultipartFile file, Record record, String comment) throws Exception {
         try {
             if (file.isEmpty()) {
                 throw new Exception("Failed to store empty file: " + file.getOriginalFilename());
@@ -92,7 +97,9 @@ public class RecordImageService {
             saveFile.setAfFilePath(rootLocation.toString().replace(File.separatorChar, '/') + File.separator + saveFileName);
             saveFile.setSize(resource.contentLength());
             saveFile.setInsertDateTime(LocalDateTime.now());
-            saveFile.setAfComment(record.getArComment());
+            if(saveFile.getAfComment()==null){
+                saveFile.setAfComment(comment);
+            }
             saveFile = recordUploadFileRepository.save(saveFile);
             return saveFile;
         } catch (IOException e) {
@@ -128,18 +135,14 @@ public class RecordImageService {
         }
     }
 
-    //파일순번 채번하기
-    public void makefileseq(Record recordSave) {
+    //파일순번 채번하기 (신규)
+    @Transactional
+    public void makefilenew(Record recordSave) {
         List<RecordUploadFile> recordUploadFiles = recordUploadFileRepository.findByRecord(recordSave);
 
-        int j = 0;
         int i = 0;
-        String comment = recordSave.getArComment();
-        List<String> commentList = Arrays.asList(comment.split(","));
 
         for (RecordUploadFile recordUploadFile : recordUploadFiles) {
-            i = i + 1;
-            String upload_size = Integer.toString(recordUploadFiles.size());
             String arDisasterItemFilename = recordSave.getArDisasterItemFilename(); //재해재난분과
             String arLocationCityType = recordSave.getArLocationCityType().getDesc(); //시
             String arLocationAddressType = recordSave.getArLocationAddressType().getDesc(); //구
@@ -150,51 +153,15 @@ public class RecordImageService {
             // 확장자 구하기
             String extensionName = afName.substring(afName.lastIndexOf("."));
 
-            // 파일코멘트 저장
-            String filecomment = recordSave.getArComment();
-            String[] filecommentList = filecomment.split(",");
-            recordUploadFile.setAfComment(filecommentList[j]);
-            j++;
-
             // 파일이름
             int pos = afName.lastIndexOf(".");
             String realName = afName.substring(0, pos);
 
-            String filename = arDisasterItemFilename + "_" + arLocationCityType + "" + arLocationAddressType + "_" + arIntoStart + "_" + arWriter + "_" + realName + "_" + i + "_" + extensionName;
-
+            i++;
+            String filename = arDisasterItemFilename + "_" + arLocationCityType + "_" + arLocationAddressType + "_" + arIntoStart + "_" + arWriter + "_" + realName + "_" + i + "_" + extensionName;
             recordUploadFile.setAfFileName(filename);
-
             recordUploadFileRepository.save(recordUploadFile);
         }
-//            } else {
-//                for (RecordUploadFile recordUploadFile : recordUploadFiles) {
-//                    i = i + 1;
-//                    String arDisasterItemFilename = recordSave.getArDisasterItemFilename(); //재해재난분과
-//                    String arLocationCityType = recordSave.getArLocationCityType().getDesc(); //시
-//                    String arLocationAddressType = recordSave.getArLocationAddressType().getDesc(); //구
-//                    String arIntoStart = recordSave.getArIntoStart(); // 시작일
-//                    String arWriter = recordSave.getArWriter(); // 작성자
-//                    String afName = recordUploadFile.getAfOriginalFilename(); //파일이름
-//
-//                    // 확장자 구하기
-//                    String extensionName = afName.substring(afName.lastIndexOf("."));
-//
-//                    // 파일코멘트 저장
-//                    String filecomment = recordSave.getArComment();
-//                    String[] filecommentList = filecomment.split(",");
-//                    recordUploadFile.setAfComment(filecommentList[j]);
-//                    j++;
-//
-//                    // 파일이름
-//                    int pos = afName.lastIndexOf(".");
-//                    String realName = afName.substring(0, pos);
-//
-//                    String filename = arDisasterItemFilename + "_" + arLocationCityType + "" + arLocationAddressType + "_" + arIntoStart + "_" + arWriter + "_" + realName + "_" + i + "_" + extensionName;
-//
-//                    recordUploadFile.setAfFileName(filename);
-//
-//                    recordUploadFileRepository.save(recordUploadFile);
-//                }
-
     }
+
 }

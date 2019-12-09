@@ -187,8 +187,8 @@ public class RecordService {
         }
     }
 
-    public Optional<Record> findByIdRecord(Long id){
-        return  recordRepository.findById(id);
+    public Optional<Record> findByIdRecord(Long recordid){
+        return  recordRepository.findById(recordid);
     }
 
     public RecordMapperDto findById(Long id){
@@ -219,6 +219,7 @@ public class RecordService {
     }
 
     //조사담당자 viewlist
+    @Transactional
     public List<Responsibil> recordRespon(Long record_id){
         Optional<Record> optionalRecord = recordRepository.findById(record_id);
         if (optionalRecord.isPresent()){

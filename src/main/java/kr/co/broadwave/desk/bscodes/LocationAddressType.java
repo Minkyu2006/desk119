@@ -48,7 +48,7 @@ public enum LocationAddressType {
     DG0002("DG0002","동구",LocationCityType.L03),
     DG0003("DG0003","서구",LocationCityType.L03),
     DG0004("DG0004","남구",LocationCityType.L03),
-    DG0005("DG0005","북구,",LocationCityType.L03),
+    DG0005("DG0005","북구",LocationCityType.L03),
     DG0006("DG0006","수성구",LocationCityType.L03),
     DG0007("DG0007","달서구",LocationCityType.L03),
     DG0008("DG0008","달성군",LocationCityType.L03),
