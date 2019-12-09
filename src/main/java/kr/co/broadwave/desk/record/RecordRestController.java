@@ -267,7 +267,6 @@ public class RecordRestController {
         int j =0;
         //파일저장
         Iterator<String> files = multi.getFileNames();
-        System.out.println("files :"+files);
         while(files.hasNext()) {
             String recorduploadFile = files.next();
             MultipartFile mFile = multi.getFile(recorduploadFile);
@@ -277,10 +276,11 @@ public class RecordRestController {
                 //System.out.println("파일명 확인  : " + fileName);
                 recordImageService.store(mFile,recordSave,filecommentList[j]);
                 j++;
-                //파일명 순번 채번하기
-                recordImageService.makefilenew(recordSave);
             }
         }
+
+        //파일명 순번 채번하기
+        recordImageService.makefilenew(recordSave);
 
         //조사담당자
         List<Responsibil> responsibils = new ArrayList<>();

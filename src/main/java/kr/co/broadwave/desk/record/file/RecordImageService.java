@@ -109,7 +109,7 @@ public class RecordImageService {
 
     //특정 게시물의 첨부파일목록을 반환하는 함수
     public List<RecordUploadFile> recorduploadFileList(Long record_id) {
-        log.info("출동일지 첨부파일 내역 조회 / 출동일지 ID '" + record_id + "'");
+//        log.info("출동일지 첨부파일 내역 조회 / 출동일지 ID '" + record_id + "'");
         Optional<Record> optionalRecord = recordRepository.findById(record_id);
         if (optionalRecord.isPresent()) {
             return recordUploadFileRepository.findByRecord(optionalRecord.get());
@@ -120,7 +120,7 @@ public class RecordImageService {
 
     //특정파일삭제하기(-1반환이면 오류)
     public int recorduploadFileDelete(Long fileId) {
-        log.info("출동일지 첨부파일 삭제 시작 / 파일ID '" + fileId + "'");
+//        log.info("출동일지 첨부파일 삭제 시작 / 파일ID '" + fileId + "'");
         Optional<RecordUploadFile> optionalUploadFile = recordUploadFileRepository.findById(fileId);
         if (optionalUploadFile.isPresent()) {
             //실제 파일삭제

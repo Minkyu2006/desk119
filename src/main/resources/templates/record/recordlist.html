@@ -94,8 +94,8 @@
 						return;
 					}
 
-					$totalCnt.text(totCnt);
-
+					// $totalCnt.text(totCnt);
+					var cnt = 0;
 					var html = '';
                     $.each(res.data.datalist, function(key, value){
 
@@ -131,7 +131,8 @@
                                     html += '<td class="c-retable--tablet-hidden">' + echoNull2Blank(value.arWriter) + '</td>';
                                     html += '</tr>';
 
-                                    return;
+									cnt++;
+									$totalCnt.text(cnt);
                                 }
                             }
                         }
@@ -164,6 +165,8 @@
                             html += '<td class="c-retable--tablet-hidden c-retable__white-space">' + echoNull2Blank(value.arDisasterItem) + '</td>';
                             html += '<td class="c-retable--tablet-hidden">' + echoNull2Blank(value.arWriter) + '</td>';
                             html += '</tr>';
+                            cnt++;
+							$totalCnt.text(cnt);
                         }
                     });
                     $schList.html(html);
