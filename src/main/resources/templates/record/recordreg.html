@@ -465,32 +465,32 @@
 				return false;
 			}
 			if ($("#arWriter").val().trim() == '') {
-				Swal.fire({text:"작성자를 입력하세요."});
+				alert("작성자를 입력하세요.");
 				return false;
 			}
 			if ($(":checkbox[name='branch']:checked").length == 0) {
-				Swal.fire({html:"재해.재난.분과 항목을<br/>하나이상 체크해주세요."});
+				alert("재해.재난.분과 항목을<br/>하나이상 체크해주세요.");
 				return;
 			}
 			if ($(":checkbox[name='scan']:checked").length == 0) {
-				Swal.fire({html:"조사시시설물 항목을<br/>하나이상 체크해주세요."});
+				alert("조사시시설물 항목을<br/>하나이상 체크해주세요.");
 				return;
 			}
 			if ($("#arIntoStart").val().trim() == '') {
-				Swal.fire({text:"시작날짜를 설정해주세요."});
+				alert("시작날짜를 설정해주세요.");
 				return;
 			}
 			if ($("#arIntoEnd").val().trim() == '') {
-				Swal.fire({text:"끝난날짜를 설정해주세요."});
+				alert("끝난날짜를 설정해주세요.");
 				return;
 			}
 			if ($("#arLocationAddressType option:selected").val()==null) {
-				Swal.fire({text:"행정구역을 설정해주세요."});
+				alert("행정구역을 설정해주세요.");
 				return;
 			}
 			if ($("#file0").val() != '') {
 				if ($('input[name=arComment]').val().trim() == '') {
-					Swal.fire({text: "관련사진 코멘트는 필수입니다."});
+					alert("관련사진 코멘트는 필수입니다.");
 					return;
 				}
 			}
@@ -546,13 +546,8 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					Swal.fire({
-						title: '출동일지가 등록 되었습니다.',
-						text: '출동일지조회에서 확인해주세요.',
-						type: "success"
-					}).then(function () {
-						window.location.href ="/record/list";
-					})
+					alert('출동일지가 등록 되었습니다.');
+					window.location.href ="/record/list";
 				}
 			});
 		}
