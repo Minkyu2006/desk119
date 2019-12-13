@@ -50,8 +50,8 @@
 				//dataType: json,
 				data : params,
 				cache:false,
-				error:function(request,status,error){
-					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				error:function(request){
+					ajaxErrorMsg(request);
 				},
 				success: function(res){
 					//화면 출력
@@ -120,8 +120,8 @@
 				//dataType: 'html',
 				data : params,
 				cache:false,
-				error:function(request,status,error){
-					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				error:function(request){
+					ajaxErrorMsg(request);
 				},
 				success: function(res){
 					if (!Ajax.checkResult(res)) {

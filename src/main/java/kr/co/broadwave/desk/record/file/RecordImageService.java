@@ -156,6 +156,7 @@ public class RecordImageService {
             // 파일이름
             int pos = afName.lastIndexOf(".");
             String realName = afName.substring(0, pos);
+            log.info("realName : "+realName);
 
             i++;
             String filename = arDisasterItemFilename + "_" + arLocationCityType + "_" + arLocationAddressType + "_" + arIntoStart + "_" + arWriter + "_" + realName + "_" + i + "_" + extensionName;

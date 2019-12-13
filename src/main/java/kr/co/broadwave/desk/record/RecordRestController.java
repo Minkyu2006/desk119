@@ -146,10 +146,8 @@ public class RecordRestController {
         while(files.hasNext()) {
             String recorduploadFile = files.next();
             MultipartFile mFile = multi.getFile(recorduploadFile);
-            String fileName = mFile.getOriginalFilename();
             //파일이 존재할때만
             if (!mFile.isEmpty()) {
-                //System.out.println("파일명 확인  : " + fileName);
                 recordImageService.store(mFile,recordSave,filecommentList[j]);
                 j++;
                 //파일명 순번 채번하기
