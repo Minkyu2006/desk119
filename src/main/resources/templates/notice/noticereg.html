@@ -9,11 +9,14 @@
 <th:block layout:fragment="css">
 	<link rel="stylesheet" href="/assets/js/summernote/summernote-lite.css" />
 
+
 </th:block>
 
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
 	<script src="/assets/js/summernote/summernote-lite.js"></script>
+
+
 	<script>
 		$(function(){
 	        $('#summernote').summernote({
@@ -169,10 +172,10 @@
 				return false;
 			}
 
-
 			//var $form = $('form[name="frmreg"]');
 			//var formData = $form.serialize();
 			var formData = new FormData(document.getElementById('frmreg')); //new FormData($("#frmreg"));
+			formData.append('content',$("#summernote").val());
 
 
 
@@ -315,7 +318,7 @@
 												<a href="#" class="c-file__control add">추가</a>
 											</div>
 										</li>
-										
+
 
 									</ul>
 									
@@ -334,26 +337,30 @@
 									</ul>
 								</td>
 							</tr>
-							<tr>
-								<td colspan="2">
-									<div id="summernote2">
-										<th:block th:if="${valueExist}">
-											<textarea class="form-control" id="summernote" name="content" placeholder="content" maxlength="140" rows="7"
-												th:field="${notice.content}">
-											</textarea>
-										</th:block>
-										<th:block th:if="!${valueExist}">
-											<textarea class="form-control" id="summernote" name="content" placeholder="content" maxlength="140" rows="7">
-											</textarea>
-										</th:block>
 
-									</div>
-								</td>
-							</tr>
+
 
 						</tbody>
 					</table>
 				</form>
+				<table>
+					<tr>
+						<td colspan="2">
+							<div id="summernote2">
+								<th:block th:if="${valueExist}">
+											<textarea class="form-control" id="summernote" name="content" placeholder="content" maxlength="140" rows="7"
+													  th:field="${notice.content}">
+											</textarea>
+								</th:block>
+								<th:block th:if="!${valueExist}">
+											<textarea class="form-control" id="summernote" name="content" placeholder="content" maxlength="140" rows="7">
+											</textarea>
+								</th:block>
+
+							</div>
+						</td>
+					</tr>
+				</table>
 				<div class="c-function">
 					<div class="c-function__group c-function__group--right">
 						<div class="c-function__item"><button class="c-button c-button--point" id="btnSave">저장</button></div>
