@@ -46,11 +46,7 @@
 		})
 
 		function sweetalertclick() {
-			Swal.fire(
-					'권한이 필요합니다',
-					'로그인해주시길 바랍니다',
-					'question'
-			);
+			alertCaution('권한이 필요합니다.<br> 로그인해주시길 바랍니다');
 		}
 
 	</script>
@@ -171,6 +167,8 @@
 				</li>
 			</ul>
 		</div>
+	</div>
+	<div id='alertpop'>
 	</div>
 </div>
 </html>

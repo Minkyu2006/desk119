@@ -93,7 +93,7 @@
 		function callApproval(userid,approvaltype) {
 			//alert (userid + '/' + approvaltype);
 			if (($("#okbtn_"+userid).html() != "승인") && ($("#rebtn_"+userid).html() != "거절") ){
-				Swal.fire({html:"이미 승인(반려) <br> 처리가 완료되었습니다."});
+				alertCaution("이미 승인(반려) 처리가 완료되었습니다.");
 				return false;
 			}
 
@@ -243,6 +243,7 @@
 
 		</article>
 	</section>
-
+	<div id='alertpop'>
+	</div>
 </div>
 </html>

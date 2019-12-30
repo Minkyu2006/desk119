@@ -14,6 +14,10 @@
 <th:block layout:fragment="script">
 	<script>
 		$(function() {
+			$(document).on("click","#successBtn",function(){
+				window.location.href = "/record/list";
+			});
+
 			//저장
 			$("#btnSave").on('click', function () {
 				save();
@@ -394,7 +398,7 @@
 		function temsave() {
 			if ($("#file0").val() != '') {
 				if ($('input[name=arComment]').val().trim() == '') {
-					alert("관련사진 코멘트는 필수입니다.");
+					alertCaution("관련사진 코멘트는 필수입니다.");
 					return;
 				}
 			}
@@ -452,7 +456,7 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					alert('임시저장이 되었습니다.')
+					alertSuccess('임시저장이 되었습니다.')
 					window.location.href ="/record/list";
 				}
 			});
@@ -460,37 +464,37 @@
 		//출동일지 저장
 		function save() {
 			if ($("#arTitle").val().trim() == '') {
-				alert("제목을 입력하세요.");
+				alertCaution("제목을 입력하세요.");
 				$("#arTitle").trigger('focus');
 				return false;
 			}
 			if ($("#arWriter").val().trim() == '') {
-				alert("작성자를 입력하세요.");
+				alertCaution("작성자를 입력하세요.");
 				return false;
 			}
 			if ($(":checkbox[name='branch']:checked").length == 0) {
-				alert("재해.재난.분과 항목을<br/>하나이상 체크해주세요.");
+				alertCaution("재해.재난.분과 항목을 <br> 하나이상 체크해주세요.");
 				return;
 			}
 			if ($(":checkbox[name='scan']:checked").length == 0) {
-				alert("조사시시설물 항목을<br/>하나이상 체크해주세요.");
+				alertCaution("조사시시설물 항목을 <br> 하나이상 체크해주세요.");
 				return;
 			}
 			if ($("#arIntoStart").val().trim() == '') {
-				alert("시작날짜를 설정해주세요.");
+				alertCaution("시작날짜를 설정해주세요.");
 				return;
 			}
 			if ($("#arIntoEnd").val().trim() == '') {
-				alert("끝난날짜를 설정해주세요.");
+				alertCaution("끝난날짜를 설정해주세요.");
 				return;
 			}
 			if ($("#arLocationAddressType option:selected").val()==null) {
-				alert("행정구역을 설정해주세요.");
+				alertCaution("행정구역을 설정해주세요.");
 				return;
 			}
 			if ($("#file0").val() != '') {
 				if ($('input[name=arComment]').val().trim() == '') {
-					alert("관련사진 코멘트는 필수입니다.");
+					alertCaution("관련사진 코멘트는 필수입니다.");
 					return;
 				}
 			}
@@ -515,11 +519,11 @@
 				arIntoEnd(realend);
 			};
 			if($("#arIntoStart").val().length != 8){
-				alert("시작날짜를 확인해주세요.");
+				alertCaution("시작날짜를 확인해주세요.");
 				return;
 			}
 			if($("#arIntoStart").val().length != 8){
-				alert("끝난날짜를 확인해주세요.");
+				alertCaution("끝난날짜를 확인해주세요.");
 				return;
 			}
 
@@ -546,8 +550,7 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					alert('출동일지가 등록 되었습니다.');
-					window.location.href ="/record/list";
+					alertSuccess('출동일지가 등록 되었습니다.');
 				}
 			});
 		}
@@ -555,7 +558,7 @@
 		//삭제버튼 실행
 		function del() {
 				if ($("#id").val() == '') {
-					alert("삭제하고자하는 출동일지를 선택하세요.");
+					alertCaution("삭제하고자하는 출동일지를 선택하세요.");
 					return false;
 				}
 				var params = {
@@ -580,8 +583,7 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					alert('출동일지가 삭제 되었습니다.');
-					window.location.href = "/record/list";
+					alertSuccess('출동일지가 삭제 되었습니다.');
 				}
 			})
 		}
@@ -1082,6 +1084,7 @@
 			</div>
 		</div>
 </section>
-
+<div id='alertpop'>
+</div>
 </div>
 </html>

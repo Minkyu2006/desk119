@@ -21,37 +21,36 @@
 
 		function save(){
 			if ($("#userid").val().trim() == '') {
-				// alert("아이디를 입력하세요. 아이디는 중복되지 않도록 확인 후 입력하세요.");
-				Swal.fire({html:"아이디를 입력하세요.<br>아이디는 중복되지 않도록 확인 후 입력하세요."});
+				alertCaution("아이디를 입력하세요.<br>아이디는 중복되지 않도록 확인 후 입력하세요.");
 				$("#userid").trigger('focus');
 				return false;
 			}
 
 			if ($("#username").val().trim() == '') {
-				Swal.fire({text:"이름을 입력하세요."});
+				alertCaution("이름을 입력하세요.");
 				$("#username").trigger('focus');
 				return false;
 			}
 
 			if ($("#password").val().trim() == '') {
-				Swal.fire({text:"비밀번호를 입력하세요."});
+				alertCaution("비밀번호를 입력하세요.");
 				$("#password").trigger('focus');
 				return false;
 			}
 
 			if ($("#password").val().trim() != $("#password2").val().trim()) {
-				Swal.fire({text:"입력한 비밀번호가 다릅니다."});
+				alertCaution("입력한 비밀번호가 다릅니다.");
 				$("#password").trigger('focus');
 				return false;
 			}
 
 			if ($("#cellphone").val().trim() == '') {
-				Swal.fire({html:"전화번호를 입력하세요<br>메세지를 받기 위해서는 필수입니다."});
+				alertCaution("전화번호를 입력하세요.<br>메세지를 받기 위해서는 필수입니다.");
 				return false;
 			}
 
 			if ($("#email").val().trim() == '') {
-				Swal.fire({html:"이메일 입력하세요.<br>알림메일을 받기위해서는 필수입니다."});
+				alertCaution("이메일 입력하세요.<br>알림메일을 받기위해서는 필수입니다.");
 				return false;
 			}
 
@@ -77,13 +76,8 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					Swal.fire({
-						title: '회원가입 요청이 되었습니다.',
-						text: '관리자의 승인 이후에 로그인이 가능합니다.',
-						type: "success"
-					}).then(function () {
-						window.location.href ="/";
-					})
+					alertSuccess('회원가입 요청이 되었습니다. <br> 관리자의 승인 이후에 로그인이 가능합니다.')
+					window.location.href ="/";
 				}
 			});
 		}
@@ -170,6 +164,7 @@
     		</div>
     	</div>
     </div>
-    
+	<div id='alertpop'>
+	</div>
 </div>
 </html>

@@ -19,6 +19,11 @@
 
 	<script>
 		$(function(){
+
+			$(document).on("click","#successBtn",function(){
+				window.location.href ="/notice/noticelist";
+			});
+
 	        $('#summernote').summernote({
 	            height: 300,
 				minHeight: null,
@@ -162,22 +167,18 @@
 		function save(){
 
 			if ($("#subject").val().trim() == '') {
-				alert("제목을 입력하세요.")
+				alertCaution("제목을 입력하세요.")
 				$("#subject").trigger('focus');
 				return false;
 			}
 
 			if ($("#summernote").val().trim() == '') {
-				alert("본문내용을 입력하세요.")
+				alertCaution("본문내용을 입력하세요.")
 				return false;
 			}
 
-			//var $form = $('form[name="frmreg"]');
-			//var formData = $form.serialize();
 			var formData = new FormData(document.getElementById('frmreg')); //new FormData($("#frmreg"));
 			formData.append('content',$("#summernote").val());
-
-
 
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
@@ -186,7 +187,6 @@
 			$.ajax({
 				url:'/api/notice/reg',
 				type : 'post',
-				//dataType: 'html',
 				data : formData,
 				processData : false,
 				contentType : false,
@@ -199,8 +199,7 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					alert('공지사항이 등록 되었습니다.');
-					window.location.href ="/notice/noticelist";
+					alertSuccess('공지사항이 등록 되었습니다.');
 				}
 			});
 		}
@@ -209,7 +208,7 @@
 		function del() {
 
 			if ($("#noticeid").val() == '') {
-				alert("삭제하고자하는 공지사항을 선택하세요.");
+				alertCaution("삭제하고자하는 공지사항을 선택하세요.");
 				return false;
 			}
 
@@ -236,7 +235,7 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					alert('공지사항이 삭제 되었습니다.');
+					alertSuccess('공지사항이 삭제 되었습니다.');
 					window.location.href = "/notice/noticelist";
 				}
 			});
@@ -352,6 +351,7 @@
 			
 		</article>
 	</section>
-    
+	<div id='alertpop'>
+	</div>
 </div>
 </html>

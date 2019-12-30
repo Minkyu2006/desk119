@@ -20,11 +20,10 @@
     <link rel="stylesheet" href="/assets/css/common.css" />
     <link rel="stylesheet" href="/assets/js/charts/Chart.min.css" />
     <link rel="stylesheet" href="/assets/js/c3/c3.css" />
+    <link rel="" href="/assets/js/alert/min_alert.css" />
 
     <!-- 사용자 CSS 영역이 들어감 -->
     <th:block layout:fragment="css"></th:block>
-
-
 
     <!-- 공통으로 쓰이는 js파일을넣는다.-->
     <script src="/assets/js/jquery.min.js"></script>
@@ -35,14 +34,14 @@
     <script src="/assets/js/charts/Chart.min.js"></script>
     <script src="/assets/js/d3/d3.js"></script>
     <script src="/assets/js/c3/c3.js"></script>
-    <script src="/assets/js/sweetalert/sweetalert2.all.js"></script>
+    <script src="/assets/js/alert/min_alert.js"></script>
 
 <script>
     //admin전용 -> 모바일인지 체크 // 2019.10.11 김민규추가
     function mobileAlert(mobileId) {
         if (navigator.userAgent.match(/iPad/) == null &&
             navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
-            Swal.fire({text:"PC에서 이용가능합니다."});
+            alertCaution("PC에서 이용가능합니다.");
             return false;
         }else{
             if(mobileId==1){
@@ -56,7 +55,7 @@
             }else if(mobileId==5){
                 return location.href = "/admin/mastercodereg";
             }else{
-                Swal.fire({text:"잘못된 접근입니다."});
+                alertCancel("잘못된 접근입니다.");
                 false;
             }
         }

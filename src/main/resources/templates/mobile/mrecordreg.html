@@ -14,6 +14,10 @@
 <th:block layout:fragment="script">
 	<script>
 		$(function() {
+			$(document).on("click","#successBtn",function(){
+				window.location.href = "/record/list";
+			});
+
 			//저장
 			$("#btnSave").on('click', function () {
 				save();
@@ -433,12 +437,7 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					Swal.fire({
-						html: '임시저장이 되었습니다.<br>출동일지조회에서 확인해주세요.',
-						type: "success"
-					}).then(function () {
-						window.location.href ="/record/list";
-					})
+					alertSuccess('임시저장이 되었습니다.<br>출동일지조회에서 확인해주세요.');
 				}
 			});
 		}
@@ -446,24 +445,24 @@
 		//출동일지 저장
 		function save() {
 			if ($("#arTitle").val().trim() == '') {
-				Swal.fire({text:"제목을 입력하세요."});
+				alertCaution("제목을 입력하세요.");
 				$("#arTitle").trigger('focus');
 				return false;
 			}
 			if ($("#arWriter").val().trim() == '') {
-				Swal.fire({text:"작성자를 입력하세요."});
+				alertCaution("작성자를 입력하세요.");
 				return false;
 			}
 			if ($(":checkbox[name='branch']:checked").length == 0) {
-				Swal.fire({html:"재해.재난.분과 항목을<br>하나이상 체크해 주세요."});
+				alertCaution("재해.재난.분과 항목을 하나이상 체크해 주세요.");
 				return;
 			}
 			if ($(":checkbox[name='scan']:checked").length == 0) {
-				Swal.fire({html:"조사시시설물 항목을<br>하나이상 체크해 주세요."});
+				alertCaution("조사시시설물 항목을 하나이상 체크해 주세요.");
 				return;
 			}
 			if ($("#arLocationAddressType option:selected").val()==null) {
-				Swal.fire({text:"행정구역을 설정해주세요."});
+				alertCaution("행정구역을 설정해주세요.");
 				return;
 			}
 
@@ -484,11 +483,11 @@
 			};
 
 			if ($("#arIntoStart").val().trim() == '') {
-				Swal.fire({text:"시작날짜를 설정해주세요."});
+				alertCaution("시작날짜를 설정해주세요.");
 				return;
 			}
 			if ($("#arIntoEnd").val().trim() == '') {
-				Swal.fire({text:"끝난날짜를 설정해주세요."});
+				alertCaution("끝난날짜를 설정해주세요.");
 				return;
 			}
 
@@ -515,59 +514,38 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					Swal.fire({
-						html: '출동일지가 등록 되었습니다.<br>출동일지조회에서 확인해주세요.',
-						type: "success"
-					}).then(function () {
-						window.location.href ="/record/list";
-					})
+					alertSuccess('출동일지가 등록 되었습니다.출동일지조회에서 확인해주세요.');
 				}
 			});
 		}
 
 		//삭제버튼 실행
 		function del() {
-			Swal.fire({
-				text: '출동일지를 삭제하시겠습니까?.',
-				type: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: '#3085d6',
-				cancelButtonColor: '#d33',
-				confirmButtonText: 'OK'
-			}).then(function (result) {
-				if (result.value) {
-					var params = {
-						recordid: $("#id").val()
-					};
+			var params = {
+				recordid: $("#id").val()
+			};
 
-					var token = $("meta[name='_csrf']").attr("content");
-					var header = $("meta[name='_csrf_header']").attr("content");
-					$(document).ajaxSend(function (e, xhr) {
-						xhr.setRequestHeader(header, token);
-					});
-
-					$.ajax({
-						url: '/api/record/del',
-						type: 'post',
-						data: params,
-						cache: false,
-						error: function (request) {
-							ajaxErrorMsg(request);
-						},
-						success: function (res) {
-							if (!Ajax.checkResult(res)) {
-								return;
-							}
-							Swal.fire({
-								html: '출동일지가 삭제 되었습니다.<br>출동일지조회에서 확인해주세요.',
-								type: "success"
-							}).then(function () {
-								window.location.href = "/record/list";
-							})
-						}
-					})
-				}
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function (e, xhr) {
+				xhr.setRequestHeader(header, token);
 			});
+
+			$.ajax({
+				url: '/api/record/del',
+				type: 'post',
+				data: params,
+				cache: false,
+				error: function (request) {
+					ajaxErrorMsg(request);
+				},
+				success: function (res) {
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+					alertSuccess('출동일지가 삭제 되었습니다. 출동일지조회에서 확인해주세요.');
+				}
+			})
 		}
 
 		// 행정구역 onchange Post
@@ -1018,5 +996,7 @@
 				</div>
     		</article>
     	</section>
+		<div id='alertpop'>
+		</div>
 	</div>
 </html>
