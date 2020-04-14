@@ -14,9 +14,6 @@
 <th:block layout:fragment="script">
 	<script>
 		$(function() {
-			$(document).on("click","#successBtn",function(){
-				window.location.href = "/record/list";
-			});
 
 			//저장
 			$("#btnSave").on('click', function () {
@@ -437,7 +434,7 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					alertSuccess('임시저장이 되었습니다.<br>출동일지조회에서 확인해주세요.');
+					alertSuccess('임시저장이 되었습니다.<br>출동일지조회에서 확인해주세요.',1);
 				}
 			});
 		}
@@ -514,7 +511,7 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					alertSuccess('출동일지가 등록 되었습니다.출동일지조회에서 확인해주세요.');
+					alertSuccess('출동일지가 등록 되었습니다.출동일지조회에서 확인해주세요.',1);
 				}
 			});
 		}
@@ -543,7 +540,7 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					alertSuccess('출동일지가 삭제 되었습니다. 출동일지조회에서 확인해주세요.');
+					alertSuccess('출동일지가 삭제 되었습니다. 출동일지조회에서 확인해주세요.',1);
 				}
 			})
 		}
@@ -996,7 +993,5 @@
 				</div>
     		</article>
     	</section>
-		<div id='alertpop'>
-		</div>
 	</div>
 </html>

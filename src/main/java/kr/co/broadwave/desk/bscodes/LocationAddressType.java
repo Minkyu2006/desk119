@@ -104,7 +104,7 @@ public enum LocationAddressType {
     G0014("G0014","부천시 오정구",LocationCityType.L08),
     G0015("G0015","부천시 원미구",LocationCityType.L08),
     G0016("G0016","성남시 분당구",LocationCityType.L08),
-    G0017("G0017","성남시 수정구,",LocationCityType.L08),
+    G0017("G0017","성남시 수정구",LocationCityType.L08),
     G0018("G0018","성남시 중원구",LocationCityType.L08),
     G0019("G0019","수원시 권선구",LocationCityType.L08),
     G0020("G0020","수원시 영통구",LocationCityType.L08),
