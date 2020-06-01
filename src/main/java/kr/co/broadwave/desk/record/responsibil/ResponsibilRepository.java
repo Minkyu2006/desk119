@@ -18,5 +18,5 @@ public interface ResponsibilRepository extends JpaRepository<Responsibil,Long> {
     List<Responsibil> findByRecord(Record record);
 
     Optional<Responsibil> findById(Long id);
-
+ 
 }
