@@ -22,10 +22,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author InSeok
@@ -167,11 +164,18 @@ public class NoticeRestController {
     @PostMapping("Popup")
     public ResponseEntity Popup(){
         List<NoticeIdStateDto> noticeIdStateDtos = noticeService.findByIdState();
-        log.info("noticeIdStateDtos : "+noticeIdStateDtos);
-//        log.info("Id : "+noticeIdStateDtos.get(0).getId());
+//        log.info("noticeIdStateDtos : "+noticeIdStateDtos);
 
-//        Page<NoticeDto> notices = noticeService.findAllBySearchStrings(subject, username, pageable);
-//        data.put("dataselect",dataselect);
+        List<Long> noticeId = new ArrayList<>();
+
+        for(int i=0; i<noticeIdStateDtos.size(); i++){
+            if(noticeIdStateDtos.get(i).getBnState()==1) {
+                noticeId.add(noticeIdStateDtos.get(i).getId());
+            }
+        }
+//        log.info("noticeId : "+noticeId);
+
+        data.put("noticeId",noticeId);
         res.addResponse("data",data);
         return ResponseEntity.ok(res.success());
 

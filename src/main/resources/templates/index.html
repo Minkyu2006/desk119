@@ -56,9 +56,11 @@
 			});
 
 		})
+		var setting;
 
 		// 공지사항 팝업
 		function noticePopUp() {
+
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
@@ -71,9 +73,19 @@
 					ajaxErrorMsg(request);
 				},
 				success: function(res) {
-
+					for(var i=0; i<res.data.noticeId.length; i++) {
+						winPop(res.data.noticeId[i]);
+					}
 				}
 			});
+		}
+
+		function winPop(id) {
+			var noticePop
+			var href = "/notice/noticeviewPopup/"+id;
+			setting = "width=" + 1044 + ", height=" + 580 + ", top=5, left=20, scrollbar=yes"
+			noticePop = window.open(href,"",setting);
+			noticePop.focus();
 		}
 
 		function sweetalertclick() {
@@ -82,7 +94,7 @@
 
 		function popWin(width, height, scroll) {
 			var newWindow;
-			var setting = "width=" + width + ", height=" + height + ", top=5, left=20, scrollbars=" + scroll
+			setting = "width=" + width + ", height=" + height + ", top=5, left=20, scrollbars=" + scroll
 			newWindow = window.open ("/statistics/statisticsview" , "통계 상세보기", setting);
 			newWindow.focus();
 		}

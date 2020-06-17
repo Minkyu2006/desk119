@@ -62,6 +62,20 @@ public class NoticeController {
 
         return "notice/noticeview";
     }
+
+    @RequestMapping("noticeviewPopup/{id}")
+    public String noticeviewPopup(Model model, @PathVariable Long id){
+        //조회수업데이트
+        noticeService.hitCountUpdate(id);
+        //데이터 가져오기
+        NoticeDto noticeDto = noticeService.findById(id);
+        List<UploadFile> uploadFiles = imageService.uploadFileList(id);
+        model.addAttribute("notice", noticeDto);
+        model.addAttribute("uploadFiles", uploadFiles);
+
+        return "notice/noticeviewPopup";
+    }
+
     @RequestMapping("download/{fileid}")
     @ResponseBody
     public byte[] downProcess(HttpServletResponse response,

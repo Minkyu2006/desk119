@@ -69,4 +69,5 @@ public class NoticeService {
     public List<NoticeIdStateDto> findByIdState() {
         return noticeRepositoryCustom.findByIdState();
     }
+
 }

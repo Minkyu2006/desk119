@@ -16,4 +16,5 @@ public interface NoticeRepositoryCustom {
     Long hitCountUpdate(Notice notice);
 
     List<NoticeIdStateDto> findByIdState();
+
 }

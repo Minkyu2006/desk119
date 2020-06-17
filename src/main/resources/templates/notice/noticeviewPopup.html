@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="configFragment">
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>공지사항</title>
+
+	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+	<!-- default header name is X-CSRF-TOKEN -->
+	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+	<!-- 공통으로 쓰이는 css파일을넣는다.-->
+	<link rel="stylesheet" href="/assets/css/main.css" />
+	<link rel="stylesheet" href="/assets/css/component.css" />
+	<link rel="stylesheet" href="/assets/css/common.css" />
+
+	<!-- 공통으로 쓰이는 js파일을넣는다.-->
+	<script src="/assets/js/jquery.min.js"></script>
+	<script src="/assets/js/jquery-ui.min.js"></script>
+	<script src="/assets/js/broadwave.common.js"></script>
+	<script src="/assets/js/common-pc.js"></script>
+</head>
+
+
+<div>
+	<section class="section">
+		<article class="article">
+			<h2 class="article__heading">공지사항</h2>
+			<div class="notice-view">
+				<div class="notice-view__contents">
+					<table class="c-table">
+						<tbody>
+							<tr>
+								<td colspan="6" class="align--center" th:text="${notice?.subject}"></td>
+							</tr>
+							<tr class="c-retable__tr--tablet-visible">
+								<td colspan="6">
+									<ul class="c-retable__tablet-list non-border">
+										<li><img src="/assets/images/icon__user.png" alt="작성자"><span th:text="${notice?.modify_name}"></span></li>
+										<li class="c-retable__list--mobile"><img src="/assets/images/icon__calendar--gray.png" alt="게시일"><span th:text="${notice?.modifyDateTime}"></span></li>
+										<li class="c-retable__list--mobile"><img src="/assets/images/icon__show.png" alt="조회수"><span th:text="${notice?.hitCount}"></span></li>
+									</ul>
+								</td>
+							</tr>
+							<tr class="c-ratable__tr--tablet-hidden">
+								<th>작성자</th>
+								<td th:text="${notice?.modify_name}"></td>
+								<th>게시일</th>
+								<td th:text="${notice?.modifyDateTime}"></td>
+								<th>조회수</th>
+								<td th:text="${notice?.hitCount}"></td>
+							</tr>
+							<tr>
+								<td colspan="6">
+									<div class="note-frame" th:utext="${notice?.content}">
+
+									</div>
+								</td>
+							</tr>
+							<tr class="c-retable__tr--tablet-visible">
+								<td colspan="6">
+									<ul class="c-file-list">
+										<li th:each ="uploadfile : ${uploadFiles}"><img src="/assets/images/icon__file.png" alt="첨부파일" class="c-file-list__img" />
+											<a th:href="@{/notice/download/{id}(id=${uploadfile.id})}"  th:text="${uploadfile.fileName}"></a></li>
+
+									</ul>
+								</td>
+							</tr>
+							<tr class="c-ratable__tr--tablet-hidden">
+								<th>첨부파일</th>
+								<td colspan="5">
+									<ul class="c-file-list">
+										<li th:each ="uploadfile : ${uploadFiles}"
+												><a th:href="@{/notice/download/{id}(id=${uploadfile.id})}"  th:text="${uploadfile.fileName}"></a></li>
+
+									</ul>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</article>
+	</section>
+</div>
+</html>

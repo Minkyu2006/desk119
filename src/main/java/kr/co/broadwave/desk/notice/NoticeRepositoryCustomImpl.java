@@ -83,5 +83,4 @@ public class NoticeRepositoryCustomImpl extends QuerydslRepositorySupport implem
                 .from(notice)
                 .fetch();
     }
-
 }
