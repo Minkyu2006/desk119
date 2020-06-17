@@ -15,6 +15,18 @@
 
 	<script>
 		$(document).ready(function() {
+
+			if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
+				console.log("mobile")
+			}else{
+				console.log("pc")
+				noticePopUp();
+			}
+
+			$("#popWin").on('click',function(){
+				popWin(1044,580,'yes');
+			});
+
 			var slider = $('.banner__slide').bxSlider({
 							controls: false,
 							pagerCustom: '.banner__slide-pager'
@@ -45,8 +57,34 @@
 
 		})
 
+		// 공지사항 팝업
+		function noticePopUp() {
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
+
+			$.ajax({
+				url:'/api/notice/Popup',
+				type : 'post',
+				cache:false,
+				error:function(request){
+					ajaxErrorMsg(request);
+				},
+				success: function(res) {
+
+				}
+			});
+		}
+
 		function sweetalertclick() {
 			alertCaution('권한이 필요합니다.<br> 로그인해주시길 바랍니다');
+		}
+
+		function popWin(width, height, scroll) {
+			var newWindow;
+			var setting = "width=" + width + ", height=" + height + ", top=5, left=20, scrollbars=" + scroll
+			newWindow = window.open ("/statistics/statisticsview" , "통계 상세보기", setting);
+			newWindow.focus();
 		}
 
 	</script>
@@ -162,7 +200,7 @@
 								<li><a href="#" data-slide-index="1">2</a></li>
 							</ul>
 						</div>
-						<a href="/statistics/statisticsview" class="banner__stat-link">상세보기&gt;&gt;</a>
+						<a id="popWin" class="banner__stat-link">상세보기&gt;&gt;</a>
 					</div>
 				</li>
 			</ul>

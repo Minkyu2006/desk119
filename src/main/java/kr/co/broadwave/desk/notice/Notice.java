@@ -37,6 +37,9 @@ public class Notice {
     @Column(name="bn_hitcount")
     private Integer hitCount;
 
+    @Column(name="bn_state")
+    private Integer bnState;
+
     @Column(name="insert_date")
     private LocalDateTime insertDateTime;
 

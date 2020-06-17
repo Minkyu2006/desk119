@@ -1,14 +1,10 @@
 package kr.co.broadwave.desk.statistics;
 
-import kr.co.broadwave.desk.bscodes.CodeType;
 import kr.co.broadwave.desk.common.AjaxResponse;
-import kr.co.broadwave.desk.mastercode.MasterCodeDto;
-import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.record.Record;
 import kr.co.broadwave.desk.record.RecordService;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
 import kr.co.broadwave.desk.record.responsibil.ResponsibilRepository;
-import kr.co.broadwave.desk.teams.Team;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.Year;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author Minkyu

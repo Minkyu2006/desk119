@@ -69,16 +69,15 @@
 
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
 
 
 			$.ajax({
 				url:'/api/notice/list?size='+ perPage + '&page=' + page,
 				type : 'post',
-				//dataType: json,
 				data : params,
 				cache:false,
-				error:function(request,status,error){
+				error:function(request){
 					ajaxErrorMsg(request);
 				},
 				success: function(res){
@@ -90,7 +89,7 @@
 						pageTotal: totCnt,
 						clickEvent: 'callList'});
 
-					if (totCnt == 0) {
+					if (totCnt === 0) {
 						$schList.empty().append('<tr class="t-c"><td colspan="4" align="center">조회된 데이터가 없습니다.</td></tr>');
 						return;
 					}
@@ -102,7 +101,7 @@
 					$.each(res.data.datalist, function(key, value){
 						html += '<tr>';
 						html += '<td class="c-retable__title"><a href="/notice/noticeview/'+ echoNull2Blank(value.id) +'" class="c-retable__subject">'+ echoNull2Blank(value.subject) +'</a>';
-						if (datecheck(value.modifyDateTime.substring(0,10)) =='new'){
+						if (datecheck(value.modifyDateTime.substring(0,10)) ==='new'){
 							html +='<img src="/assets/images/icon__new.png" alt="새글알림" />';
 						}
 						html += '<div class="c-retable--tablet-visible">';

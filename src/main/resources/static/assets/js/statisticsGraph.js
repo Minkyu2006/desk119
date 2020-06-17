@@ -1,7 +1,7 @@
 $(function(){
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
-	$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+	$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
 
 	$.ajax({
 		url:'/api/statistics/dataGraph',
@@ -36,7 +36,7 @@ $(function(){
 
 // 원형 그래프데이터
 function circle_graph_call(circle_data_columns) {
-	var pie = c3.generate({
+	c3.generate({
 		bindto: "#pie_chart1",
 		data: {
 			columns: circle_data_columns,
@@ -54,7 +54,7 @@ function circle_graph_call(circle_data_columns) {
 
 // 재해재난 그래프데이터
 function disaster_graph_call(disaster_data_columns) {
-	var chart = c3.generate({
+	c3.generate({
 		bindto: "#bar_chart1",
 		data: {
 			columns: disaster_data_columns,
@@ -78,7 +78,7 @@ function disaster_graph_call(disaster_data_columns) {
 
 // 조사시설물 그래프데이터
 function fac_graph_call(fac_data_columns) {
-	var chart = c3.generate({
+	c3.generate({
 		bindto: "#bar_chart2",
 		data: {
 			columns: fac_data_columns,
@@ -102,7 +102,7 @@ function fac_graph_call(fac_data_columns) {
 
 // 부서별 출동현황 그래프데이터
 function team_graph_call(team_data_columns,teamsData) {
-	var chart = c3.generate({
+	c3.generate({
 		bindto: "#bar_team",
 		data: {
 			columns: [team_data_columns],
@@ -129,7 +129,7 @@ function team_graph_call(team_data_columns,teamsData) {
 
 // 월별 출동현황 그래프데이터
 function month_graph_call(month_data_columns) {
-	var chart = c3.generate({
+	c3.generate({
 		bindto: "#bar_chart3",
 		data: {
 			columns: month_data_columns,

@@ -165,24 +165,31 @@
 		}
 
 		function save(){
-
-			if ($("#subject").val().trim() == '') {
+			var $subject = $("#subject");
+			var $summernote = $("#summernote");
+			if ($subject.val().trim() === '') {
 				alertCaution("제목을 입력하세요.")
-				$("#subject").trigger('focus');
+				$subject.trigger('focus');
 				return false;
 			}
 
-			if ($("#summernote").val().trim() == '') {
+			if ($summernote.val().trim() === '') {
 				alertCaution("본문내용을 입력하세요.")
 				return false;
 			}
 
+			if ($("#bnStateCheckBox" ).is(":checked") === true) {
+				$("#bnState").val(1);
+			}else{
+				$("#bnState").val(0);
+			}
+
 			var formData = new FormData(document.getElementById('frmreg')); //new FormData($("#frmreg"));
-			formData.append('content',$("#summernote").val());
+			formData.append('content',$summernote.val());
 
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
 
 			$.ajax({
 				url:'/api/notice/reg',
@@ -192,7 +199,7 @@
 				contentType : false,
 				enctype: 'multipart/form-data',
 				cache:false,
-				error:function(request,status,error){
+				error:function(request){
 					ajaxErrorMsg(request);
 				},
 				success: function(res){
@@ -314,9 +321,16 @@
 									</ul>
 								</td>
 							</tr>
-
-
-
+							<tr>
+								<th>팝업여부</th>
+								<td>
+									<div class="c-checkbox">
+										<input type="hidden" name="bnState" id="bnState" >
+										<input type="checkbox" class="c-checkbox__input" id="bnStateCheckBox" />
+										<label for="bnStateCheckBox" class="c-checkbox__label"></label>
+									</div>
+								</td>
+							</tr>
 						</tbody>
 					</table>
 				</form>

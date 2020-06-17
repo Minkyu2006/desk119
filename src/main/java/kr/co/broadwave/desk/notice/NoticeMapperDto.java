@@ -18,4 +18,5 @@ public class NoticeMapperDto {
     private Long id;
     private String subject;
     private String content;
+    private Integer bnState;
 }

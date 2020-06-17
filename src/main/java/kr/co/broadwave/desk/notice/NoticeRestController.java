@@ -99,9 +99,11 @@ public class NoticeRestController {
         String noticeid = multi.getParameter("noticeid");
         String subject = multi.getParameter("subject");
         String content = multi.getParameter("content");
+        String bnState = multi.getParameter("bnState");
         Notice notice = Notice.builder()
                 .subject(subject)
                 .content(content)
+                .bnState(Integer.parseInt(bnState))
                 .build();
 
 
@@ -160,8 +162,21 @@ public class NoticeRestController {
 
         Page<NoticeDto> notices = noticeService.findAllBySearchStrings(subject, username, pageable);
         return CommonUtils.ResponseEntityPage(notices);
+    }
+
+    @PostMapping("Popup")
+    public ResponseEntity Popup(){
+        List<NoticeIdStateDto> noticeIdStateDtos = noticeService.findByIdState();
+        log.info("noticeIdStateDtos : "+noticeIdStateDtos);
+//        log.info("Id : "+noticeIdStateDtos.get(0).getId());
+
+//        Page<NoticeDto> notices = noticeService.findAllBySearchStrings(subject, username, pageable);
+//        data.put("dataselect",dataselect);
+        res.addResponse("data",data);
+        return ResponseEntity.ok(res.success());
 
     }
+
     //공지사항내파일삭제
     @PostMapping("filedel")
     public ResponseEntity filedelete(@RequestParam(value="fileid", defaultValue="") Long fileid){

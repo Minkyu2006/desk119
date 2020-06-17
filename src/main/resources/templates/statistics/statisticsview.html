@@ -1,20 +1,38 @@
 <!DOCTYPE html>
 <html lang="ko"
 	  xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layout/default">
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<!-- 사용자 CSS 추가 -->
-<th:block layout:fragment="css">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>활동통계 상세보기</title>
 
-</th:block>
+	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+	<!-- default header name is X-CSRF-TOKEN -->
+	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
 
-<!-- 사용자 스크립트 추가 -->
-<th:block layout:fragment="script">
-		<script src="/assets/js/statisticsGraph.js"></script>
-</th:block>
-<div layout:fragment="content" class="content">
+	<!-- 공통으로 쓰이는 css파일을넣는다.-->
+	<link rel="stylesheet" href="/assets/css/main.css" />
+	<link rel="stylesheet" href="/assets/css/component.css" />
+	<link rel="stylesheet" href="/assets/css/common.css" />
+	<link rel="stylesheet" href="/assets/js/c3/c3.css" />
+	<link rel="stylesheet" href="/assets/js/alert/min_alert.css" />
+
+	<!-- 공통으로 쓰이는 js파일을넣는다.-->
+	<script src="/assets/js/jquery.min.js"></script>
+	<script src="/assets/js/jquery-ui.min.js"></script>
+	<script src="/assets/js/broadwave.common.js"></script>
+	<script src="/assets/js/common-pc.js"></script>
+	<script src="/assets/js/broadwave.ajax.js"></script>
+	<script src="/assets/js/d3/d3.js"></script>
+	<script src="/assets/js/c3/c3.js"></script>
+	<script src="/assets/js/alert/min_alert.js"></script>
+	<script src="/assets/js/statisticsGraph.js"></script>
+</head>
+<div>
+	<br/>
 	<section class="section">
 		<div class="stat">
 			<div class="stat__dual">

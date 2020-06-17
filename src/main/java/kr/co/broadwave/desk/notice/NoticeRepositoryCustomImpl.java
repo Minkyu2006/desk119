@@ -2,6 +2,7 @@ package kr.co.broadwave.desk.notice;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.broadwave.desk.accounts.QAccount;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -68,6 +69,19 @@ public class NoticeRepositoryCustomImpl extends QuerydslRepositorySupport implem
                 .set(qNotice.hitCount,hitCount)
                 .execute();
 
+    }
+
+    @Override
+    public List<NoticeIdStateDto> findByIdState() {
+
+        JPAQueryFactory queryFactory = new JPAQueryFactory(this.getEntityManager());
+
+        QNotice notice = QNotice.notice;
+
+        return queryFactory.select(Projections.constructor(NoticeIdStateDto.class,
+                notice.id,notice.bnState))
+                .from(notice)
+                .fetch();
     }
 
 }
