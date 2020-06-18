@@ -44,6 +44,10 @@ public class Record {
     @Column(name="ar_disaster_type")
     private String arDisasterType;
 
+    //재해.재난.분과 기타
+    @Column(name="ar_disaster_gita")
+    private String arDisasterGita;
+
     //관련부처
     @ManyToOne(targetEntity = MasterCode.class,fetch = FetchType.EAGER)
     @JoinColumn(name="ar_related_id")

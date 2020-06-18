@@ -1,6 +1,6 @@
 package kr.co.broadwave.desk.accounts;
 
-import kr.co.broadwave.desk.bscodes.ApprovalType;
+import kr.co.broadwave.desk.bscodes.*;
 import kr.co.broadwave.desk.mastercode.MasterCode;
 import kr.co.broadwave.desk.teams.Team;
 import lombok.*;
@@ -57,10 +57,19 @@ public class Account {
     @JoinColumn(name="team_id")
     private Team team;
 
+    // 분과
+    @Enumerated(EnumType.STRING)
+    @Column(name="user_disaster_type")
+    private DisasterType disasterType;
+
+    // 분과종류
+    @Enumerated(EnumType.STRING)
+    @Column(name="user_collapse_type")
+    private CollapseType collapseType;
+
     @ManyToOne(targetEntity = MasterCode.class,fetch = FetchType.LAZY)
     @JoinColumn(name="position_id")
     private MasterCode position;
-
 
     @Column(name="insert_date")
     private LocalDateTime insertDateTime;

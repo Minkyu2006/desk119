@@ -1,10 +1,7 @@
 package kr.co.broadwave.desk.accounts;
 
 import kr.co.broadwave.desk.bscodes.ApprovalType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * @author InSeok
@@ -12,7 +9,7 @@ import lombok.NoArgsConstructor;
  * Time : 10:11
  * Remark : Account Dto
  */
-@Data
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,6 +23,56 @@ public class AccountMapperDto {
     private AccountRole role;
     private ApprovalType approvalType;
     private String teamcode;
+    private String disasterType;
+    private String collapseType;
     private String mode;
     private Long positionid;
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getEmail() {
+        return email+"@kict.re.kr";
+    }
+
+    public String getCellphone() {
+        return cellphone;
+    }
+
+    public AccountRole getRole() {
+        return role;
+    }
+
+    public ApprovalType getApprovalType() {
+        return approvalType;
+    }
+
+    public String getTeamcode() {
+        return teamcode;
+    }
+
+    public String getDisasterType() {
+        return disasterType;
+    }
+
+    public String getCollapseType() {
+        return collapseType;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public Long getPositionid() {
+        return positionid;
+    }
 }

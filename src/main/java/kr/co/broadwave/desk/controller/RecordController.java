@@ -164,7 +164,6 @@ public class RecordController {
 
         model.addAttribute("arRelatedIds", arRelatedId);
         model.addAttribute("LocationCityTypes", LocationCityType.values());
-        model.addAttribute("LocationAddressTypes", LocationAddressType.values());
         model.addAttribute("record", recordMapperDto);
 
         List<RecordUploadFile> recorduploadFiles = recordimageService.recorduploadFileList(id);
@@ -204,6 +203,7 @@ public class RecordController {
 
         //데이터 가져오기
         RecordViewDto recordViewDto = recordService.findByIdView(id);
+        System.out.println("recordViewDto : "+recordViewDto);
         model.addAttribute("record", recordViewDto);
 
         List<RecordUploadFile> recorduploadFiles = recordimageService.recorduploadFileList(id);

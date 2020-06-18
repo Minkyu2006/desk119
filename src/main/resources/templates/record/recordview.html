@@ -68,7 +68,10 @@
 					<th>작성자</th>
 					<td th:text="${record} ? ${record.arWriter} : ''"></td>
 					<th>재해·재난 분과</th>
-					<td th:text="${record} ? ${record.arDisasterItem} : ''"></td>
+					<td>
+						<span th:text="${record} ? ${record.arDisasterItem} : ''"></span>
+						<span th:text="${record} ? ${record.arDisasterGita} : ''"></span>
+					</td>
 				</tr>
 				<tr>
 					<th>관련부처</th>

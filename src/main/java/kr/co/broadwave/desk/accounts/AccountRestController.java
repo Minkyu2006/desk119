@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -57,7 +58,7 @@ public class AccountRestController {
     }
 
     @PostMapping("reg")
-    public ResponseEntity accountSave(@ModelAttribute AccountMapperDto accountMapperDto, HttpServletRequest request){
+    public ResponseEntity<Map<String,Object>> accountSave(@ModelAttribute AccountMapperDto accountMapperDto, HttpServletRequest request){
 
 
         Account account = modelMapper.map(accountMapperDto, Account.class);
@@ -123,17 +124,15 @@ public class AccountRestController {
 
         }
 
-
-
         Account accountSave =  this.accountService.saveAccount(account);
 
-        log.info("사용자 저장 성공 : '" + accountMapperDto.getUserid() +"'" );
+        log.info("사용자 저장 성공 : '" + accountSave.getUserid() +"'" );
         return ResponseEntity.ok(res.success());
 
     }
 
     @PostMapping("modifyReg")
-    public ResponseEntity accountModifySave(@ModelAttribute AccountMapperDto accountMapperDto, HttpServletRequest request){
+    public ResponseEntity<Map<String,Object>> accountModifySave(@ModelAttribute AccountMapperDto accountMapperDto, HttpServletRequest request){
 
 
         Account account = modelMapper.map(accountMapperDto, Account.class);
@@ -247,7 +246,7 @@ public class AccountRestController {
 
     //회원가입처리
     @PostMapping("signup")
-    public ResponseEntity signup(@ModelAttribute AccountMapperDto accountMapperDto, HttpServletRequest request){
+    public ResponseEntity<Map<String,Object>> signup(@ModelAttribute AccountMapperDto accountMapperDto){
 
         Account account = modelMapper.map(accountMapperDto, Account.class);
         Optional<Team> optionalTeam = teamService.findByTeamcode(accountMapperDto.getTeamcode());
@@ -263,8 +262,6 @@ public class AccountRestController {
             log.info(ResponseErrorCode.E007.getDesc());
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E007.getCode(), ResponseErrorCode.E007.getDesc()));
         }
-
-
 
         Optional<Account> optionalAccount = accountService.findByUserid(account.getUserid());
 
@@ -294,18 +291,15 @@ public class AccountRestController {
             account.setPosition(optionalPositionCode.get());
         }
 
+        Account accountSave = accountService.saveAccount(account);
 
+        log.info("회원가입 저장 성공 : '" + accountSave.getUserid() +"'" );
 
-
-        Account accountSave =  this.accountService.saveAccount(account);
-
-        log.info("회원가입 저장 성공 : '" + accountMapperDto.getUserid() +"'" );
         return ResponseEntity.ok(res.success());
-
     }
 
     @PostMapping("modifyemail")
-    public ResponseEntity accountSaveEmail(@ModelAttribute AccountMapperDtoModify accountMapperDto, HttpServletRequest request){
+    public ResponseEntity<Map<String,Object>> accountSaveEmail(@ModelAttribute AccountMapperDtoModify accountMapperDto, HttpServletRequest request){
 
 
         Account account = modelMapper.map(accountMapperDto, Account.class);
@@ -353,7 +347,7 @@ public class AccountRestController {
     }
 
     @PostMapping("modifypassword")
-    public ResponseEntity accountSavepassword(@ModelAttribute AccountMapperDtoModify accountMapperDto, HttpServletRequest request){
+    public ResponseEntity<Map<String,Object>> accountSavepassword(@ModelAttribute AccountMapperDtoModify accountMapperDto, HttpServletRequest request){
 
 
         Account account = modelMapper.map(accountMapperDto, Account.class);
@@ -412,7 +406,7 @@ public class AccountRestController {
 
 
     @PostMapping("list")
-    public ResponseEntity accountList(@RequestParam(value="userid", defaultValue="") String userid,
+    public ResponseEntity<Map<String,Object>> accountList(@RequestParam(value="userid", defaultValue="") String userid,
                                       @RequestParam(value="username", defaultValue="") String username,
                                       @RequestParam(value="email", defaultValue="") String email,
                                       Pageable pageable){
@@ -426,7 +420,7 @@ public class AccountRestController {
     }
 
     @PostMapping("approvallist")
-    public ResponseEntity accountApprovalList(
+    public ResponseEntity<Map<String,Object>> accountApprovalList(
                                       @RequestParam(value="username", defaultValue="") String username,
                                       @RequestParam(value="startdate", defaultValue="") String startdate,
                                       @RequestParam(value="enddate", defaultValue="") String enddate,
@@ -442,7 +436,7 @@ public class AccountRestController {
 
     //회원가입 승인처리
     @PostMapping("approval")
-    public ResponseEntity saveApproval(
+    public ResponseEntity<Map<String,Object>> saveApproval(
                                     @RequestParam(value="userid", defaultValue="") String userid,
                                     @RequestParam(value="approvaltype", defaultValue="") String approvaltype,
                                     HttpServletRequest request
@@ -468,7 +462,7 @@ public class AccountRestController {
 
     //사용자삭제
     @PostMapping("del")
-    public ResponseEntity accountdel(@RequestParam (value="userid", defaultValue="") String userid
+    public ResponseEntity<Map<String,Object>> accountdel(@RequestParam (value="userid", defaultValue="") String userid
                                      ){
         log.info("사용자 삭제 / userid: " + userid );
         Optional<Account> optionalAccount = accountService.findByUserid(userid);
@@ -489,7 +483,7 @@ public class AccountRestController {
     }
 
     @PostMapping("account")
-    public ResponseEntity account(@RequestParam (value="userid", defaultValue="") String userid){
+    public ResponseEntity<Map<String,Object>> account(@RequestParam (value="userid", defaultValue="") String userid){
 
         log.info("단일사용자조회  / userid: '" + userid + "'");
         Optional<Account> optionalAccount = accountService.findByUserid(userid);

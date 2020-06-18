@@ -1,7 +1,7 @@
 package kr.co.broadwave.desk.controller;
 
 import kr.co.broadwave.desk.accounts.*;
-import kr.co.broadwave.desk.bscodes.CodeType;
+import kr.co.broadwave.desk.bscodes.*;
 import kr.co.broadwave.desk.common.CommonUtils;
 import kr.co.broadwave.desk.mastercode.MasterCodeDto;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
@@ -136,10 +136,16 @@ public class Maincontroller {
     }
 
     @RequestMapping("/signup")
-    public String siguup(HttpServletRequest request,Model model){
+    public String siguup(Model model){
         List<MasterCodeDto> positions = masterCodeService.findCodeList(CodeType.C0001); // 직급코드가져오기
-        List<TeamDto> teams = teamService.findTeamList();
+        model.addAttribute("DisasterTypes", DisasterType.values());
+        model.addAttribute("CollapseTypes", CollapseType.values());
 
+        model.addAttribute("LocationAddressTypes", LocationAddressType.values());
+
+        model.addAttribute("roles", AccountRole.values());
+
+        List<TeamDto> teams = teamService.findTeamList();
         model.addAttribute("roles", AccountRole.values());
         model.addAttribute("positions", positions);
         model.addAttribute("teams", teams);

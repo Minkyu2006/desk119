@@ -25,6 +25,7 @@ public class RecordMapperDto {
     private String arTitle; //출동일지 제목
     private String arWriter; //작성자
     private String arDisasterType; //재해.재난.분과
+    private String arDisasterGita; //재해.재난.분과 기타
     private Long arRelatedId; //관련부처
     private String arRelatedDetail; //관련부처상세정보
     private String arPapers; //관련문서
@@ -54,6 +55,14 @@ public class RecordMapperDto {
     private LocalDateTime insertDateTime;
     private String insert_id;
     private String insert_name;
+
+    public String getArDisasterGita() {
+        return arDisasterGita;
+    }
+
+    public void setArDisasterGita(String arDisasterGita) {
+        this.arDisasterGita = arDisasterGita;
+    }
 
     public String getModify_id() {
         return modify_id;
