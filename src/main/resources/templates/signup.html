@@ -128,11 +128,13 @@
 					</div>
 					<div class="join__form-item">
 						<label for="cellphone" class="join__label">휴대폰 번호</label>
-						<input type="text" class="join__input" id="cellphone" name="cellphone" />
+						<input type="text" class="join__input" id="cellphone" name="cellphone" placeholder="'-'를 제외한 숫자만 입력해주세요." />
 					</div>
 					<div class="join__form-item">
 						<label for="email" class="join__label" >이메일</label>
-						<input type="text" class="join__input" id="email" name="email" placeholder="@kict.re.kr"/>
+						<input type="text" class="join__input email__id" id="email" name="email" />
+						<span class="email__at">@</span>
+						<input type="text" class="join__input email__address" value="kict.re.kr" readonly="readonly" />
 					</div>
 					<div class="join__form-item">
 						<div class="c-select">

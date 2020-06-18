@@ -1479,6 +1479,15 @@ h4.article__heading {
 .member {
 	position: relative;
 }
+.join__form-item:before {
+	content: " ";
+	display: table;
+}
+.join__form-item:after {
+	content: " ";
+	display: table;
+	clear: both;
+}
 .join__form-item + .join__form-item,
 .member__form-item + .member__form-item {
 	margin-top: 15px;
@@ -1501,6 +1510,22 @@ h4.article__heading {
 }
 .join__input[readonly] {
 	background-color: #ddd;
+}
+.join__input.email__id {
+	float: left;
+	width: 120px;
+}
+.email__at {
+	float: left;
+	display: block;
+	width: 20px;
+	color: #666;
+	line-height: 34px;
+	text-align: center;
+}
+.join__input.email__address {
+	float: left;
+	width: calc(100% - 140px);
 }
 .join__submit {
 	display: block;
