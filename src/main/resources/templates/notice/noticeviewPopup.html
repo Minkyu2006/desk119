@@ -22,6 +22,25 @@
 	<script src="/assets/js/jquery-ui.min.js"></script>
 	<script src="/assets/js/broadwave.common.js"></script>
 	<script src="/assets/js/common-pc.js"></script>
+	
+	<style>
+		.section {
+			max-width: none;
+			padding: 20px;
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+		}
+		.note-frame {
+			padding: 20px;
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+		}
+		.note-frame img {
+			width: 100% !important;
+		}
+	</style>
 </head>
 
 
@@ -36,47 +55,11 @@
 							<tr>
 								<td colspan="6" class="align--center" th:text="${notice?.subject}"></td>
 							</tr>
-							<tr class="c-retable__tr--tablet-visible">
-								<td colspan="6">
-									<ul class="c-retable__tablet-list non-border">
-										<li><img src="/assets/images/icon__user.png" alt="작성자"><span th:text="${notice?.modify_name}"></span></li>
-										<li class="c-retable__list--mobile"><img src="/assets/images/icon__calendar--gray.png" alt="게시일"><span th:text="${notice?.modifyDateTime}"></span></li>
-										<li class="c-retable__list--mobile"><img src="/assets/images/icon__show.png" alt="조회수"><span th:text="${notice?.hitCount}"></span></li>
-									</ul>
-								</td>
-							</tr>
-							<tr class="c-ratable__tr--tablet-hidden">
-								<th>작성자</th>
-								<td th:text="${notice?.modify_name}"></td>
-								<th>게시일</th>
-								<td th:text="${notice?.modifyDateTime}"></td>
-								<th>조회수</th>
-								<td th:text="${notice?.hitCount}"></td>
-							</tr>
 							<tr>
 								<td colspan="6">
 									<div class="note-frame" th:utext="${notice?.content}">
 
 									</div>
-								</td>
-							</tr>
-							<tr class="c-retable__tr--tablet-visible">
-								<td colspan="6">
-									<ul class="c-file-list">
-										<li th:each ="uploadfile : ${uploadFiles}"><img src="/assets/images/icon__file.png" alt="첨부파일" class="c-file-list__img" />
-											<a th:href="@{/notice/download/{id}(id=${uploadfile.id})}"  th:text="${uploadfile.fileName}"></a></li>
-
-									</ul>
-								</td>
-							</tr>
-							<tr class="c-ratable__tr--tablet-hidden">
-								<th>첨부파일</th>
-								<td colspan="5">
-									<ul class="c-file-list">
-										<li th:each ="uploadfile : ${uploadFiles}"
-												><a th:href="@{/notice/download/{id}(id=${uploadfile.id})}"  th:text="${uploadfile.fileName}"></a></li>
-
-									</ul>
 								</td>
 							</tr>
 						</tbody>
