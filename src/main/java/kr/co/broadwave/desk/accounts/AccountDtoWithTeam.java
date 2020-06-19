@@ -1,5 +1,6 @@
 package kr.co.broadwave.desk.accounts;
 
+import kr.co.broadwave.desk.bscodes.DisasterType;
 import lombok.*;
 
 /**
@@ -20,8 +21,17 @@ public class AccountDtoWithTeam {
     private AccountRole role;
     private String teamcode;
     private String teamname;
+    private DisasterType disasterType;
     private String positioncode;
     private String positionname;
+
+    public void setDisasterType(DisasterType disasterType) {
+        this.disasterType = disasterType;
+    }
+
+    public String getDisasterType() {
+        return disasterType.getDesc();
+    }
 
     public String getPositioncode() {
         return positioncode;

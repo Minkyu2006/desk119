@@ -114,18 +114,19 @@
 		}
 
 		function save1(){
-			if ($("#userid").val().trim() == '') {
+			var $userid = $("#userid");
+			var $username = $("#username");
+			if ($userid.val().trim() === '') {
 				alertCaution("수정할 아이디를 먼저 선택하세요.");
-				$("#userid").trigger('focus');
+				$userid.trigger('focus');
 				return false;
 			}
 
-			if ($("#username").val().trim() == '') {
+			if ($username.val().trim() === '') {
 				alertCaution("이름을 입력하세요.");
-				$("#username").trigger('focus');
+				$username.trigger('focus');
 				return false;
 			}
-
 
 			var $form = $('form[name="frmreg"]');
 
@@ -134,7 +135,7 @@
 
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
 
 			$.ajax({
 				url:'/api/account/modifyReg',
@@ -157,14 +158,16 @@
 		}
 
 		function savepassword(){
-			if ($("#userid").val().trim() == '') {
+			var $userid = $("#userid");
+			var $password = $("#password");
+			if ($userid.val().trim() === '') {
 				alertCaution("수정할 아이디를 먼저 선택하세요.");
 				return false;
 			}
 
-			if ($("#password").val().trim() == '') {
+			if ($password.val().trim() === '') {
 				alertCaution("수정할 패스워드를 입력하세요.");
-				$("#password").trigger('focus');
+				$password.trigger('focus');
 				return false;
 			}
 
@@ -180,7 +183,6 @@
 			$.ajax({
 				url:'/api/account/modifyAdminPassword',
 				type : 'post',
-				//dataType: 'html',
 				data : params,
 				cache:false,
 				error:function(request){
@@ -221,12 +223,12 @@
 				email:$("#s_email").val()
 			};
 
-			$schList.empty().append('<tr ><td colspan="8" align = "center">조회 중</td></tr>');
+			$schList.empty().append('<tr ><td colspan="9" align = "center">조회 중</td></tr>');
 			$totalCnt.text('0');
 
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
 
 
 			$.ajax({
@@ -246,8 +248,8 @@
 						pageTotal: totCnt,
 						clickEvent: 'callList'});
 
-					if (totCnt == 0) {
-						$schList.empty().append('<tr class="t-c"><td colspan="8" align="center">조회된 데이터가 없습니다.</td></tr>');
+					if (totCnt === 0) {
+						$schList.empty().append('<tr class="t-c"><td colspan="9" align="center">조회된 데이터가 없습니다.</td></tr>');
 						return;
 					}
 
@@ -259,12 +261,13 @@
 						html += '<td >'+ echoNull2Blank(value.userid) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.username) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.positionname) +'</td>';
+						html += '<td >'+ echoNull2Blank(value.disasterType) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.teamname) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.cellphone) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.email) +'</td>';
 						html += '<td >'+ echoNull2Blank(value.role) +'</td>';
 
-						html += '<td ><button class="c-button c-button--point btn__member" onclick="javascript:callinfo(\''+ echoNull2Blank(value.userid) +'\');">수정</button></td>';
+						html += '<td ><button class="c-button c-button--point btn__member" onclick="callinfo(\''+ echoNull2Blank(value.userid) +'\');">수정</button></td>';
 
 						html += '</tr>';
 					});
@@ -288,16 +291,15 @@
 
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
 
 			$.ajax({
 				url:'/api/account/account',
 				type : 'post',
 				data : params,
 				cache:false,
-				error:function(request,status,error){
+				error:function(request){
 					ajaxErrorMsg(request);
-					//alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 				},
 				success: function(res){
 					$("#userid").val(res.data.datarow.userid);
@@ -307,12 +309,23 @@
 					$("#cellphone").val(res.data.datarow.cellphone);
 					$("#role").val(res.data.datarow.role);
 					$("#teamcode").val(res.data.datarow.team.teamcode);
+					DisasterSetting(res.data.datarow.disasterType);
+					$("#disasterType").val(res.data.datarow.disasterType);
+					if(res.data.datarow.collapseType!==null){
+						$("#collapseType").val(res.data.datarow.collapseType);
+					}
 					$("#positionid").val(res.data.datarow.position.id);
 				}
 			});
 		}
 
-
+		function DisasterSetting(value) {
+			if(value === "DS01"){
+				$("#collapseTypeDiv").css('display','block');
+			}else{
+				$("#collapseTypeDiv").css('display','none');
+			}
+		}
 
 	</script>
 
@@ -371,6 +384,7 @@
 					<col />
 					<col />
 					<col />
+					<col />
 					<col style="width: 60px;" />
 				</colgroup>
 				<thead>
@@ -378,6 +392,7 @@
 						<th>아이디</th>
 						<th>이름</th>
 						<th>직급</th>
+						<th>분과</th>
 						<th>부서</th>
 						<th>전화번호</th>
 						<th>이메일</th>
@@ -443,6 +458,24 @@
 								</select>
 							</div>
 							<div class="member__form-item">
+								<label for="disasterType" class="join__label">분과</label>
+								<select name="disasterType" id="disasterType" class="c-select__input" onchange="DisasterSetting(this.value)">
+									<option th:each ="DisasterType : ${DisasterTypes}"
+											th:value="${DisasterType.getCode()}"
+											th:text="${DisasterType.getDesc()}">
+									</option>
+								</select>
+							</div>
+							<div id="collapseTypeDiv"  class="member__form-item" style="display: block">
+								<label for="collapseType" class="join__label">붕괴종류</label>
+								<select name="collapseType" id="collapseType" class="c-select__input">
+									<option th:each ="CollapseType : ${CollapseTypes}"
+											th:value="${CollapseType.getCode()}"
+											th:text="${CollapseType.getDesc()}">
+									</option>
+								</select>
+							</div>
+							<div class="member__form-item">
 								<label for="positionid" class="join__label">직급</label>
 								<select name="positionid" id="positionid" class="c-select__input">
 									<option th:each ="position : ${positions}"
@@ -451,7 +484,6 @@
 
 								</select>
 							</div>
-
 							<div class="member__form-item">
 								<label for="role" class="join__label">권한</label>
 								<div class="c-select">

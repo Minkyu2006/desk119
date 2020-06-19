@@ -46,6 +46,7 @@ public class AccountRepositoryCustomImpl extends QuerydslRepositorySupport imple
                         qAccount.role,
                         qTeam.teamcode,
                         qTeam.teamname,
+                        qAccount.disasterType,
                         qMasterCode.code,
                         qMasterCode.name
 

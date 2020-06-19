@@ -149,8 +149,7 @@
 					<div class="join__form-item">
 						<div class="c-select">
 							<label for="disasterType" class="join__label">분과</label>
-							<select name="disasterType" id="disasterType" class="c-select__input" onchange="DisasterSetting(this.value)">
-								<option value="">해당없음</option>
+							<select nameDisasterSetting="disasterType" id="disasterType" class="c-select__input" onchange="DisasterSetting(this.value)">
 								<option th:each ="DisasterType : ${DisasterTypes}"
 										th:value="${DisasterType.getCode()}"
 										th:text="${DisasterType.getDesc()}">

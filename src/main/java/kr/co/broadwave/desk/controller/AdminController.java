@@ -2,6 +2,8 @@ package kr.co.broadwave.desk.controller;
 
 import kr.co.broadwave.desk.accounts.AccountRole;
 import kr.co.broadwave.desk.bscodes.CodeType;
+import kr.co.broadwave.desk.bscodes.CollapseType;
+import kr.co.broadwave.desk.bscodes.DisasterType;
 import kr.co.broadwave.desk.mastercode.MasterCodeDto;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.notice.*;
@@ -48,7 +50,8 @@ public class AdminController {
         model.addAttribute("roles", AccountRole.values());
         model.addAttribute("positions", positions);
         model.addAttribute("teams", teams);
-
+        model.addAttribute("DisasterTypes", DisasterType.values());
+        model.addAttribute("CollapseTypes", CollapseType.values());
         return "admin/accountreg";
     }
 
