@@ -41,31 +41,50 @@
 			width: 100% !important;
 		}
 	</style>
+
+	<script>
+		$(document).ready(function() {
+			$("#closePop").click(function () {
+				setCookieMobile($("#noticeId").val(),$("#insert_id").val(),1);
+				var daddy = window.self;
+				daddy.opener = window.self;
+				daddy.close();
+			});
+
+			function setCookieMobile ( name, value, expiredays ) {
+				var todayDate = new Date();
+				todayDate.setDate( todayDate.getDate() + expiredays );
+				document.cookie = name + "=" + escape( value ) + "; path=/; expires=" + todayDate.toGMTString() + ";"
+			}
+
+		});
+	</script>
 </head>
 
 
 <div>
-	<section class="section">
+	<section id="pop" class="section">
 		<article class="article">
+			<input type="hidden" id="noticeId" th:value="${notice?.id}" />
+			<input type="hidden" id="insert_id" th:value="${notice?.insert_id}" />
 			<h2 class="article__heading">공지사항</h2>
 			<div class="notice-view">
 				<div class="notice-view__contents">
 					<table class="c-table">
 						<tbody>
 							<tr>
-								<td colspan="6" class="align--center" th:text="${notice?.subject}"></td>
+								<td colspan="6" id="subject" class="align--center" th:text="${notice?.subject}"></td>
 							</tr>
 							<tr>
 								<td colspan="6">
-									<div class="note-frame" th:utext="${notice?.content}">
-
-									</div>
+									<div class="note-frame" th:utext="${notice?.content}"></div>
 								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
+			<footer><a href="#" id="closePop" class="btn_close">오늘하루열지않음</a></footer>
 		</article>
 	</section>
 </div>

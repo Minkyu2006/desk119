@@ -69,9 +69,7 @@ public class NoticeController {
         noticeService.hitCountUpdate(id);
         //데이터 가져오기
         NoticeDto noticeDto = noticeService.findById(id);
-        List<UploadFile> uploadFiles = imageService.uploadFileList(id);
         model.addAttribute("notice", noticeDto);
-        model.addAttribute("uploadFiles", uploadFiles);
 
         return "notice/noticeviewPopup";
     }

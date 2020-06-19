@@ -73,8 +73,21 @@
 					ajaxErrorMsg(request);
 				},
 				success: function(res) {
-					for(var i=0; i<res.data.noticeId.length; i++) {
-						winPop(res.data.noticeId[i]);
+					var cookiedata = document.cookie;
+					var i;
+					// console.log("cookiedata : "+cookiedata);
+					if(cookiedata===""){
+						// console.log("쿠키없음")
+						for(i=0; i<res.data.noticeId.length; i++) {
+							winPop(res.data.noticeId[i]);
+						}
+					}else{
+						// console.log("쿠키있음")
+						for(i=0; i<res.data.noticeId.length; i++) {
+							if (cookiedata.indexOf(res.data.noticeId[i]+"=admin") < 0) {
+								winPop(res.data.noticeId[i]);
+							}
+						}
 					}
 				}
 			});
