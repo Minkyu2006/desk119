@@ -1030,21 +1030,31 @@
 			</tr>
 			<tr>
 				<th>현장개요</th>
-				<td colspan="3">
+				<td colspan="3" style="height: auto;">
 					<textarea name="arOutline" id="arOutline" class="c-textarea"
 							  th:text="${record} ? ${record.arOutline} : ''"></textarea>
+					<div class="c-file" style="margin-top: 5px;">
+						<input type="text" readonly="readonly" class="c-file__input" id="place" name="place" />
+						<label class="c-file__button">파일선택<input type="file" name="place" /></label>
+						<button class="c-file__control">추가</button>
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<th>조사·분석 결과</th>
-				<td colspan="3">
+				<td colspan="3" style="height: auto;">
 					<textarea name="arResult" id="arResult" class="c-textarea"
 							  th:text="${record} ? ${record.arResult} : ''"></textarea>
+					<div class="c-file" style="margin-top: 5px;">
+						<input type="text" readonly="readonly" class="c-file__input" id="inquiry" name="inquiry" />
+						<label class="c-file__button">파일선택<input type="file" name="inquiry" /></label>
+						<button class="c-file__control">추가</button>
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<th>검토의견 (대응방안)</th>
-				<td colspan="3">
+				<td colspan="3" style="height: auto;">
 					<textarea name="arOpinion" id="arOpinion" class="c-textarea"
 							  th:text="${record} ? ${record.arOpinion} : ''"></textarea>
 				</td>
