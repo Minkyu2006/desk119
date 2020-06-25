@@ -24,6 +24,11 @@
 				window.location.href ="/notice/noticelist";
 			});
 
+			var $bnState = $("#bnState").val();
+			if($bnState!==""){
+				bnStateCheck($bnState);
+			}
+
 	        $('#summernote').summernote({
 	            height: 300,
 				minHeight: null,
@@ -101,6 +106,14 @@
 			})
 
 	    });
+
+		function bnStateCheck(val) {
+			if(val==="1"){
+				$("#bnStateCheckBox").prop('checked', true);
+			}else{
+				$("#bnStateCheckBox").prop('checked', false)
+			}
+		}
 
 		//첨부파일삭제
 		function fileDelete(th,fileid) {
@@ -325,7 +338,7 @@
 								<th>팝업여부</th>
 								<td>
 									<div class="c-checkbox">
-										<input type="hidden" name="bnState" id="bnState" >
+										<input type="hidden" name="bnState" id="bnState" th:value="${notice} ? ${notice.bnState} : ''" />
 										<input type="checkbox" class="c-checkbox__input" id="bnStateCheckBox" />
 										<label for="bnStateCheckBox" class="c-checkbox__label"></label>
 									</div>

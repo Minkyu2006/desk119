@@ -151,7 +151,7 @@ public class RecordViewDto {
     }
 
     public String getArgita() {
-        if(argita!=null){
+        if(!argita.equals("")){
             return ": "+argita;
         }else{
             return argita;

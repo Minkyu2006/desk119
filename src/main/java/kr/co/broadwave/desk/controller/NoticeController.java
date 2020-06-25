@@ -35,14 +35,12 @@ public class NoticeController {
     private final UploadFileRepository uploadFileRepository;
     private final ImageService imageService;
 
-
     @Autowired
     public NoticeController(NoticeService noticeService, UploadFileRepository uploadFileRepository, ImageService imageService) {
         this.noticeService = noticeService;
         this.uploadFileRepository = uploadFileRepository;
         this.imageService = imageService;
     }
-
 
     @RequestMapping("noticelist")
     public String noticeList(){

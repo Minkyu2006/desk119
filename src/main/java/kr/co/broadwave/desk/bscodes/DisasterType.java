@@ -6,14 +6,15 @@ package kr.co.broadwave.desk.bscodes;
  * Remark : 분과 Enum
  */
 public enum DisasterType {
-    DS08("DS08", "해당없음"),
     DS01("DS01", "붕괴"),
     DS02("DS02", "화재/폭발"),
     DS03("DS03", "지진"),
     DS04("DS04", "싱크홀"),
     DS05("DS05", "교통사고"),
     DS06("DS06", "홍수/가뭄"),
-    DS07("DS07", "환경오염");
+    DS07("DS07", "환경오염"),
+    DS08("DS08", "위원장"),
+    DS09("DS09", "간사");
 
     private final String code;
     private final String desc;

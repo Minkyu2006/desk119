@@ -37,6 +37,7 @@ public class NoticeRepositoryCustomImpl extends QuerydslRepositorySupport implem
                         qNotice.subject,
                         qNotice.content,
                         qNotice.hitCount,
+                        qNotice.bnState,
                         qNotice.insertDateTime,
                         qNotice.insert_id,
                         qNotice.insert_name,

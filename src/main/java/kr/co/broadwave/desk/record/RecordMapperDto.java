@@ -56,6 +56,14 @@ public class RecordMapperDto {
     private String insert_id;
     private String insert_name;
 
+    public String getArComment() {
+        return arComment;
+    }
+
+    public void setArComment(String arComment) {
+        this.arComment = arComment;
+    }
+
     public String getArDisasterGita() {
         return arDisasterGita;
     }
@@ -304,11 +312,4 @@ public class RecordMapperDto {
         this.arRecordState = arRecordState;
     }
 
-    public String getArComment() {
-        return arComment;
-    }
-
-    public void setArComment(String arComment) {
-        this.arComment = arComment;
-    }
 }

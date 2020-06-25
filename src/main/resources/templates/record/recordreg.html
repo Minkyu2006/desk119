@@ -241,7 +241,7 @@
 					} else {
 						facArr[9] = 0;
 						$argita.attr("readonly",true);
-						$argita.val(" ");
+						$argita.val("");
 					}
 					$("#arFac").val(facArr.join(","));
 					$("#arFacItem").val(arFacItemArr.join(" "));
@@ -1068,7 +1068,7 @@
 								<input type="text" readonly="readonly" class="c-file__input" id="file0" name="file0" />
 								<label class="c-file__button">파일선택<input type="file" name="file0" /></label>
 								<input type="text" class="c-text__input" name="arComment" placeholder="사진의 코멘트를 입력해주세요" />
-								<a href="#" id="commentAdd" class="c-file__control add">추가</a>
+								<a href="#" class="c-file__control add">추가</a>
 							</div>
 						</li>
 					</ul>

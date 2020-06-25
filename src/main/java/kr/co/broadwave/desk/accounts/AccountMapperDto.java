@@ -3,6 +3,9 @@ package kr.co.broadwave.desk.accounts;
 import kr.co.broadwave.desk.bscodes.ApprovalType;
 import lombok.*;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @author InSeok
  * Date : 2019-03-25
@@ -40,8 +43,16 @@ public class AccountMapperDto {
         return password;
     }
 
+    //이메일인지 확인하고 값보내기
     public String getEmail() {
-        return email+"@kict.re.kr";
+        String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(email);
+        if(m.matches()) {
+            return email;
+        }else{
+            return email+"@kict.re.kr";
+        }
     }
 
     public String getCellphone() {

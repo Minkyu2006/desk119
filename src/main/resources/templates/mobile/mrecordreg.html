@@ -51,7 +51,7 @@
 						'<div class="c-file c-file--comment">' +
 						'<input type="text" readonly="readonly" class="c-file__input" id="file' + idx + '" name="file' + idx + '" />' +
 						'<label class="c-file__button">파일선택<input type="file" name="file' + idx + '" /></label>' +
-						'<input type="text" class="c-text__input" placeholder="사진의 코멘트를 입력해주세요" />' +
+						'<input type="text" class="c-text__input" name="arComment" placeholder="사진의 코멘트를 입력해주세요" />' +
 						'<a href="#" class="c-file__control remove">삭제</a>' +
 						'</div>' +
 						'</li>';
@@ -384,7 +384,12 @@
 
 		//출동일지 임시저장
 		function temsave() {
-
+			if ($("#file0").val() !== '') {
+				if ($('input[name=arComment]').val().trim() === '') {
+					alertCaution("관련사진 코멘트는 필수입니다.");
+					return;
+				}
+			}
 			// 날짜저장 VIEW(YYYY-MM-DD) -> DATABASE(YYYYMMDD)
 			if($("#arIntoStart").val() != "" && $("#arIntoEnd").val() != "") {
 				var start = $('#arIntoStart').val();
@@ -462,7 +467,12 @@
 				alertCaution("행정구역을 설정해주세요.");
 				return;
 			}
-
+			if ($("#file0").val() !== '') {
+				if ($('input[name=arComment]').val().trim() === '') {
+					alertCaution("관련사진 코멘트는 필수입니다.");
+					return;
+				}
+			}
 			//날짜저장 VIEW(YYYY-MM-DD) -> DATABASE(YYYYMMDD)
 			if($("#dateValue_arIntoStart").val() != "" && $("#dateValue_arIntoEnd").val() != "") {
 				var start = $('#dateValue_arIntoStart').val();
@@ -962,7 +972,7 @@
 										<div class="c-file c-file--comment">
 											<input type="text" readonly="readonly" class="c-file__input" id="file0" name="file0">
 											<label class="c-file__button">파일선택<input type="file" name="file0" /></label>
-											<input type="text" class="c-text__input" placeholder="사진의 코멘트를 입력해주세요" />
+											<input type="text" class="c-text__input" name="arComment" placeholder="사진의 코멘트를 입력해주세요" />
 											<a href="#" class="c-file__control add">추가</a>
 										</div>
 									</li>

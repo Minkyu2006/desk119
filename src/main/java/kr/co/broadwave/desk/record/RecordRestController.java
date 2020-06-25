@@ -139,7 +139,11 @@ public class RecordRestController {
         Record recordSave = recordService.save(record);
 
         String filecomment = recordMapperDto.getArComment();
-        String[] filecommentList = filecomment.split(",");
+//        log.info("filecomment : "+filecomment);
+        String[] filecommentList = null;
+        if(filecomment != null){
+            filecommentList = filecomment.split(",");
+        }
         int j =0;
         //파일저장
         Iterator<String> files = multi.getFileNames();
@@ -200,7 +204,7 @@ public class RecordRestController {
             }
         }
 
-        recordService.recordResponSave(responsibils);
+//        recordService.recordResponSave(responsibils);
 
 //        log.info("출동일지 저장 성공 : " + recordSave.toString() );
 //        log.info("조사담당자 저장 성공 : " + responsibils.toString() );

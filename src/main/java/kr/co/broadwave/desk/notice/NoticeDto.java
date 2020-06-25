@@ -19,12 +19,21 @@ public class NoticeDto {
     private String subject;
     private String content;
     private Integer hitCount;
+    private Integer bnState;
     private LocalDateTime insertDateTime;
     private String insert_id;
     private String insert_name;
     private LocalDateTime modifyDateTime;
     private String modify_id;
     private String modify_name;
+
+    public void setBnState(Integer bnState) {
+        this.bnState = bnState;
+    }
+
+    public Integer getBnState() {
+        return bnState;
+    }
 
     // getter setter 에서 날짜 getter 만 손봄
 
