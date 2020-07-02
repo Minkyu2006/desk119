@@ -128,6 +128,15 @@
 				return false;
 			}
 
+			if($("#disasterType").val() !== "DS01"){
+				$("#collapseType").val("CS07");
+			}else{
+				if($("#collapseType").val()==="CS07"){
+					alertCaution("붕괴종류를 선택해주세요.");
+					return false;
+				}
+			}
+
 			var $form = $('form[name="frmreg"]');
 
 			var params = $form.serialize();
@@ -377,14 +386,14 @@
 		<article class="article">
 			<table class="c-table c-table--hover">
 				<colgroup>
+					<col style="width: 120px;" />
+					<col style="width: 100px;" />
+					<col style="width: 120px;" />
+					<col style="width: 80px;" />
+					<col style="width: 140px;" />
 					<col />
-					<col />
-					<col />
-					<col />
-					<col />
-					<col />
-					<col />
-					<col />
+					<col style="width: 120px;" />
+					<col style="width: 80px;" />
 					<col style="width: 60px;" />
 				</colgroup>
 				<thead>
@@ -418,7 +427,7 @@
 		</article>
 	</section>
 
-    <div class="l-popup" id="pop-member">
+    <div class="l-popup" id="pop-member" style="z-index: 1">
     	<div class="l-popup__container" style="width: 322px;">
     		<div class="l-popup__head">
     			<h3 class="l-popup__heading">회원정보 수정</h3>

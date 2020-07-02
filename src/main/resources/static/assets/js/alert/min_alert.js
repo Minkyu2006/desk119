@@ -31,6 +31,10 @@ $(function() {
         $('#popupId').remove();
         return  window.location.reload();
     });
+    $(document).on("click","#successBtnSign",function(){
+        $('#popupId').remove();
+        return  window.location.href ="/";
+    });
 });
 
 
@@ -47,6 +51,8 @@ function alertSuccess(text,num) { //성공창(삭제성공시),저장성공시
     html +='<div class="popup__buttons">';
     if(num===1){
         html +='<button id="successBtnReg" class="popup__btn popup__btn--success">확인</button>';
+    }else if(num===2){
+        html +='<button id="successBtnSign" class="popup__btn popup__btn--success">확인</button>';
     }else{
         html +='<button id="successBtn" class="popup__btn popup__btn--success">확인</button>';
     }

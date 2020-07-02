@@ -2,7 +2,10 @@ package kr.co.broadwave.desk.accounts;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.broadwave.desk.bscodes.ApprovalType;
+import kr.co.broadwave.desk.bscodes.CollapseType;
+import kr.co.broadwave.desk.bscodes.DisasterType;
 import kr.co.broadwave.desk.mastercode.QMasterCode;
 import kr.co.broadwave.desk.teams.QTeam;
 import org.springframework.data.domain.Page;
@@ -38,6 +41,7 @@ public class AccountRepositoryCustomImpl extends QuerydslRepositorySupport imple
         JPQLQuery<AccountDtoWithTeam> query = from(qAccount)
                 .innerJoin(qAccount.team,qTeam)
                 .innerJoin(qAccount.position,qMasterCode)
+                .where(qAccount.approvalType.eq(ApprovalType.AT02))
                 .select(Projections.constructor(AccountDtoWithTeam.class,
                         qAccount.userid,
                         qAccount.username,
@@ -132,4 +136,49 @@ public class AccountRepositoryCustomImpl extends QuerydslRepositorySupport imple
 
 
     }
+
+    @Override
+    public List<AccountLineUpDto> findByLineUpList() {
+
+        JPAQueryFactory queryFactory = new JPAQueryFactory(this.getEntityManager());
+
+        QAccount qAccount  = QAccount.account;
+        QTeam qTeam = QTeam.team;
+        QMasterCode qMasterCode = QMasterCode.masterCode;
+
+        return queryFactory.select(Projections.constructor(AccountLineUpDto.class,
+                qAccount.username,
+                qAccount.disasterType, qAccount.collapseType,
+                qTeam.teamname,qMasterCode.name))
+                .from(qAccount)
+                .innerJoin(qAccount.team,qTeam)
+                .innerJoin(qAccount.position,qMasterCode)
+                .where(qAccount.userid.notEqualsIgnoreCase("admin"))
+                .where(qAccount.approvalType.eq(ApprovalType.AT02))
+                .fetch();
+    }
+
+    @Override
+    public List<AccountPositionUserDto> findByPositionUser(String disaterKey, String collapseKey) {
+
+        JPAQueryFactory queryFactory = new JPAQueryFactory(this.getEntityManager());
+
+        QAccount qAccount  = QAccount.account;
+        QMasterCode qMasterCode = QMasterCode.masterCode;
+//        String disaterCode = DisasterType.valueOf(disaterKey).getCode();
+//        String collapseCode = CollapseType.valueOf(collapseKey).getCode();
+
+//        System.out.println("disaterCode : "+disaterCode);
+//        System.out.println("collapseCode : "+collapseCode);
+        return queryFactory.select(Projections.constructor(AccountPositionUserDto.class,
+                qMasterCode.name,qAccount.username))
+                .from(qAccount)
+                .innerJoin(qAccount.position,qMasterCode)
+                .where(qAccount.userid.notEqualsIgnoreCase("admin"))
+                .where(qAccount.approvalType.eq(ApprovalType.AT02))
+//                .where(qAccount.disasterType.eq(DisasterType.valueOf(disaterCode)))
+//                .where(qAccount.collapseType.eq(CollapseType.valueOf(collapseCode)))
+                .fetch();
+    }
+
 }

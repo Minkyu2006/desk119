@@ -17,6 +17,8 @@
 			$("#btnSave").on('click',function(){
 				save();
 			});
+
+			DisasterSetting("DS01");
 		});
 
 		function save(){
@@ -55,7 +57,12 @@
 			}
 
 			if($("#disasterType").val() !== "DS01"){
-				$("#collapseType").val(null);
+				$("#collapseType").val("CS07");
+			}else{
+				if($("#collapseType").val()==="CS07"){
+					alertCaution("붕괴종류를 선택해주세요.");
+					return false;
+				}
 			}
 
 			var $form = $('form[name="frmreg"]');
@@ -78,8 +85,7 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					alertSuccess('회원가입 요청이 되었습니다. <br> 관리자의 승인 이후에 로그인이 가능합니다.')
-					window.location.href ="/";
+					alertSuccess('회원가입 요청이 되었습니다. <br> 관리자의 승인 이후에 로그인이 가능합니다.',2)
 				}
 			});
 		}
@@ -149,7 +155,7 @@
 					<div class="join__form-item">
 						<div class="c-select">
 							<label for="disasterType" class="join__label">분과</label>
-							<select nameDisasterSetting="disasterType" id="disasterType" class="c-select__input" onchange="DisasterSetting(this.value)">
+							<select name="disasterType" id="disasterType" class="c-select__input" onchange="DisasterSetting(this.value)">
 								<option th:each ="DisasterType : ${DisasterTypes}"
 										th:value="${DisasterType.getCode()}"
 										th:text="${DisasterType.getDesc()}">

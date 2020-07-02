@@ -136,5 +136,11 @@ public class AccountService implements UserDetailsService {
     }
 
 
+    public List<AccountLineUpDto> findByLineUpList() {
+        return accountRepositoryCustom.findByLineUpList();
+    }
 
+    public List<AccountPositionUserDto> findByPositionUser(String disaterKey, String collapseKey) {
+        return accountRepositoryCustom.findByPositionUser(disaterKey,collapseKey);
+    }
 }

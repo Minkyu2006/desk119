@@ -4,6 +4,8 @@ import kr.co.broadwave.desk.bscodes.ApprovalType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * @author InSeok
  * Date : 2019-03-29
@@ -15,4 +17,7 @@ public interface AccountRepositoryCustom {
     Page<AccountDto> findAllByApproval(String username,String startDate, String endDate, Pageable pageable);
     Long saveApproval(Account account, ApprovalType approvalType, String loginId);
 
+    List<AccountLineUpDto> findByLineUpList();
+
+    List<AccountPositionUserDto> findByPositionUser(String disaterKey, String collapseKey);
 }
