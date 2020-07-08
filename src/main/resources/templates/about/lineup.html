@@ -30,37 +30,10 @@
 				},
 				success: function(res){
 					var $lineUpSet = $('#lineUpSet');
+					var $lineUpSet2 = $('#lineUpSet2');
 
-					var positionuserSize = res.data.positionuserSize;
-					var disaterMap = res.data.disaterMap;
-					var collapseMap = res.data.collapseMap;
-					var disaterMapLength = Object.keys(disaterMap).length;
-					var collapseMapLength = Object.keys(collapseMap).length;
-
-					var teamTypeList = res.data.teamTypeList;
-					var teamMap = res.data.teamMap;
-					var teamMapLength = Object.keys(teamMap).length;
-					console.log("positionuserSize : "+ positionuserSize);
-					console.log("disaterMap : "+ disaterMap);
-					console.log("disaterMapLength : "+ disaterMapLength);
-					console.log("collapseMapLength : "+ collapseMapLength);
-					console.log("disaterMap : "+ disaterMap[Object.keys(disaterMap)[0]] + "=" + Object.keys(disaterMap)[0]);
-					console.log("collapseMap : "+ collapseMap[Object.keys(collapseMap)[0]] + "=" + Object.keys(collapseMap)[0]);
-
-					console.log("teamTypeList : "+ teamTypeList);
-					// console.log("teamMap : "+ teamMap[Object.keys(teamMap)[0]]);
-
-					var chairpersonList = res.data.chairpersonList;
-					var stewardList = res.data.stewardList;
-
-					var positionnameList = res.data.positionnameList;
-					var usernameList = res.data.usernameList;
-
-					console.log("chairpersonList : "+ chairpersonList);
-					console.log("stewardList : "+ stewardList);
-
-					console.log("positionnameList : "+ positionnameList);
-					console.log("usernameList : "+ usernameList);
+					var chairpersonList = res.data.chairpersonList; //위원장
+					var stewardList = res.data.stewardList; //간사
 
 					var html = '';
 
@@ -101,69 +74,139 @@
 					html += '<th>'+ "전문가" +'</th>';
 					html += '</tr>';
 
-					console.log("")
-					for(var c=0; c<teamMapLength; c++){
-						console.log("teamMap : "+ teamMap[Object.keys(teamMap)[c]]);
-					}
+					var disaterMap = res.data.disaterMap;
+					var collapseMap = res.data.collapseMap;
 
-					var a=0;
-					for(var j=0; j<positionnameList.length; j++){
-						if(Object.keys(disaterMap)[j]==="붕괴"){
-							html += '<tr>';
-								html += '<td rowspan="' + disaterMap[Object.keys(disaterMap)[j]] + '">' + Object.keys(disaterMap)[j] + '</td>';
-								if(a===0){
-									html += '<td rowspan="' + collapseMap[Object.keys(collapseMap)[a]] + '">' + Object.keys(collapseMap)[a] + '</td>';
-									html += '<td rowspan="' + teamMap[Object.keys(teamMap)[a]] + '">' + teamTypeList[0] + '</td>';
-									for(var y=0; y<teamMap[Object.keys(teamMap)[a]]; y++) {
-										html += '<td>' + positionnameList[0] + '</td>';
-										html += '<td>' + usernameList[0] + '</td>';
-										teamTypeList.shift();
-										positionnameList.shift();
-										usernameList.shift();
-									}
-									a++;
+					var teamTypeList = res.data.teamTypeList;
+					var positionnameList = res.data.positionnameList;
+					var usernameList = res.data.usernameList;
+
+					var html2 = '';
+					console.log("disaterMap.length : "+Object.keys(disaterMap).length)
+					for(var i=0; i<Object.keys(disaterMap).length; i++){
+						if(Object.keys(disaterMap)[i]==="붕괴") {
+							for(var j=0; j<disaterMap[Object.keys(disaterMap)[i]]; j++){
+								html2 += '<tr>';
+								if(j===0) {
+									html2 += '<td rowspan="' + disaterMap[Object.keys(disaterMap)[j]] + '">' + Object.keys(disaterMap)[j] + '</td>';
 								}
-							html += '</tr>';
-
-								if(a!==collapseMap[Object.keys(collapseMap)[0]]){
-									for(var b=0; b<collapseMapLength-1; b++){
-										html += '<tr>';
-										html += '<td rowspan="' + collapseMap[Object.keys(collapseMap)[a]] + '">' + Object.keys(collapseMap)[a] + '</td>';
-										html += '<td rowspan="' + teamMap[Object.keys(teamMap)[a]] + '">' + teamTypeList[0] + '</td>';
-										html += '<td>' + positionnameList[0] + '</td>';
-										html += '<td>' + usernameList[0] + '</td>';
-										html += '</tr>';
-										teamTypeList.shift();
-										positionnameList.shift();
-										usernameList.shift();
-										a++;
+								if(collapseMap[Object.keys(collapseMap)[j]]<=2) {
+									for(var x=0; x<collapseMap[Object.keys(collapseMap)[j]]; x++) {
+										if(x===0) {
+											html2 += '<td rowspan="' + collapseMap[Object.keys(collapseMap)[j]] + '">' + Object.keys(collapseMap)[j] + '</td>';
+											html2 += '<td>' + teamTypeList[0] + '</td>';
+											html2 += '<td>' + positionnameList[0] + '</td>';
+											html2 += '<td>' + usernameList[0] + '</td>';
+											teamTypeList.shift();
+											positionnameList.shift();
+											usernameList.shift();
+										}else{
+											html2 += '<td>' + teamTypeList[0] + '</td>';
+											html2 += '<td>' + positionnameList[0] + '</td>';
+											html2 += '<td>' + usernameList[0] + '</td>';
+											teamTypeList.shift();
+											positionnameList.shift();
+											usernameList.shift();
+										}
 									}
 								}else{
-									for(var b=0; b<collapseMapLength-1; b++){
-										html += '<tr>';
-										html += '<td rowspan="' + collapseMap[Object.keys(collapseMap)[a]] + '">' + Object.keys(collapseMap)[a] + '</td>';
-										html += '<td rowspan="' + teamMap[Object.keys(teamMap)[a]] + '">' + teamTypeList[0] + '</td>';
-										html += '<td>' + positionnameList[0] + '</td>';
-										html += '<td>' + usernameList[0] + '</td>';
-										html += '</tr>';
-										teamTypeList.shift();
-										positionnameList.shift();
-										usernameList.shift();
-										a++;
+									for(var x=0; x<collapseMap[Object.keys(collapseMap)[i]]; x++) {
+										if(x===0) {
+											html2 += '<td rowspan="' + collapseMap[Object.keys(collapseMap)[i]] + '">' + Object.keys(collapseMap)[i] + '</td>';
+											html2 += '<td>' + teamTypeList[0] + '</td>';
+											html2 += '<td>' + positionnameList[0] + '</td>';
+											html2 += '<td>' + usernameList[0] + '</td>';
+											teamTypeList.shift();
+											positionnameList.shift();
+											usernameList.shift();
+										}else{
+											html2 += '<td>' + teamTypeList[0] + '</td>';
+											html2 += '<td>' + positionnameList[0] + '</td>';
+											html2 += '<td>' + usernameList[0] + '</td>';
+											teamTypeList.shift();
+											positionnameList.shift();
+											usernameList.shift();
+										}
 									}
 								}
+								html2 += '</tr>';
+							}
 						}else{
-							html += '<tr>';
-							html += '<td colspan="2" rowspan="' + disaterMap[Object.keys(disaterMap)[j]] + '">' + Object.keys(disaterMap)[j] + '</td>';
-							html += '<td rowspan="' + teamMap[Object.keys(teamMap)[a]] + '">' + teamTypeList[0] + '</td>';
-							html += '<td>' + positionnameList[0] + '</td>';
-							html += '<td>' + usernameList[0] + '</td>';
-							html += '</tr>';
+							html2 += '<tr>';
+							html2 += '<td colspan="2" rowspan="' + disaterMap[Object.keys(disaterMap)[i]] + '">' + Object.keys(disaterMap)[i] + '</td>';
+							html2 += '<td>' + teamTypeList[0] + '</td>';
+							html2 += '<td>' + positionnameList[0] + '</td>';
+							html2 += '<td>' + usernameList[0] + '</td>';
 							teamTypeList.shift();
 							positionnameList.shift();
 							usernameList.shift();
-							a++;
+							html2 += '</tr>';
 						}
+					}
+
+					// console.log("")
+					// for(var c=0; c<teamMapLength; c++){
+					// 	console.log("teamMap : "+ teamMap[Object.keys(teamMap)[c]]);
+					// }
+					//
+					// var a=0;
+					// for(var j=0; j<positionSize; j++){
+					// 	if(Object.keys(disaterMap)[j]==="붕괴"){
+					// 		html += '<tr>';
+					// 			html += '<td rowspan="' + disaterMap[Object.keys(disaterMap)[j]] + '">' + Object.keys(disaterMap)[j] + '</td>';
+					// 			if(a===0){
+					// 				html += '<td rowspan="' + collapseMap[Object.keys(collapseMap)[a]] + '">' + Object.keys(collapseMap)[a] + '</td>';
+					// 				html += '<td rowspan="' + teamMap[Object.keys(teamMap)[a]] + '">' + teamTypeList[0] + '</td>';
+					// 				for(var y=0; y<teamMap[Object.keys(teamMap)[a]]; y++) {
+					// 					html += '<td>' + positionnameList[0] + '</td>';
+					// 					html += '<td>' + usernameList[0] + '</td>';
+					// 					teamTypeList.shift();
+					// 					positionnameList.shift();
+					// 					usernameList.shift();
+					// 				}
+					// 				a++;
+					// 			}
+					// 		html += '</tr>';
+					//
+					// 			if(a!==collapseMap[Object.keys(collapseMap)[0]]){
+					// 				for(var b=0; b<collapseMapLength-1; b++){
+					// 					html += '<tr>';
+					// 					html += '<td rowspan="' + collapseMap[Object.keys(collapseMap)[a]] + '">' + Object.keys(collapseMap)[a] + '</td>';
+					// 					html += '<td rowspan="' + teamMap[Object.keys(teamMap)[a]] + '">' + teamTypeList[0] + '</td>';
+					// 					html += '<td>' + positionnameList[0] + '</td>';
+					// 					html += '<td>' + usernameList[0] + '</td>';
+					// 					html += '</tr>';
+					// 					teamTypeList.shift();
+					// 					positionnameList.shift();
+					// 					usernameList.shift();
+					// 					a++;
+					// 				}
+					// 			}else{
+					// 				for(var b=0; b<collapseMapLength-1; b++){
+					// 					html += '<tr>';
+					// 					html += '<td rowspan="' + collapseMap[Object.keys(collapseMap)[a]] + '">' + Object.keys(collapseMap)[a] + '</td>';
+					// 					html += '<td rowspan="' + teamMap[Object.keys(teamMap)[a]] + '">' + teamTypeList[0] + '</td>';
+					// 					html += '<td>' + positionnameList[0] + '</td>';
+					// 					html += '<td>' + usernameList[0] + '</td>';
+					// 					html += '</tr>';
+					// 					teamTypeList.shift();
+					// 					positionnameList.shift();
+					// 					usernameList.shift();
+					// 					a++;
+					// 				}
+					// 			}
+					// 	}else{
+					// 		html += '<tr>';
+					// 		html += '<td colspan="2" rowspan="' + disaterMap[Object.keys(disaterMap)[j]] + '">' + Object.keys(disaterMap)[j] + '</td>';
+					// 		html += '<td rowspan="' + teamMap[Object.keys(teamMap)[a]] + '">' + teamTypeList[0] + '</td>';
+					// 		html += '<td>' + positionnameList[0] + '</td>';
+					// 		html += '<td>' + usernameList[0] + '</td>';
+					// 		html += '</tr>';
+					// 		teamTypeList.shift();
+					// 		positionnameList.shift();
+					// 		usernameList.shift();
+					// 		a++;
+					// 	}
 
 
 					// 	html += '<tr>';
@@ -176,8 +219,9 @@
 					// 		html += '</tr>';
 					// 	}
 					//
-					}
+					// }
 					$lineUpSet.html(html);
+					$lineUpSet2.html(html2);
 				}
 			});
 
@@ -251,24 +295,28 @@
 							<th>직급</th>
 							<th>전문가</th>
 						</tr>
+					</tbody>
 
+
+					<tbody id="lineUpSet2">
 						<tr>
 							<td rowspan="3">붕괴</td>
 							<td rowspan="1">교량</td>
-							<td rowspan="2">노후인프라센터</td>
+							<td>노후인프라센터</td>
 							<td>수석연구원</td>
 							<td>민지영</td>
 						</tr>
 						<tr>
-							<td rowspan="1">건축물</td>
-							<td>수석연구원</td>
-							<td>김건수</td>
-						</tr>
-						<tr>
 							<td rowspan="1">지반</td>
-							<td rowspan="1">국민생활연구본부</td>
+							<td>노후인프라센터</td>
 							<td>선임연구위원</td>
 							<td>testname</td>
+						</tr>
+						<tr>
+							<td rowspan="1">건축물</td>
+							<td>국민생활연구본부</td>
+							<td>수석연구원</td>
+							<td>김건수</td>
 						</tr>
 
 						<tr>
@@ -284,8 +332,8 @@
 							<td>연구부원장</td>
 							<td>테스트아뒤2</td>
 						</tr>
-
 					</tbody>
+
 				</table>
 			</article>
 		</section>

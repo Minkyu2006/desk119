@@ -110,31 +110,39 @@
 					<li>
 						<h3 class="record__title">현장개요</h3>
 						<div class="record__result">
-                     <pre th:text="${record} ? ${record.arOutline} : ''">
-                     </pre>
+							 <pre th:text="${record} ? ${record.arOutline} : ''">
+
+							 </pre>
+							 <div class="report__picture">
+								<img th:src="${recorduploadFile0} ? '/uploadfiles/recordimages/'+${recorduploadFile0.afSaveFileName} : ''" />
+							 </div>
 						</div>
 					</li>
 					<li>
 						<h3 class="record__title">조사·분석 결과</h3>
 						<div class="record__result">
-                     <pre th:text="${record} ? ${record.arResult} : ''">
-                     </pre>
+							<pre th:text="${record} ? ${record.arResult} : ''"></pre>
+							<div class="report__picture">
+								<img th:src="${recorduploadFile1} ? '/uploadfiles/recordimages/'+${recorduploadFile1.afSaveFileName} : ''" />
+							</div>
 						</div>
 					</li>
 					<li>
 						<h3 class="record__title">검토의견(대응방안)</h3>
 						<div class="record__result">
-                     <pre th:text="${record} ? ${record.arOpinion} : ''">
-                     </pre>
+							<pre th:text="${record} ? ${record.arOpinion} : ''"></pre>
+							<div class="report__picture">
+								<img th:src="${recorduploadFile2} ? '/uploadfiles/recordimages/'+${recorduploadFile2.afSaveFileName} : ''" />
+							</div>
 						</div>
 					</li>
 					<li>
-						<h3 class="record__title">관련사진</h3>
+						<h3 class="record__title">기타사진</h3>
 						<ul class="report__picture-list">
-							<li th:each ="recorduploadFile : ${recorduploadFiles}">
+							<li th:each ="recorduploadFilesList : ${recorduploadFilesList}">
 								<div class="report__picture">
-									<img th:src="${recorduploadFile} ? '/uploadfiles/recordimages/'+${recorduploadFile.afSaveFileName} : ''">
-									<p>&lt;<span th:text="${recorduploadFile.afComment}"></span>&gt;</p>
+									<img th:src="${recorduploadFilesList} ? '/uploadfiles/recordimages/'+${recorduploadFilesList.afSaveFileName} : ''" />
+									<p>&lt;<span th:text="${recorduploadFilesList.afComment}"></span>&gt;</p>
 								</div>
 							</li>
 						</ul>

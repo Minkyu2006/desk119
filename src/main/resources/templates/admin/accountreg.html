@@ -35,7 +35,7 @@
 			});
 
 			$("#btnDel").on('click',function(){
-				del();
+				delCheck();
 			});
 
 			$('.btn__member').on('click', function(e) {
@@ -56,50 +56,61 @@
 			init();
 		}
 
-		function del() {
-
-			if ($("#userid").attr("readonly") != "readonly") {
+		function delCheck(){
+			var $userid = $("#userid");
+			if ($userid.attr("readonly") !== "readonly") {
 				alertCaution("삭제하고자하는 사용자를 하단에서 선택 후 삭제하세요.");
 				return false;
 			}
-
-			if ($("#userid").val().trim() == '') {
+			if ($userid.val().trim() === '') {
 				alertCaution("삭제하고자하는 사용자를 하단에서 선택 후 삭제하세요.");
 				$("#userid").trigger('focus');
 				return false;
 			}
-
-			if (result.value) {
-
-				var params = {
-					userid: $("#userid").val()
-				};
-
-				var token = $("meta[name='_csrf']").attr("content");
-				var header = $("meta[name='_csrf_header']").attr("content");
-				$(document).ajaxSend(function (e, xhr, options) {
-					xhr.setRequestHeader(header, token);
-				});
-
-				$.ajax({
-					url: '/api/account/del',
-					type: 'post',
-					data: params,
-					cache: false,
-					error: function (request, status, error) {
-						ajaxErrorMsg(request);
-					},
-					success: function (res) {
-						if (!Ajax.checkResult(res)) {
-							return;
-						}
-						alertSuccess('삭제되었습니다. ');
-						init();
-						callList(1);
-					}
-				})
+			alertCheck("정말 사용자를 삭제하겠습니까? <br> 삭제한 사용자는 되돌릴 수 없습니다.",$userid.val());
+		}
+		// 삭제실행여부확인
+		function startDel(id,booleanValue) {
+			$('#popupId').remove();
+			if(booleanValue===true){
+				del(id)
+			}else{
+				return false;
 			}
 		}
+
+		function del(id) {
+			var params = {
+				userid: id
+			};
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function (e, xhr) {
+				xhr.setRequestHeader(header, token);
+			});
+
+			$.ajax({
+				url: '/api/account/del',
+				type: 'post',
+				data: params,
+				cache: false,
+				error: function (request) {
+					ajaxErrorMsg(request);
+				},
+				success: function (res) {
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+					alertSuccess('삭제되었습니다.');
+					$('.l-popup').removeClass('open');
+					init();
+					callList(1);
+				}
+			});
+		}
+
+
 
 		function init(){
 			//화면 초기화
@@ -510,7 +521,7 @@
 						<div class="c-function__group c-function__group--right">
 							<div class="c-function__item"><button class="c-button c-button--point" id="btnSave1">일반정보수정</button></div>
 							<div class="c-function__item"><button class="c-button c-button--point" id="btnPassword">비밀번호수정</button></div>
-							<div class="c-function__item"><button class="c-button" id="btnCancel">취소</button></div>
+							<div class="c-function__item"><button class="c-button" id="btnDel">삭제</button></div>
 						</div>
 					</div>
     			</div>

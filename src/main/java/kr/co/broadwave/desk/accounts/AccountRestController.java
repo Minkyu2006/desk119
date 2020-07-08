@@ -462,8 +462,11 @@ public class AccountRestController {
 
     //사용자삭제
     @PostMapping("del")
-    public ResponseEntity<Map<String,Object>> accountdel(@RequestParam (value="userid", defaultValue="") String userid
-                                     ){
+    public ResponseEntity<Map<String,Object>> accountdel(@RequestParam (value="userid", defaultValue="") String userid,
+                                                         HttpServletRequest request){
+
+        String currentuserid = CommonUtils.getCurrentuser(request);
+
         log.info("사용자 삭제 / userid: " + userid );
         Optional<Account> optionalAccount = accountService.findByUserid(userid);
         //정보가있는지 체크
@@ -472,13 +475,33 @@ public class AccountRestController {
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E003.getCode(),ResponseErrorCode.E003.getDesc()));
         }
         Account account = optionalAccount.get();
+
         //사용중인지체크
         if( loginlogService.countByLoginAccount(account) > 0){
             log.info("사용자삭제실패 : LoginLog에서 사용중인데이터 , 삭제대상 userid : '" + userid + "'");
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E002.getCode(),ResponseErrorCode.E002.getDesc()));
+        }else{
+            //수정시작
+            account.setId(optionalAccount.get().getId());
+            account.setUserid(optionalAccount.get().getUserid());
+            account.setUsername(optionalAccount.get().getUsername());
+            account.setCellphone(optionalAccount.get().getCellphone());
+            account.setPassword(optionalAccount.get().getPassword());
+            account.setRole(optionalAccount.get().getRole());
+            account.setApprovalType(ApprovalType.AT04);
+            account.setEmail(optionalAccount.get().getEmail());
+            account.setTeam(optionalAccount.get().getTeam());
+            account.setDisasterType(optionalAccount.get().getDisasterType());
+            account.setCollapseType(optionalAccount.get().getCollapseType());
+            account.setPosition(optionalAccount.get().getPosition());
+            account.setInsertDateTime(optionalAccount.get().getInsertDateTime());
+            account.setInsert_id(optionalAccount.get().getInsert_id());
+            account.setApprovalDateTime(optionalAccount.get().getApprovalDateTime());
+            account.setApproval_id(optionalAccount.get().getApproval_id());
+            account.setModify_id(currentuserid);
+            account.setModifyDateTime(LocalDateTime.now());
         }
-
-        accountService.delete(account);
+        accountService.updateAccount(account);
         return ResponseEntity.ok(res.success());
     }
 
@@ -511,14 +534,14 @@ public class AccountRestController {
 
         int listSize = accountlineUpDtoList.size();
 
-        for(int i=0; i<listSize; i++) {
-            log.info("username : " + accountlineUpDtoList.get(i).getUsername());
-            log.info("getDisasterType : " + accountlineUpDtoList.get(i).getDisasterType());
-            log.info("getCollapseType : " + accountlineUpDtoList.get(i).getCollapseType());
-            log.info("getTeamname : " + accountlineUpDtoList.get(i).getTeamname());
-            log.info("getPositionname : " + accountlineUpDtoList.get(i).getPositionname());
-            System.out.println();
-        }
+//        for(int i=0; i<listSize; i++) {
+//            log.info("username : " + accountlineUpDtoList.get(i).getUsername());
+//            log.info("getDisasterType : " + accountlineUpDtoList.get(i).getDisasterType());
+//            log.info("getCollapseType : " + accountlineUpDtoList.get(i).getCollapseType());
+//            log.info("getTeamname : " + accountlineUpDtoList.get(i).getTeamname());
+//            log.info("getPositionname : " + accountlineUpDtoList.get(i).getPositionname());
+//            System.out.println();
+//        }
 
         List<String> disaterTypeList = new ArrayList<>();
         List<String> collapseTypeList = new ArrayList<>();
@@ -534,6 +557,7 @@ public class AccountRestController {
         Map<String,String> team;
         Map<Map<String,String>,String> team2;
         List<Map<Map<String,String>,String>> team3 = new ArrayList<>();
+
         for(int i=0; i<listSize; i++){
             if(accountlineUpDtoList.get(i).getDisasterType().equals("간사")) {
                 stewardList.add(accountlineUpDtoList.get(i).getPositionname()+" "+accountlineUpDtoList.get(i).getUsername());
@@ -542,6 +566,9 @@ public class AccountRestController {
             }else{
                 disaterTypeList.add(accountlineUpDtoList.get(i).getDisasterType());
                 collapseTypeList.add(accountlineUpDtoList.get(i).getCollapseType());
+
+                positionnameList.add(accountlineUpDtoList.get(i).getPositionname());
+                usernameList.add(accountlineUpDtoList.get(i).getUsername());
 
                 team = new HashMap<>();
                 team2 = new HashMap<>();
@@ -563,7 +590,6 @@ public class AccountRestController {
 
         Map<String, Integer> disaterMap = new LinkedHashMap<>();
         Map<String, Integer> collapseMap = new LinkedHashMap<>();
-        Map<Map<String,String>, Integer> discollMap = new LinkedHashMap<>();
         Map<Map<Map<String,String>,String>, Integer> teamMap = new LinkedHashMap<>();
 
         disaterTypeList.forEach(e -> {
@@ -580,77 +606,20 @@ public class AccountRestController {
             Integer count = teamMap.get(e);
             teamMap.put(e, count == null ? 1 : count + 1);
         });
-        team3.forEach(e -> {
-            Integer count = teamMap.get(e);
-            teamMap.put(e, count == null ? 1 : count + 1);
-        });
-        disaterCollList.forEach(e -> {
-            Integer count = discollMap.get(e);
-            discollMap.put(e, count == null ? 1 : count + 1);
-        });
-
-//        Iterator<String> disaterKeys = disaterMap.keySet().iterator();
-//        Iterator<Integer> disaterValues = disaterMap.values().iterator();
-//        Iterator<String> collapseKeys = collapseMap.keySet().iterator();
-//        Iterator<Integer> collapseValues = collapseMap.values().iterator();
-//        for(int a=0; a<listSize; a++){
-//            String disaterKey = disaterKeys.next();
-//            if(disaterKey.equals("붕괴")){
-//                Integer disaterValue = disaterValues.next();
-//                String collapseKey = collapseKeys.next();
-//                for(int b=0; b<disaterValue; b++){
-//                    DisasterType a = DisasterType.valueOf(disaterCode).getDesc();
-//
-//                    String disaterCode = DisasterType.valueOf(disaterKey).getDesc();
-//                    String collapseCode = CollapseType.valueOf(collapseKey).getDesc();
-//
-////                    log.info("disaterCode : "+disaterCode);
-////                    log.info("collapseCode : "+collapseCode);
-////                    List<AccountPositionUserDto> accountPositionUserDto = accountService.findByPositionUser(disaterKey,collapseKey);
-////                    log.info("accountPositionUserDto");
-//                }
-//            }
-//        }
-
-        log.info("discollMap : "+discollMap);
-//        Iterator<Map<Map<String, String>, String>> teamKeys = teamMap.keySet().iterator();
-        int count=0;
-//        for(int a=0; a<listSize; a++){
-//            String disaterKey = disaterKeys.next();
-//            Integer disaterValue = disaterValues.next();
-////            Map<Map<String, String>, String> teamKey = teamKeys.next();
-//            log.info("disaterKey : "+disaterKey);
-////            log.info("teamKey : "+teamKey);
-//            if(disaterKey.equals("붕괴")){
-//                count++;
-//            }else{
-//
-//            }
-
-
-//            for(int b=0; b<accountlineUpDtoList.size(); b++){
-//                if(accountlineUpDtoList.get(b).getDisasterType().contains(disaterKey) && accountlineUpDtoList.get(b).getCollapseType().contains(key)){
-//                    if(!accountlineUpDtoList.get(b).getDisasterType().equals("간사") || !accountlineUpDtoList.get(b).getDisasterType().equals("위원장")) {
-//                        positionnameList.add(accountlineUpDtoList.get(b).getPositionname());
-//                        usernameList.add(accountlineUpDtoList.get(b).getUsername());
-//                    }
-//                }
-//            }
-//        }
-
-
 
         log.info("disaterMap : "+disaterMap);
         log.info("collapseMap : "+collapseMap);
 
         log.info("positionnameList : "+positionnameList);
         log.info("usernameList : "+usernameList);
+
+        log.info("teamTypeList : "+teamTypeList);
         log.info("teamMap : "+teamMap);
 
         data.clear();
         data.put("chairpersonList",chairpersonList);
         data.put("stewardList",stewardList);
-        data.put("positionuserSize",positionnameList.size());
+        data.put("positionSize",positionnameList.size());
         data.put("disaterMap",disaterMap);
         data.put("collapseMap",collapseMap);
         data.put("positionnameList",positionnameList);

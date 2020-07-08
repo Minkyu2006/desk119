@@ -13,7 +13,25 @@
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
 	<script>
+		var fileValue = 0;
 		$(function() {
+
+			if($("#recordupload0").val()==="false"){
+				$("#outlineFileDiv").css('display','block');
+			}else{
+				fileValue++
+			}
+			if($("#recordupload1").val()==="false"){
+				$("#resultFileDiv").css('display','block');
+			}else{
+				fileValue++
+			}
+			if($("#recordupload2").val()==="false"){
+				$("#opinionFileDiv").css('display','block');
+			}else{
+				fileValue++
+			}
+			$("#fileValue").val(fileValue);
 
 			//저장
 			$("#btnSave").on('click', function () {
@@ -25,29 +43,21 @@
 			});
 			//삭제
 			$("#btnDel").on('click', function () {
-				del();
+				delCheck();
 			});
 			//조사담당자 추가버튼
 			$("#responsibilBtn").on('click', function () {
 				responsibiladd();
 			});
 
-			$('.c-file__button input').change(function(){
-				var txt = [];
-				for(var i=0; i<this.files.length; i++){
-					txt.push(this.files[i].name);
-				}
-				$(this).parent().prev('.c-file__input').val(txt.join("_"));
-			}).change();
-
 			// 파일 항목 추가
-			$('.c-file__control.add').on('click', function(e) {
+			$("#fileAdd").on('click', function(e) {
 				var last = $(this).parents('.c-file-list').children('li').last();
 				var clName = last.attr('class');
 				var num = Number(clName.replace(/[^0-9]/g,''));
 				var idx = num + 1;
 				var filearea =
-						'<li class="c-file-list__item c-file-list__item' + idx + '">' +
+						'<li class="c-file-list__item' + idx + '">' +
 						'<div class="c-file c-file--comment">' +
 						'<input type="text" readonly="readonly" class="c-file__input" id="file' + idx + '" name="file' + idx + '" />' +
 						'<label class="c-file__button">파일선택<input type="file" name="file' + idx + '" /></label>' +
@@ -69,7 +79,7 @@
 
 			// 파일 항목 삭제
 			$(document).on('click', '.c-file__control.remove', function(e) {
-				var idx = $(this).parents('li.c-file-list__item');
+				var idx = $(this).parents('li');
 				idx.remove();
 				e.preventDefault();
 			});
@@ -82,252 +92,325 @@
 			});
 
 			//재해.재난.분과 체크박스 값넣기
-			$(".c-checkbox__input").change(function(){
-				if($('input[name=branch]').is(":checked") == true) {
-					var listsArr = new Array(0, 0, 0, 0, 0, 0, 0);
-					var arDisasterArr = new Array();
-					var arDisasterArrFilename = new Array();
-					if ($("#branch01").is(":checked") == true) {
+			var $checkbox__input = $(".c-checkbox__input");
+			$checkbox__input.change(function(){
+				var listsArr = [0, 0, 0, 0, 0, 0, 0, 0];
+				var $branch01 = $("#branch01");
+				var $branch02 = $("#branch02");
+				var $branch03 = $("#branch03");
+				var $branch04 = $("#branch04");
+				var $branch05 = $("#branch05");
+				var $branch06 = $("#branch06");
+				var $branch07 = $("#branch07");
+				var $branch08 = $("#branch08");
+				var $arDisasterGita = $("#arDisasterGita");
+				if($("input[name=branch]").is(":checked") === true) {
+					var arDisasterArr = [];
+					var arDisasterArrFilename = [];
+					if ($branch01.is(":checked") === true) {
 						listsArr[0] = 1;
-						arDisasterArr[0] = $("#branch01").attr('value');
-						arDisasterArrFilename[0] = $("#branch01").attr('value');
+						arDisasterArr[0] = $branch01.attr('value');
+						arDisasterArrFilename[0] = $branch01.attr('value');
 					} else {
 						listsArr[0] = 0;
 					}
-					if ($("#branch02" ).is(":checked") == true) {
+					if ($branch02.is(":checked") === true) {
 						listsArr[1] = 1;
-						arDisasterArr[1] = $("#branch02").attr('value');
-						arDisasterArrFilename[1] = $("#branch02").attr('value');
+						arDisasterArr[1] = $branch02.attr('value');
+						arDisasterArrFilename[1] = $branch02.attr('value');
 					} else {
 						listsArr[1] = 0;
 
 					}
-					if ($("#branch03").is(":checked") == true) {
+					if ($branch03.is(":checked") === true) {
 						listsArr[2] = 1;
-						arDisasterArr[2] = $("#branch03").attr('value');
-						arDisasterArrFilename[2] = $("#branch03").attr('value');
+						arDisasterArr[2] = $branch03.attr('value');
+						arDisasterArrFilename[2] = $branch03.attr('value');
 					} else {
 						listsArr[2] = 0;
 
 					}
-					if ($("#branch04").is(":checked") == true) {
+					if ($branch04.is(":checked") === true) {
 						listsArr[3] = 1;
-						arDisasterArr[3] = $("#branch04").attr('value');
-						arDisasterArrFilename[3] = $("#branch04").attr('value');
+						arDisasterArr[3] = $branch04.attr('value');
+						arDisasterArrFilename[3] = $branch04.attr('value');
 					} else {
 						listsArr[3] = 0;
 					}
-					if ($("#branch05").is(":checked") == true) {
+					if ($branch05.is(":checked") === true) {
 						listsArr[4] = 1;
-						arDisasterArr[4] = $("#branch05").attr('value');
-						arDisasterArrFilename[4] = $("#branch05").attr('value');
+						arDisasterArr[4] = $branch05.attr('value');
+						arDisasterArrFilename[4] = $branch05.attr('value');
 					} else {
 						listsArr[4] = 0;
 					}
-					if ($("#branch06").is(":checked") == true) {
+					if ($branch06.is(":checked") === true) {
 						listsArr[5] = 1;
-						arDisasterArr[5] = $("#branch06").attr('value');
-						arDisasterArrFilename[5] = $("#branch06").attr('value');
+						arDisasterArr[5] = $branch06.attr('value');
+						arDisasterArrFilename[5] = $branch06.attr('value');
 					} else {
 						listsArr[5] = 0;
 					}
-					if ($("#branch07").is(":checked") == true) {
+					if ($branch07.is(":checked") === true) {
 						listsArr[6] = 1;
-						arDisasterArr[6] = $("#branch07").attr('value');
-						arDisasterArrFilename[6] = $("#branch07").attr('value');
+						arDisasterArr[6] = $branch07.attr('value');
+						arDisasterArrFilename[6] = $branch07.attr('value');
 					} else {
 						listsArr[6] = 0;
 					}
-					arDisasterType.value = listsArr.join(",");
-					arDisasterItem.value = arDisasterArr.join(" ");
-					arDisasterItemFilename.value= arDisasterArrFilename.join("");
-				};
-			});
+					if ($branch08.is(":checked") === true) {
+						listsArr[7] = 1;
+						arDisasterArr[7] = $branch08.attr('value');
+						arDisasterArrFilename[7] = $branch08.attr('value');
+						$arDisasterGita.attr("readonly",false);
+					} else {
+						listsArr[7] = 0;
+						$arDisasterGita.attr("readonly",true);
+						$arDisasterGita.val(" ");
+					}
 
+					$("#arDisasterType").val(listsArr.join(","));
+					$("#arDisasterItem").val(arDisasterArr.join(" "));
+					$("#arDisasterItemFilename").val(arDisasterArrFilename.join(""));
+				}
+			});
 			//조사시설물 체크박스 값넣기
-			$(".c-checkbox__input").change(function(){
-				if($('input[name=scan]').is(":checked") == true) {
-					var facArr = new Array(0, 0, 0, 0, 0, 0, 0);
-					var arFacItemArr = new Array();
-					if ($("#scan01").is(":checked") == true) {
+			$checkbox__input.change(function(){
+				var facArr = [0, 0, 0, 0, 0, 0, 0];
+				var $argita = $("#argita");
+				if($("input[name=scan]").is(":checked") === true) {
+					var arFacItemArr = [];
+					var $scan01 = $("#scan01");
+					if ($scan01.is(":checked") === true) {
 						facArr[0] = 1;
-						arFacItemArr[0] = $("#scan01").attr('value');
+						arFacItemArr[0] = $scan01.attr('value');
 					} else {
 						facArr[0] = 0;
 					}
-					if ($("#scan02" ).is(":checked") == true) {
+					var $scan02 = $("#scan02");
+					if ($scan02.is(":checked") === true) {
 						facArr[1] = 1;
-						arFacItemArr[1] = $("#scan02").attr('value');
+						arFacItemArr[1] = $scan02.attr('value');
 					} else {
 						facArr[1] = 0;
 					}
-					if ($("#scan03").is(":checked") == true) {
+					var $scan03 = $("#scan03");
+					if ($scan03.is(":checked") === true) {
 						facArr[2] = 1;
-						arFacItemArr[2] = $("#scan03").attr('value');
+						arFacItemArr[2] = $scan03.attr('value');
 					} else {
 						facArr[2] = 0;
 					}
-					if ($("#scan04").is(":checked") == true) {
+					var $scan04 = $("#scan04");
+					if ($scan04.is(":checked") === true) {
 						facArr[3] = 1;
-						arFacItemArr[3] = $("#scan04").attr('value');
+						arFacItemArr[3] = $scan04.attr('value');
 					} else {
 						facArr[3] = 0;
 					}
-					if ($("#scan05").is(":checked") == true) {
+					var $scan05 = $("#scan05");
+					if ($scan05.is(":checked") === true) {
 						facArr[4] = 1;
-						arFacItemArr[4] = $("#scan05").attr('value');
+						arFacItemArr[4] = $scan05.attr('value');
 					} else {
 						facArr[4] = 0;
 					}
-					if ($("#scan06").is(":checked") == true) {
+					var $scan06 = $("#scan06");
+					if ($scan06.is(":checked") === true) {
 						facArr[5] = 1;
-						arFacItemArr[5] = $("#scan06").attr('value');
+						arFacItemArr[5] = $scan06.attr('value');
 					} else {
 						facArr[5] = 0;
 					}
-					if ($("#scan07").is(":checked") == true) {
+					var $scan07 = $("#scan07");
+					if ($scan07.is(":checked") === true) {
 						facArr[6] = 1;
-						arFacItemArr[6] = $("#scan07").attr('value');
+						arFacItemArr[6] = $scan07.attr('value');
 					} else {
 						facArr[6] = 0;
 					}
-					if ($("#scan08").is(":checked") == true) {
+					var $scan08 = $("#scan08");
+					if ($scan08.is(":checked") === true) {
 						facArr[7] = 1;
-						arFacItemArr[7] = $("#scan08").attr('value');
+						arFacItemArr[7] = $scan08.attr('value');
 					} else {
 						facArr[7] = 0;
 					}
-					if ($("#scan09").is(":checked") == true) {
+					var $scan09 = $("#scan09");
+					if ($scan09.is(":checked") === true) {
 						facArr[8] = 1;
-						arFacItemArr[8] = $("#scan09").attr('value');
+						arFacItemArr[8] = $scan09.attr('value');
 					} else {
 						facArr[8] = 0;
 					}
-					if ($("#scan10").is(":checked") == true) {
+					var $scan10 = $("#scan10");
+					if ($scan10.is(":checked") === true) {
 						facArr[9] = 1;
-						arFacItemArr[9] = $("#scan10").attr('value');
-						$("#argita").attr("readonly",false);
+						arFacItemArr[9] = $scan10.attr('value');
+						$argita.attr("readonly",false);
 					} else {
 						facArr[9] = 0;
-						$("#argita").attr("readonly",true);
-						$("#argita").val(" ");
+						$argita.attr("readonly",true);
+						$argita.val("");
 					}
-					arFac.value = facArr.join(",");
-					arFacItem.value = arFacItemArr.join(' ');
-				};
+					$("#arFac").val(facArr.join(","));
+					$("#arFacItem").val(arFacItemArr.join(" "));
+				}
 			});
 
 			//재해.재난.분과 체크박스 여부확인
-			if($("#arDisasterType").val() != "") {
-				var value = $("#arDisasterType").val();
-				var listsArr = value.split(',');
+			if($("#arDisasterType").val() !== "") {
+				var disasterType = $('#arDisasterType').val();
+				var listsArr = disasterType.split(',')
+				var check = "1";
 
-				var zero = 0;
-
-				//for(i=0; i<listsArr.length; i++){
-				if(listsArr[0] != zero){
+				if(listsArr[0] === check){
 					$("#branch01").prop('checked', true);
-					//$("input[name=branch]").prop('checked', true);
-				}else{
-					$("#branch01").prop('checked', false);
-					//$("input[name=branch]").prop('checked', false);
 				}
-				if(listsArr[1] != zero){
+				if(listsArr[1] === check){
 					$("#branch02").prop('checked', true);
-				}else{
-					$("#branch02").prop('checked', false);
 				}
-				if(listsArr[2] != zero){
+				if(listsArr[2] === check){
 					$("#branch03").prop('checked', true);
-				}else{
-					$("#branch03").prop('checked', false);
 				}
-				if(listsArr[3] != zero){
+				if(listsArr[3] === check){
 					$("#branch04").prop('checked', true);
-				}else{
-					$("#branch04").prop('checked', false);
 				}
-				if(listsArr[4] != zero){
+				if(listsArr[4] === check){
 					$("#branch05").prop('checked', true);
-				}else{
-					$("#branch05").prop('checked', false);
 				}
-				if(listsArr[5] != zero){
+				if(listsArr[5] === check){
 					$("#branch06").prop('checked', true);
-				}else{
-					$("#branch06").prop('checked', false);
 				}
-				if(listsArr[6] != zero){
+				if(listsArr[6] === check){
 					$("#branch07").prop('checked', true);
-				}else{
-					$("#branch07").prop('checked', false);
 				}
-				//}
-			};
+				if(listsArr[7] === check){
+					$("#arDisasterGita").attr("readonly",false);
+					$("#branch08").prop('checked', true);
+				}
+			}
 
 			//조사시설물 체크박스 여부확인
-			if($("#arFac").val() != "") {
-				var value = $('#arFac').val();
-				var facArr = value.split(',');
+			if($("#arFac").val() !== "") {
+				var fac = $('#arFac').val();
+				var facArr = fac.split(',');
 
-				var zero = 0;
+				var check2 = "1";
 
-				if(facArr[0] != zero){
+				if(facArr[0] === check2){
 					$("#scan01").prop('checked', true);
-				}else{
-					$("#scan01").prop('checked', false);
 				}
-				if(facArr[1] != zero){
+				if(facArr[1] === check2){
 					$("#scan02").prop('checked', true);
-				}else{
-					$("#scan02").prop('checked', false);
 				}
-				if(facArr[2] != zero){
+				if(facArr[2] === check2){
 					$("#scan03").prop('checked', true);
-				}else{
-					$("#scan03").prop('checked', false);
 				}
-				if(facArr[3] != zero){
+				if(facArr[3] === check2){
 					$("#scan04").prop('checked', true);
-				}else{
-					$("#scan04").prop('checked', false);
 				}
-				if(facArr[4] != zero){
+				if(facArr[4] === check2){
 					$("#scan05").prop('checked', true);
-				}else{
-					$("#scan05").prop('checked', false);
 				}
-				if(facArr[5] != zero){
+				if(facArr[5] === check2){
 					$("#scan06").prop('checked', true);
-				}else{
-					$("#scan06").prop('checked', false);
 				}
-				if(facArr[6] != zero){
+				if(facArr[6] === check2){
 					$("#scan07").prop('checked', true);
-				}else{
-					$("#scan07").prop('checked', false);
 				}
-				if(facArr[7] != zero){
+				if(facArr[7] === check2){
 					$("#scan08").prop('checked', true);
-				}else{
-					$("#scan08").prop('checked', false);
 				}
-				if(facArr[8] != zero){
+				if(facArr[8] === check2){
 					$("#scan09").prop('checked', true);
-				}else{
-					$("#scan09").prop('checked', false);
 				}
-				if(facArr[9] != zero){
+				if(facArr[9] === check2){
 					$("#scan10").prop('checked', true);
 					$("#argita").attr("readonly",false);
-				}else{
-					$("#scan10").prop('checked', false);
 				}
-			};
+			}
 
 			LocationSetting(); //행정구역 onchange실행
 
+			// 파일사이즈 체크
+			$("input[type=file]").change(function(){
+				console.log("파일업로드실행")
+				if($(this).val()!==""){
+
+					var txt = [];
+					for(var i=0; i<this.files.length; i++){
+						txt.push(this.files[i].name);
+					}
+					$(this).parent().prev('.c-file__input').val(txt.join(""));
+
+					// var ext = $(this).val().split(".").pop().toLowerCase();
+					// if($.inArray(ext,["gif","jpg","jpeg","png"]) === -1){
+					// 	alertCaution("이미지 파일만 업로드 해주세요.");
+					// 	$(this).val("");
+					// 	return;
+					// }
+					//
+					// // 브라우저 확인
+					// var browser=navigator.appName;
+					// var file;
+					//
+					// // 익스플로러일 경우
+					// if (browser==="Microsoft Internet Explorer"){
+					// 	var oas = new ActiveXObject("Scripting.FileSystemObject");
+					// 	file = oas.getFile(this.files[0])
+					// }else{ // 익스플로러가 아닐경우
+					// 	file  = this.files[0];
+					// }
+
+					// var url = window.URL || window.webkitURL;
+					// var img = new Image();
+					// img.src = url.createObjectURL(file);
+					// var  fileName = file.name;
+					// console.log("fileName : "+ fileName);
+					// var maxWidth = 514; // 514px
+					// img.onload = function() {
+					// 	console.log("width : "+img.width);
+					// 	console.log("img : "+img);
+					// 	if(img.width < maxWidth) {
+					// 		a = 1;
+					// 		alertCaution("이미지 가로 최소 514px로 맞춰서 올려주세요.");
+					// 		console.log("a : "+a);
+					// 	}else{
+					// 		$('.c-file__input').val(fileName);
+					// 	}
+					// }
+
+					// if(a===0){
+					// 	console.log("a 는 영임 ");
+					// 	var txt = [];
+					// 	for(var i=0; i<this.files.length; i++){
+					// 		txt.push(this.files[i].name);
+					// 	}
+					// 	$(this).parent().prev('.c-file__input').val(txt.join("_"));
+					// }else{
+					// 	console.log("a 는 일임 ");
+					// 	$(this).val("");
+					// }
+
+					// if(fileSize < maxSize){
+					// 	// alertCaution("첨부파일 사이즈가 너무작아 <br> 업로드 할 수 없습니다.");
+					// 	// $(this).val("");
+					// 	// return false;
+					// }else{
+					// 	alertSuccess("파일사이즈 : "+ fileSize +"<br> 최소 파일사이즈 : 1MB",0);
+
+					// for(var i=0; i<this.files.length; i++){
+					// 	txt.push(this.files[i].name);
+					// }
+					// $(this).parent().prev('.c-file__input').val(txt.join("_"));
+					// }
+
+				}
+			});
+
 		});
+
 
 		// 조사담당자 추가버튼
 		function responsibiladd() {
@@ -335,7 +418,7 @@
 
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function (e, xhr, options) {
+			$(document).ajaxSend(function (e, xhr) {
 				xhr.setRequestHeader(header, token);
 			});
 
@@ -351,15 +434,15 @@
 						return;
 					}
 					var html = '';
+					html += '<li class="c-input-list">'
+					html += '<ul>'
 					html += '<li>'
-					html += '<ul class="c-input-list c-input-list--button-right">'
-					html += '<li>'
-					html += '<div class="m-text">'
+					html += '<div class="c-text">'
 					html += '<input type="text" class="c-text__input" name="arEmployeeNumber" placeholder="사번" />'
 					html += '</div>'
 					html += '</li>'
 					html += '<li>'
-					html += '<div class="m-text">'
+					html += '<div class="c-text">'
 					html += '<input type="text" class="c-text__input" name="arEmployeeName" placeholder="이름" />'
 					html += '</div>'
 					html += '</li>'
@@ -390,28 +473,32 @@
 					return;
 				}
 			}
-			// 날짜저장 VIEW(YYYY-MM-DD) -> DATABASE(YYYYMMDD)
-			if($("#arIntoStart").val() != "" && $("#arIntoEnd").val() != "") {
+			var i;
+			if($("#arIntoStart").val().length===10) {
 				var start = $('#arIntoStart').val();
-				var end = $('#arIntoEnd').val();
 				var startArray = start.split("");
-				var endArray = end.split("");
-				for(var i = 0; i<2; i++) {
+				for(i = 0; i<2; i++) {
 					startArray.splice(startArray.indexOf("-"), 1);
-					endArray.splice(endArray.indexOf("-"), 1);
 				}
 				var realstart = startArray.join("");
-				var realend = endArray.join("");
-
 				arIntoStart(realstart);
+			}
+			if($("#arIntoEnd").val().length===10) {
+				var end = $('#arIntoEnd').val();
+				var endArray = end.split("");
+				for(i = 0; i<2; i++) {
+					endArray.splice(endArray.indexOf("-"), 1);
+				}
+				var realend = endArray.join("");
 				arIntoEnd(realend);
-			};
+			}
 
-			if($("#arDisasterType").val() == "") {
-				var zeroType = "0,0,0,0,0,0,0";
+			// 체크값이없으면 0으로 반환
+			if($("#arDisasterType").val() === "") {
+				var zeroType = "0,0,0,0,0,0,0,0";
 				$('#arDisasterType').val(zeroType);
 			}
-			if($("#arFac").val() == "") {
+			if($("#arFac").val() === "") {
 				var zeroType2 = "0,0,0,0,0,0,0,0,0,0";
 				$('#arFac').val(zeroType2);
 			}
@@ -420,7 +507,7 @@
 
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function (e, xhr, options) {
+			$(document).ajaxSend(function (e, xhr) {
 				xhr.setRequestHeader(header, token);
 			});
 
@@ -432,49 +519,50 @@
 				contentType: false,
 				enctype: 'multipart/form-data',
 				cache: false,
-				error:function(request,status,error){
+				error:function(request){
 					ajaxErrorMsg(request);
 				},
 				success: function (res) {
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					alertSuccess('임시저장이 되었습니다.<br>출동일지조회에서 확인해주세요.',1);
+					alertSuccess('임시저장이 되었습니다.',1)
 				}
 			});
 		}
-
 		//출동일지 저장
 		function save() {
-			if ($("#arTitle").val().trim() == '') {
+			if ($("#arTitle").val().trim() === '') {
 				alertCaution("제목을 입력하세요.");
-				$("#arTitle").trigger('focus');
 				return false;
 			}
-			if ($("#arWriter").val().trim() == '') {
+			if ($("#arWriter").val().trim() === '') {
 				alertCaution("작성자를 입력하세요.");
 				return false;
 			}
-			if ($(":checkbox[name='branch']:checked").length == 0) {
-				alertCaution("재해.재난.분과 항목을 하나이상 체크해 주세요.");
+			if ($(":checkbox[name='branch']:checked").length === 0) {
+				alertCaution("재해.재난.분과 항목을 <br> 하나이상 체크해주세요.");
 				return;
 			}
-			if ($(":checkbox[name='scan']:checked").length == 0) {
-				alertCaution("조사시시설물 항목을 하나이상 체크해 주세요.");
+			if ($(":checkbox[name='scan']:checked").length === 0) {
+				alertCaution("조사시시설물 항목을 <br> 하나이상 체크해주세요.");
 				return;
 			}
+
 			if ($("#arLocationAddressType option:selected").val()==null) {
 				alertCaution("행정구역을 설정해주세요.");
 				return;
 			}
-			if ($("#file0").val() !== '') {
+
+			if ($("#file0").val() !== ''){
 				if ($('input[name=arComment]').val().trim() === '') {
 					alertCaution("관련사진 코멘트는 필수입니다.");
 					return;
 				}
 			}
+
 			//날짜저장 VIEW(YYYY-MM-DD) -> DATABASE(YYYYMMDD)
-			if($("#dateValue_arIntoStart").val() != "" && $("#dateValue_arIntoEnd").val() != "") {
+			if($("#dateValue_arIntoStart").val() !== "" && $("#dateValue_arIntoEnd").val() !== "") {
 				var start = $('#dateValue_arIntoStart').val();
 				var end = $('#dateValue_arIntoEnd').val();
 				var startArray = start.split("");
@@ -487,13 +575,13 @@
 				var realend = endArray.join("");
 				arIntoStart(realstart);
 				arIntoEnd(realend);
-			};
+			}
 
-			if ($("#arIntoStart").val().trim() == '') {
+			if ($("#arIntoStart").val().trim() === '') {
 				alertCaution("시작날짜를 설정해주세요.");
 				return;
 			}
-			if ($("#arIntoEnd").val().trim() == '') {
+			if ($("#arIntoEnd").val().trim() === '') {
 				alertCaution("끝난날짜를 설정해주세요.");
 				return;
 			}
@@ -502,7 +590,7 @@
 
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function (e, xhr, options) {
+			$(document).ajaxSend(function (e, xhr) {
 				xhr.setRequestHeader(header, token);
 			});
 
@@ -514,22 +602,35 @@
 				contentType: false,
 				enctype: 'multipart/form-data',
 				cache: false,
-				error:function(request,status,error){
+				error:function(request){
 					ajaxErrorMsg(request);
 				},
 				success: function (res) {
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					alertSuccess('출동일지가 등록 되었습니다.출동일지조회에서 확인해주세요.',1);
+					alertSuccess('출동일지가 등록 되었습니다.',1);
 				}
 			});
 		}
 
+		function delCheck(){
+			alertCheck("정말 출동일지를 삭제하겠습니까?",$("#id").val());
+		}
+		// 삭제실행여부확인
+		function startDel(id,booleanValue) {
+			$('#popupId').remove();
+			if(booleanValue===true){
+				del(id)
+			}else{
+				return false;
+			}
+		}
 		//삭제버튼 실행
-		function del() {
+		function del(id) {
+
 			var params = {
-				recordid: $("#id").val()
+				recordid: id
 			};
 
 			var token = $("meta[name='_csrf']").attr("content");
@@ -550,7 +651,7 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
-					alertSuccess('출동일지가 삭제 되었습니다. 출동일지조회에서 확인해주세요.',1);
+					alertSuccess('출동일지가 삭제 되었습니다.',1);
 				}
 			})
 		}
@@ -565,7 +666,7 @@
 
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function (e, xhr, options) { xhr.setRequestHeader(header, token); });
+			$(document).ajaxSend(function (e, xhr) { xhr.setRequestHeader(header, token); });
 
 			$.ajax({
 				url: '/api/record/location',
@@ -579,22 +680,25 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
+
 					var html = '';
 					$.each(res.data.dataselect, function (key, value) {
 						html += '<option value ="' + echoNull2Blank(value.code) + '">' + echoNull2Blank(value.name)+ '</option>';
 					});
 					$schList.html(html);
-					if($("#addSel").val() !==''){
-						var addressSelect = $("#addSel").val();
+
+					var $addSel = $("#addSel");
+					if($addSel.val() !== ''){
+						var addressSelect = $addSel.val();
 						setarLocationAddressType(addressSelect);
 					}
 				}
 			});
 		}
-
 		function setarLocationAddressType(value){
 			$("#arLocationAddressType").val(value);
 		}
+
 		function arIntoStart(value){
 			$("#arIntoStart").val(value);
 		}
@@ -603,13 +707,15 @@
 		}
 
 		//첨부파일삭제
-		function fileDelete(th,fileid) {
+		function fileDelete(th,fileid,checkLine) {
+
 			var params = {
 				fileid:fileid
 			};
+
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
 
 			$.ajax({
 				url:'/api/record/filedel',
@@ -623,6 +729,22 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
+
+					if(checkLine==="outline"){
+						$("#recordupload0").val("false")
+						$("#outlineFileDiv").css('display','block');
+						fileValue--;
+					}else if(checkLine==="result"){
+						$("#recordupload1").val("false")
+						$("#resultFileDiv").css('display','block');
+						fileValue--;
+					}else{
+						$("#recordupload2").val("false")
+						$("#opinionFileDiv").css('display','block');
+						fileValue--;
+					}
+					$("#fileValue").val(fileValue);
+
 					//파일삭제 성공후 해당 라인 화면에서 제거
 					var obj = $(th).parent('li').parent('ul');
 					obj.remove();
@@ -637,7 +759,7 @@
 			};
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
 			$.ajax({
 				url:'/api/record/respondel',
 				type : 'post',
@@ -655,6 +777,7 @@
 				}
 			});
 		}
+
 	</script>
 </th:block>
 
@@ -734,12 +857,23 @@
 											<label for="branch07" class="c-checkbox__label">환경오염</label>
 										</div>
 									</li>
+									<li>
+										<div class="c-checkbox c-checkbox--input">
+											<input type="checkbox" name="branch" class="c-checkbox__input" value="기타" id="branch08"/>
+											<label for="branch08" class="c-checkbox__label">기타</label>
+											<div class="c-text c-text--small">
+												<input id="arDisasterGita" name="arDisasterGita" type="text" class="c-text__input"
+													   th:value="${record} ? ${record.arDisasterGita} : ''" readonly="readonly" />
+											</div>
+										</div>
+									</li>
 									<input type="hidden" name="arDisasterType" id="arDisasterType" value=""
 										   th:value="${record} ? ${record.arDisasterType} : ''" readonly />
 									<input type="hidden" name="arDisasterItem" id="arDisasterItem" value=""
 										   th:value="${record} ? ${record.arDisasterItem} : ''" readonly />
 									<input type="hidden" name="arDisasterItemFilename" id="arDisasterItemFilename" value=""
 										   th:value="${record} ? ${record.arDisasterItemFilename} : ''" readonly />
+									<input type="hidden" id="fileValue" name="fileValue" readonly />
 								</ul>
 							</li>
 							<li>
@@ -954,19 +1088,73 @@
 								<h3 class="record__title">현장개요</h3>
 								<textarea name="arOutline" id="arOutline" class="c-textarea"
 										  th:text="${record} ? ${record.arOutline} : ''"></textarea>
+								<input type="hidden" id="recordupload0" th:value="${recordupload0}" readonly />
+								<div id="outlineFileDiv" class="c-file c-file--comment" style="margin-top: 5px;display: none">
+									<input type="text" readonly="readonly" class="c-file__input" />
+									<label class="c-file__button">파일선택<input type="file" name="outlineFile" /></label>
+								</div>
+								<ul class="c-result-list">
+									<li th:each ="recorduploadFile0 : ${recorduploadFile0}">
+										<ul class="c-input-list">
+											<li >
+												<a th:href="@{/record/download/{id}(id=${recorduploadFile0.getId()})}"
+												   th:text="${recorduploadFile0.getAfFileName()}"></a>
+											</li>
+											<li>
+												<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile0.getId()}','outline')|">삭제</button>
+											</li>
+										</ul>
+									</li>
+								</ul>
 							</li>
 							<li>
 								<h3 class="record__title">조사·분석 결과</h3>
 								<textarea name="arResult" id="arResult" class="c-textarea"
 										  th:text="${record} ? ${record.arResult} : ''"></textarea>
+								<input type="hidden" id="recordupload1" th:value="${recordupload1}" readonly />
+								<div id="resultFileDiv" class="c-file c-file--comment" style="margin-top: 5px;display: none">
+									<input type="text" readonly="readonly" class="c-file__input" />
+									<label class="c-file__button">파일선택<input type="file" name="resultFile" /></label>
+								</div>
+								<ul class="c-result-list">
+									<li th:each ="recorduploadFile1 : ${recorduploadFile1}">
+										<ul class="c-input-list">
+											<li >
+												<a th:href="@{/record/download/{id}(id=${recorduploadFile1.getId()})}"
+												   th:text="${recorduploadFile1.getAfFileName()}"></a>
+											</li>
+											<li>
+												<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile1.getId()}','result')|">삭제</button>
+											</li>
+										</ul>
+									</li>
+								</ul>
 							</li>
 							<li>
 								<h3 class="record__title">검토의견(대응방안)</h3>
 								<textarea name="arOpinion" id="arOpinion" class="c-textarea"
 										  th:text="${record} ? ${record.arOpinion} : ''"></textarea>
+								<input type="hidden" id="recordupload2" th:value="${recordupload2}" readonly />
+								<div id="opinionFileDiv" class="c-file c-file--comment" style="margin-top: 5px;display: none">
+									<input type="text" readonly="readonly" class="c-file__input" />
+									<label class="c-file__button">파일선택<input type="file" name="opinionFile" /></label>
+								</div>
+								<ul class="c-result-list">
+									<li th:each ="recorduploadFile2 : ${recorduploadFile2}">
+										<ul class="c-input-list">
+											<li >
+												<a th:href="@{/record/download/{id}(id=${recorduploadFile2.getId()})}"
+												   th:text="${recorduploadFile2.getAfFileName()}"></a>
+											</li>
+											<li>
+												<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile2.getId()}','opinion')|">삭제</button>
+											</li>
+										</ul>
+									</li>
+								</ul>
 							</li>
 							<li>
-								<h3 class="record__title">관련사진</h3>
+								<h3 class="record__title">기타사진</h3>
 								<ul class="c-file-list">
 									<li class="c-file-list__item c-file-list__item0">
 										<div class="c-file c-file--comment">
@@ -977,15 +1165,15 @@
 										</div>
 									</li>
 								</ul>
-								<ul class="c-result-list" style="margin-top: 10px;" id ="">
-									<li th:each ="recorduploadFile : ${recorduploadFiles}">
+								<ul class="c-result-list" style="margin-top: 10px;">
+									<li th:each ="recorduploadFilesList : ${recorduploadFilesList}">
 										<ul class="c-input-list">
 											<li >
-												<a th:href="@{/record/download/{id}(id=${recorduploadFile.getId()})}"
-												   th:text="${recorduploadFile.getAfFileName()}"></a>
+												<a th:href="@{/record/download/{id}(id=${recorduploadFilesList.getId()})}"
+												   th:text="${recorduploadFilesList.getAfFileName()}"></a>
 											</li>
 											<li>
-												<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile.getId()}')|">삭제</button>
+												<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFilesList.getId()}')|">삭제</button>
 											</li>
 										</ul>
 									</li>

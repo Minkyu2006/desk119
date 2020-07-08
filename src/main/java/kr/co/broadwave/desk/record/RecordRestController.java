@@ -86,7 +86,7 @@ public class RecordRestController {
 
     // 출동일지작성 저장기능
     @PostMapping("reg")
-    public ResponseEntity recordSave(@ModelAttribute RecordMapperDto recordMapperDto,
+    public ResponseEntity<Map<String,Object>> recordSave(@ModelAttribute RecordMapperDto recordMapperDto,
                                      MultipartHttpServletRequest multi,
                                      HttpServletRequest request) throws Exception {
 
@@ -139,23 +139,35 @@ public class RecordRestController {
         Record recordSave = recordService.save(record);
 
         String filecomment = recordMapperDto.getArComment();
-//        log.info("filecomment : "+filecomment);
         String[] filecommentList = null;
         if(filecomment != null){
             filecommentList = filecomment.split(",");
         }
-        int j =0;
+
+        int i = 1;
+        int x = Integer.parseInt(recordMapperDto.getFileValue());
+        int j = 0;
         //파일저장
         Iterator<String> files = multi.getFileNames();
         while(files.hasNext()) {
             String recorduploadFile = files.next();
             MultipartFile mFile = multi.getFile(recorduploadFile);
-            //파일이 존재할때만
-            if (!mFile.isEmpty()) {
-                recordImageService.store(mFile,recordSave,filecommentList[j]);
-                j++;
-                //파일명 순번 채번하기
-                recordImageService.makefilenew(recordSave);
+            assert mFile != null;
+            String a = mFile.getName();
+            if(a.equals("outlineFile") || a.equals("resultFile") || a.equals("opinionFile")){
+                if (!mFile.isEmpty()) {
+                    recordImageService.store2(recordSave,mFile,recordSave,i);
+                    x++;
+                }
+                i++;
+            }else{
+                //파일이 존재할때만
+                if (!mFile.isEmpty()) {
+                    recordImageService.store(mFile,recordSave,filecommentList[j]);
+                    j++;
+                    //파일명 순번 채번하기 (기타사진전용)
+                    recordImageService.makefilenew(recordSave,x);
+                }
             }
         }
 
@@ -189,7 +201,7 @@ public class RecordRestController {
         String[] arEmployeeName = request.getParameterValues("arEmployeeName");
         String[] teamcode = request.getParameterValues("teamcode");
 
-        for (int i = 0; i < arEmployeeNumber.length; i++) {
+        for (i = 0; i < arEmployeeNumber.length; i++) {
             Optional<Team> byTeamcode = teamService.findByTeamcode(teamcode[i]);
             if (byTeamcode.isPresent()){
                 Responsibil responsibils2 = Responsibil.builder()
@@ -204,7 +216,7 @@ public class RecordRestController {
             }
         }
 
-//        recordService.recordResponSave(responsibils);
+        recordService.recordResponSave(responsibils);
 
 //        log.info("출동일지 저장 성공 : " + recordSave.toString() );
 //        log.info("조사담당자 저장 성공 : " + responsibils.toString() );
@@ -213,7 +225,7 @@ public class RecordRestController {
 
     // 출동일지작성 임시저장기능
     @PostMapping("temreg")
-    public ResponseEntity recordTemSave(@ModelAttribute RecordMapperDto recordMapperDto,
+    public ResponseEntity<Map<String,Object>> recordTemSave(@ModelAttribute RecordMapperDto recordMapperDto,
                                      MultipartHttpServletRequest multi,
                                      HttpServletRequest request) throws Exception {
         String currentuserid = CommonUtils.getCurrentuser(request);
@@ -282,7 +294,7 @@ public class RecordRestController {
         }
 
         //파일명 순번 채번하기
-        recordImageService.makefilenew(recordSave);
+//        recordImageService.makefilenew(recordSave,j);
 
         //조사담당자
         List<Responsibil> responsibils = new ArrayList<>();
@@ -314,7 +326,7 @@ public class RecordRestController {
 
     // 행정구역 도시선택시 -> 부도시select기능
     @PostMapping("location")
-    public ResponseEntity Location(
+    public ResponseEntity<Map<String,Object>> Location(
             @RequestParam(value="locationCityType", defaultValue="") String locationCityType){
 
         List<CommonCode> commonCodes = new ArrayList<>();
@@ -334,7 +346,7 @@ public class RecordRestController {
 
     // 출동일지 조회
     @PostMapping("list")
-    public ResponseEntity recordList(@RequestParam(value="arTitle", defaultValue="") String arTitle,
+    public ResponseEntity<Map<String,Object>> recordList(@RequestParam(value="arTitle", defaultValue="") String arTitle,
                                      @RequestParam(value="arWriter", defaultValue="") String arWriter,
                                      @RequestParam(value="arNumber", defaultValue="") String arNumber,
                                      Pageable pageable){
@@ -347,9 +359,9 @@ public class RecordRestController {
 
     // 출동일지 삭제
     @PostMapping("del")
-    public ResponseEntity recordDelete(@RequestParam(value="recordid", defaultValue="") Long recordid){
+    public ResponseEntity<Map<String,Object>> recordDelete(@RequestParam(value="recordid", defaultValue="") Long recordid){
 
-        log.info("출동일지 삭제 시작 / 고유번호 ID : '" + recordid + "'");
+//        log.info("출동일지 삭제 시작 / 고유번호 ID : '" + recordid + "'");
 
         Optional<Record> optionalRecord = recordService.findByIdRecord(recordid);
 //        List<Responsibil> optionalResponsibil = recordService.recordRespon(recordid);
@@ -360,8 +372,9 @@ public class RecordRestController {
         }
 
         recordService.delete(optionalRecord.get());
+        recordImageService.fileDel(optionalRecord.get());
 
-        log.info("출동일지 삭제 성공 / 고유번호 ID : '" + recordid + "'");
+//        log.info("출동일지 삭제 성공 / 고유번호 ID : '" + recordid + "'");
 
         return ResponseEntity.ok(res.success());
     }
@@ -401,7 +414,7 @@ public class RecordRestController {
 
     //출동일지 파일삭제
     @PostMapping("filedel")
-    public ResponseEntity filedelete(@RequestParam(value="fileid", defaultValue="") Long fileid){
+    public ResponseEntity<Map<String,Object>> filedel(@RequestParam(value="fileid", defaultValue="") Long fileid){
 //        log.info("출동일지 첨부파일삭제 시작/ 파일ID : '" + fileid + "'");
         int resultValue = recordImageService.recorduploadFileDelete(fileid);
         if (resultValue == -1){
@@ -414,7 +427,7 @@ public class RecordRestController {
 
     //조사담당자 삭제
     @PostMapping("respondel")
-    public ResponseEntity respondelete(@RequestParam(value="rsid", defaultValue="") Long rsid){
+    public ResponseEntity<Map<String,Object>> respondelete(@RequestParam(value="rsid", defaultValue="") Long rsid){
 //        log.info("조사담당자 삭제 시작: '" + rsid + "'");
         int resultValue = recordService.recordresponsibilDelete(rsid);
         if (resultValue == -1){
@@ -427,7 +440,7 @@ public class RecordRestController {
 
     // 조사담당자 select 추가
     @PostMapping ("recordteam")
-    public ResponseEntity recordteam(){
+    public ResponseEntity<Map<String,Object>> recordteam(){
         List<TeamDto> teams = teamService.findTeamList();
         data.clear();
         data.put("teamdata",teams);

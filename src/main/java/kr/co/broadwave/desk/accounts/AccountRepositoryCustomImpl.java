@@ -158,27 +158,4 @@ public class AccountRepositoryCustomImpl extends QuerydslRepositorySupport imple
                 .fetch();
     }
 
-    @Override
-    public List<AccountPositionUserDto> findByPositionUser(String disaterKey, String collapseKey) {
-
-        JPAQueryFactory queryFactory = new JPAQueryFactory(this.getEntityManager());
-
-        QAccount qAccount  = QAccount.account;
-        QMasterCode qMasterCode = QMasterCode.masterCode;
-//        String disaterCode = DisasterType.valueOf(disaterKey).getCode();
-//        String collapseCode = CollapseType.valueOf(collapseKey).getCode();
-
-//        System.out.println("disaterCode : "+disaterCode);
-//        System.out.println("collapseCode : "+collapseCode);
-        return queryFactory.select(Projections.constructor(AccountPositionUserDto.class,
-                qMasterCode.name,qAccount.username))
-                .from(qAccount)
-                .innerJoin(qAccount.position,qMasterCode)
-                .where(qAccount.userid.notEqualsIgnoreCase("admin"))
-                .where(qAccount.approvalType.eq(ApprovalType.AT02))
-//                .where(qAccount.disasterType.eq(DisasterType.valueOf(disaterCode)))
-//                .where(qAccount.collapseType.eq(CollapseType.valueOf(collapseCode)))
-                .fetch();
-    }
-
 }

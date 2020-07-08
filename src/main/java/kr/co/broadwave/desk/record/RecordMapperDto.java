@@ -47,6 +47,7 @@ public class RecordMapperDto {
     private String arDisasterItemFilename; //추가 파일이름_띄어쓰기없음
     private int arRecordState; //추가 임시저장인지 아닌지 확인하는 state값
     private String arComment; //추가 파일코멘트리스트
+    private String fileValue; // 추가 파일있는지 숫자
 
     //기본적인것
     private String modify_name;
@@ -55,6 +56,14 @@ public class RecordMapperDto {
     private LocalDateTime insertDateTime;
     private String insert_id;
     private String insert_name;
+
+    public String getFileValue() {
+        return fileValue;
+    }
+
+    public void setFileValue(String fileValue) {
+        this.fileValue = fileValue;
+    }
 
     public String getArComment() {
         return arComment;

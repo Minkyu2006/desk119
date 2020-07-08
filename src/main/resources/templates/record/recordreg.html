@@ -13,7 +13,25 @@
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
 	<script>
+		var fileValue = 0;
 		$(function() {
+
+			if($("#recordupload0").val()==="false"){
+				$("#outlineFileDiv").css('display','block');
+			}else{
+				fileValue++
+			}
+			if($("#recordupload1").val()==="false"){
+				$("#resultFileDiv").css('display','block');
+			}else{
+				fileValue++
+			}
+			if($("#recordupload2").val()==="false"){
+				$("#opinionFileDiv").css('display','block');
+			}else{
+				fileValue++
+			}
+			$("#fileValue").val(fileValue);
 
 			//저장
 			$("#btnSave").on('click', function () {
@@ -25,23 +43,15 @@
 			});
 			//삭제
 			$("#btnDel").on('click', function () {
-				del();
+				delCheck();
 			});
 			//조사담당자 추가버튼
 			$("#responsibilBtn").on('click', function () {
 				responsibiladd();
 			});
 
-			$('.c-file__button input').change(function(){
-				var txt = [];
-				for(var i=0; i<this.files.length; i++){
-					txt.push(this.files[i].name);
-				}
-				$(this).parent().prev('.c-file__input').val(txt.join("_"));
-			}).change();
-
 			// 파일 항목 추가
-			$('.c-file__control.add').on('click', function(e) {
+			$("#fileAdd").on('click', function(e) {
 				var last = $(this).parents('.c-file-list').children('li').last();
 				var clName = last.attr('class');
 				var num = Number(clName.replace(/[^0-9]/g,''));
@@ -335,7 +345,84 @@
 
 			LocationSetting(); //행정구역 onchange실행
 
+			// 파일사이즈 체크
+			$("input[type=file]").change(function(){
+				console.log("파일업로드실행")
+				if($(this).val()!==""){
+
+					var txt = [];
+					for(var i=0; i<this.files.length; i++){
+						txt.push(this.files[i].name);
+					}
+					$(this).parent().prev('.c-file__input').val(txt.join(""));
+
+					// var ext = $(this).val().split(".").pop().toLowerCase();
+					// if($.inArray(ext,["gif","jpg","jpeg","png"]) === -1){
+					// 	alertCaution("이미지 파일만 업로드 해주세요.");
+					// 	$(this).val("");
+					// 	return;
+					// }
+					//
+					// // 브라우저 확인
+					// var browser=navigator.appName;
+					// var file;
+					//
+					// // 익스플로러일 경우
+					// if (browser==="Microsoft Internet Explorer"){
+					// 	var oas = new ActiveXObject("Scripting.FileSystemObject");
+					// 	file = oas.getFile(this.files[0])
+					// }else{ // 익스플로러가 아닐경우
+					// 	file  = this.files[0];
+					// }
+
+					// var url = window.URL || window.webkitURL;
+					// var img = new Image();
+					// img.src = url.createObjectURL(file);
+					// var  fileName = file.name;
+					// console.log("fileName : "+ fileName);
+					// var maxWidth = 514; // 514px
+					// img.onload = function() {
+					// 	console.log("width : "+img.width);
+					// 	console.log("img : "+img);
+					// 	if(img.width < maxWidth) {
+					// 		a = 1;
+					// 		alertCaution("이미지 가로 최소 514px로 맞춰서 올려주세요.");
+					// 		console.log("a : "+a);
+					// 	}else{
+					// 		$('.c-file__input').val(fileName);
+					// 	}
+					// }
+
+					// if(a===0){
+					// 	console.log("a 는 영임 ");
+					// 	var txt = [];
+					// 	for(var i=0; i<this.files.length; i++){
+					// 		txt.push(this.files[i].name);
+					// 	}
+					// 	$(this).parent().prev('.c-file__input').val(txt.join("_"));
+					// }else{
+					// 	console.log("a 는 일임 ");
+					// 	$(this).val("");
+					// }
+
+					// if(fileSize < maxSize){
+					// 	// alertCaution("첨부파일 사이즈가 너무작아 <br> 업로드 할 수 없습니다.");
+					// 	// $(this).val("");
+					// 	// return false;
+					// }else{
+					// 	alertSuccess("파일사이즈 : "+ fileSize +"<br> 최소 파일사이즈 : 1MB",0);
+
+						// for(var i=0; i<this.files.length; i++){
+						// 	txt.push(this.files[i].name);
+						// }
+						// $(this).parent().prev('.c-file__input').val(txt.join("_"));
+					// }
+
+				}
+			});
+
 		});
+
 
 		// 조사담당자 추가버튼
 		function responsibiladd() {
@@ -486,7 +573,8 @@
 				alertCaution("행정구역을 설정해주세요.");
 				return;
 			}
-			if ($("#file0").val() !== '') {
+
+			if ($("#file0").val() !== ''){
 				if ($('input[name=arComment]').val().trim() === '') {
 					alertCaution("관련사진 코멘트는 필수입니다.");
 					return;
@@ -549,15 +637,23 @@
 			});
 		}
 
+		function delCheck(){
+			alertCheck("정말 출동일지를 삭제하겠습니까?",$("#id").val());
+		}
+		// 삭제실행여부확인
+		function startDel(id,booleanValue) {
+			$('#popupId').remove();
+			if(booleanValue===true){
+				del(id)
+			}else{
+				return false;
+			}
+		}
 		//삭제버튼 실행
-		function del() {
-				var $id = $("#id");
-				if ($id.val() === '') {
-					alertCaution("삭제하고자하는 출동일지를 선택하세요.");
-					return false;
-				}
+		function del(id) {
+
 				var params = {
-					recordid: $id.val()
+					recordid: id
 				};
 
 				var token = $("meta[name='_csrf']").attr("content");
@@ -634,10 +730,12 @@
 		}
 
 		//첨부파일삭제
-		function fileDelete(th,fileid) {
+		function fileDelete(th,fileid,checkLine) {
+
 			var params = {
 				fileid:fileid
 			};
+
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
@@ -645,7 +743,6 @@
 			$.ajax({
 				url:'/api/record/filedel',
 				type : 'post',
-				//dataType: 'html',
 				data : params,
 				cache:false,
 				error:function(request){
@@ -655,6 +752,22 @@
 					if (!Ajax.checkResult(res)) {
 						return;
 					}
+
+					if(checkLine==="outline"){
+						$("#recordupload0").val("false")
+						$("#outlineFileDiv").css('display','block');
+						fileValue--;
+					}else if(checkLine==="result"){
+						$("#recordupload1").val("false")
+						$("#resultFileDiv").css('display','block');
+						fileValue--;
+					}else{
+						$("#recordupload2").val("false")
+						$("#opinionFileDiv").css('display','block');
+						fileValue--;
+					}
+					$("#fileValue").val(fileValue);
+
 					//파일삭제 성공후 해당 라인 화면에서 제거
 					var obj = $(th).parent('li').parent('ul');
 					obj.remove();
@@ -784,11 +897,12 @@
 							</div>
 						</li>
 						<input type="hidden" name="arDisasterType" id="arDisasterType" value=""
-							   th:value="${record} ? ${record.arDisasterType} : ''" readonly>
+							   th:value="${record} ? ${record.arDisasterType} : ''" readonly />
 						<input type="hidden" name="arDisasterItem" id="arDisasterItem" value=""
-							   th:value="${record} ? ${record.arDisasterItem} : ''" readonly>
+							   th:value="${record} ? ${record.arDisasterItem} : ''" readonly />
 						<input type="hidden" name="arDisasterItemFilename" id="arDisasterItemFilename" value=""
-							   th:value="${record} ? ${record.arDisasterItemFilename} : ''" readonly>
+							   th:value="${record} ? ${record.arDisasterItemFilename} : ''" readonly />
+						<input type="hidden" id="fileValue" name="fileValue" readonly />
 					</ul>
 				</td>
 			</tr>
@@ -1033,11 +1147,24 @@
 				<td colspan="3" style="height: auto;">
 					<textarea name="arOutline" id="arOutline" class="c-textarea"
 							  th:text="${record} ? ${record.arOutline} : ''"></textarea>
-					<div class="c-file" style="margin-top: 5px;">
-						<input type="text" readonly="readonly" class="c-file__input" id="place" name="place" />
-						<label class="c-file__button">파일선택<input type="file" name="place" /></label>
-						<button class="c-file__control">추가</button>
+					<input type="hidden" id="recordupload0" th:value="${recordupload0}" readonly />
+					<div id="outlineFileDiv" class="c-file c-file--comment" style="margin-top: 5px;display: none">
+						<input type="text" readonly="readonly" class="c-file__input" />
+						<label class="c-file__button">파일선택<input type="file" name="outlineFile" /></label>
 					</div>
+					<ul class="c-result-list">
+						<li th:each ="recorduploadFile0 : ${recorduploadFile0}">
+							<ul class="c-input-list">
+								<li >
+									<a th:href="@{/record/download/{id}(id=${recorduploadFile0.getId()})}"
+									   th:text="${recorduploadFile0.getAfFileName()}"></a>
+								</li>
+								<li>
+									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile0.getId()}','outline')|">삭제</button>
+								</li>
+							</ul>
+						</li>
+					</ul>
 				</td>
 			</tr>
 			<tr>
@@ -1045,11 +1172,24 @@
 				<td colspan="3" style="height: auto;">
 					<textarea name="arResult" id="arResult" class="c-textarea"
 							  th:text="${record} ? ${record.arResult} : ''"></textarea>
-					<div class="c-file" style="margin-top: 5px;">
-						<input type="text" readonly="readonly" class="c-file__input" id="inquiry" name="inquiry" />
-						<label class="c-file__button">파일선택<input type="file" name="inquiry" /></label>
-						<button class="c-file__control">추가</button>
+					<input type="hidden" id="recordupload1" th:value="${recordupload1}" readonly />
+					<div id="resultFileDiv" class="c-file c-file--comment" style="margin-top: 5px;display: none">
+						<input type="text" readonly="readonly" class="c-file__input" />
+						<label class="c-file__button">파일선택<input type="file" name="resultFile" /></label>
 					</div>
+					<ul class="c-result-list">
+						<li th:each ="recorduploadFile1 : ${recorduploadFile1}">
+							<ul class="c-input-list">
+								<li >
+									<a th:href="@{/record/download/{id}(id=${recorduploadFile1.getId()})}"
+									   th:text="${recorduploadFile1.getAfFileName()}"></a>
+								</li>
+								<li>
+									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile1.getId()}','result')|">삭제</button>
+								</li>
+							</ul>
+						</li>
+					</ul>
 				</td>
 			</tr>
 			<tr>
@@ -1057,6 +1197,24 @@
 				<td colspan="3" style="height: auto;">
 					<textarea name="arOpinion" id="arOpinion" class="c-textarea"
 							  th:text="${record} ? ${record.arOpinion} : ''"></textarea>
+					<input type="hidden" id="recordupload2" th:value="${recordupload2}" readonly />
+					<div id="opinionFileDiv" class="c-file c-file--comment" style="margin-top: 5px;display: none">
+						<input type="text" readonly="readonly" class="c-file__input" />
+						<label class="c-file__button">파일선택<input type="file" name="opinionFile" /></label>
+					</div>
+					<ul class="c-result-list">
+						<li th:each ="recorduploadFile2 : ${recorduploadFile2}">
+							<ul class="c-input-list">
+								<li >
+									<a th:href="@{/record/download/{id}(id=${recorduploadFile2.getId()})}"
+									   th:text="${recorduploadFile2.getAfFileName()}"></a>
+								</li>
+								<li>
+									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile2.getId()}','opinion')|">삭제</button>
+								</li>
+							</ul>
+						</li>
+					</ul>
 				</td>
 			</tr>
 			<tr>
@@ -1068,25 +1226,23 @@
 								<input type="text" readonly="readonly" class="c-file__input" id="file0" name="file0" />
 								<label class="c-file__button">파일선택<input type="file" name="file0" /></label>
 								<input type="text" class="c-text__input" name="arComment" placeholder="사진의 코멘트를 입력해주세요" />
-								<a href="#" class="c-file__control add">추가</a>
+								<a href="#" id="fileAdd" class="c-file__control add">추가</a>
 							</div>
 						</li>
 					</ul>
-
-					<ul class="c-result-list" style="margin-top: 10px;" id ="">
-						<li th:each ="recorduploadFile : ${recorduploadFiles}">
+					<ul class="c-result-list" style="margin-top: 10px;">
+						<li th:each ="recorduploadFilesList : ${recorduploadFilesList}">
 							<ul class="c-input-list">
 								<li >
-									<a th:href="@{/record/download/{id}(id=${recorduploadFile.getId()})}"
-									   th:text="${recorduploadFile.getAfFileName()}"></a>
+									<a th:href="@{/record/download/{id}(id=${recorduploadFilesList.getId()})}"
+									   th:text="${recorduploadFilesList.getAfFileName()}"></a>
 								</li>
 								<li>
-									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile.getId()}')|">삭제</button>
+									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFilesList.getId()}')|">삭제</button>
 								</li>
 							</ul>
 						</li>
 					</ul>
-
 				</td>
 			</tr>
 		</tbody>

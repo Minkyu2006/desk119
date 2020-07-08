@@ -10,10 +10,12 @@ import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.record.*;
 import kr.co.broadwave.desk.record.file.RecordImageService;
 import kr.co.broadwave.desk.record.file.RecordUploadFile;
+import kr.co.broadwave.desk.record.file.RecordUploadFileDto;
 import kr.co.broadwave.desk.record.file.RecordUploadFileRepository;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.server.Session;
@@ -42,6 +44,7 @@ import java.util.Optional;
  * Date : 2019-09-05
  * Remark : 출동일지 컨트롤러
  */
+@Slf4j
 @Controller
 @RequestMapping("/record")
 public class RecordController {
@@ -74,6 +77,10 @@ public class RecordController {
         List<MasterCodeDto> arRelatedId = masterCodeService.findCodeList(CodeType.C0002);
         List<TeamDto> teams = teamService.findTeamList();
 
+        model.addAttribute("recordupload0", "false");
+        model.addAttribute("recordupload1", "false");
+        model.addAttribute("recordupload2", "false");
+
         model.addAttribute("teams", teams);
         model.addAttribute("LocationCityTypes", LocationCityType.values());
         model.addAttribute("LocationAddressTypes", LocationAddressType.values());
@@ -86,9 +93,30 @@ public class RecordController {
     public String recordMUpdate(Model model, @PathVariable Long id){
         RecordMapperDto recordMapperDto = recordService.findById(id);
         List<MasterCodeDto> arRelatedId = masterCodeService.findCodeList(CodeType.C0002);
-        List<RecordUploadFile> recorduploadFiles = recordimageService.recorduploadFileList(id);
         List<Responsibil> responsibils = recordService.recordRespon(id);
         List<TeamDto> teams = teamService.findTeamList();
+
+        Optional<Record> record = recordService.findByIdRecord(id);
+        if(record.isPresent()) {
+            for(int i=0; i<4; i++){
+                if(i!=3) {
+                    RecordUploadFileDto recordUploadFileDto = recordimageService.recordUploadFile(record.get(), i+1);
+//                    log.info("recordUploadFileDto : " + recordUploadFileDto);
+                    if (recordUploadFileDto != null){
+                        model.addAttribute("recorduploadFile"+i, recordUploadFileDto);
+                        model.addAttribute("recordupload"+i, "ture");
+                    }else{
+                        model.addAttribute("recordupload"+i, "false");
+                    }
+                }else{
+                    List<RecordUploadFileDto> recordUploadFileDto = recordimageService.recordUploadFileList(record.get(), 0);
+//                    log.info("recordUploadFileDto : " + recordUploadFileDto);
+                    if (recordUploadFileDto != null){
+                        model.addAttribute("recorduploadFilesList", recordUploadFileDto);
+                    }
+                }
+            }
+        }
 
         // 날짜 데이터변경(update)
         String intoStart = recordMapperDto.getArIntoStart();
@@ -113,7 +141,6 @@ public class RecordController {
         model.addAttribute("LocationCityTypes", LocationCityType.values());
         model.addAttribute("LocationAddressTypes", LocationAddressType.values());
         model.addAttribute("record", recordMapperDto);
-        model.addAttribute("recorduploadFiles", recorduploadFiles);
         model.addAttribute("responsibils", responsibils);
 
         return "mobile/mrecordreg";
@@ -131,14 +158,28 @@ public class RecordController {
         RecordViewDto recordViewDto = recordService.findByIdView(id);
         model.addAttribute("record", recordViewDto);
 
-        List<RecordUploadFile> recorduploadFiles = recordimageService.recorduploadFileList(id);
-        model.addAttribute("recorduploadFiles", recorduploadFiles);
+
+        Optional<Record> record = recordService.findByIdRecord(id);
+        if(record.isPresent()) {
+            for(int i=0; i<4; i++){
+                if(i!=3) {
+                    RecordUploadFileDto recordUploadFileDto = recordimageService.recordUploadFile(record.get(), i+1);
+//                    log.info("recordUploadFileDto : " + recordUploadFileDto);
+                    if (recordUploadFileDto != null){
+                        model.addAttribute("recorduploadFile"+i, recordUploadFileDto);
+                    }
+                }else{
+                    List<RecordUploadFileDto> recordUploadFileDto = recordimageService.recordUploadFileList(record.get(), 0);
+//                    log.info("recordUploadFileDto : " + recordUploadFileDto);
+                    if (recordUploadFileDto != null){
+                        model.addAttribute("recorduploadFilesList", recordUploadFileDto);
+                    }
+                }
+            }
+        }
 
         List<Responsibil> responsibils = recordService.recordRespon(id);
         model.addAttribute("responsibils", responsibils);
-
-        List<TeamDto> teams = teamService.findTeamList();
-        model.addAttribute("teams", teams);
 
         return "mobile/mrecordview";
     }
@@ -149,6 +190,10 @@ public class RecordController {
         List<MasterCodeDto> arRelatedId = masterCodeService.findCodeList(CodeType.C0002);
         List<TeamDto> teams = teamService.findTeamList();
 
+        model.addAttribute("recordupload0", "false");
+        model.addAttribute("recordupload1", "false");
+        model.addAttribute("recordupload2", "false");
+
         model.addAttribute("teams", teams);
         model.addAttribute("LocationCityTypes", LocationCityType.values());
         model.addAttribute("LocationAddressTypes", LocationAddressType.values());
@@ -156,6 +201,7 @@ public class RecordController {
 
         return "record/recordreg";
     }
+
     //출동일지수정
     @RequestMapping("reg/{id}")
     public String recrodReg(Model model, @PathVariable Long id){
@@ -166,8 +212,27 @@ public class RecordController {
         model.addAttribute("LocationCityTypes", LocationCityType.values());
         model.addAttribute("record", recordMapperDto);
 
-        List<RecordUploadFile> recorduploadFiles = recordimageService.recorduploadFileList(id);
-        model.addAttribute("recorduploadFiles", recorduploadFiles);
+        Optional<Record> record = recordService.findByIdRecord(id);
+        if(record.isPresent()) {
+            for(int i=0; i<4; i++){
+                if(i!=3) {
+                    RecordUploadFileDto recordUploadFileDto = recordimageService.recordUploadFile(record.get(), i+1);
+//                    log.info("recordUploadFileDto : " + recordUploadFileDto);
+                    if (recordUploadFileDto != null){
+                        model.addAttribute("recorduploadFile"+i, recordUploadFileDto);
+                        model.addAttribute("recordupload"+i, "ture");
+                    }else{
+                        model.addAttribute("recordupload"+i, "false");
+                    }
+                }else{
+                    List<RecordUploadFileDto> recordUploadFileDto = recordimageService.recordUploadFileList(record.get(), 0);
+//                    log.info("recordUploadFileDto : " + recordUploadFileDto);
+                    if (recordUploadFileDto != null){
+                        model.addAttribute("recorduploadFilesList", recordUploadFileDto);
+                    }
+                }
+            }
+        }
 
         List<Responsibil> responsibils = recordService.recordRespon(id);
         model.addAttribute("responsibils", responsibils);
@@ -203,14 +268,30 @@ public class RecordController {
 
         //데이터 가져오기
         RecordViewDto recordViewDto = recordService.findByIdView(id);
-        System.out.println("recordViewDto : "+recordViewDto);
+//        System.out.println("recordViewDto : "+recordViewDto);
         model.addAttribute("record", recordViewDto);
-
-        List<RecordUploadFile> recorduploadFiles = recordimageService.recorduploadFileList(id);
-        model.addAttribute("recorduploadFiles", recorduploadFiles);
 
         List<Responsibil> responsibils = recordService.recordRespon(id);
         model.addAttribute("responsibils", responsibils);
+
+        Optional<Record> record = recordService.findByIdRecord(id);
+        if(record.isPresent()) {
+            for(int i=0; i<4; i++){
+                if(i!=3) {
+                    RecordUploadFileDto recordUploadFileDto = recordimageService.recordUploadFile(record.get(), i+1);
+//                    log.info("recordUploadFileDto : " + recordUploadFileDto);
+                    if (recordUploadFileDto != null){
+                        model.addAttribute("recorduploadFile"+i, recordUploadFileDto);
+                    }
+                }else{
+                    List<RecordUploadFileDto> recordUploadFileDto = recordimageService.recordUploadFileList(record.get(), 0);
+//                    log.info("recordUploadFileDto : " + recordUploadFileDto);
+                    if (recordUploadFileDto != null){
+                        model.addAttribute("recorduploadFilesList", recordUploadFileDto);
+                    }
+                }
+            }
+        }
 
         return "record/recordview";
     }

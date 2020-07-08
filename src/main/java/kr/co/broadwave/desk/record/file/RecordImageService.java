@@ -2,30 +2,23 @@ package kr.co.broadwave.desk.record.file;
 
 import kr.co.broadwave.desk.common.UploadFileUtils;
 import kr.co.broadwave.desk.record.Record;
-import kr.co.broadwave.desk.record.RecordMapperDto;
 import kr.co.broadwave.desk.record.RecordRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.xmlbeans.impl.xb.xsdschema.All;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Minkyu
@@ -39,12 +32,14 @@ public class RecordImageService {
     private final Path rootLocation;
     private final RecordRepository recordRepository;
     private final RecordUploadFileRepository recordUploadFileRepository;
-
+    private final RecordImageRepositoryCustom recordImageRepositoryCustom;
 
     @Autowired
-    public RecordImageService(String uploadPath, RecordRepository recordRepository, RecordUploadFileRepository recordUploadFileRepository) {
+    public RecordImageService(String uploadPath, RecordRepository recordRepository, RecordUploadFileRepository recordUploadFileRepository,
+                              RecordImageRepositoryCustom recordImageRepositoryCustom) {
         this.recordRepository = recordRepository;
         this.recordUploadFileRepository = recordUploadFileRepository;
+        this.recordImageRepositoryCustom = recordImageRepositoryCustom;
         logger.info("PATH :: " + uploadPath);
         this.rootLocation = Paths.get(uploadPath + "recordimages");
     }
@@ -78,6 +73,44 @@ public class RecordImageService {
         return rootLocation.resolve(fileName);
     }
 
+    // 항목별 파일업로드
+    public RecordUploadFile store2(Record recordSave,MultipartFile file, Record record, int state) throws Exception {
+        try {
+            if (file.isEmpty()) {
+                throw new Exception("Failed to store empty file: " + file.getOriginalFilename());
+            }
+            String saveFileName = UploadFileUtils.fileSave(rootLocation.toString(), file);
+
+            String afName = file.getOriginalFilename(); //파일이름
+            String extensionName = afName.substring(afName.lastIndexOf("."));
+            int pos = afName.lastIndexOf(".");
+            String realName = afName.substring(0, pos);
+
+            if (saveFileName.toCharArray()[0] == '/') {
+                saveFileName = saveFileName.substring(1);
+            }
+            Resource resource = loadAsResource(saveFileName);
+            RecordUploadFile saveFile = new RecordUploadFile();
+            saveFile.setRecord(record);
+            saveFile.setAfSaveFileName(saveFileName);
+            saveFile.setAfFileName(recordSave.getArDisasterItemFilename()+"_"+
+                            recordSave.getArLocationCityType().getDesc()+"_"+
+                    recordSave.getArLocationAddressType().getDesc()+"_"+
+                    recordSave.getArIntoStart()+"_"+recordSave.getArWriter()+"_"+realName+"_"+extensionName);
+            saveFile.setAfOriginalFilename(file.getOriginalFilename());
+            saveFile.setContentType(file.getContentType());
+            saveFile.setAfFilePath(rootLocation.toString().replace(File.separatorChar, '/') + File.separator + saveFileName);
+            saveFile.setSize(resource.contentLength());
+            saveFile.setAfState(state);
+            saveFile.setInsertDateTime(LocalDateTime.now());
+            saveFile = recordUploadFileRepository.save(saveFile);
+            return saveFile;
+        } catch (IOException e) {
+            throw new Exception("Failed to store file " + file.getOriginalFilename(), e);
+        }
+    }
+
+    // 기타사진 파일업로드
     public RecordUploadFile store(MultipartFile file, Record record, String comment) throws Exception {
         try {
             if (file.isEmpty()) {
@@ -96,6 +129,7 @@ public class RecordImageService {
             saveFile.setContentType(file.getContentType());
             saveFile.setAfFilePath(rootLocation.toString().replace(File.separatorChar, '/') + File.separator + saveFileName);
             saveFile.setSize(resource.contentLength());
+            saveFile.setAfState(0);
             saveFile.setInsertDateTime(LocalDateTime.now());
             if(saveFile.getAfComment()==null){
                 saveFile.setAfComment(comment);
@@ -107,16 +141,15 @@ public class RecordImageService {
         }
     }
 
-    //특정 게시물의 첨부파일목록을 반환하는 함수
-    public List<RecordUploadFile> recorduploadFileList(Long record_id) {
-//        log.info("출동일지 첨부파일 내역 조회 / 출동일지 ID '" + record_id + "'");
-        Optional<Record> optionalRecord = recordRepository.findById(record_id);
-        if (optionalRecord.isPresent()) {
-            return recordUploadFileRepository.findByRecord(optionalRecord.get());
-        } else {
-            return null;
-        }
-    }
+//    public List<RecordUploadFile> recorduploadFileList(Long record_id) {
+////        log.info("출동일지 첨부파일 내역 조회 / 출동일지 ID '" + record_id + "'");
+//        Optional<Record> optionalRecord = recordRepository.findById(record_id);
+//        if (optionalRecord.isPresent()) {
+//            return recordUploadFileRepository.findByRecord(optionalRecord.get());
+//        } else {
+//            return null;
+//        }
+//    }
 
     //특정파일삭제하기(-1반환이면 오류)
     public int recorduploadFileDelete(Long fileId) {
@@ -137,9 +170,15 @@ public class RecordImageService {
 
     //파일순번 채번하기 (신규)
     @Transactional
-    public void makefilenew(Record recordSave) {
+    public void makefilenew(Record recordSave,int removeCnt) {
         List<RecordUploadFile> recordUploadFiles = recordUploadFileRepository.findByRecord(recordSave);
-
+//        log.info("Now recordUploadFiles : "+recordUploadFiles);
+        if(removeCnt!=0){
+            for(int a=0; a<removeCnt; a++){
+                recordUploadFiles.remove(0);
+            }
+//            log.info("Remove recordUploadFiles : "+recordUploadFiles);
+        }
         int i = 0;
 
         for (RecordUploadFile recordUploadFile : recordUploadFiles) {
@@ -156,13 +195,26 @@ public class RecordImageService {
             // 파일이름
             int pos = afName.lastIndexOf(".");
             String realName = afName.substring(0, pos);
-            log.info("realName : "+realName);
+//            log.info("realName : "+realName);
 
             i++;
             String filename = arDisasterItemFilename + "_" + arLocationCityType + "_" + arLocationAddressType + "_" + arIntoStart + "_" + arWriter + "_" + realName + "_" + i + "_" + extensionName;
             recordUploadFile.setAfFileName(filename);
             recordUploadFileRepository.save(recordUploadFile);
         }
+    }
+
+    //특정 게시물의 첨부파일목록을 반환하는 함수
+    public RecordUploadFileDto recordUploadFile(Record record, int stateVal) {
+        return recordImageRepositoryCustom.recordUploadFile(record,stateVal);
+    }
+
+    public List<RecordUploadFileDto> recordUploadFileList(Record record, int stateVal) {
+        return recordImageRepositoryCustom.recordUploadFileList(record,stateVal);
+    }
+
+    public long fileDel(Record record) {
+        return recordImageRepositoryCustom.fileDel(record);
     }
 
 }

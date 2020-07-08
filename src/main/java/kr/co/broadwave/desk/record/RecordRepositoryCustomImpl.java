@@ -2,6 +2,10 @@ package kr.co.broadwave.desk.record;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import kr.co.broadwave.desk.record.file.QRecordUploadFile;
+import kr.co.broadwave.desk.record.file.RecordUploadFile;
+import kr.co.broadwave.desk.record.file.RecordUploadFileDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -62,5 +66,26 @@ public class RecordRepositoryCustomImpl extends QuerydslRepositorySupport implem
         return new PageImpl<>(records, pageable, query.fetchCount());
 
     }
+
+//    @Override
+//    public List<CollectionInfoDto> findByCollectionInfoQueryDsl(String ctCode) {
+//
+//        JPAQueryFactory queryFactory = new JPAQueryFactory(this.getEntityManager());
+//
+//        QCollectionTask collectionTask = QCollectionTask.collectionTask;
+//        QEquipment equipment =QEquipment.equipment;
+//        QIModel iModel =QIModel.iModel;
+//
+//        return queryFactory.select(Projections.constructor(CollectionInfoDto.class,
+//                collectionTask.ctCode,collectionTask.ctSeq,collectionTask.yyyymmdd,
+//                collectionTask.deviceid,collectionTask.accountId.username,collectionTask.accountId.userid,
+//                collectionTask.vehicleId.vcNumber,collectionTask.vehicleId.vcName,iModel.mdType.name))
+//                .from(collectionTask)
+//                .where(collectionTask.ctCode.eq(ctCode))
+//                .groupBy(collectionTask.ctSeq)
+//                .innerJoin(collectionTask.emId,equipment)
+//                .innerJoin(equipment.mdId,iModel)
+//                .fetch();
+//    }
 
 }

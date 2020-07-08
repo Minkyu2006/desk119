@@ -19,5 +19,4 @@ public interface AccountRepositoryCustom {
 
     List<AccountLineUpDto> findByLineUpList();
 
-    List<AccountPositionUserDto> findByPositionUser(String disaterKey, String collapseKey);
 }

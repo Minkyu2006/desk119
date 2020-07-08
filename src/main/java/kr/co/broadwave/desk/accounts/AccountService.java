@@ -48,6 +48,7 @@ public class AccountService implements UserDetailsService {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         return this.accountRepository.save(account);
     }
+
     @Transactional
     public Account modifyAccount(Account account){
         //password notencoding
@@ -138,9 +139,5 @@ public class AccountService implements UserDetailsService {
 
     public List<AccountLineUpDto> findByLineUpList() {
         return accountRepositoryCustom.findByLineUpList();
-    }
-
-    public List<AccountPositionUserDto> findByPositionUser(String disaterKey, String collapseKey) {
-        return accountRepositoryCustom.findByPositionUser(disaterKey,collapseKey);
     }
 }

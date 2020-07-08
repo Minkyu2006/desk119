@@ -18,20 +18,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AccountLineUpDto {
     private String username;
-    private DisasterType disaster;
-    private CollapseType collapse;
     private DisasterType disasterType;
     private CollapseType collapseType;
     private String teamname;
     private String positionname;
-
-    public void setDisaster(DisasterType disaster) {
-        this.disaster = disaster;
-    }
-
-    public void setCollapse(CollapseType collapse) {
-        this.collapse = collapse;
-    }
 
     public String getCollapseType() {
         if(collapseType.getCode().equals("CS07")){

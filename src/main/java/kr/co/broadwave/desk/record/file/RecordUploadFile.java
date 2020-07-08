@@ -41,6 +41,8 @@ public class RecordUploadFile {
     private String contentType;
     @Column(name="af_size")
     private Long size;
+    @Column(name="af_state")
+    private Integer afState;
     @Column(name="insert_date")
     private LocalDateTime insertDateTime;
 }

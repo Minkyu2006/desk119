@@ -461,9 +461,9 @@ public class StatisticsRestController {
 
 //        responsibils.forEach(x -> teamNames.add(x.getTeam().getTeamname()));
 
-        log.info("스테이트번호 arState :"+arState);
+//        log.info("스테이트번호 arState :"+arState);
         responsibils.forEach(x -> teamNames.add(x.getTeam().getTeamname()));
-        log.info("팀이름들 : "+teamNames);
+//        log.info("팀이름들 : "+teamNames);
 
         //배열 맨앞 빈칸채우기
         teamgraphDataColumns.add(" ");
