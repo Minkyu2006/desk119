@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Print</title>
+
+	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+	<!-- default header name is X-CSRF-TOKEN -->
+	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <!-- 공통으로 쓰이는 css파일을넣는다.-->
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    <link rel="stylesheet" href="/assets/css/component.css" />
+    <link rel="stylesheet" href="/assets/css/common.css" />
+
+    <!-- 공통으로 쓰이는 js파일을넣는다.-->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.min.js"></script>
+    <script src="/assets/js/broadwave.common.js"></script>
+    <script src="/assets/js/common-pc.js"></script>
+	<script src="/assets/js/broadwave.ajax.js"></script>
+
+	<link rel="stylesheet" href="/assets/js/alert/min_alert.css" />
+	<script src="/assets/js/alert/min_alert.js"></script>
+
+    <style>
+        /*빈페이지 방지*/
+        @media print {
+            html, body {
+                height: 99%;
+            }
+        }
+        /* A4페이지 한페이지 한정 */
+        @page a4sheet { size: 21.0cm 29.7cm }
+        .a4 { page: a4sheet; page-break-after: always }
+    </style>
+
+    <script>
+    	$(function() {
+    		$('#print').on('click', function() {
+    			window.print();
+    		});
+
+			multiPrint();
+
+    	})
+
+		// function onloadPrint() {
+		// 	window.print();
+		// 	setTimeout("self.close();", 100);
+		// }
+
+		//다중프린트
+		function multiPrint(){
+
+			var $printIds = $("#printIds").val();
+			// console.log("$printIds : "+$printIds);
+			var idsArr = $printIds.substr(1,$printIds.length-2);
+			// console.log("idsArr : "+idsArr);
+
+			var arr = idsArr.split(",");
+			var arrayList = [];
+			for(i=0; i<arr.length; i++){
+				arrayList.push(arr[i])
+			}
+
+			// console.log("arrayList : "+arrayList);
+			var params = {
+				ids : arrayList
+			};
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
+
+			$.ajax({
+				url : '/print/multiViewInfo',
+				type : 'post',
+				data : params,
+				cache:false,
+				error:function(request){
+					ajaxErrorMsg(request);
+				},
+				success: function(res){
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+
+					// console.log("res : "+res.data.record[0]["id"]);
+					// console.log("recordId : "+res.data.responsibils[0]["recordId"]);
+					// console.log("arEmployeeNumber : "+res.data.responsibils[0]["arEmployeeNumber"]);
+					// console.log("arEmployeeName : "+res.data.responsibils[0]["arEmployeeName"]);
+					// console.log("team : "+res.data.responsibils[0]["team"]);
+
+					var record = res.data.record;
+					var responsibils = res.data.responsibils;
+					var recordUploadFilePrint0 = res.data.recordUploadFilePrint0;
+					var recordUploadFilePrint1 = res.data.recordUploadFilePrint1;
+					var recordUploadFilePrint2 = res.data.recordUploadFilePrint2;
+					var recordUploadFileListPrint = res.data.recordUploadFileListPrint;
+
+					// console.log("record : "+record);
+					// console.log("responsibils : "+responsibils);
+					// console.log("recordUploadFilePrint0 : "+recordUploadFilePrint0);
+					// console.log("recordUploadFilePrint1 : "+recordUploadFilePrint1);
+					// console.log("recordUploadFilePrint2 : "+recordUploadFilePrint2);
+					// console.log("recordUploadFileListPrint : "+recordUploadFileListPrint);
+
+					var $multiViewBody = $("#multiViewBody");
+					var html = '';
+
+					var idValue;
+					for(i=0; i<res.data.idsList.length; i++) {
+						idValue = record[i]["id"];
+						// console.log("idValue : "+idValue);
+                        html += '<div class="a4">';
+                        html += '<section class="report print">';
+						html += '<h2 class="report__heading">재난·재해 발생현장 조사 및 분석결과보고서</h2>';
+						html += '<table class="c-input-table">'
+						html += '<colgroup>';
+						html += '<col style="width: 140px;" />';
+						html += '<col style="width: 340px;" />';
+						html += '<col style="width: 140px;" />';
+						html += '<col />';
+						html += '</colgroup>';
+
+						html += '<tbody>';
+							html += '<tr class="print--none">';
+							html += '<th>출동일지 번호</th>';
+							html += '<td class="c-text c-text--duo">'+nvl(record[i]["arNumber"], "확 인 불 가")+'</td>';
+							html += '<th>출동일지 제목</th>';
+							html += '<td>'+nvl(record[i]["arTitle"], "확 인 불 가")+'</td>';
+							html += '</tr>';
+
+							html += '<tr>';
+							html += '<th>작성자</th>';
+							html += '<td>'+nvl(record[i]["arWriter"], "확 인 불 가")+'</td>';
+							html += '<th>재해·재난 분과</th>';
+							html += '<td>'+nvl(record[i]["arDisasterItem"], "확 인 불 가")+record[i]["arDisasterGita"]+'</td>';
+							html += '</tr>';
+
+							html += '<tr>';
+							html += '<th>관련부처</th>';
+							html += '<td>'+nvl(record[i]["arRelatedId"], "확 인 불 가")+'</td>';
+							html += '<th>관련부처 상세정보</th>';
+							html += '<td>'+record[i]["arRelatedDetail"]+'</td>';
+							html += '</tr>';
+							html += '<th>조사일시</th>'
+							html += '<td>'
+							html += '<span>'+nvl(record[i]["arIntoStart"], "확 인 불 가")+'</span>'
+							html += '~'
+							html += '<span>'+nvl(record[i]["arIntoEnd"], "확 인 불 가")+'</span>'
+							html += '</td>'
+							html += '<th>조사위치</th>'
+							html += '<td class="c-input-table__non-padding">'
+								html += '<table class="c-input-table c-input-table--inner">'
+									html += '<colgroup>'
+									html += '<col style="width: 100px;" />'
+									html += '<col />'
+									html += '</colgroup>'
+									html += '<tbody>'
+									html += '<tr>'
+									html += '<th>행정구역</th>'
+									html += '<td>'
+									html += '<span>'+nvl(record[i]["arLocationCityType"], "확 인 불 가")+'</span>'
+									html += '<span>'+nvl(record[i]["arLocationAddressType"], "확 인 불 가")+'</span>'
+									html += '</td>'
+									html += '</tr>'
+									html += '<tr>'
+									html += '<th>상세위치</th>'
+									html += '<td>'+record[i]["arLocationDetail"]+'</td>'
+									html += '</tr>'
+									html += '</tbody>'
+								html += '</table>'
+							html += '</td>'
+							html += '</tr>'
+							html += '<tr>'
+							html += '<th>조사시설물</th>'
+							html += '<td colspan=3>'
+							html += '<span>'+nvl(record[i]["arFacItem"], "확 인 불 가")+'</span>'
+							html += '<span>'+record[i]["argita"]+'</span>'
+							html += '</td>'
+							html += '</tr>'
+							html += '<tr>'
+							html += '<th>조사목적</th>'
+							html += '<td colspan=3>'+record[i]["arPurpose"]+'</td>'
+							html += '</tr>'
+							html += '<tr>'
+							html += '<th>KICT 조사담당자</th>'
+							html += '<td colspan=3>'
+							for(var j=0; j<responsibils.length; j++) {
+								if (idValue === responsibils[j]["recordId"]) {
+									html += '<p class="c-input-list" >'
+									html += '<span>' + responsibils[j]["arEmployeeNumber"] + '</span>'
+									html += '<span>' + responsibils[j]["arEmployeeName"] + '</span>'
+									html += '<span>' + responsibils[j]["team"] + '</span>'
+									html += '</p>'
+								}
+							}
+							html += '</td>'
+							html += '</tr>'
+							html += '<tr>'
+							html += '<th>공동 참여기관</th>'
+							html += '<td colspan=3 >'+record[i]["arEngine"]+'</td>'
+							html += '</tr>'
+							html += '<tr>'
+							html += '<th>관련문서</th>'
+							html += '<td colspan=3 >'+record[i]["arPapers"]+'</td>'
+							html += '</tr>'
+
+							html += '<tr>'
+							html += '<th>현장개요</th>'
+							html += '<td colspan=3>'
+							html += '<pre>'+record[i]["arOutline"]+'</pre>'
+							if(recordUploadFilePrint0!=="") {
+								for (var a = 0; a < recordUploadFilePrint0.length; a++) {
+									if(idValue===recordUploadFilePrint0[a]["recordId"]) {
+										html += '<div class="report__picture">'
+										html += '<img style="width: 700px" src="/uploadfiles/recordimages/'+recordUploadFilePrint0[a]['afSaveFileName']+'"/>'
+										html += '</div>'
+									}
+								}
+							}
+							html += '</td>'
+							html += '</tr>'
+
+                            html += '<tr>'
+                            html += '<th>조사·분석 결과</th>'
+                            html += '<td colspan=3>'
+                            html += '<pre>'+record[i]["arResult"]+'</pre>'
+                            if(recordUploadFilePrint1!=="") {
+                                for (var b = 0; b < recordUploadFilePrint1.length; b++) {
+                                    if(idValue===recordUploadFilePrint1[b]["recordId"]) {
+                                        html += '<div class="report__picture">'
+                                        html += '<img style="width: 700px" src="/uploadfiles/recordimages/'+recordUploadFilePrint1[b]['afSaveFileName']+'"/>'
+                                        html += '</div>'
+                                    }
+                                }
+                            }
+                            html += '</td>'
+                            html += '</tr>'
+
+                            html += '<tr>'
+                            html += '<th>검토의견(대응방안)</th>'
+                            html += '<td colspan=3>'
+                            html += '<pre>'+record[i]["arOpinion"]+'</pre>'
+                            if(recordUploadFilePrint2!=="") {
+                                for (var c = 0; c < recordUploadFilePrint2.length; c++) {
+                                    if(idValue===recordUploadFilePrint2[c]["recordId"]) {
+                                        html += '<div class="report__picture">'
+                                        html += '<img style="width: 700px" src="/uploadfiles/recordimages/'+recordUploadFilePrint2[c]['afSaveFileName']+'"/>'
+                                        html += '</div>'
+                                    }
+                                }
+                            }
+
+                            html += '<tr>'
+                            html += '<th>기타사진</th>'
+                            html += '<td colspan=3>'
+                            if(recordUploadFileListPrint!=="") {
+                                for (var d = 0; d < recordUploadFileListPrint.length; d++) {
+                                    if(idValue===recordUploadFileListPrint[d]["recordId"]) {
+                                        html += '<div class="report__picture">'
+                                        html += '<img style="width: 700px" src="/uploadfiles/recordimages/'+recordUploadFileListPrint[d]['afSaveFileName']+'"/>'
+                                        html += '<p>'+'<'+'<span>'+recordUploadFileListPrint[d]['afComment']+'</span>'+'>'+'</p>'
+                                        html += '</div>'
+                                    }
+                                }
+                            }
+                            html += '</td>'
+                            html += '</tr>'
+
+						html += '</tbody>';
+						html += '</table>';
+
+						html += '</section>';
+						html += '</div>';
+					}
+					$multiViewBody.html(html);
+				}
+			});
+		}
+
+    </script>
+
+</head>
+<body>
+	<input type="hidden" th:value="${ids}" id="printIds" />
+	<div id="multiViewBody">
+	</div>
+	<a href="#" id="print" class="print__btn print--none" title="인쇄">인쇄</a>
+</body>
+</html>

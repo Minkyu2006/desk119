@@ -231,8 +231,8 @@ public class StatisticsRestController {
 //        System.out.println("2019 재해분난 카운트 : "+nowDisastersCnt);
 //        System.out.println("2018 재해분난 카운트 : "+productionDisastersCnt);
 
-        disastergraphDataColumns.add(nowDisastersCnt);
         disastergraphDataColumns.add(productionDisastersCnt);
+        disastergraphDataColumns.add(nowDisastersCnt);
 
         //조사시설물 현황
         nowcnt01 = 0; nowcnt02 = 0; nowcnt03 = 0;
@@ -338,8 +338,8 @@ public class StatisticsRestController {
 //        System.out.println("2019 조사시설물 카운트 : "+nowFacCnt);
 //        System.out.println("2018 조사시설물 카운트 : "+productionFacCnt);
 
-        facgraphDataColumns.add(nowFacCnt);
         facgraphDataColumns.add(productionFacCnt);
+        facgraphDataColumns.add(nowFacCnt);
 
         //월별 출동 현황
         nowcnt01 = 0; nowcnt02 = 0; nowcnt03 = 0;
@@ -442,8 +442,8 @@ public class StatisticsRestController {
 //        System.out.println("현재 카운트 : "+nowCnt);
 //        System.out.println("작년 카운트 : "+productionCnt);
 
-        monthgraphDataColumns.add(nowCnt);
         monthgraphDataColumns.add(productionCnt);
+        monthgraphDataColumns.add(nowCnt);
 
 //        System.out.println("출동요청기관 데이터 : "+circleDataColumns);
 //        System.out.println("재해재난유형 데이터 : "+disastergraphDataColumns);

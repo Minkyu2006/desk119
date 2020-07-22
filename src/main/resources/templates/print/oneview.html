@@ -20,15 +20,24 @@
     <script src="/assets/js/common-pc.js"></script>
 
     <script>
-    	$(document).ready(function() {
+    	$(function() {
     		$('#print').on('click', function() {
     			window.print();
     		});
-    	})
+
+		// 	multiPrint();
+
+		})
+
+		function onloadPrint() {
+			window.print();
+			setTimeout("self.close();", 100);
+		}
+
     </script>
 
 </head>
-<body>
+<body onload="onloadPrint()">
     <section class="report print">
 		<h2 class="report__heading">재난·재해 발생현장 조사 및 분석결과보고서</h2>
 		
@@ -54,10 +63,11 @@
 				</tr>
 				<tr>
 					<th>관련부처</th>
-					<td colspan="3" th:text="${record} ? ${record.arRelatedId} : ''"></td>
+					<td th:text="${record} ? ${record.arRelatedId} : ''"></td>
+					<th>관련부처 상세정보</th>
+					<td th:text="${record} ? ${record.arRelatedDetail} : ''"></td>
 				</tr>
 				<tr>
-
 					<th>조사일시</th>
 					<td>
 						<span th:text="${record} ? ${record.arIntoStart} : ''"></span> ~
@@ -122,7 +132,7 @@
 						<pre th:text="${record} ? ${record.arOutline} : ''">
 						</pre>
 						<div class="report__picture">
-							<img th:src="${recorduploadFile0} ? '/uploadfiles/recordimages/'+${recorduploadFile0.afSaveFileName} : ''" />
+							<img style="width: 700px" th:src="${recorduploadFile0} ? '/uploadfiles/recordimages/'+${recorduploadFile0.afSaveFileName} : ''" />
 						</div>
 					</td>
 				</tr>
@@ -132,7 +142,7 @@
 						<pre th:text="${record} ? ${record.arResult} : ''">
 						</pre>
 						<div class="report__picture">
-							<img th:src="${recorduploadFile1} ? '/uploadfiles/recordimages/'+${recorduploadFile1.afSaveFileName} : ''" />
+							<img style="width: 700px" th:src="${recorduploadFile1} ? '/uploadfiles/recordimages/'+${recorduploadFile1.afSaveFileName} : ''" />
 						</div>
 					</td>
 				</tr>
@@ -142,17 +152,17 @@
 						<pre th:text="${record} ? ${record.arOpinion} : ''">
 						</pre>
 						<div class="report__picture">
-							<img th:src="${recorduploadFile2} ? '/uploadfiles/recordimages/'+${recorduploadFile2.afSaveFileName} : ''" />
+							<img style="width: 700px" th:src="${recorduploadFile2} ? '/uploadfiles/recordimages/'+${recorduploadFile2.afSaveFileName} : ''" />
 						</div>
 					</td>
 				</tr>
 				<tr>
-					<th>관련사진</th>
+					<th>기타사진</th>
 					<td colspan=3>
 						<ul class="report__picture-list">
 							<li th:each ="recorduploadFilesList : ${recorduploadFilesList}">
 								<div class="report__picture">
-									<img th:src="${recorduploadFilesList} ? '/uploadfiles/recordimages/'+${recorduploadFilesList.afSaveFileName} : ''" />
+									<img style="width: 700px" th:src="${recorduploadFilesList} ? '/uploadfiles/recordimages/'+${recorduploadFilesList.afSaveFileName} : ''" />
 									<p>&lt;<span th:text="${recorduploadFilesList.afComment}"></span>&gt;</p>
 								</div>
 							</li>

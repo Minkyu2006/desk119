@@ -205,11 +205,11 @@ public class RecordImageService {
     }
 
     //특정 게시물의 첨부파일목록을 반환하는 함수
-    public RecordUploadFileDto recordUploadFile(Record record, int stateVal) {
+    public RecordUploadFileDto recordUploadFile(Long record, int stateVal) {
         return recordImageRepositoryCustom.recordUploadFile(record,stateVal);
     }
 
-    public List<RecordUploadFileDto> recordUploadFileList(Record record, int stateVal) {
+    public List<RecordUploadFileDto> recordUploadFileList(Long record, int stateVal) {
         return recordImageRepositoryCustom.recordUploadFileList(record,stateVal);
     }
 
@@ -217,4 +217,7 @@ public class RecordImageService {
         return recordImageRepositoryCustom.fileDel(record);
     }
 
+    public List<RecordUploadFileDto> recordUploadFilePrint(List<Long> recordList, int stateVal) {
+        return recordImageRepositoryCustom.recordUploadFilePrint(recordList,stateVal);
+    }
 }

@@ -2,19 +2,17 @@ package kr.co.broadwave.desk.record;
 
 import kr.co.broadwave.desk.keygenerate.KeyGenerateService;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
+import kr.co.broadwave.desk.record.responsibil.ResponsibilListDto;
 import kr.co.broadwave.desk.record.responsibil.ResponsibilRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -209,6 +207,15 @@ public class RecordService {
         }
     }
 
+//    public List<RecordViewDto> findByIdView2(Long[] id){
+//        Optional<Record> optionalRecord = recordRepository.findById(id);
+//        if (optionalRecord.isPresent()) {
+//            return modelMapper.map(optionalRecord.get(), RecordViewDto.class);
+//        } else {
+//            return null;
+//        }
+//    }
+
     public Page<RecrodListDto> findAllBySearchStrings(String arNumber, String arTitle, String arWriter, Pageable pageable){
         return recordRepositoryCustom.findAllBySearchStrings(arNumber,arTitle,arWriter,pageable);
 
@@ -239,4 +246,12 @@ public class RecordService {
         }
     }
 
+    public List<RecordViewPrintDto> findByIdViewList(List<Long> ids) {
+        return recordRepositoryCustom.findByIdViewList(ids);
+    }
+
+    public List<ResponsibilListDto> recordResponList(List<Long> recordList) {
+        return recordRepositoryCustom.recordResponList(recordList);
+    }
 }
+

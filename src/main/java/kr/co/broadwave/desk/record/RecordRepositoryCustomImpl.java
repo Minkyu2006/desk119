@@ -3,9 +3,11 @@ package kr.co.broadwave.desk.record;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kr.co.broadwave.desk.record.file.QRecordUploadFile;
-import kr.co.broadwave.desk.record.file.RecordUploadFile;
-import kr.co.broadwave.desk.record.file.RecordUploadFileDto;
+import kr.co.broadwave.desk.mastercode.QMasterCode;
+import kr.co.broadwave.desk.record.responsibil.QResponsibil;
+import kr.co.broadwave.desk.record.responsibil.ResponsibilListDto;
+import kr.co.broadwave.desk.teams.QTeam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -13,13 +15,14 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 /**
  * @author Minkyu
  * Date : 2019-09-11
  * Remark :
  */
+@Slf4j
 @Repository
 public class RecordRepositoryCustomImpl extends QuerydslRepositorySupport implements RecordRepositoryCustom{
 
@@ -62,30 +65,49 @@ public class RecordRepositoryCustomImpl extends QuerydslRepositorySupport implem
 
         query.orderBy(qRecord.arNumber.desc());
 
-        final List<RecrodListDto> records = getQuerydsl().applyPagination(pageable, query).fetch();
+        final List<RecrodListDto> records = Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, query).fetch();
         return new PageImpl<>(records, pageable, query.fetchCount());
 
     }
 
-//    @Override
-//    public List<CollectionInfoDto> findByCollectionInfoQueryDsl(String ctCode) {
-//
-//        JPAQueryFactory queryFactory = new JPAQueryFactory(this.getEntityManager());
-//
-//        QCollectionTask collectionTask = QCollectionTask.collectionTask;
-//        QEquipment equipment =QEquipment.equipment;
-//        QIModel iModel =QIModel.iModel;
-//
-//        return queryFactory.select(Projections.constructor(CollectionInfoDto.class,
-//                collectionTask.ctCode,collectionTask.ctSeq,collectionTask.yyyymmdd,
-//                collectionTask.deviceid,collectionTask.accountId.username,collectionTask.accountId.userid,
-//                collectionTask.vehicleId.vcNumber,collectionTask.vehicleId.vcName,iModel.mdType.name))
-//                .from(collectionTask)
-//                .where(collectionTask.ctCode.eq(ctCode))
-//                .groupBy(collectionTask.ctSeq)
-//                .innerJoin(collectionTask.emId,equipment)
-//                .innerJoin(equipment.mdId,iModel)
-//                .fetch();
-//    }
+    @Override
+    public List<RecordViewPrintDto> findByIdViewList(List<Long> ids) {
+
+        JPAQueryFactory queryFactory = new JPAQueryFactory(this.getEntityManager());
+
+        QRecord record = QRecord.record;
+        QMasterCode masterCode = QMasterCode.masterCode;
+
+        return queryFactory.select(Projections.constructor(RecordViewPrintDto.class,
+                record.id,record.arNumber,record.arTitle,record.arWriter,
+                masterCode.name,record.arRelatedDetail,
+                record.arPapers,record.arIntoStart,record.arIntoEnd,
+                record.arLocationCityType,record.arLocationAddressType,
+                record.arLocationDetail,record.arPurpose,record.arEngine,
+                record.arOutline,record.arResult,record.arOpinion,
+                record.arDisasterItem,record.arFacItem,
+                record.argita,record.arDisasterGita))
+                .from(record)
+                .where(record.id.in(ids))
+                .innerJoin(record.arRelatedId,masterCode)
+//                .orderBy(record.id.asc())
+                .fetch();
+    }
+
+    @Override
+    public  List<ResponsibilListDto> recordResponList(List<Long> recordList) {
+
+        JPAQueryFactory queryFactory = new JPAQueryFactory(this.getEntityManager());
+
+        QResponsibil responsibil = QResponsibil.responsibil;
+        QTeam team = QTeam.team;
+
+        return queryFactory.select(Projections.constructor(ResponsibilListDto.class,
+                responsibil.record.id,responsibil.arEmployeeNumber,responsibil.arEmployeeName,team.teamname))
+                .from(responsibil)
+                .where(responsibil.record.id.in(recordList))
+                .innerJoin(responsibil.team,team)
+                .fetch();
+    }
 
 }

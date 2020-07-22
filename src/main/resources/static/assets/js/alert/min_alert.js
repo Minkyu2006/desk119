@@ -112,6 +112,27 @@ function alertCaution(text) { //경고창
 
 }
 
+function alertCaution2(text) { // 창이 좀더 긴 경고창
+    var cau = "!";
+
+    var html = '';
+
+    html +='<div id="popupId" class="popup popup--dim">';
+    html +='<div class="popup__box2">';
+    html +='<div class="popup__content">';
+    html +='<div class="popup__stat caution">'+cau+'</div>';
+    html +='<div class="popup__text">'+text+'</div>';
+    html +='</div>';
+    html +='<div class="popup__buttons">';
+    html +='<button id="successBtn" class="popup__btn popup__btn--success">확인</button>';
+    html +='</div>';
+    html +='</div>';
+    html +='</div>';
+
+    $('#alertpop').html(html);
+
+}
+
 // 삭제 알림창.
 function alertCheck(text,id) { //정말삭제할껀지확인하는창
     var html = '';

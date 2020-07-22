@@ -32,7 +32,7 @@
 		function popWin(id, width, height, scroll) {
 			var newWindow;
 			var setting = "width=" + width + ", height=" + height + ", top=5, left=20, scrollbars=" + scroll;
-			newWindow = window.open ("/print/view/"+id , "", setting);
+			newWindow = window.open ("/print/oneview/"+id , "", setting);
 			newWindow.focus();
 		}
 
@@ -42,7 +42,7 @@
 
 
 
-<div layout:fragment="content" class="content">
+<div layout:fragment="content" class="content" id="printtest">
 	<section class="report">
 		<h2 class="report__heading">재난·재해 발생현장 조사 및 분석결과보고서</h2>
 
@@ -75,7 +75,9 @@
 				</tr>
 				<tr>
 					<th>관련부처</th>
-					<td colspan="3" th:text="${record} ? ${record.arRelatedId} : ''"></td>
+					<td th:text="${record} ? ${record.arRelatedId} : ''"></td>
+					<th>관련부처 상세정보</th>
+					<td th:text="${record} ? ${record.arRelatedDetail} : ''"></td>
 				</tr>
 				<tr>
 
@@ -143,7 +145,7 @@
 						<pre th:text="${record} ? ${record.arOutline} : ''">
 						</pre>
 						<div class="report__picture">
-							<img th:src="${recorduploadFile0} ? '/uploadfiles/recordimages/'+${recorduploadFile0.afSaveFileName} : ''" />
+							<img style="width: 700px" th:src="${recorduploadFile0} ? '/uploadfiles/recordimages/'+${recorduploadFile0.afSaveFileName} : ''" />
 						</div>
 					</td>
 				</tr>
@@ -153,7 +155,7 @@
 						<pre th:text="${record} ? ${record.arResult} : ''">
 						</pre>
 						<div class="report__picture">
-							<img th:src="${recorduploadFile1} ? '/uploadfiles/recordimages/'+${recorduploadFile1.afSaveFileName} : ''" />
+							<img style="width: 700px" th:src="${recorduploadFile1} ? '/uploadfiles/recordimages/'+${recorduploadFile1.afSaveFileName} : ''" />
 						</div>
 					</td>
 				</tr>
@@ -163,7 +165,7 @@
 						<pre th:text="${record} ? ${record.arOpinion} : ''">
 						</pre>
 						<div class="report__picture">
-							<img th:src="${recorduploadFile2} ? '/uploadfiles/recordimages/'+${recorduploadFile2.afSaveFileName} : ''" />
+							<img style="width: 700px" th:src="${recorduploadFile2} ? '/uploadfiles/recordimages/'+${recorduploadFile2.afSaveFileName} : ''" />
 						</div>
 					</td>
 				</tr>
@@ -173,7 +175,7 @@
 						<ul class="report__picture-list">
 							<li th:each ="recorduploadFilesList : ${recorduploadFilesList}">
 								<div class="report__picture">
-									<img th:src="${recorduploadFilesList} ? '/uploadfiles/recordimages/'+${recorduploadFilesList.afSaveFileName} : ''" />
+									<img style="width: 700px" th:src="${recorduploadFilesList} ? '/uploadfiles/recordimages/'+${recorduploadFilesList.afSaveFileName} : ''" />
 									<p>&lt;<span th:text="${recorduploadFilesList.afComment}"></span>&gt;</p>
 								</div>
 							</li>
@@ -187,7 +189,7 @@
 				<input type="hidden" id="insertId" th:value="${record} ? ${record.insert_id} : ''" readonly>
 				<input type="hidden" id="userId" th:value="${userid} ? ${userid.toString()} : ''" readonly>
 				<div class="c-function__item"><a th:href="|javascript:popWin('${record.id}', 1044, 580, 'yes');|" class="c-button c-button--point">인쇄</a></div>
- 				<div class="c-function__item"><button id="updateId" class="c-button c-button--point" sec:authorize = "hasRole('ROLE_USER')" th:onclick="|javascript:linkReg('${record.id}')|">수정</button></div>
+				<div class="c-function__item"><button id="updateId" class="c-button c-button--point" sec:authorize = "hasRole('ROLE_USER')" th:onclick="|javascript:linkReg('${record.id}')|">수정</button></div>
 				<div class="c-function__item"><button class="c-button c-button--point" sec:authorize = "hasRole('ROLE_ADMIN')" th:onclick="|javascript:linkReg('${record.id}')|">수정</button></div>
 				<div class="c-function__item"><button class="c-button" onclick="linkList();">목록</button></div>
 			</div>

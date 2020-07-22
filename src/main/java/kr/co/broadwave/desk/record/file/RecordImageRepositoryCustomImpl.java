@@ -23,13 +23,14 @@ public class RecordImageRepositoryCustomImpl extends QuerydslRepositorySupport i
     }
 
     @Override
-    public RecordUploadFileDto recordUploadFile(Record record, int stateVal){
+    public RecordUploadFileDto recordUploadFile(Long record, int stateVal){
 
         QRecordUploadFile recordUploadFile = QRecordUploadFile.recordUploadFile;
 
         JPQLQuery<RecordUploadFileDto> query = from(recordUploadFile)
                 .select(Projections.constructor(RecordUploadFileDto.class,
                         recordUploadFile.id,
+                        recordUploadFile.record.id,
                         recordUploadFile.afComment,
                         recordUploadFile.afSaveFileName,
                         recordUploadFile.afFileName,
@@ -37,7 +38,7 @@ public class RecordImageRepositoryCustomImpl extends QuerydslRepositorySupport i
                 ));
 
         if (record != null){
-            query.where(recordUploadFile.record.eq(record));
+            query.where(recordUploadFile.record.id.eq(record));
         }
 
         if (stateVal != 0){
@@ -48,19 +49,20 @@ public class RecordImageRepositoryCustomImpl extends QuerydslRepositorySupport i
     }
 
     @Override
-    public List<RecordUploadFileDto> recordUploadFileList(Record record, int stateVal) {
+    public List<RecordUploadFileDto> recordUploadFileList(Long record, int stateVal) {
 
         JPAQueryFactory queryFactory = new JPAQueryFactory(this.getEntityManager());
         QRecordUploadFile recordUploadFile = QRecordUploadFile.recordUploadFile;
 
         return queryFactory.select(Projections.constructor(RecordUploadFileDto.class,
                 recordUploadFile.id,
+                recordUploadFile.record.id,
                 recordUploadFile.afComment,
                 recordUploadFile.afSaveFileName,
                 recordUploadFile.afFileName,
                 recordUploadFile.afState))
                 .from(recordUploadFile)
-                .where(recordUploadFile.record.eq(record))
+                .where(recordUploadFile.record.id.eq(record))
                 .where(recordUploadFile.afState.eq(stateVal))
                 .fetch();
     }
@@ -70,6 +72,27 @@ public class RecordImageRepositoryCustomImpl extends QuerydslRepositorySupport i
     public long fileDel(Record record) {
         QRecordUploadFile recordUploadFile = QRecordUploadFile.recordUploadFile;
         return delete(recordUploadFile).where(recordUploadFile.record.eq(record)).execute();
+    }
+
+
+
+    @Override
+    public List<RecordUploadFileDto> recordUploadFilePrint(List<Long> recordList, int stateVal) {
+
+        JPAQueryFactory queryFactory = new JPAQueryFactory(this.getEntityManager());
+        QRecordUploadFile recordUploadFile = QRecordUploadFile.recordUploadFile;
+
+        return queryFactory.select(Projections.constructor(RecordUploadFileDto.class,
+                recordUploadFile.id,
+                recordUploadFile.record.id,
+                recordUploadFile.afComment,
+                recordUploadFile.afSaveFileName,
+                recordUploadFile.afFileName,
+                recordUploadFile.afState))
+                .from(recordUploadFile)
+                .where(recordUploadFile.record.id.in(recordList))
+                .where(recordUploadFile.afState.eq(stateVal))
+                .fetch();
     }
 
 }

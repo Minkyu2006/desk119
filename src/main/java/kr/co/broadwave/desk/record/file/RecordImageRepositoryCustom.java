@@ -11,9 +11,11 @@ import java.util.List;
  */
 public interface RecordImageRepositoryCustom {
 
-    RecordUploadFileDto recordUploadFile(Record record, int stateVal);
+    RecordUploadFileDto recordUploadFile(Long record, int stateVal);
 
-    List<RecordUploadFileDto> recordUploadFileList(Record record, int stateVal);
+    List<RecordUploadFileDto> recordUploadFileList(Long record, int stateVal);
 
     long fileDel(Record record);
+
+    List<RecordUploadFileDto> recordUploadFilePrint(List<Long> recordList, int stateVal);
 }

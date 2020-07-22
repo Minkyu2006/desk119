@@ -1,13 +1,17 @@
 package kr.co.broadwave.desk.controller;
 
 import kr.co.broadwave.desk.accounts.Account;
-import kr.co.broadwave.desk.accounts.AccountRole;
 import kr.co.broadwave.desk.accounts.AccountService;
-import kr.co.broadwave.desk.bscodes.*;
+import kr.co.broadwave.desk.bscodes.CodeType;
+import kr.co.broadwave.desk.bscodes.LocationAddressType;
+import kr.co.broadwave.desk.bscodes.LocationCityType;
 import kr.co.broadwave.desk.common.CommonUtils;
 import kr.co.broadwave.desk.mastercode.MasterCodeDto;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
-import kr.co.broadwave.desk.record.*;
+import kr.co.broadwave.desk.record.Record;
+import kr.co.broadwave.desk.record.RecordMapperDto;
+import kr.co.broadwave.desk.record.RecordService;
+import kr.co.broadwave.desk.record.RecordViewDto;
 import kr.co.broadwave.desk.record.file.RecordImageService;
 import kr.co.broadwave.desk.record.file.RecordUploadFile;
 import kr.co.broadwave.desk.record.file.RecordUploadFileDto;
@@ -18,7 +22,6 @@ import kr.co.broadwave.desk.teams.TeamService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -33,9 +36,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
 
@@ -96,24 +100,22 @@ public class RecordController {
         List<Responsibil> responsibils = recordService.recordRespon(id);
         List<TeamDto> teams = teamService.findTeamList();
 
-        Optional<Record> record = recordService.findByIdRecord(id);
-        if(record.isPresent()) {
-            for(int i=0; i<4; i++){
-                if(i!=3) {
-                    RecordUploadFileDto recordUploadFileDto = recordimageService.recordUploadFile(record.get(), i+1);
+        for(int i=0; i<4; i++){
+            if(i!=3) {
+                RecordUploadFileDto recordUploadFileDto = recordimageService.recordUploadFile(id, i+1);
 //                    log.info("recordUploadFileDto : " + recordUploadFileDto);
-                    if (recordUploadFileDto != null){
-                        model.addAttribute("recorduploadFile"+i, recordUploadFileDto);
-                        model.addAttribute("recordupload"+i, "ture");
-                    }else{
-                        model.addAttribute("recordupload"+i, "false");
-                    }
+                if (recordUploadFileDto != null){
+                    model.addAttribute("recorduploadFile"+i, recordUploadFileDto);
+                    model.addAttribute("recordupload"+i, "ture");
                 }else{
-                    List<RecordUploadFileDto> recordUploadFileDto = recordimageService.recordUploadFileList(record.get(), 0);
+                    model.addAttribute("recorduploadFile"+i, null);
+                    model.addAttribute("recordupload"+i, "false");
+                }
+            }else{
+                List<RecordUploadFileDto> recordUploadFileDto = recordimageService.recordUploadFileList(id, 0);
 //                    log.info("recordUploadFileDto : " + recordUploadFileDto);
-                    if (recordUploadFileDto != null){
-                        model.addAttribute("recorduploadFilesList", recordUploadFileDto);
-                    }
+                if (recordUploadFileDto != null){
+                    model.addAttribute("recorduploadFilesList", recordUploadFileDto);
                 }
             }
         }
@@ -163,13 +165,13 @@ public class RecordController {
         if(record.isPresent()) {
             for(int i=0; i<4; i++){
                 if(i!=3) {
-                    RecordUploadFileDto recordUploadFileDto = recordimageService.recordUploadFile(record.get(), i+1);
+                    RecordUploadFileDto recordUploadFileDto = recordimageService.recordUploadFile(id, i+1);
 //                    log.info("recordUploadFileDto : " + recordUploadFileDto);
                     if (recordUploadFileDto != null){
                         model.addAttribute("recorduploadFile"+i, recordUploadFileDto);
                     }
                 }else{
-                    List<RecordUploadFileDto> recordUploadFileDto = recordimageService.recordUploadFileList(record.get(), 0);
+                    List<RecordUploadFileDto> recordUploadFileDto = recordimageService.recordUploadFileList(id, 0);
 //                    log.info("recordUploadFileDto : " + recordUploadFileDto);
                     if (recordUploadFileDto != null){
                         model.addAttribute("recorduploadFilesList", recordUploadFileDto);
@@ -216,16 +218,17 @@ public class RecordController {
         if(record.isPresent()) {
             for(int i=0; i<4; i++){
                 if(i!=3) {
-                    RecordUploadFileDto recordUploadFileDto = recordimageService.recordUploadFile(record.get(), i+1);
+                    RecordUploadFileDto recordUploadFileDto = recordimageService.recordUploadFile(id, i+1);
 //                    log.info("recordUploadFileDto : " + recordUploadFileDto);
                     if (recordUploadFileDto != null){
                         model.addAttribute("recorduploadFile"+i, recordUploadFileDto);
                         model.addAttribute("recordupload"+i, "ture");
                     }else{
+                        model.addAttribute("recorduploadFile"+i, null);
                         model.addAttribute("recordupload"+i, "false");
                     }
                 }else{
-                    List<RecordUploadFileDto> recordUploadFileDto = recordimageService.recordUploadFileList(record.get(), 0);
+                    List<RecordUploadFileDto> recordUploadFileDto = recordimageService.recordUploadFileList(id, 0);
 //                    log.info("recordUploadFileDto : " + recordUploadFileDto);
                     if (recordUploadFileDto != null){
                         model.addAttribute("recorduploadFilesList", recordUploadFileDto);
@@ -268,7 +271,7 @@ public class RecordController {
 
         //데이터 가져오기
         RecordViewDto recordViewDto = recordService.findByIdView(id);
-//        System.out.println("recordViewDto : "+recordViewDto);
+//        log.info("recordViewDto : "+recordViewDto);
         model.addAttribute("record", recordViewDto);
 
         List<Responsibil> responsibils = recordService.recordRespon(id);
@@ -278,13 +281,13 @@ public class RecordController {
         if(record.isPresent()) {
             for(int i=0; i<4; i++){
                 if(i!=3) {
-                    RecordUploadFileDto recordUploadFileDto = recordimageService.recordUploadFile(record.get(), i+1);
+                    RecordUploadFileDto recordUploadFileDto = recordimageService.recordUploadFile(id, i+1);
 //                    log.info("recordUploadFileDto : " + recordUploadFileDto);
                     if (recordUploadFileDto != null){
                         model.addAttribute("recorduploadFile"+i, recordUploadFileDto);
                     }
                 }else{
-                    List<RecordUploadFileDto> recordUploadFileDto = recordimageService.recordUploadFileList(record.get(), 0);
+                    List<RecordUploadFileDto> recordUploadFileDto = recordimageService.recordUploadFileList(id, 0);
 //                    log.info("recordUploadFileDto : " + recordUploadFileDto);
                     if (recordUploadFileDto != null){
                         model.addAttribute("recorduploadFilesList", recordUploadFileDto);

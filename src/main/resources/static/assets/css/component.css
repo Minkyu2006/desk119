@@ -2245,6 +2245,12 @@ input[type=text]:-ms-clear {
 	.c-searchtext__input {
 		width: 100%;
 	}
+    input[name=checkemNumber]{
+        display: none;
+    }
+    #batchPrint{
+        display: none;
+    }
 }
 
 @media(max-width: 720px) {

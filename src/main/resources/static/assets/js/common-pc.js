@@ -7,6 +7,14 @@ function ajaxErrorMsg(request) {
     }
 }
 
+function nvl(str, defaultStr){
+
+    if(typeof str == "undefined" || str == null || str == "")
+        str = defaultStr ;
+
+    return str ;
+}
+
 //접속장비 확인하기
 //리스트페이지 -> 모바일인지 체크 // 2019.9.24 김민규추가
 function mobileCheck() {

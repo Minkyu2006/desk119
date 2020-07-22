@@ -27,6 +27,10 @@
 				callList(1);
 			});
 
+			$("#batchPrint").on('click',function(){
+				batchPrint();
+			});
+
 			callList(1);
 
 		}); //실행 자바쿼리 끝
@@ -98,10 +102,11 @@
 
 					var html = '';
                     $.each(res.data.datalist, function(key, value){
-                        if($("#role").val() =="ROLE_USER" || $("#role").val() =="ROLE_ADMIN" ) {
-                            if ($("#userId").val() == value.insert_id || $("#role").val() =="ROLE_ADMIN"){
-                                if(value.arRecordState == 0){
-                                    html += '<tr>';
+                        if($("#role").val() === "ROLE_USER" || $("#role").val() === "ROLE_ADMIN" ) {
+                            if ($("#userId").val() === value.insert_id || $("#role").val() === "ROLE_ADMIN"){
+                                if(value.arRecordState === 0){
+									html += '<tr >';
+									html += '<td >'+ '<input name="checkemNumber" type="checkbox" value='+echoNull2Blank(value.id)+' />' +'</td>';
                                     html += '<td class="c-retable--tablet-hidden">'+ echoNull2Blank(value.arNumber) +'</td>';
 
                                     html += '<td class="c-retable__title">';
@@ -110,7 +115,7 @@
                                     } else {
                                         html += '<a href="/record/view/' + echoNull2Blank(value.id) + '" class="c-retable__subject">' + echoNull2Blank(value.arTitle) + "(임시저장)" + '</a>';
                                     }
-                                    if (datecheck(value.modifyDateTime.substring(0, 10)) == 'new') {
+                                    if (datecheck(value.modifyDateTime.substring(0, 10)) === 'new') {
                                         html += '<img src="/assets/images/icon__new.png" alt="새글알림" />';
                                     }
                                     html += '<div class="c-retable--tablet-visible">';
@@ -132,8 +137,9 @@
                                 }
                             }
                         }
-                        if(value.arRecordState == 1) {
-                            html += '<tr>';
+                        if(value.arRecordState === 1) {
+							html += '<tr >';
+							html += '<td >'+ '<input name="checkemNumber" type="checkbox" value='+echoNull2Blank(value.id)+' />' +'</td>';
 
                             html += '<td class="c-retable--tablet-hidden">' + echoNull2Blank(value.arNumber) + '</td>';
                             html += '<td class="c-retable__title">';
@@ -142,7 +148,7 @@
                             } else {
                                 html += '<a href="/record/view/' + echoNull2Blank(value.id) + '" class="c-retable__subject">' + echoNull2Blank(value.arTitle) + '</a>';
                             }
-                            if (datecheck(value.modifyDateTime.substring(0, 10)) == 'new') {
+                            if (datecheck(value.modifyDateTime.substring(0, 10)) === 'new') {
                                 html += '<img src="/assets/images/icon__new.png" alt="새글알림" />';
                             }
                             html += '<div class="c-retable--tablet-visible">';
@@ -167,6 +173,39 @@
                 }
             });
         }
+
+		// 체크박스 일괄선택함수
+		function checkAll(){
+			if( $("#th_checkAll").is(':checked') ){
+				$("input[name=checkemNumber]").prop("checked", true);
+			}else{
+				$("input[name=checkemNumber]").prop("checked", false);
+			}
+		}
+
+		// 일괄선택 출력
+		function batchPrint() {
+
+			var ids = [];
+			$('input[name="checkemNumber"]:checked').each(function() {
+				ids.push($(this).val());
+			});
+
+			if(ids[0]===undefined){
+				alertCaution("선택된 보고서가 없습니다.")
+			}
+			var newWindow;
+			var setting = "width=1050,height= 680,top=5,left=20,scrollbars=yes";
+
+			if(ids.length===1){
+				newWindow = window.open ("/print/oneview/"+ids , "", setting);
+				newWindow.focus();
+			}else{
+				newWindow = window.open ("/print/multiview/"+ids,"",setting);
+				newWindow.focus();
+			}
+
+		}
 
 	</script>
 
@@ -212,6 +251,7 @@
 			<table class="c-retable">
 				<thead class="c-retable--tablet-hidden">
 					<tr>
+						<th><input type="checkbox" id="th_checkAll" onclick="checkAll();" /></th>
 						<th scope="col">번호</th>
 						<th scope="col">보고서 제목</th>
 						<th scope="col">재해·재난 분과</th>
@@ -225,7 +265,8 @@
 
 				</tbody>
 			</table>
-			
+
+			<input class="c-button c-button--point" style="position: absolute;z-index: 1;bottom: 0px" id="batchPrint" type="button" value="인쇄">
 			<div class="c-pager">
 				<div class="c-paging" id ="paging1">
 					<!-- 페이징 처리되는곳   -->

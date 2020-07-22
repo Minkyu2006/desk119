@@ -50,23 +50,33 @@
 				responsibiladd();
 			});
 
+			// $('#file0').change(function(){
+			$('.c-file__button input').change(function(){
+				// console.log("result : "+detect(this));
+				var txt = [];
+				for(var i=0; i<this.files.length; i++){
+					txt.push(this.files[i].name);
+				}
+				$(this).parent().prev('.c-file__input').val(txt.join("_"));
+			}).change();
+
+
 			// 파일 항목 추가
-			$("#fileAdd").on('click', function(e) {
+			$('.c-file__control.add').on('click', function(e) {
 				var last = $(this).parents('.c-file-list').children('li').last();
 				var clName = last.attr('class');
 				var num = Number(clName.replace(/[^0-9]/g,''));
 				var idx = num + 1;
 				var filearea =
-					'<li class="c-file-list__item' + idx + '">' +
-					'<div class="c-file c-file--comment">' +
-					'<input type="text" readonly="readonly" class="c-file__input" id="file' + idx + '" name="file' + idx + '" />' +
-					'<label class="c-file__button">파일선택<input type="file" name="file' + idx + '" /></label>' +
-					'<input type="text" class="c-text__input" name="arComment" placeholder="사진의 코멘트를 입력해주세요" />' +
-					'<a href="#" class="c-file__control remove">삭제</a>' +
-					'</div>' +
-					'</li>';
+						'<li class="c-file-list__item' + idx + '">' +
+						'<div class="c-file c-file--comment">' +
+						'<input type="text" readonly="readonly" class="c-file__input" />' +
+						'<label class="c-file__button">파일선택<input type="file" name="file' + idx + '" /></label>' +
+						'<input type="text" class="c-text__input" name="arComment" placeholder="사진의 코멘트를 입력해주세요" />' +
+						'<a href="#" class="c-file__control remove">삭제</a>' +
+						'</div>' +
+						'</li>';
 				$(this).parents('.c-file-list').append(filearea);
-
 				$('.c-file__button input').change(function(){
 					var txt = [];
 					for(var i=0; i<this.files.length; i++){
@@ -290,7 +300,6 @@
 					$("#branch08").prop('checked', true);
 				}
 			}
-
 			//조사시설물 체크박스 여부확인
 			if($("#arFac").val() !== "") {
 				var fac = $('#arFac').val();
@@ -345,84 +354,19 @@
 
 			LocationSetting(); //행정구역 onchange실행
 
-			// 파일사이즈 체크
-			$("input[type=file]").change(function(){
-				console.log("파일업로드실행")
-				if($(this).val()!==""){
-
-					var txt = [];
-					for(var i=0; i<this.files.length; i++){
-						txt.push(this.files[i].name);
-					}
-					$(this).parent().prev('.c-file__input').val(txt.join(""));
-
-					// var ext = $(this).val().split(".").pop().toLowerCase();
-					// if($.inArray(ext,["gif","jpg","jpeg","png"]) === -1){
-					// 	alertCaution("이미지 파일만 업로드 해주세요.");
-					// 	$(this).val("");
-					// 	return;
-					// }
-					//
-					// // 브라우저 확인
-					// var browser=navigator.appName;
-					// var file;
-					//
-					// // 익스플로러일 경우
-					// if (browser==="Microsoft Internet Explorer"){
-					// 	var oas = new ActiveXObject("Scripting.FileSystemObject");
-					// 	file = oas.getFile(this.files[0])
-					// }else{ // 익스플로러가 아닐경우
-					// 	file  = this.files[0];
-					// }
-
-					// var url = window.URL || window.webkitURL;
-					// var img = new Image();
-					// img.src = url.createObjectURL(file);
-					// var  fileName = file.name;
-					// console.log("fileName : "+ fileName);
-					// var maxWidth = 514; // 514px
-					// img.onload = function() {
-					// 	console.log("width : "+img.width);
-					// 	console.log("img : "+img);
-					// 	if(img.width < maxWidth) {
-					// 		a = 1;
-					// 		alertCaution("이미지 가로 최소 514px로 맞춰서 올려주세요.");
-					// 		console.log("a : "+a);
-					// 	}else{
-					// 		$('.c-file__input').val(fileName);
-					// 	}
-					// }
-
-					// if(a===0){
-					// 	console.log("a 는 영임 ");
-					// 	var txt = [];
-					// 	for(var i=0; i<this.files.length; i++){
-					// 		txt.push(this.files[i].name);
-					// 	}
-					// 	$(this).parent().prev('.c-file__input').val(txt.join("_"));
-					// }else{
-					// 	console.log("a 는 일임 ");
-					// 	$(this).val("");
-					// }
-
-					// if(fileSize < maxSize){
-					// 	// alertCaution("첨부파일 사이즈가 너무작아 <br> 업로드 할 수 없습니다.");
-					// 	// $(this).val("");
-					// 	// return false;
-					// }else{
-					// 	alertSuccess("파일사이즈 : "+ fileSize +"<br> 최소 파일사이즈 : 1MB",0);
-
-						// for(var i=0; i<this.files.length; i++){
-						// 	txt.push(this.files[i].name);
-						// }
-						// $(this).parent().prev('.c-file__input').val(txt.join("_"));
-					// }
-
-				}
-			});
-
 		});
 
+		function detect(URL) {
+			var image = new Image();
+			image.src = URL;
+			var x = image.onload = function() {
+				var result = [{ x: 45, y: 56 }]; // An example result
+				return result;
+			}();
+			return x;
+		}
+
+		var i;
 
 		// 조사담당자 추가버튼
 		function responsibiladd() {
@@ -430,7 +374,7 @@
 
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function (e, xhr, options) {
+			$(document).ajaxSend(function (e, xhr) {
 				xhr.setRequestHeader(header, token);
 			});
 
@@ -488,7 +432,7 @@
 			if($("#arIntoStart").val().length===10) {
 				var start = $('#arIntoStart').val();
 				var startArray = start.split("");
-				for(var i = 0; i<2; i++) {
+				for(i = 0; i<2; i++) {
 					startArray.splice(startArray.indexOf("-"), 1);
 				}
 				var realstart = startArray.join("");
@@ -497,7 +441,7 @@
 			if($("#arIntoEnd").val().length===10) {
 				var end = $('#arIntoEnd').val();
 				var endArray = end.split("");
-				for(var i = 0; i<2; i++) {
+				for(i = 0; i<2; i++) {
 					endArray.splice(endArray.indexOf("-"), 1);
 				}
 				var realend = endArray.join("");
@@ -594,7 +538,8 @@
 			if($arIntoEnd.val() !== "") {
 				var end = $('#arIntoEnd').val();
 				var endArray = end.split("");
-				for(var i = 0; i<2; i++) {
+
+				for(i = 0; i<2; i++) {
 					endArray.splice(endArray.indexOf("-"), 1);
 				}
 				var realend = endArray.join("");
@@ -1223,10 +1168,12 @@
 					<ul class="c-file-list">
 						<li class="c-file-list__item0">
 							<div class="c-file c-file--comment">
-								<input type="text" readonly="readonly" class="c-file__input" id="file0" name="file0" />
-								<label class="c-file__button">파일선택<input type="file" name="file0" /></label>
+								<input type="text" readonly="readonly" class="c-file__input" />
+								<label class="c-file__button">파일선택
+									<input type="file" name="file0" id="file0" />
+								</label>
 								<input type="text" class="c-text__input" name="arComment" placeholder="사진의 코멘트를 입력해주세요" />
-								<a href="#" id="fileAdd" class="c-file__control add">추가</a>
+								<a href="#" class="c-file__control add">추가</a>
 							</div>
 						</li>
 					</ul>

@@ -6,6 +6,7 @@ import kr.co.broadwave.desk.mastercode.MasterCode;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Minkyu
@@ -44,10 +45,10 @@ public class RecordViewDto {
     }
 
     public String getArDisasterGita() {
-        if(arDisasterGita!=null){
-            return ": "+arDisasterGita;
-        }else{
+        if(arDisasterGita.equals(" ")){
             return arDisasterGita;
+        }else{
+            return ": "+arDisasterGita;
         }
     }
 

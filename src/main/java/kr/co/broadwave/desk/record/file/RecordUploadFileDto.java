@@ -17,10 +17,15 @@ import lombok.ToString;
 @Setter
 public class RecordUploadFileDto {
     private Long id;
+    private Long recordId;
     private String afComment;
     private String afSaveFileName;
     private String afFileName;
     private Integer afState;
+
+    public Long getRecordId() {
+        return recordId;
+    }
 
     public Long getId() {
         return id;
