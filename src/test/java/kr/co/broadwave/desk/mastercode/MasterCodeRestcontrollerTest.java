@@ -4,6 +4,8 @@ import kr.co.broadwave.desk.accounts.Account;
 import kr.co.broadwave.desk.accounts.AccountRepository;
 import kr.co.broadwave.desk.accounts.AccountRole;
 import kr.co.broadwave.desk.bscodes.CodeType;
+import kr.co.broadwave.desk.bscodes.CollapseType;
+import kr.co.broadwave.desk.bscodes.DisasterType;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamRepository;
 import org.junit.Test;
@@ -68,6 +70,8 @@ public class MasterCodeRestcontrollerTest {
                 .password("1234")
                 .email("test@naver.com")
                 .role(AccountRole.ROLE_ADMIN)
+                .disasterType(DisasterType.DS01)
+                .collapseType(CollapseType.CS01)
                 .team(t1)
                 .build();
         accountRepository.save(a1);

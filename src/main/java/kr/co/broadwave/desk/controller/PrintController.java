@@ -126,8 +126,8 @@ public class PrintController {
             }
         }
 
-        log.info("recordViewDto : "+recordViewDto);
-        log.info("responsibils : "+responsibils);
+//        log.info("recordViewDto : "+recordViewDto);
+//        log.info("responsibils : "+responsibils);
 
         res.addResponse("data",data);
 
