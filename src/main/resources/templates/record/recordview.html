@@ -175,7 +175,7 @@
 						<ul class="report__picture-list">
 							<li th:each ="recorduploadFilesList : ${recorduploadFilesList}">
 								<div class="report__picture">
-									<img style="width: 700px" th:src="${recorduploadFilesList} ? '/uploadfiles/recordimages/'+${recorduploadFilesList.afSaveFileName} : ''" />
+									<img style="width: 300px" th:src="${recorduploadFilesList} ? '/uploadfiles/recordimages/'+${recorduploadFilesList.afSaveFileName} : ''" />
 									<p>&lt;<span th:text="${recorduploadFilesList.afComment}"></span>&gt;</p>
 								</div>
 							</li>
