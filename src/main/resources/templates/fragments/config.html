@@ -40,15 +40,15 @@
             alertCaution("PC에서 이용가능합니다.");
             return false;
         }else{
-            if(mobileId==1){
+            if(mobileId===1){
                 return location.href = "/admin/accountapproval";
-            }else if(mobileId==2) {
+            }else if(mobileId===2) {
                 return location.href = "/admin/accountreg";
-            }else if(mobileId==3){
+            }else if(mobileId===3){
                 return location.href = "/admin/noticereg";
-            }else if(mobileId==4){
+            }else if(mobileId===4){
                 return location.href = "/admin/teamreg";
-            }else if(mobileId==5){
+            }else if(mobileId===5){
                 return location.href = "/admin/mastercodereg";
             }else{
                 alertCancel("잘못된 접근입니다.");

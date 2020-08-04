@@ -145,12 +145,14 @@ public class NoticeRestController {
                 maillists.add(masterCodeDto.getName());
             }
 
-            mailService.mailsend(maillists,
-                    "KICT119 공지사항이 등록 되었습니다",
-                    "작성자 : " + notice.getInsert_name() + "\r\n\n",
-                    "공지사항 제목 : " + notice.getSubject() + "\r\n\n",
-                    " 작성날짜  : " + notice.getInsertDateTime().format(dateTimeFormatter) + "", ""+"\r\n\n",
-                    "해당글 보러가기 : https://kict119.broadwave.co.kr/notice/noticeview/"+notice.getId());
+            if(maillists.size() != 0) {
+                mailService.mailsend(maillists,
+                        "KICT119 공지사항이 등록 되었습니다",
+                        "작성자 : " + notice.getInsert_name() + "\r\n\n",
+                        "공지사항 제목 : " + notice.getSubject() + "\r\n\n",
+                        " 작성날짜  : " + notice.getInsertDateTime().format(dateTimeFormatter) + "", "" + "\r\n\n",
+                        "해당글 보러가기 : https://kict119.broadwave.co.kr/notice/noticeview/" + notice.getId());
+            }
         }
 
         //파일저장

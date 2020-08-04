@@ -13,22 +13,20 @@ import kr.co.broadwave.desk.mail.MailService;
 import kr.co.broadwave.desk.mastercode.MasterCode;
 import kr.co.broadwave.desk.mastercode.MasterCodeDto;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
-import kr.co.broadwave.desk.notice.file.UploadFile;
 import kr.co.broadwave.desk.record.file.RecordImageService;
+import kr.co.broadwave.desk.record.file.RecordUploadFile;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
 import kr.co.broadwave.desk.record.responsibil.ResponsibilService;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-
-import kr.co.broadwave.desk.record.file.RecordUploadFile;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,10 +34,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.annotation.Repeatable;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author MinKyu
@@ -50,8 +46,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/record")
 public class RecordRestController {
-    private AjaxResponse res = new AjaxResponse();
-    HashMap<String, Object> data = new HashMap<>();
 
     private final RecordService recordService;
     private final AccountService accountService;
@@ -89,6 +83,8 @@ public class RecordRestController {
     public ResponseEntity<Map<String,Object>> recordSave(@ModelAttribute RecordMapperDto recordMapperDto,
                                      MultipartHttpServletRequest multi,
                                      HttpServletRequest request) throws Exception {
+
+        AjaxResponse res = new AjaxResponse();
 
         Record record = modelMapper.map(recordMapperDto,Record.class);
 
@@ -180,18 +176,14 @@ public class RecordRestController {
                 maillists.add(masterCodeDto.getName());
             }
 
-//            mailService.mailsend(maillists,
-//                    "출동일지 <" + record.getArNumber() + ">가 등록(제출완료) 되었습니다",
-//                    "작성자 : " + record.getArWriter() + "\r\n\n",
-//                    "출동일지제목 : " + record.getArTitle() + "\r\n\n",
-//                    " 조사일자 : " + record.getArIntoStart() + " ~ ", record.getArIntoEnd()+"\r\n\n",
-//                    "해당글 보러가기 : https://kict119.broadwave.co.kr/record/view/"+record.getId());
-            mailService.mailsend(maillists,
-                    "출동일지 <" + record.getArNumber() + ">가 등록(제출완료) 되었습니다",
-                    "작성자 : " + record.getArWriter() + "\r\n\n",
-                    "출동일지제목 : " + record.getArTitle() + "\r\n\n",
-                    " 조사일자 : " + record.getArIntoStart() + " ~ ", record.getArIntoEnd()+"\r\n\n",
-                    "해당글 보러가기 : https://kict119.broadwave.co.kr/record/view/"+record.getId());
+            if(maillists.size() != 0) {
+                mailService.mailsend(maillists,
+                        "<" + record.getArNumber() + ">가 출동일지를 등록 하였습니다",
+                        "작성자 : " + record.getArWriter() + "\r\n\n",
+                        "출동일지제목 : " + record.getArTitle() + "\r\n\n",
+                        " 조사일자 : " + record.getArIntoStart() + " ~ ", record.getArIntoEnd() + "\r\n\n",
+                        "해당글 보러가기 : https://kict119.broadwave.co.kr/record/view/" + record.getId());
+            }
         }
 
         //조사담당자
@@ -228,6 +220,8 @@ public class RecordRestController {
     public ResponseEntity<Map<String,Object>> recordTemSave(@ModelAttribute RecordMapperDto recordMapperDto,
                                      MultipartHttpServletRequest multi,
                                      HttpServletRequest request) throws Exception {
+        AjaxResponse res = new AjaxResponse();
+
         String currentuserid = CommonUtils.getCurrentuser(request);
 
         Record record = modelMapper.map(recordMapperDto,Record.class);
@@ -328,6 +322,8 @@ public class RecordRestController {
     @PostMapping("location")
     public ResponseEntity<Map<String,Object>> Location(
             @RequestParam(value="locationCityType", defaultValue="") String locationCityType){
+        AjaxResponse res = new AjaxResponse();
+        HashMap<String, Object> data = new HashMap<>();
 
         List<CommonCode> commonCodes = new ArrayList<>();
 
@@ -337,7 +333,7 @@ public class RecordRestController {
                     CommonCode commonCode = new CommonCode(v.getCode(),v.getDesc());
                     commonCodes.add(commonCode);
                 });
-        data.clear();
+
         data.put("dataselect",commonCodes);
 
         res.addResponse("data",data);
@@ -360,6 +356,8 @@ public class RecordRestController {
     // 출동일지 삭제
     @PostMapping("del")
     public ResponseEntity<Map<String,Object>> recordDelete(@RequestParam(value="recordid", defaultValue="") Long recordid){
+
+        AjaxResponse res = new AjaxResponse();
 
 //        log.info("출동일지 삭제 시작 / 고유번호 ID : '" + recordid + "'");
 
@@ -415,6 +413,9 @@ public class RecordRestController {
     //출동일지 파일삭제
     @PostMapping("filedel")
     public ResponseEntity<Map<String,Object>> filedel(@RequestParam(value="fileid", defaultValue="") Long fileid){
+
+        AjaxResponse res = new AjaxResponse();
+
 //        log.info("출동일지 첨부파일삭제 시작/ 파일ID : '" + fileid + "'");
         int resultValue = recordImageService.recorduploadFileDelete(fileid);
         if (resultValue == -1){
@@ -428,6 +429,9 @@ public class RecordRestController {
     //조사담당자 삭제
     @PostMapping("respondel")
     public ResponseEntity<Map<String,Object>> respondelete(@RequestParam(value="rsid", defaultValue="") Long rsid){
+
+        AjaxResponse res = new AjaxResponse();
+
 //        log.info("조사담당자 삭제 시작: '" + rsid + "'");
         int resultValue = recordService.recordresponsibilDelete(rsid);
         if (resultValue == -1){
@@ -441,8 +445,11 @@ public class RecordRestController {
     // 조사담당자 select 추가
     @PostMapping ("recordteam")
     public ResponseEntity<Map<String,Object>> recordteam(){
+        AjaxResponse res = new AjaxResponse();
+        HashMap<String, Object> data = new HashMap<>();
+
         List<TeamDto> teams = teamService.findTeamList();
-        data.clear();
+
         data.put("teamdata",teams);
         res.addResponse("data",data);
         return ResponseEntity.ok(res.success());
