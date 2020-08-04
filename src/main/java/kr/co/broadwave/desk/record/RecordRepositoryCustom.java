@@ -18,4 +18,7 @@ public interface RecordRepositoryCustom {
     List<RecordViewPrintDto> findByIdViewList(List<Long> ids);
 
     List<ResponsibilListDto> recordResponList(List<Long> recordList);
+
+    Page<RecrodStatisticDto> findByStatisticList(String typeName,Pageable pageable,String num);
+    List<RecrodStatisticDto> findByStatisticList2(String typeName,String num);
 }

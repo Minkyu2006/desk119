@@ -253,5 +253,13 @@ public class RecordService {
     public List<ResponsibilListDto> recordResponList(List<Long> recordList) {
         return recordRepositoryCustom.recordResponList(recordList);
     }
+
+    public Page<RecrodStatisticDto> findByStatisticList(String typeName,Pageable pageable,String num) {
+        return recordRepositoryCustom.findByStatisticList(typeName,pageable,num);
+    }
+
+    public List<RecrodStatisticDto> findByStatisticList2(String typeName, String num) {
+        return recordRepositoryCustom.findByStatisticList2(typeName,num);
+    }
 }
 

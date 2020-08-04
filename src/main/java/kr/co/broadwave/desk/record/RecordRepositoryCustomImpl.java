@@ -110,4 +110,97 @@ public class RecordRepositoryCustomImpl extends QuerydslRepositorySupport implem
                 .fetch();
     }
 
+    @Override
+    public Page<RecrodStatisticDto> findByStatisticList(String typeName,Pageable pageable,String num) {
+        QRecord qRecord = QRecord.record;
+
+        JPQLQuery<RecrodStatisticDto> query = from(qRecord)
+                .select(Projections.constructor(RecrodStatisticDto.class,
+                        qRecord.id,
+                        qRecord.arDisasterType,
+                        qRecord.arFac,
+                        qRecord.arDisasterItem,
+                        qRecord.arFacItem,
+                        qRecord.arLocationCityType,
+                        qRecord.arRelatedId,
+                        qRecord.arIntoStart,
+                        qRecord.arIntoEnd,
+                        qRecord.modify_id,
+                        qRecord.arRecordState
+                ));
+
+        query.where(qRecord.arRecordState.eq(1));
+
+        if(num.equals("1")){
+            query.where(qRecord.arDisasterItem.contains(typeName));
+        }else{
+            switch (typeName) {
+                case "옹벽":
+                    query.where(qRecord.arFacItem.contains(typeName).or(qRecord.arFacItem.contains("비탈면")));
+                    break;
+                case "도로":
+                    query.where(qRecord.arFacItem.contains(typeName).or(qRecord.arFacItem.contains("도로시설물")));
+                    break;
+                case "지반":
+                    query.where(qRecord.arFacItem.contains(typeName).or(qRecord.arFacItem.contains("지하시설물")));
+                    break;
+                default:
+                    query.where(qRecord.arFacItem.contains(typeName));
+                    break;
+            }
+        }
+
+        query.orderBy(qRecord.arNumber.desc());
+
+        final List<RecrodStatisticDto> records = Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, query).fetch();
+        return new PageImpl<>(records, pageable, query.fetchCount());
+
+    }
+
+    @Override
+    public List<RecrodStatisticDto> findByStatisticList2(String typeName,String num) {
+        QRecord qRecord = QRecord.record;
+
+        JPQLQuery<RecrodStatisticDto> query = from(qRecord)
+                .select(Projections.constructor(RecrodStatisticDto.class,
+                        qRecord.id,
+                        qRecord.arDisasterType,
+                        qRecord.arFac,
+                        qRecord.arDisasterItem,
+                        qRecord.arFacItem,
+                        qRecord.arLocationCityType,
+                        qRecord.arRelatedId,
+                        qRecord.arIntoStart,
+                        qRecord.arIntoEnd,
+                        qRecord.modify_id,
+                        qRecord.arRecordState
+                ));
+
+        query.where(qRecord.arRecordState.eq(1));
+
+        if(num.equals("1")){
+            query.where(qRecord.arDisasterItem.contains(typeName));
+        }else{
+            switch (typeName) {
+                case "옹벽":
+                    query.where(qRecord.arFacItem.contains(typeName).or(qRecord.arFacItem.contains("비탈면")));
+                    break;
+                case "도로":
+                    query.where(qRecord.arFacItem.contains(typeName).or(qRecord.arFacItem.contains("도로시설물")));
+                    break;
+                case "지반":
+                    query.where(qRecord.arFacItem.contains(typeName).or(qRecord.arFacItem.contains("지하시설물")));
+                    break;
+                default:
+                    query.where(qRecord.arFacItem.contains(typeName));
+                    break;
+            }
+        }
+
+        query.orderBy(qRecord.arNumber.desc());
+
+        return query.fetch();
+
+    }
+
 }

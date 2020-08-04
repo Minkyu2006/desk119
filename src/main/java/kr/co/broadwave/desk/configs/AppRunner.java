@@ -69,20 +69,20 @@ public class AppRunner implements ApplicationRunner {
         }else{
             team1 = teamService.findByTeamcode(team1.getTeamcode()).get();
         }
-
-        Team team2 = Team.builder()
-                .teamcode("T00002")
-                .teamname("노후인프라센터")
-                .remark("최초생성")
-                .insertDateTime(LocalDateTime.now())
-                .insert_id("system")
-                .build();
-        if(!teamService.findByTeamcode(team2.getTeamcode()).isPresent()) {
-            teamService.tesmSave(team2);
-
-        }else{
-            team2 = teamService.findByTeamcode(team2.getTeamcode()).get();
-        }
+//노후인프라가 없어진 관계로 주석처리함. 2020-08-03 김민규
+//        Team team2 = Team.builder()
+//                .teamcode("T00002")
+//                .teamname("노후인프라센터")
+//                .remark("최초생성")
+//                .insertDateTime(LocalDateTime.now())
+//                .insert_id("system")
+//                .build();
+//        if(!teamService.findByTeamcode(team2.getTeamcode()).isPresent()) {
+//            teamService.tesmSave(team2);
+//
+//        }else{
+//            team2 = teamService.findByTeamcode(team2.getTeamcode()).get();
+//        }
         //사용자저장
         Account account1 = Account.builder()
                 .userid("admin")

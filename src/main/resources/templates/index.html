@@ -24,7 +24,7 @@
 			}
 
 			$("#popWin").on('click',function(){
-				popWin(1060,580,'yes');
+				popWin(1200,620,'yes');
 			});
 
 			var slider = $('.banner__slide').bxSlider({
@@ -108,8 +108,20 @@
 		function popWin(width, height, scroll) {
 			var newWindow;
 			setting = "width=" + width + ", height=" + height + ", top=5, left=20, scrollbars=" + scroll
-			newWindow = window.open ("/statistics/statisticsview" , "통계 상세보기", setting);
+			newWindow = window.open ("/statistics/statisticsview" ,"", setting);
 			newWindow.focus();
+		}
+
+		function popWinType(width, height, scroll,type,num,text) {
+			// console.log("text : "+text.innerHTML);
+			if(text.innerHTML !== "0") {
+				var newWindow;
+				setting = "width=" + width + ", height=" + height + ", top=5, left=20, scrollbars=" + scroll
+				newWindow = window.open("/statistics/statisticsviewtype/" + type + "/" + num, "", setting);
+				newWindow.focus();
+			}else{
+				alertCaution("선택하신 항목의 출동일지보고서<br>기록이 존재하지 않습니다.")
+			}
 		}
 
 	</script>
@@ -161,10 +173,10 @@
 											<th>싱크홀</th>
 										</tr>
 										<tr>
-											<td  th:text="${arDisasters[0]}"></td>
-											<td  th:text="${arDisasters[1]}"></td>
-											<td  th:text="${arDisasters[2]}"></td>
-											<td  th:text="${arDisasters[3]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','붕괴','1',this)" th:text="${arDisasters[0]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','화재','1',this)" th:text="${arDisasters[1]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','지진','1',this)" th:text="${arDisasters[2]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','싱크홀','1',this)" th:text="${arDisasters[3]}"></td>
 										</tr>
 										<tr>
 											<th>교통사고</th>
@@ -173,9 +185,9 @@
 											<th class="sum">합계</th>
 										</tr>
 										<tr>
-											<td  th:text="${arDisasters[4]}"></td>
-											<td  th:text="${arDisasters[5]}"></td>
-											<td  th:text="${arDisasters[6]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','교통사고','1',this)" th:text="${arDisasters[4]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','홍수','1',this)" th:text="${arDisasters[5]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','환경오염','1',this)" th:text="${arDisasters[6]}"></td>
 											<td  th:text="${arDisasters[7]}"></td>
 										</tr>
 									</tbody>
@@ -197,10 +209,10 @@
 											<th>건축물</th>
 										</tr>
 										<tr>
-											<td th:text="${arFacs[0]}"></td>
-											<td th:text="${arFacs[1]}"></td>
-											<td th:text="${arFacs[2]}"></td>
-											<td th:text="${arFacs[3]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','교량','2',this)" th:text="${arFacs[0]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','옹벽','2',this)" th:text="${arFacs[1]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','터널','2',this)" th:text="${arFacs[2]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','건축물','2',this)" th:text="${arFacs[3]}"></td>
 										</tr>
 										<tr>
 											<th>도로 &frasl; 시설물</th>
@@ -209,9 +221,9 @@
 											<th>합계</th>
 										</tr>
 										<tr>
-											<td th:text="${arFacs[4]}"></td>
-											<td th:text="${arFacs[5]}"></td>
-											<td th:text="${arFacs[6]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','도로','2',this)" th:text="${arFacs[4]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','지반','2',this)" th:text="${arFacs[5]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','기타','2',this)" th:text="${arFacs[6]}"></td>
 											<td th:text="${arFacs[7]}"></td>
 										</tr>
 									</tbody>

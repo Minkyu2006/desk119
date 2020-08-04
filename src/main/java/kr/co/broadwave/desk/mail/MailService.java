@@ -35,7 +35,7 @@ public class MailService {
     }
 
     public void sendSimpleMessage(List<String> maillists, String title, String writer, String recordtitle, String recordstart, String recordend,String viewId) {
-        String mailArray[] = maillists.toArray(new String[maillists.size()]);
+        String[] mailArray = maillists.toArray(new String[0]);
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mailArray);//보낼 대상
         message.setSubject(title);//제목

@@ -59,6 +59,10 @@ public class AccountService implements UserDetailsService {
         return this.accountRepository.findByUserid(userid);
     }
 
+    public AccountTeamDto findByTeamUserid(String userid ){
+        return accountRepositoryCustom.findByTeamUserid(userid);
+    }
+
     public Page<AccountDtoWithTeam> findAllBySearchStrings(String userid,String username,String email,Pageable pageable){
         return accountRepositoryCustom.findAllBySearchStrings(userid,username,email,pageable);
     }

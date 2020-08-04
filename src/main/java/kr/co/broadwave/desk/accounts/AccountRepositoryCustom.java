@@ -19,4 +19,5 @@ public interface AccountRepositoryCustom {
 
     List<AccountLineUpDto> findByLineUpList();
 
+    AccountTeamDto findByTeamUserid(String userid);
 }

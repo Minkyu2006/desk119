@@ -2,10 +2,14 @@ package kr.co.broadwave.desk.notice;
 
 import kr.co.broadwave.desk.accounts.Account;
 import kr.co.broadwave.desk.accounts.AccountService;
+import kr.co.broadwave.desk.bscodes.CodeType;
 import kr.co.broadwave.desk.common.AjaxResponse;
 import kr.co.broadwave.desk.common.CommonUtils;
 import kr.co.broadwave.desk.common.MediaUtils;
 import kr.co.broadwave.desk.common.ResponseErrorCode;
+import kr.co.broadwave.desk.mail.MailService;
+import kr.co.broadwave.desk.mastercode.MasterCodeDto;
+import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.notice.file.UploadFile;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -22,6 +26,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -40,15 +45,22 @@ public class NoticeRestController {
     private final NoticeService noticeService;
     private final AccountService accountService;
     private final ImageService imageService;
-
-
+    private final MailService mailService;
+    private final MasterCodeService masterCodeService;
 
     @Autowired
-    public NoticeRestController(ModelMapper modelMapper, NoticeService noticeService, AccountService accountService, ImageService imageService) {
+    public NoticeRestController(ModelMapper modelMapper,
+                                NoticeService noticeService,
+                                AccountService accountService,
+                                ImageService imageService,
+                                MailService mailService,
+                                MasterCodeService masterCodeService) {
         this.modelMapper = modelMapper;
         this.noticeService = noticeService;
         this.accountService = accountService;
         this.imageService = imageService;
+        this.mailService = mailService;
+        this.masterCodeService = masterCodeService;
     }
 
     @GetMapping("/image/{fileId}")
@@ -89,9 +101,7 @@ public class NoticeRestController {
 
 
     @PostMapping("reg")
-//    public ResponseEntity noticeSave(@ModelAttribute NoticeMapperDto noticeMapperDto , HttpServletRequest request){
-    public ResponseEntity noticeSave(MultipartHttpServletRequest multi,HttpServletRequest request) throws Exception {
-        //Notice notice = modelMapper.map(noticeMapperDto, Notice.class);
+    public ResponseEntity<Map<String,Object>> noticeSave(MultipartHttpServletRequest multi,HttpServletRequest request) throws Exception {
 
         String noticeid = multi.getParameter("noticeid");
         String subject = multi.getParameter("subject");
@@ -118,12 +128,30 @@ public class NoticeRestController {
         notice.setModify_name(optionalAccount.get().getUsername());
         notice.setModifyDateTime(LocalDateTime.now());
         notice.setHitCount(0);
+
         //기존수정이면 저장
         if(!noticeid.isEmpty()){
             notice.setId(Long.parseLong(noticeid));
         }
 
         Notice noticeSave = noticeService.save(notice);
+
+        if(noticeid.isEmpty()){
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            List<MasterCodeDto> mailListLRaws = masterCodeService.findCodeList(CodeType.C0003);
+            List<String> maillists = new ArrayList<>();
+
+            for (MasterCodeDto masterCodeDto : mailListLRaws) {
+                maillists.add(masterCodeDto.getName());
+            }
+
+            mailService.mailsend(maillists,
+                    "KICT119 공지사항이 등록 되었습니다",
+                    "작성자 : " + notice.getInsert_name() + "\r\n\n",
+                    "공지사항 제목 : " + notice.getSubject() + "\r\n\n",
+                    " 작성날짜  : " + notice.getInsertDateTime().format(dateTimeFormatter) + "", ""+"\r\n\n",
+                    "해당글 보러가기 : https://kict119.broadwave.co.kr/notice/noticeview/"+notice.getId());
+        }
 
         //파일저장
         Iterator<String> files = multi.getFileNames();
@@ -137,11 +165,10 @@ public class NoticeRestController {
                 //System.out.println("파일명 확인  : " + fileName);
                 imageService.store(mFile,noticeSave);
             }
-
         }
 
 
-        log.info("공지사항 저장 성공 : " + noticeSave.toString() );
+//        log.info("공지사항 저장 성공 : " + noticeSave.toString() );
         return ResponseEntity.ok(res.success());
 
 
@@ -162,7 +189,7 @@ public class NoticeRestController {
     }
 
     @PostMapping("Popup")
-    public ResponseEntity Popup(){
+    public ResponseEntity<Map<String,Object>> Popup(){
         List<NoticeIdStateDto> noticeIdStateDtos = noticeService.findByIdState();
 //        log.info("noticeIdStateDtos : "+noticeIdStateDtos);
 
@@ -183,7 +210,7 @@ public class NoticeRestController {
 
     //공지사항내파일삭제
     @PostMapping("filedel")
-    public ResponseEntity filedelete(@RequestParam(value="fileid", defaultValue="") Long fileid){
+    public ResponseEntity<Map<String,Object>> filedelete(@RequestParam(value="fileid", defaultValue="") Long fileid){
 
         log.info("공지사항 첨부파일삭제 시작/ 파일ID : '" + fileid + "'");
 
@@ -198,7 +225,7 @@ public class NoticeRestController {
     }
 
     @PostMapping("del")
-    public ResponseEntity noticeDelete(@RequestParam(value="noticeid", defaultValue="") Long noticeid){
+    public ResponseEntity<Map<String,Object>> noticeDelete(@RequestParam(value="noticeid", defaultValue="") Long noticeid){
 
         log.info("공지사항 삭제 시작 / 게시번호 ID : '" + noticeid + "'");
 

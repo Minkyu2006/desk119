@@ -158,4 +158,20 @@ public class AccountRepositoryCustomImpl extends QuerydslRepositorySupport imple
                 .fetch();
     }
 
+    @Override
+    public AccountTeamDto findByTeamUserid(String userid) {
+
+        JPAQueryFactory queryFactory = new JPAQueryFactory(this.getEntityManager());
+
+        QAccount qAccount  = QAccount.account;
+        QTeam qTeam = QTeam.team;
+
+        return queryFactory.select(Projections.constructor(AccountTeamDto.class,
+                qTeam.teamname))
+                .from(qAccount)
+                .innerJoin(qAccount.team,qTeam)
+                .where(qAccount.userid.eq(userid))
+                .fetchOne();
+    }
+
 }
