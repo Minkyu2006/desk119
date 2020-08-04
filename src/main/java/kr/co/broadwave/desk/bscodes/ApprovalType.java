@@ -3,7 +3,7 @@ package kr.co.broadwave.desk.bscodes;
 /**
  * @author InSeok
  * Date : 2019-07-22
- * Remark : 결재타입
+ * Remark : 결재타입.
  */
 public enum ApprovalType {
     AT01("AT01", "미처리"),
