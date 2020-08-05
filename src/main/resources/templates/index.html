@@ -16,11 +16,16 @@
 	<script>
 		$(document).ready(function() {
 
-			if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
-				console.log("mobile")
-			}else{
-				console.log("pc")
-				noticePopUp();
+			// console.log("window.location.href : "+window.location.href);
+			if(window.location.href==="http://192.168.0.136:8080/" || window.location.href==="https://kict119.broadwave.co.kr/"){
+				if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
+					// console.log("mobile")
+					$("#cameralist").css('display', 'block');
+				}else{
+					// console.log("pc")
+					$("#cameralist").css('display', 'none');
+					noticePopUp();
+				}
 			}
 
 			$("#popWin").on('click',function(){
@@ -42,7 +47,6 @@
 					slider.destroySlider();
 				}
 			});
-
 			
 			$(window).resize(function () {
 				var width_size = window.outerWidth;

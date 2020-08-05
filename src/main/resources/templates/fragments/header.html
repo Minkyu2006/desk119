@@ -61,10 +61,14 @@
 
 		<div class="info" sec:authorize="isAuthenticated()">
 			<ul>
+				<li id="cameralist" style="display: none">
+					<form id ="fileupload" enctype="multipart/form-data">
+						<input type="file" id="camera" name="camera" capture="camera" accept="image/*"/>
+					</form>
+					<button id="uploadBtn" onclick="fileupload()">업로드</button>
+				</li>
 				<li>
-<!--					<a href="/mypage" class="info__btn"><span th:text="${session.username}"></span></a>-->
 					<a href="/mypage" class="info__btn"><div sec:authentication="name"></div></a>
-
 				</li>
 				<li>
 					<form th:action="@{/logout}" method="post">
