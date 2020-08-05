@@ -61,12 +61,12 @@
 
 		<div class="info" sec:authorize="isAuthenticated()">
 			<ul>
-				<li id="cameralist" style="display: none">
+				<!-- <li id="cameralist" style="display: none">
 					<form id ="fileupload" enctype="multipart/form-data">
 						<input type="file" id="camera" name="camera" capture="camera" accept="image/*"/>
 					</form>
 					<button id="uploadBtn" onclick="fileupload()">업로드</button>
-				</li>
+				</li> -->
 				<li>
 					<a href="/mypage" class="info__btn"><div sec:authentication="name"></div></a>
 				</li>
