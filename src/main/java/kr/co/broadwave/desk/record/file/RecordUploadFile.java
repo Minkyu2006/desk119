@@ -43,6 +43,8 @@ public class RecordUploadFile {
     private Long size;
     @Column(name="af_state")
     private Integer afState;
+    @Column(name="af_dblocal")
+    private Integer afDblocal;
     @Column(name="insert_date")
     private LocalDateTime insertDateTime;
 }

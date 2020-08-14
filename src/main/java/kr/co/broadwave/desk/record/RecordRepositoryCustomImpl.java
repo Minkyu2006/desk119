@@ -117,6 +117,7 @@ public class RecordRepositoryCustomImpl extends QuerydslRepositorySupport implem
         JPQLQuery<RecrodStatisticDto> query = from(qRecord)
                 .select(Projections.constructor(RecrodStatisticDto.class,
                         qRecord.id,
+                        qRecord.arWriter,
                         qRecord.arDisasterType,
                         qRecord.arFac,
                         qRecord.arDisasterItem,
@@ -164,6 +165,7 @@ public class RecordRepositoryCustomImpl extends QuerydslRepositorySupport implem
         JPQLQuery<RecrodStatisticDto> query = from(qRecord)
                 .select(Projections.constructor(RecrodStatisticDto.class,
                         qRecord.id,
+                        qRecord.arWriter,
                         qRecord.arDisasterType,
                         qRecord.arFac,
                         qRecord.arDisasterItem,

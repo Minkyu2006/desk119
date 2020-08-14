@@ -7,6 +7,7 @@ import kr.co.broadwave.desk.record.Record;
 import kr.co.broadwave.desk.record.RecordService;
 import kr.co.broadwave.desk.record.RecrodStatisticDto;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
+import kr.co.broadwave.desk.record.responsibil.ResponsibilListDto;
 import kr.co.broadwave.desk.record.responsibil.ResponsibilRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -564,7 +565,7 @@ public class StatisticsRestController {
         if (records.getTotalElements() > 0) {
 
             List<String> writeTeam = new ArrayList<>();
-            for (int i = 0; i < records.getTotalElements(); i++) {
+            for (int i = 0; i < records.getNumberOfElements(); i++) {
                 AccountTeamDto accountLineUpDto = accountService.findByTeamUserid(records.getContent().get(i).getModify_id());
 //                log.info("accountLineUpDto : "+accountLineUpDto.getTeamname());
                 writeTeam.add(accountLineUpDto.getTeamname());
@@ -603,10 +604,11 @@ public class StatisticsRestController {
         List<String> mastersSize = new ArrayList<>();
         List<String> masterCodeNames = new ArrayList<>();
         List<Integer> arState  = new ArrayList<>();
-
+        List<Long> ids  = new ArrayList<>();
         records.forEach(x -> arState.add(x.getArRecordState()));
 
         for(int i=0; i<records.size(); i++){
+            ids.add(records.get(i).getId());
             if(arState.get(i) == 1) {
                 masters.add(records.get(i).getArRelatedId());
             }
@@ -1004,44 +1006,44 @@ public class StatisticsRestController {
 
 
 //        // 부서별 출동 현황
-//        List<Responsibil> responsibils = responsibilRepository.findAll();
-//
-//        List<String> teamsData = new ArrayList<>();
-//        List<String> teamgraphDataColumns = new ArrayList<>();
-//
-//        List<String> teamNames = new ArrayList<>();
-//        List<String> teamName = new ArrayList<>();
-//
-////        responsibils.forEach(x -> teamNames.add(x.getTeam().getTeamname()));
-//
-////        log.info("스테이트번호 arState :"+arState);
+        List<ResponsibilListDto> responsibils = recordService.recordResponList(ids);
+        log.info("responsibils : "+responsibils);
+        List<String> teamsData = new ArrayList<>();
+        List<String> teamgraphDataColumns = new ArrayList<>();
+
+        List<String> teamNames = new ArrayList<>();
+        List<String> teamName = new ArrayList<>();
+
 //        responsibils.forEach(x -> teamNames.add(x.getTeam().getTeamname()));
-////        log.info("팀이름들 : "+teamNames);
-//
-//        //배열 맨앞 빈칸채우기
-//        teamgraphDataColumns.add(" ");
-//
-//        //등록된 중복부서 중복되지않게 정렬
-//        for(int i=0; i<teamNames.size(); i++){
-//            if(!teamsData.contains(teamNames.get(i))){
-//                teamsData.add(teamNames.get(i));
-//            }
-//        }
-//
-//        for(int j=0; j<teamsData.size(); j++) {
-//            String team = teamsData.get(j);
-//            teamName.clear();
-//            for (int i = 0; i < teamsData.size(); i++) {
-//                if (!teamName.contains(team)) {
-//                    teamName.add(team);
-//                }
-//            }
-//            teamgraphDataColumns.add(Long.toString(teamNames.stream().filter(x -> x.contains(team)).count()));
-//        }
-//
-////        System.out.println("등록된 팀당 건수 team_data_columns : "+teamgraphDataColumns);
-////        System.out.println("등록된 부서팀 teamsData : "+teamsData);
-//
+
+//        log.info("스테이트번호 arState :"+arState);
+        responsibils.forEach(x -> teamNames.add(x.getTeam()));
+//        log.info("팀이름들 : "+teamNames);
+
+        //배열 맨앞 빈칸채우기
+        teamgraphDataColumns.add(" ");
+
+        //등록된 중복부서 중복되지않게 정렬
+        for(int i=0; i<teamNames.size(); i++){
+            if(!teamsData.contains(teamNames.get(i))){
+                teamsData.add(teamNames.get(i));
+            }
+        }
+
+        for(int j=0; j<teamsData.size(); j++) {
+            String team = teamsData.get(j);
+            teamName.clear();
+            for (int i = 0; i < teamsData.size(); i++) {
+                if (!teamName.contains(team)) {
+                    teamName.add(team);
+                }
+            }
+            teamgraphDataColumns.add(Long.toString(teamNames.stream().filter(x -> x.contains(team)).count()));
+        }
+
+//        System.out.println("등록된 팀당 건수 team_data_columns : "+teamgraphDataColumns);
+//        System.out.println("등록된 부서팀 teamsData : "+teamsData);
+
 
         // 원형 그래프데이터
         data.put("circle_data_columns",circleDataColumns);
@@ -1050,8 +1052,8 @@ public class StatisticsRestController {
         // 조사시설물 그래프데이터
         data.put("fac_data_columns",facgraphDataColumns);
 //        // 부서별 출동현황 그래프데이터
-//        data.put("team_data_columns",teamgraphDataColumns);
-//        data.put("teamsData",teamsData);
+        data.put("team_data_columns",teamgraphDataColumns);
+        data.put("teamsData",teamsData);
         // 월별 출동현황 그래프데이터
         data.put("month_data_columns",monthgraphDataColumns);
 

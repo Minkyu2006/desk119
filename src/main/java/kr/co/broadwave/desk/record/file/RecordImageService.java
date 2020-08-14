@@ -3,6 +3,7 @@ package kr.co.broadwave.desk.record.file;
 import kr.co.broadwave.desk.common.UploadFileUtils;
 import kr.co.broadwave.desk.record.Record;
 import kr.co.broadwave.desk.record.RecordRepository;
+import kr.co.broadwave.desk.record.file.mobilefile.MobileUploadFile;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +75,7 @@ public class RecordImageService {
     }
 
     // 항목별 파일업로드
-    public RecordUploadFile store2(Record recordSave,MultipartFile file, Record record, int state) throws Exception {
+    public RecordUploadFile store2(MultipartFile file, Record record, int state) throws Exception {
         try {
             if (file.isEmpty()) {
                 throw new Exception("Failed to store empty file: " + file.getOriginalFilename());
@@ -93,20 +94,54 @@ public class RecordImageService {
             RecordUploadFile saveFile = new RecordUploadFile();
             saveFile.setRecord(record);
             saveFile.setAfSaveFileName(saveFileName);
-            saveFile.setAfFileName(recordSave.getArDisasterItemFilename()+"_"+
-                            recordSave.getArLocationCityType().getDesc()+"_"+
-                    recordSave.getArLocationAddressType().getDesc()+"_"+
-                    recordSave.getArIntoStart()+"_"+recordSave.getArWriter()+"_"+realName+"_"+extensionName);
+            saveFile.setAfFileName(record.getArDisasterItemFilename()+"_"+
+                    record.getArLocationCityType().getDesc()+"_"+
+                    record.getArLocationAddressType().getDesc()+"_"+
+                    record.getArIntoStart()+"_"+record.getArWriter()+"_"+realName+"_"+extensionName);
             saveFile.setAfOriginalFilename(file.getOriginalFilename());
             saveFile.setContentType(file.getContentType());
             saveFile.setAfFilePath(rootLocation.toString().replace(File.separatorChar, '/') + File.separator + saveFileName);
             saveFile.setSize(resource.contentLength());
             saveFile.setAfState(state);
+            saveFile.setAfDblocal(0);
             saveFile.setInsertDateTime(LocalDateTime.now());
             saveFile = recordUploadFileRepository.save(saveFile);
             return saveFile;
         } catch (IOException e) {
             throw new Exception("Failed to store file " + file.getOriginalFilename(), e);
+        }
+    }
+
+    // 항목별 DB파일업로드
+    public RecordUploadFile store3(MobileUploadFile mobileUploadFile, Record record, int state, String comment) throws Exception {
+        try {
+            RecordUploadFile saveFile = new RecordUploadFile();
+
+            String afName = mobileUploadFile.getAfmFilename(); //파일이름
+            String extensionName = afName.substring(afName.lastIndexOf("."));
+            int pos = afName.lastIndexOf(".");
+            String realName = afName.substring(0, pos);
+
+            saveFile.setRecord(record);
+            saveFile.setAfSaveFileName(mobileUploadFile.getAfmSaveFilename());
+            saveFile.setAfFileName(record.getArDisasterItemFilename() + "_" +
+                    record.getArLocationCityType().getDesc() + "_" +
+                    record.getArLocationAddressType().getDesc() + "_" +
+                    record.getArIntoStart() + "_" + record.getArWriter() + "_" + realName + "_" + extensionName);
+            saveFile.setAfOriginalFilename(mobileUploadFile.getAfmOriginalFilename());
+            saveFile.setContentType(mobileUploadFile.getAfmContentType());
+            saveFile.setAfFilePath(mobileUploadFile.getAfmFilePath());
+            saveFile.setSize(mobileUploadFile.getAfmSize());
+            saveFile.setAfState(state);
+            saveFile.setAfDblocal(1);
+            if(saveFile.getAfComment()==null){
+                saveFile.setAfComment(comment);
+            }
+            saveFile.setInsertDateTime(LocalDateTime.now());
+            saveFile = recordUploadFileRepository.save(saveFile);
+            return saveFile;
+        } catch (Exception e) {
+            throw new Exception("Failed to store file " + mobileUploadFile.getAfmOriginalFilename(), e);
         }
     }
 
@@ -130,6 +165,7 @@ public class RecordImageService {
             saveFile.setAfFilePath(rootLocation.toString().replace(File.separatorChar, '/') + File.separator + saveFileName);
             saveFile.setSize(resource.contentLength());
             saveFile.setAfState(0);
+            saveFile.setAfDblocal(0);
             saveFile.setInsertDateTime(LocalDateTime.now());
             if(saveFile.getAfComment()==null){
                 saveFile.setAfComment(comment);
@@ -173,13 +209,17 @@ public class RecordImageService {
     public void makefilenew(Record recordSave,int removeCnt) {
         List<RecordUploadFile> recordUploadFiles = recordUploadFileRepository.findByRecord(recordSave);
 //        log.info("Now recordUploadFiles : "+recordUploadFiles);
+//        log.info("removeCnt : "+removeCnt);
+
+        int i;
         if(removeCnt!=0){
-            for(int a=0; a<removeCnt; a++){
+            for(i=0; i<removeCnt; i++){
                 recordUploadFiles.remove(0);
             }
 //            log.info("Remove recordUploadFiles : "+recordUploadFiles);
         }
-        int i = 0;
+
+        i = 0;
 
         for (RecordUploadFile recordUploadFile : recordUploadFiles) {
             String arDisasterItemFilename = recordSave.getArDisasterItemFilename(); //재해재난분과

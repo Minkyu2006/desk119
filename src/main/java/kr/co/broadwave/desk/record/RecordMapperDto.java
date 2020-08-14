@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * @author Minkyu
@@ -46,7 +47,7 @@ public class RecordMapperDto {
     private String arFacItem; //추가 조사시설물 항목
     private String arDisasterItemFilename; //추가 파일이름_띄어쓰기없음
     private int arRecordState; //추가 임시저장인지 아닌지 확인하는 state값
-    private String arComment; //추가 파일코멘트리스트
+    private List<String> arComments; //추가 파일코멘트리스트
     private String fileValue; // 추가 파일있는지 숫자
 
     //기본적인것
@@ -57,20 +58,49 @@ public class RecordMapperDto {
     private String insert_id;
     private String insert_name;
 
+    private Long outlineFileName;
+    private Long resultFileName;
+    private Long opinionFileName;
+    private List<Long> filenamedbIds;
+
+    public List<Long> getFilenamedbIds() {
+        return filenamedbIds;
+    }
+
+    public void setFilenamedbIds(List<Long> filenamedbIds) {
+        this.filenamedbIds = filenamedbIds;
+    }
+
+    public Long getOutlineFileName() {
+        return outlineFileName;
+    }
+
+    public void setOutlineFileName(Long outlineFileName) {
+        this.outlineFileName = outlineFileName;
+    }
+
+    public Long getResultFileName() {
+        return resultFileName;
+    }
+
+    public void setResultFileName(Long resultFileName) {
+        this.resultFileName = resultFileName;
+    }
+
+    public Long getOpinionFileName() {
+        return opinionFileName;
+    }
+
+    public void setOpinionFileName(Long opinionFileName) {
+        this.opinionFileName = opinionFileName;
+    }
+
     public String getFileValue() {
         return fileValue;
     }
 
     public void setFileValue(String fileValue) {
         this.fileValue = fileValue;
-    }
-
-    public String getArComment() {
-        return arComment;
-    }
-
-    public void setArComment(String arComment) {
-        this.arComment = arComment;
     }
 
     public String getArDisasterGita() {
@@ -87,6 +117,14 @@ public class RecordMapperDto {
 
     public void setModify_id(String modify_id) {
         this.modify_id = modify_id;
+    }
+
+    public List<String> getArComments() {
+        return arComments;
+    }
+
+    public void setArComments(List<String> arComments) {
+        this.arComments = arComments;
     }
 
     public String getInsertDateTime() {

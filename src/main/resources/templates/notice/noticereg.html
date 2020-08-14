@@ -72,10 +72,10 @@
 			$('.c-file__control.add').on('click', function(e) {
 				var last = $(this).parents('.c-file-list').children('li').last();
 				var clName = last.attr('class');
-				console.log(clName);
+				// console.log(clName);
 				var num = Number(clName.replace(/[^0-9]/g,''));
 				var idx = num + 1;
-				console.log(idx);
+				// console.log(idx);
 				//var idx = $(this).parents('.c-file-list').children('li').length;
 				var filearea = '<li class="c-file-list__item' + idx + '">' +
 				'<div class="c-file">' +

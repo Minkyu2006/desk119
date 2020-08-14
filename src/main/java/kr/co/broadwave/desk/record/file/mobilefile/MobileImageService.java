@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,10 +18,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Minkyu
- * Date : 2019-09-16
+ * Date : 2020-08-05
  * Remark :
  */
 @Slf4j
@@ -28,10 +32,12 @@ public class MobileImageService {
     private static final Logger logger = LoggerFactory.getLogger(MobileImageService.class);
     private final Path rootLocation;
     private final MobileUploadFileRepository mobileUploadFileRepository;
-
+    private final  MobileUploadFileRepositoryCustom mobileUploadFileRepositoryCustom;
     @Autowired
-    public MobileImageService(String uploadPath,MobileUploadFileRepository mobileUploadFileRepository) {
+    public MobileImageService(String uploadPath,MobileUploadFileRepository mobileUploadFileRepository,
+                              MobileUploadFileRepositoryCustom mobileUploadFileRepositoryCustom) {
         this.mobileUploadFileRepository = mobileUploadFileRepository;
+        this.mobileUploadFileRepositoryCustom = mobileUploadFileRepositoryCustom;
         logger.info("PATH :: " + uploadPath);
         this.rootLocation = Paths.get(uploadPath + "recordimages");
     }
@@ -63,7 +69,7 @@ public class MobileImageService {
             if (file.isEmpty()) {
                 throw new Exception("Failed to store empty file: " + file.getOriginalFilename());
             }
-            String saveFileName = UploadFileUtils.fileSave(rootLocation.toString(), file);
+            String saveFileName = UploadFileUtils.s_fileSave(rootLocation.toString(), file);
             if (saveFileName.toCharArray()[0] == '/') {
                 saveFileName = saveFileName.substring(1);
             }
@@ -83,5 +89,22 @@ public class MobileImageService {
         } catch (IOException e) {
             throw new Exception("Failed to store file " + file.getOriginalFilename(), e);
         }
+    }
+
+    public List<MobileUploadFileDto> findByMobileUploadFileList(Account account) {
+        return mobileUploadFileRepositoryCustom.findByMobileUploadFileList(account);
+    }
+
+
+    public Page<MobileUploadFileDto> findByMobileUploadFilePage(Account account, LocalDateTime s_from, LocalDateTime s_to, Pageable pageable) {
+        return mobileUploadFileRepositoryCustom.findByMobileUploadFilePage(account,s_from,s_to,pageable);
+    }
+
+    public Optional<MobileUploadFile> findById(Long mobileid) {
+        return mobileUploadFileRepository.findById(mobileid);
+    }
+
+    public void delete(MobileUploadFile mobileUploadFile) {
+        mobileUploadFileRepository.delete(mobileUploadFile);
     }
 }
