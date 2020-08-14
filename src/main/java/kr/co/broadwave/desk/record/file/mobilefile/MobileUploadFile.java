@@ -25,7 +25,7 @@ public class MobileUploadFile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="af_m_id")
     private Long id;
-    @ManyToOne(targetEntity = Account.class,fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Account.class,fetch = FetchType.EAGER)
     @JoinColumn(name="account_id")
     private Account account;
     @Column(name="af_m_filename")

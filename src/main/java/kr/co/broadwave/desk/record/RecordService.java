@@ -261,5 +261,6 @@ public class RecordService {
     public List<RecrodStatisticDto> findByStatisticList2(String typeName, String num) {
         return recordRepositoryCustom.findByStatisticList2(typeName,num);
     }
+
 }
 

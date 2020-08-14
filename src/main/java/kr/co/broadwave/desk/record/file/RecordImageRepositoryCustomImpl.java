@@ -34,7 +34,8 @@ public class RecordImageRepositoryCustomImpl extends QuerydslRepositorySupport i
                         recordUploadFile.afComment,
                         recordUploadFile.afSaveFileName,
                         recordUploadFile.afFileName,
-                        recordUploadFile.afState
+                        recordUploadFile.afState,
+                        recordUploadFile.afDblocal
                 ));
 
         if (record != null){
@@ -60,7 +61,8 @@ public class RecordImageRepositoryCustomImpl extends QuerydslRepositorySupport i
                 recordUploadFile.afComment,
                 recordUploadFile.afSaveFileName,
                 recordUploadFile.afFileName,
-                recordUploadFile.afState))
+                recordUploadFile.afState,
+                recordUploadFile.afDblocal))
                 .from(recordUploadFile)
                 .where(recordUploadFile.record.id.eq(record))
                 .where(recordUploadFile.afState.eq(stateVal))
@@ -88,7 +90,8 @@ public class RecordImageRepositoryCustomImpl extends QuerydslRepositorySupport i
                 recordUploadFile.afComment,
                 recordUploadFile.afSaveFileName,
                 recordUploadFile.afFileName,
-                recordUploadFile.afState))
+                recordUploadFile.afState,
+                recordUploadFile.afDblocal))
                 .from(recordUploadFile)
                 .where(recordUploadFile.record.id.in(recordList))
                 .where(recordUploadFile.afState.eq(stateVal))

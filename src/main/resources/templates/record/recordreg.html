@@ -50,15 +50,15 @@
 				responsibiladd();
 			});
 
-			// $('#file0').change(function(){
-			$('.c-file__button input').change(function(){
-				// console.log("result : "+detect(this));
-				var txt = [];
-				for(var i=0; i<this.files.length; i++){
-					txt.push(this.files[i].name);
-				}
-				$(this).parent().prev('.c-file__input').val(txt.join("_"));
-			}).change();
+			$("#fileListBtn").on('click', function () {
+				mobileFileList(1);
+			});
+
+			$('.l-popup__close').on('click', function(e) {
+				$('.l-popup').removeClass('open');
+				e.preventDefault();
+			});
+
 
 
 			// 파일 항목 추가
@@ -67,25 +67,55 @@
 				var clName = last.attr('class');
 				var num = Number(clName.replace(/[^0-9]/g,''));
 				var idx = num + 1;
+				var filename = 'filename'+idx;
 				var filearea =
 						'<li class="c-file-list__item' + idx + '">' +
 						'<div class="c-file c-file--comment">' +
-						'<input type="text" readonly="readonly" class="c-file__input" />' +
-						'<label class="c-file__button">파일선택<input type="file" name="file' + idx + '" /></label>' +
-						'<input type="text" class="c-text__input" name="arComment" placeholder="사진의 코멘트를 입력해주세요" />' +
+						'<input type="text" readonly="readonly"  id="filename'+ idx +'" class="c-file__input" />' +
+						'<label onclick="popName2(\'' + filename + '\')" class="c-file__button">PC선택<input type="file" id="s_filename' + idx + '" name="file' + idx + '" /></label>' +
+						'<label onclick="popOpen2(\'' + filename + '\')" class="c-file__button">DB선택</label>' +
+						'<input type="hidden" readonly="readonly"  name="filename'+ idx +'" class="c-file_id" />' +
+						'<input type="text" class="c-text__input" id="arComment'+ idx +'" placeholder="사진의 코멘트를 입력해주세요" />' +
 						'<a href="#" class="c-file__control remove">삭제</a>' +
 						'</div>' +
 						'</li>';
 				$(this).parents('.c-file-list').append(filearea);
+
+				var text = [];
+				var comments = [];
+				var $photoUl = $("#photoUl").children('li');
+				for(i=0; i<$photoUl.length; i++){
+					text.push($("#filename"+i).val());
+					comments.push($("#arComment"+i).val());
+				}
+				// console.log("text : "+text);
 				$('.c-file__button input').change(function(){
-					var txt = [];
-					for(var i=0; i<this.files.length; i++){
-						txt.push(this.files[i].name);
-					}
-					$(this).parent().prev('.c-file__input').val(txt.join(""));
+					var fileValue = $(this).val().split("\\");
+					var fileName = fileValue[fileValue.length-1]; // 파일명
+					$(this).parent().prev('.c-file__input').val(fileName);
 				}).change();
+
+				for(i=0; i<text.length; i++){
+					if(text[i]!==''){
+						$("#filename"+i).val(text[i]);
+						$("#arComment"+i).val(comments[i]);
+					}
+				}
+
 				e.preventDefault();
 			});
+
+			$('.c-file__button input').change(function () {
+				var fileValue = $(this).val().split("\\");
+				var fileName = fileValue[fileValue.length-1]; // 파일명
+				$(this).parent().prev('.c-file__input').val(fileName);
+			}).change();
+
+			$('.c-file__button2 input').change(function () {
+				var fileValue = $(this).val().split("\\");
+				var fileName = fileValue[fileValue.length-1]; // 파일명
+				$(this).parent().prev('.c-file__input').val(fileName);
+			}).change();
 
 			// 파일 항목 삭제
 			$(document).on('click', '.c-file__control.remove', function(e) {
@@ -356,18 +386,7 @@
 
 		});
 
-		function detect(URL) {
-			var image = new Image();
-			image.src = URL;
-			var x = image.onload = function() {
-				var result = [{ x: 45, y: 56 }]; // An example result
-				return result;
-			}();
-			return x;
-		}
-
 		var i;
-
 		// 조사담당자 추가버튼
 		function responsibiladd() {
 			var $responAdd = $('#responAdd');
@@ -423,11 +442,22 @@
 
 		//출동일지 임시저장
 		function temsave() {
-			if ($("#file0").val() !== '') {
-				if ($('input[name=arComment]').val().trim() === '') {
-					alertCaution("관련사진 코멘트는 필수입니다.");
-					return;
+			// 기타사진 고유아이디값 배열하기
+			var $photoUlLength = $("#photoUl").children('li').length;
+			var $filenamedbIds = $("#filenamedbIds");
+			var $arComments = $("#arComments");
+			var idVal;
+			var commentVal;
+			for(i=0; i<$photoUlLength; i++){
+				if(i===0){
+					idVal = $("input[name=filename"+i+"]").val();
+					commentVal = $("#arComment"+i).val();
+				}else{
+					idVal = $filenamedbIds.val()+','+$("input[name=filename"+i+"]").val();
+					commentVal = $arComments.val()+','+$("#arComment"+i).val();
 				}
+				$filenamedbIds.val(idVal);
+				$arComments.val(commentVal);
 			}
 			if($("#arIntoStart").val().length===10) {
 				var start = $('#arIntoStart').val();
@@ -485,6 +515,7 @@
 				}
 			});
 		}
+
 		//출동일지 저장
 		function save() {
 			if ($("#arTitle").val().trim() === '') {
@@ -518,11 +549,22 @@
 				return;
 			}
 
-			if ($("#file0").val() !== ''){
-				if ($('input[name=arComment]').val().trim() === '') {
-					alertCaution("관련사진 코멘트는 필수입니다.");
-					return;
+			// 기타사진 고유아이디값 배열하기
+			var $photoUlLength = $("#photoUl").children('li').length;
+			var $filenamedbIds = $("#filenamedbIds");
+			var $arComments = $("#arComments");
+			var idVal;
+			var commentVal;
+			for(i=0; i<$photoUlLength; i++){
+				if(i===0){
+					idVal = $("input[name=filename"+i+"]").val();
+					commentVal = $("#arComment"+i).val();
+				}else{
+					idVal = $filenamedbIds.val()+','+$("input[name=filename"+i+"]").val();
+					commentVal = $arComments.val()+','+$("#arComment"+i).val();
 				}
+				$filenamedbIds.val(idVal);
+				$arComments.val(commentVal);
 			}
 
 			// 날짜저장 VIEW(YYYY-MM-DD) -> DATABASE(YYYYMMDD)
@@ -675,7 +717,7 @@
 		}
 
 		//첨부파일삭제
-		function fileDelete(th,fileid,checkLine) {
+		function fileDelete(th,fileid,checkLine,dblocal) {
 
 			var params = {
 				fileid:fileid
@@ -685,8 +727,16 @@
 			var header = $("meta[name='_csrf_header']").attr("content");
 			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
 
+			var $url;
+			console.log("dblocal : "+dblocal);
+			if(dblocal==='1'){
+				$url = '/api/record/dbfiledel';
+			}else{
+				$url = '/api/record/filedel';
+			}
+
 			$.ajax({
-				url:'/api/record/filedel',
+				url: $url,
 				type : 'post',
 				data : params,
 				cache:false,
@@ -706,7 +756,7 @@
 						$("#recordupload1").val("false")
 						$("#resultFileDiv").css('display','block');
 						fileValue--;
-					}else{
+					}else if(checkLine==="opinion"){
 						$("#recordupload2").val("false")
 						$("#opinionFileDiv").css('display','block');
 						fileValue--;
@@ -744,6 +794,158 @@
 					obj.remove();
 				}
 			});
+		}
+
+		function mobileFileList(page,num) {
+
+			page = page - 1;
+			if (page < 0) page = 0
+
+			var perPage = 5;
+			var perArea = 5;
+			var totCnt = 0;
+			var $schList = $('#schList');
+			var $totalCnt = $('#totalCnt');
+
+			var params = {
+				s_from : $("#s_from").val(),
+				s_to :$("#s_to").val()
+			};
+
+			$schList.empty().append('<tr ><td colspan="5" align = "center">조회 중</td></tr>');
+			$totalCnt.text('0');
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function (e, xhr) {xhr.setRequestHeader(header, token);});
+
+			$.ajax({
+				url:'/api/mobile/uploadPage?size='+ perPage + '&page=' + page,
+				type: 'post',
+				data : params,
+				cache:false,
+				error:function(request){
+					ajaxErrorMsg(request);
+				},
+				success: function(res){
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+
+					//화면 출력
+					totCnt = res.data.total_rows;
+					$("#paging").jqueryPager({pageSize: perPage,
+						pageBlock: perArea,
+						currentPage: page + 1,
+						pageTotal: totCnt,
+						clickEvent: 'mobileFileList'});
+
+					if (totCnt === 0) {
+						$schList.empty().append('<tr class="t-c"><td colspan="5" align="center">조회된 데이터가 없습니다.</td></tr>');
+						return;
+					}
+
+					$totalCnt.text(totCnt);
+
+					var html = '';
+					$.each(res.data.datalist, function(key, value){
+						html += '<tr >';
+						html += '<td><img style="width: 100px;height: 100px" src="/uploadfiles/recordimages/'+value.afmSaveFilename+'" /></td>';
+						html += '<td >'+ value.insertDateTime +'</td>';
+						html += '<td >'+ nvl(value.afmComment,"설 명 없 음") +'</td>';
+						html += '<td ><button class="c-button c-button--point" onclick="mobileFileCho(\''+value.id + '\',\'' + num + '\')">선택</button></td>';
+						html += '<td ><button class="c-button c-button--point" onclick="mobileFileDel(\''+value.id+'\');">삭제</button></td>';
+						html += '</tr>';
+					});
+
+					$schList.html(html);
+
+				}
+			});
+		}
+
+		// 모바일파일 선택
+		function mobileFileCho(id,num) {
+			var $inputFileName;
+			if(num==='1') {
+				$inputFileName = $("#inputFileName").val();
+				if ($inputFileName !== '') {
+					$("#" + $inputFileName).val("스마트폰촬영사진.png");
+					$("input[name=" + $inputFileName + "]").val(id);
+				}
+			}else{
+				$inputFileNames = $("#inputFileNames").val();
+				if ($inputFileNames !== '') {
+					$("#" + $inputFileNames).val("스마트폰촬영사진.png");
+					$("input[name=" + $inputFileNames + "]").val(id);
+					$("#s_" + $inputFileNames).val('');
+				}
+			}
+			// console.log("id : "+id);
+			$('.l-popup').removeClass('open');
+		}
+
+		// 모바일파일삭제 여부
+		function mobileFileDel(id){
+			alertCheck("정말 사진을 삭제하겠습니까?",id,1);
+		}
+		// 모바일파일삭제 시작
+		function mobileDelStart(id,booleanValue) {
+			$('#popupId').remove();
+			if(booleanValue===true){
+				mobileDel(id)
+			}else{
+				return false;
+			}
+		}
+		//포바일파일삭제 실행
+		function mobileDel(id) {
+
+			var params = {
+				mobileid: id
+			};
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function (e, xhr) {
+				xhr.setRequestHeader(header, token);
+			});
+
+			$.ajax({
+				url: '/api/mobile/mobileFileDel',
+				type: 'post',
+				data: params,
+				cache: false,
+				error: function (request) {
+					ajaxErrorMsg(request);
+				},
+				success: function (res) {
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+					mobileFileList(1);
+				}
+			})
+		}
+
+		function popOpen(inputId) {
+			// console.log("inputId : "+inputId);
+			$('#pop__list').addClass('open');
+			mobileFileList(1,1);
+			$("#inputFileName").val(inputId);
+		}
+		function popOpen2(inputId) {
+			// console.log("inputId : "+inputId);
+			$('#pop__list').addClass('open');
+			mobileFileList(1,2);
+			$("#inputFileNames").val(inputId);
+		}
+
+		function popName(inputId) {
+			$("#inputFileName").val(inputId);
+		}
+		function popName2(inputId) {
+			$("#inputFileNames").val(inputId);
 		}
 
 	</script>
@@ -1094,8 +1296,10 @@
 							  th:text="${record} ? ${record.arOutline} : ''"></textarea>
 					<input type="hidden" id="recordupload0" th:value="${recordupload0}" readonly />
 					<div id="outlineFileDiv" class="c-file c-file--comment" style="margin-top: 5px;display: none">
-						<input type="text" readonly="readonly" class="c-file__input" />
-						<label class="c-file__button">파일선택<input type="file" name="outlineFile" /></label>
+						<input type="text" readonly="readonly" id="outlineFileName" class="c-file__input" />
+						<label onclick="popName('outlineFileName')" class="c-file__button2">PC선택<input type="file" name="outlineFile" /></label>
+						<label onclick="popOpen('outlineFileName')" class="c-file__button2">DB선택</label>
+						<input type="hidden" readonly="readonly" name="outlineFileName" />
 					</div>
 					<ul class="c-result-list">
 						<li th:each ="recorduploadFile0 : ${recorduploadFile0}">
@@ -1105,7 +1309,7 @@
 									   th:text="${recorduploadFile0.getAfFileName()}"></a>
 								</li>
 								<li>
-									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile0.getId()}','outline')|">삭제</button>
+									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile0.getId()}','outline','${recorduploadFile0.getAfDblocal()}')|">삭제</button>
 								</li>
 							</ul>
 						</li>
@@ -1119,8 +1323,10 @@
 							  th:text="${record} ? ${record.arResult} : ''"></textarea>
 					<input type="hidden" id="recordupload1" th:value="${recordupload1}" readonly />
 					<div id="resultFileDiv" class="c-file c-file--comment" style="margin-top: 5px;display: none">
-						<input type="text" readonly="readonly" class="c-file__input" />
-						<label class="c-file__button">파일선택<input type="file" name="resultFile" /></label>
+						<input type="text" readonly="readonly" id="resultFileName" class="c-file__input" />
+						<label onclick="popName('resultFileName')" class="c-file__button2">PC선택<input type="file" name="resultFile" /></label>
+						<label onclick="popOpen('resultFileName')" class="c-file__button2">DB선택</label>
+						<input type="hidden" readonly="readonly" name="resultFileName" />
 					</div>
 					<ul class="c-result-list">
 						<li th:each ="recorduploadFile1 : ${recorduploadFile1}">
@@ -1130,7 +1336,7 @@
 									   th:text="${recorduploadFile1.getAfFileName()}"></a>
 								</li>
 								<li>
-									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile1.getId()}','result')|">삭제</button>
+									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile1.getId()}','result','${recorduploadFile1.getAfDblocal()}')|">삭제</button>
 								</li>
 							</ul>
 						</li>
@@ -1144,8 +1350,10 @@
 							  th:text="${record} ? ${record.arOpinion} : ''"></textarea>
 					<input type="hidden" id="recordupload2" th:value="${recordupload2}" readonly />
 					<div id="opinionFileDiv" class="c-file c-file--comment" style="margin-top: 5px;display: none">
-						<input type="text" readonly="readonly" class="c-file__input" />
-						<label class="c-file__button">파일선택<input type="file" name="opinionFile" /></label>
+						<input type="text" readonly="readonly" id="opinionFileName" class="c-file__input" />
+						<label onclick="popName('opinionFileName')" class="c-file__button2">PC선택<input type="file" name="opinionFile" /></label>
+						<label onclick="popOpen('opinionFileName')" class="c-file__button2">DB선택</label>
+						<input type="hidden" readonly="readonly" name="opinionFileName" />
 					</div>
 					<ul class="c-result-list">
 						<li th:each ="recorduploadFile2 : ${recorduploadFile2}">
@@ -1155,7 +1363,7 @@
 									   th:text="${recorduploadFile2.getAfFileName()}"></a>
 								</li>
 								<li>
-									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile2.getId()}','opinion')|">삭제</button>
+									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile2.getId()}','opinion','${recorduploadFile2.getAfDblocal()}')|">삭제</button>
 								</li>
 							</ul>
 						</li>
@@ -1165,14 +1373,16 @@
 			<tr>
 				<th>기타사진</th>
 				<td colspan="3">
-					<ul class="c-file-list">
+					<input type="hidden" id="filenamedbIds" name="filenamedbIds" />
+					<input type="hidden" id="arComments" name="arComments" />
+					<ul class="c-file-list" id="photoUl">
 						<li class="c-file-list__item0">
 							<div class="c-file c-file--comment">
-								<input type="text" readonly="readonly" class="c-file__input" />
-								<label class="c-file__button">파일선택
-									<input type="file" name="file0" id="file0" />
-								</label>
-								<input type="text" class="c-text__input" name="arComment" placeholder="사진의 코멘트를 입력해주세요" />
+								<input type="text" readonly="readonly" id="filename0" class="c-file__input" />
+								<label onclick="popName2('filename0')" class="c-file__button">PC선택<input type="file" name="file0" id="s_filename0" /></label>
+								<label onclick="popOpen2('filename0')" class="c-file__button">DB선택</label>
+								<input type="hidden" readonly="readonly" name="filename0" class="c-file_id" />
+								<input type="text" class="c-text__input" id="arComment0" placeholder="사진의 코멘트를 입력해주세요" />
 								<a href="#" class="c-file__control add">추가</a>
 							</div>
 						</li>
@@ -1185,7 +1395,7 @@
 									   th:text="${recorduploadFilesList.getAfFileName()}"></a>
 								</li>
 								<li>
-									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFilesList.getId()}')|">삭제</button>
+									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFilesList.getId()}','','${recorduploadFilesList.getAfDblocal()}')|">삭제</button>
 								</li>
 							</ul>
 						</li>
@@ -1195,13 +1405,107 @@
 		</tbody>
 	</table>
 	</form>
-		<div class="c-function">
-			<div class="c-function__group c-function__group--right">
-				<div class="c-function__item"><button id="btnSave" class="c-button c-button--point">제출완료</button></div>
-				<div class="c-function__item"><button id="btnTemSave" class="c-button c-button--point">임시저장</button></div>
-				<div class="c-function__item"><button id="btnDel" class="c-button c-button--point">삭제</button></div>
-			</div>
+
+	<div class="c-function">
+		<div class="c-function__group c-function__group--right">
+			<div class="c-function__item"><button id="btnSave" class="c-button c-button--point">제출완료</button></div>
+			<div class="c-function__item"><button id="btnTemSave" class="c-button c-button--point">임시저장</button></div>
+			<div class="c-function__item"><button id="btnDel" class="c-button c-button--point">삭제</button></div>
 		</div>
+	</div>
+
+	<div class="l-popup" id="pop__list" style="z-index: 1">
+		<div class="l-popup__container">
+			<input type="hidden" id="inputFileName" />
+			<input type="hidden" id="inputFileNames" />
+			<div class="l-popup__head">
+				<h3 class="l-popup__heading">DB파일 조회</h3>
+			</div>
+			<div class="l-popup__content">
+				<div class="l-popup__section">
+					<table class="c-table c-table--non-border">
+						<colgroup>
+							<col style="width: 110px;">
+							<col>
+							<col style="width: 110px;">
+							<col>
+							<col style="width: 60px;">
+						</colgroup>
+						<tbody>
+						<tr>
+							<th>From. 촬영날짜</th>
+							<td>
+								<div class="c-date">
+									<div class="c-date__input-box">
+										<input type="text" class="c-date__result" id="s_from" readonly />
+										<button type="button" class="c-date__button">
+											<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
+										</button>
+									</div>
+									<div class="c-date__calendar"></div>
+								</div>
+							</td>
+							<th>To. 촬영날짜</th>
+							<td>
+								<div class="c-date">
+									<div class="c-date__input-box">
+										<input type="text" class="c-date__result" id="s_to" readonly />
+										<button type="button" class="c-date__button">
+											<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
+										</button>
+									</div>
+									<div class="c-date__calendar"></div>
+								</div>
+							</td>
+							<td>
+								<button class="c-button c-button--point" id="fileListBtn">조회</button>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="l-popup__section">
+					<table class="c-table">
+						<colgroup>
+							<col style="width: 120px;">
+							<col style="width: 160px;">
+							<col>
+							<col style="width: 80px;">
+							<col style="width: 80px;">
+						</colgroup>
+						<thead>
+						<tr>
+							<th>이미지</th>
+							<th>촬영날짜</th>
+							<th>설명</th>
+							<th></th>
+							<th></th>
+						</tr>
+						</thead>
+						<tbody id="schList">
+						</tbody>
+					</table>
+
+					<div class="c-pager">
+						<div class="c-paging" id="paging">
+							<!-- 페이징 처리되는곳   -->
+						</div>
+						<div class="c-paging__total">
+							<div class="c-paging__total-group">
+								Total
+							</div>
+							<div class="c-paging__total-group" id="totalCnt">0</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<a href="#" class="l-popup__close">팝업닫기</a>
+		</div>
+	</div>
+
+
+
 </section>
 </div>
 </html>

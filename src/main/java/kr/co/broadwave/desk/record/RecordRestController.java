@@ -15,8 +15,10 @@ import kr.co.broadwave.desk.mastercode.MasterCodeDto;
 import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import kr.co.broadwave.desk.record.file.RecordImageService;
 import kr.co.broadwave.desk.record.file.RecordUploadFile;
+import kr.co.broadwave.desk.record.file.RecordUploadFileRepository;
+import kr.co.broadwave.desk.record.file.mobilefile.MobileImageService;
+import kr.co.broadwave.desk.record.file.mobilefile.MobileUploadFile;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
-import kr.co.broadwave.desk.record.responsibil.ResponsibilService;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
@@ -55,19 +57,19 @@ public class RecordRestController {
     private final RecordImageService recordImageService;
     private final MailService mailService;
     private final TeamService teamService;
-    private final ResponsibilService responsibilService;
-
+    private final MobileImageService mobileImageService;
+    private final RecordUploadFileRepository recordUploadFileRepository;
     @Autowired
     public RecordRestController(RecordService recordService,
-                                ResponsibilService responsibilService,
                                 AccountService accountService,
                                 ModelMapper modelMapper,
                                 RecordRepository recordRepository,
                                 RecordImageService recordImageService,
                                 MailService mailService,
                                 TeamService teamService,
-                                MasterCodeService masterCodeService) {
-        this.responsibilService = responsibilService;
+                                MasterCodeService masterCodeService,
+                                RecordUploadFileRepository recordUploadFileRepository,
+                                MobileImageService mobileImageService) {
         this.recordService = recordService;
         this.accountService = accountService;
         this.modelMapper = modelMapper;
@@ -76,6 +78,8 @@ public class RecordRestController {
         this.recordImageService = recordImageService;
         this.mailService = mailService;
         this.teamService = teamService;
+        this.mobileImageService = mobileImageService;
+        this.recordUploadFileRepository = recordUploadFileRepository;
     }
 
     // 출동일지작성 저장기능
@@ -134,35 +138,100 @@ public class RecordRestController {
 
         Record recordSave = recordService.save(record);
 
-        String filecomment = recordMapperDto.getArComment();
-        String[] filecommentList = null;
-        if(filecomment != null){
-            filecommentList = filecomment.split(",");
+        int y = 0;
+        int x = Integer.parseInt(recordMapperDto.getFileValue());
+//        log.info("x : "+x);
+        if(recordMapperDto.getOutlineFileName()!=null){
+            Optional<MobileUploadFile> optionalMobileUploadFile = mobileImageService.findById(recordMapperDto.getOutlineFileName());
+            if(optionalMobileUploadFile.isPresent()) {
+                recordImageService.store3(optionalMobileUploadFile.get(), recordSave, 1,null);
+                y++;
+                x++;
+            }
+        }
+        if(recordMapperDto.getResultFileName()!=null){
+            Optional<MobileUploadFile> optionalMobileUploadFile = mobileImageService.findById(recordMapperDto.getResultFileName());
+            if(optionalMobileUploadFile.isPresent()) {
+                recordImageService.store3(optionalMobileUploadFile.get(), recordSave, 2,null);
+                y++;
+                x++;
+            }
+        }
+        if(recordMapperDto.getOpinionFileName()!=null){
+            Optional<MobileUploadFile> optionalMobileUploadFile = mobileImageService.findById(recordMapperDto.getOpinionFileName());
+            if(optionalMobileUploadFile.isPresent()) {
+                recordImageService.store3(optionalMobileUploadFile.get(), recordSave, 3,null);
+                y++;
+                x++;
+            }
         }
 
-        int i = 1;
-        int x = Integer.parseInt(recordMapperDto.getFileValue());
         int j = 0;
+        int b = 0;
         //파일저장
         Iterator<String> files = multi.getFileNames();
+        List<Long> dbIds = recordMapperDto.getFilenamedbIds();
+        List<String> filecomment = recordMapperDto.getArComments();
+//        log.info("dbIds : "+dbIds);
+//        log.info("dbIds Size : "+dbIds.size());
+//        log.info("filecomment : "+filecomment);
+//        log.info("filecomment Size : "+filecomment.size());
         while(files.hasNext()) {
             String recorduploadFile = files.next();
             MultipartFile mFile = multi.getFile(recorduploadFile);
             assert mFile != null;
             String a = mFile.getName();
-            if(a.equals("outlineFile") || a.equals("resultFile") || a.equals("opinionFile")){
-                if (!mFile.isEmpty()) {
-                    recordImageService.store2(recordSave,mFile,recordSave,i);
-                    x++;
+            String comment = "설명없음";
+//            log.info("filecomment : "+filecomment);
+            if(filecomment.size() != 0) {
+                if (filecomment.get(j).equals("")) {
+                    comment = "설명없음";
+                } else {
+                    comment = filecomment.get(j);
                 }
-                i++;
-            }else{
+            }
+//            log.info("a : "+a);
+//            log.info("mFile : "+mFile);
+            if(y<3) {
+                if(a.equals("outlineFile") && recordMapperDto.getOutlineFileName() == null){
+                    if (!mFile.isEmpty()) {
+                        recordImageService.store2(mFile, recordSave, 1);
+                        x++;
+                    }
+                    y++;
+                }else if(a.equals("resultFile") && recordMapperDto.getResultFileName() == null){
+                    if (!mFile.isEmpty()) {
+                        recordImageService.store2(mFile, recordSave, 2);
+                        x++;
+                    }
+                    y++;
+                }else if(a.equals("opinionFile") && recordMapperDto.getOpinionFileName() == null){
+                    if (!mFile.isEmpty()) {
+                        recordImageService.store2(mFile, recordSave, 3);
+                        x++;
+                    }
+                    y++;
+                }
+            }else {
                 //파일이 존재할때만
                 if (!mFile.isEmpty()) {
-                    recordImageService.store(mFile,recordSave,filecommentList[j]);
+                    recordImageService.store(mFile, recordSave, comment);
+                    dbIds.remove(0);
                     j++;
                     //파일명 순번 채번하기 (기타사진전용)
-                    recordImageService.makefilenew(recordSave,x);
+                    recordImageService.makefilenew(recordSave, x);
+                }else {
+                    if(dbIds.size() != 0){
+                        if(dbIds.get(b) != null) {
+                            Optional<MobileUploadFile> optionalMobileUploadFile = mobileImageService.findById(dbIds.get(b));
+                            if (optionalMobileUploadFile.isPresent()) {
+                                recordImageService.store3(optionalMobileUploadFile.get(), recordSave, 0, comment);
+                                recordImageService.makefilenew(recordSave, x);
+                                b++;
+                                j++;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -178,7 +247,7 @@ public class RecordRestController {
 
             if(maillists.size() != 0) {
                 mailService.mailsend(maillists,
-                        "<" + record.getArNumber() + ">가 출동일지를 등록 하였습니다",
+                        "<" + record.getArNumber() + "> 출동일지가 등록 되었습니다",
                         "작성자 : " + record.getArWriter() + "\r\n\n",
                         "출동일지제목 : " + record.getArTitle() + "\r\n\n",
                         " 조사일자 : " + record.getArIntoStart() + " ~ ", record.getArIntoEnd() + "\r\n\n",
@@ -193,7 +262,7 @@ public class RecordRestController {
         String[] arEmployeeName = request.getParameterValues("arEmployeeName");
         String[] teamcode = request.getParameterValues("teamcode");
 
-        for (i = 0; i < arEmployeeNumber.length; i++) {
+        for (int i = 0; i < arEmployeeNumber.length; i++) {
             Optional<Team> byTeamcode = teamService.findByTeamcode(teamcode[i]);
             if (byTeamcode.isPresent()){
                 Responsibil responsibils2 = Responsibil.builder()
@@ -270,25 +339,103 @@ public class RecordRestController {
 
         Record recordSave = recordService.save(record);
 
-        String filecomment = recordMapperDto.getArComment();
-        String[] filecommentList = filecomment.split(",");
-        int j =0;
-        //파일저장
-        Iterator<String> files = multi.getFileNames();
-        while(files.hasNext()) {
-            String recorduploadFile = files.next();
-            MultipartFile mFile = multi.getFile(recorduploadFile);
-//            String fileName = mFile.getOriginalFilename();
-            //파일이 존재할때만
-            if (!mFile.isEmpty()) {
-                //System.out.println("파일명 확인  : " + fileName);
-                recordImageService.store(mFile,recordSave,filecommentList[j]);
-                j++;
+        int y = 0;
+        int x = Integer.parseInt(recordMapperDto.getFileValue());
+//        log.info("x : "+x);
+        if(recordMapperDto.getOutlineFileName()!=null){
+            Optional<MobileUploadFile> optionalMobileUploadFile = mobileImageService.findById(recordMapperDto.getOutlineFileName());
+            if(optionalMobileUploadFile.isPresent()) {
+                recordImageService.store3(optionalMobileUploadFile.get(), recordSave, 1,null);
+                y++;
+                x++;
+            }
+        }
+        if(recordMapperDto.getResultFileName()!=null){
+            Optional<MobileUploadFile> optionalMobileUploadFile = mobileImageService.findById(recordMapperDto.getResultFileName());
+            if(optionalMobileUploadFile.isPresent()) {
+                recordImageService.store3(optionalMobileUploadFile.get(), recordSave, 2,null);
+                y++;
+                x++;
+            }
+        }
+        if(recordMapperDto.getOpinionFileName()!=null){
+            Optional<MobileUploadFile> optionalMobileUploadFile = mobileImageService.findById(recordMapperDto.getOpinionFileName());
+            if(optionalMobileUploadFile.isPresent()) {
+                recordImageService.store3(optionalMobileUploadFile.get(), recordSave, 3,null);
+                y++;
+                x++;
             }
         }
 
-        //파일명 순번 채번하기
-//        recordImageService.makefilenew(recordSave,j);
+        int j = 0;
+        int b = 0;
+        //파일저장
+        Iterator<String> files = multi.getFileNames();
+        List<Long> dbIds = recordMapperDto.getFilenamedbIds();
+        List<String> filecomment = recordMapperDto.getArComments();
+//        log.info("dbIds : "+dbIds);
+//        log.info("dbIds Size : "+dbIds.size());
+//        log.info("filecomment : "+filecomment);
+//        log.info("filecomment Size : "+filecomment.size());
+        while(files.hasNext()) {
+            String recorduploadFile = files.next();
+            MultipartFile mFile = multi.getFile(recorduploadFile);
+            assert mFile != null;
+            String a = mFile.getName();
+            String comment = "설명없음";
+//            log.info("filecomment : "+filecomment);
+            if(filecomment.size() != 0) {
+                if (filecomment.get(j).equals("")) {
+                    comment = "설명없음";
+                } else {
+                    comment = filecomment.get(j);
+                }
+            }
+//            log.info("a : "+a);
+//            log.info("mFile : "+mFile);
+            if(y<3) {
+                if(a.equals("outlineFile") && recordMapperDto.getOutlineFileName() == null){
+                    if (!mFile.isEmpty()) {
+                        recordImageService.store2(mFile, recordSave, 1);
+                        x++;
+                    }
+                    y++;
+                }else if(a.equals("resultFile") && recordMapperDto.getResultFileName() == null){
+                    if (!mFile.isEmpty()) {
+                        recordImageService.store2(mFile, recordSave, 2);
+                        x++;
+                    }
+                    y++;
+                }else if(a.equals("opinionFile") && recordMapperDto.getOpinionFileName() == null){
+                    if (!mFile.isEmpty()) {
+                        recordImageService.store2(mFile, recordSave, 3);
+                        x++;
+                    }
+                    y++;
+                }
+            }else {
+                //파일이 존재할때만
+                if (!mFile.isEmpty()) {
+                    recordImageService.store(mFile, recordSave, comment);
+                    dbIds.remove(0);
+                    j++;
+                    //파일명 순번 채번하기 (기타사진전용)
+                    recordImageService.makefilenew(recordSave, x);
+                }else {
+                    if(dbIds.size() != 0){
+                        if(dbIds.get(b) != null) {
+                            Optional<MobileUploadFile> optionalMobileUploadFile = mobileImageService.findById(dbIds.get(b));
+                            if (optionalMobileUploadFile.isPresent()) {
+                                recordImageService.store3(optionalMobileUploadFile.get(), recordSave, 0, comment);
+                                recordImageService.makefilenew(recordSave, x);
+                                b++;
+                                j++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         //조사담당자
         List<Responsibil> responsibils = new ArrayList<>();
@@ -410,7 +557,17 @@ public class RecordRestController {
         }
     }
 
-    //출동일지 파일삭제
+
+    //출동일지 파일삭제(DB파일)
+    @PostMapping("dbfiledel")
+    public ResponseEntity<Map<String,Object>> dbfiledel(@RequestParam(value="fileid", defaultValue="") Long fileid){
+        AjaxResponse res = new AjaxResponse();
+        Optional<RecordUploadFile> optionalUploadFile = recordUploadFileRepository.findById(fileid);
+        optionalUploadFile.ifPresent(recordUploadFileRepository::delete);
+        return ResponseEntity.ok(res.success());
+    }
+
+    //출동일지 파일삭제(로컬파일)
     @PostMapping("filedel")
     public ResponseEntity<Map<String,Object>> filedel(@RequestParam(value="fileid", defaultValue="") Long fileid){
 

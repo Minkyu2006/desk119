@@ -23,7 +23,7 @@ import java.time.format.DateTimeFormatter;
 public class RecrodStatisticDto {
 
     private Long id;
-
+    private String arWriter;
     private String arDisasterType; //재해.재난.분과 항목(숫자)
     private String arFac;//조사시설물(숫자)
 
@@ -40,6 +40,10 @@ public class RecrodStatisticDto {
     private String modify_id; // 작성자 아이디
 
     private int arRecordState;
+
+    public String getArWriter() {
+        return arWriter;
+    }
 
     public int getArRecordState() {
         return arRecordState;

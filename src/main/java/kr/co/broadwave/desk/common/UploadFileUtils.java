@@ -7,6 +7,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,12 +25,14 @@ public class UploadFileUtils {
     private static final Logger logger = LoggerFactory.getLogger(UploadFileUtils.class);
 
     /**
-     * @param filePath
-     * @param multipartFile
+//     * @param filePath
+//     * @param multipartFile
      * @return 생성된 파일 명(유일한 값)
      * @throws IllegalStateException
      * @throws IOException
      */
+
+    // 일반파일 저장
     public static String fileSave(String uploadPath, MultipartFile file) throws IllegalStateException, IOException {
 
         File uploadPathDir = new File(uploadPath);
@@ -51,6 +54,46 @@ public class UploadFileUtils {
         File target = new File(uploadPath + savePath, saveFileName);
 
         FileCopyUtils.copy(file.getBytes(), target);
+
+        return makeFilePath(uploadPath, savePath, saveFileName);
+    }
+
+    // 모바일파일저장(썸네일파일추가)
+    public static String s_fileSave(String uploadPath, MultipartFile file) throws IllegalStateException, IOException {
+
+        File uploadPathDir = new File(uploadPath);
+
+        if ( !uploadPathDir.exists() ){
+            uploadPathDir.mkdirs();
+        }
+
+        // 파일 중복명 처리
+        String genId = UUID.randomUUID().toString();
+        genId = genId.replace("-", "");
+
+        String originalfileName = file.getOriginalFilename();
+        String fileExtension = getExtension(originalfileName);
+
+
+
+        String saveFileName = genId + "." + fileExtension;
+//        String saveFileName2 = "s_" + genId + "." + fileExtension;
+
+        String savePath = calcPath(uploadPath);
+
+//        // 썸네일 파일 버퍼 생성
+//        BufferedImage originFileBuffer = ImageIO.read((File) file) ;
+//        BufferedImage thumbFileBuffer = new BufferedImage(100, 100, BufferedImage.TYPE_3BYTE_BGR);
+//        Graphics2D graphic = thumbFileBuffer.createGraphics();
+//        graphic.drawImage(originFileBuffer, 0, 0, 100, 100, null);
+//        File thumbFile =  new File(uploadPath + savePath, saveFileName2);
+//        ImageIO.write(thumbFileBuffer,fileExtension,uploadPathDir);
+
+        File target = new File(uploadPath + savePath, saveFileName);
+//        File target2 = new File(uploadPath + savePath, saveFileName2);
+
+        FileCopyUtils.copy(file.getBytes(), target);
+//        FileCopyUtils.copy(file.getBytes(), target2);
 
         return makeFilePath(uploadPath, savePath, saveFileName);
     }

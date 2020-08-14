@@ -14,7 +14,7 @@
 <th:block layout:fragment="script">
 	<script>
 		$(function() {
-			if($('#insertId').val() == $('#userId').val()){
+			if($('#insertId').val() === $('#userId').val()){
 				$('#updateId').show()
 			}else{
 				$('#updateId').hide()
@@ -145,7 +145,7 @@
 						<pre th:text="${record} ? ${record.arOutline} : ''">
 						</pre>
 						<div class="report__picture">
-							<img style="width: 700px" th:src="${recorduploadFile0} ? '/uploadfiles/recordimages/'+${recorduploadFile0.afSaveFileName} : ''" />
+							<img style="width: 400px;" th:src="${recorduploadFile0} ? '/uploadfiles/recordimages/'+${recorduploadFile0.afSaveFileName} : ''" />
 						</div>
 					</td>
 				</tr>
@@ -155,7 +155,7 @@
 						<pre th:text="${record} ? ${record.arResult} : ''">
 						</pre>
 						<div class="report__picture">
-							<img style="width: 700px" th:src="${recorduploadFile1} ? '/uploadfiles/recordimages/'+${recorduploadFile1.afSaveFileName} : ''" />
+							<img style="width: 400px;" th:src="${recorduploadFile1} ? '/uploadfiles/recordimages/'+${recorduploadFile1.afSaveFileName} : ''" />
 						</div>
 					</td>
 				</tr>
@@ -165,7 +165,7 @@
 						<pre th:text="${record} ? ${record.arOpinion} : ''">
 						</pre>
 						<div class="report__picture">
-							<img style="width: 700px" th:src="${recorduploadFile2} ? '/uploadfiles/recordimages/'+${recorduploadFile2.afSaveFileName} : ''" />
+							<img style="width: 400px;" th:src="${recorduploadFile2} ? '/uploadfiles/recordimages/'+${recorduploadFile2.afSaveFileName} : ''" />
 						</div>
 					</td>
 				</tr>
@@ -175,7 +175,7 @@
 						<ul class="report__picture-list">
 							<li th:each ="recorduploadFilesList : ${recorduploadFilesList}">
 								<div class="report__picture">
-									<img style="width: 300px" th:src="${recorduploadFilesList} ? '/uploadfiles/recordimages/'+${recorduploadFilesList.afSaveFileName} : ''" />
+									<img style="width: 300px;" th:src="${recorduploadFilesList} ? '/uploadfiles/recordimages/'+${recorduploadFilesList.afSaveFileName} : ''" />
 									<p>&lt;<span th:text="${recorduploadFilesList.afComment}"></span>&gt;</p>
 								</div>
 							</li>

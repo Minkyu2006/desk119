@@ -22,6 +22,11 @@ public class RecordUploadFileDto {
     private String afSaveFileName;
     private String afFileName;
     private Integer afState;
+    private Integer afDblocal;
+
+    public Integer getAfDblocal() {
+        return afDblocal;
+    }
 
     public Long getRecordId() {
         return recordId;
