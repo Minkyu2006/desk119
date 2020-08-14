@@ -1334,8 +1334,9 @@ a.c-button {
 }
 
 .c-file__button {
+    text-align: center;
     float: left;
-    width: 84px;
+    width: 80px;
     height: 30px;
     padding: 0 14px;
     border: 0;
@@ -1352,12 +1353,41 @@ a.c-button {
 .c-file__button input[type="file"] {
   display: none;
 }
+
+.c-file__button2 {
+    text-align: center;
+    float: left;
+    width: 80px;
+    height: 30px;
+    padding: 0 14px;
+    border: 0;
+    background-color: #eee;
+    color: #222;
+    font-size: 14px;
+    line-height: 30px;
+    cursor: pointer;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: background-color .2s;
+    transition: background-color .2s;
+}
+.c-file__button2 input[type="file"] {
+    display: none;
+}
+
 .c-file__button:hover,
 .c-file__button:focus,
 .c-file__control:hover {
   background-color: #d6d6d6;
   text-decoration: none !important;
 }
+
+.c-file__button2:hover,
+.c-file__button2:focus{
+    background-color: #d6d6d6;
+    text-decoration: none !important;
+}
+
 .c-file__control {
 	float: left;
 	display: block;
@@ -1377,7 +1407,7 @@ a.c-button {
 }
 
 .c-file.c-file--comment .c-file__input {
-	width: calc(100% - 84px)
+	width: calc(100% - 160px)
 }
 .c-file.c-file--comment .c-text__input {
 	float: left;

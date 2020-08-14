@@ -7,6 +7,13 @@ $(function() {
         startDel($("#delId").val(),false)
     });
 
+    $(document).on("click","#mobileSuccessBtn",function(){
+        mobileDelStart($("#delId").val(),true)
+    });
+    $(document).on("click","#mobileCancelBtn",function(){
+        mobileDelStart($("#delId").val(),false)
+    });
+
     $(document).on("click","#collectionSuccessBtn",function(){
         continueSaveCheck()
     });
@@ -134,7 +141,7 @@ function alertCaution2(text) { // 창이 좀더 긴 경고창
 }
 
 // 삭제 알림창.
-function alertCheck(text,id) { //정말삭제할껀지확인하는창
+function alertCheck(text,id,num) { //정말삭제할껀지확인하는창
     var html = '';
 
     html +='<div id="popupId" class="popup popup--dim">';
@@ -145,8 +152,13 @@ function alertCheck(text,id) { //정말삭제할껀지확인하는창
     html +='</div>';
     html +='<div class="popup__buttons">';
     html +='<input type="hidden" id="delId" value="'+id+'" />';
-    html +='<button id="checkSuccessBtn" class="popup__btn popup__btn--success">확인</button>';
-    html +='<button id="checkCancelBtn" class="popup__btn popup__btn--cancel">취소</button>';
+    if(num!==1) {
+        html += '<button id="checkSuccessBtn" class="popup__btn popup__btn--success">확인</button>';
+        html += '<button id="checkCancelBtn" class="popup__btn popup__btn--cancel">취소</button>';
+    }else{
+        html += '<button id="mobileSuccessBtn" class="popup__btn popup__btn--success">확인</button>';
+        html += '<button id="mobileCancelBtn" class="popup__btn popup__btn--cancel">취소</button>';
+    }
     html +='</div>';
     html +='</div>';
     html +='</div>';

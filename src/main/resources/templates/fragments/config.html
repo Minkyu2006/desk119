@@ -34,55 +34,6 @@
     <script src="/assets/js/alert/min_alert.js"></script>
     <script src="/assets/js/toastr/toastr.min.js"></script>
 <script>
-
-    // 모바일사진을 촬영후, 업로드하는 함수
-    function fileupload(){
-        if(window.location.href==="http://192.168.0.136:8080/" || window.location.href==="https://kict119.broadwave.co.kr/") {
-            var $camera = $("#camera");
-
-            toastr.options = {
-                "positionClass": "toast-bottom-center",
-                "timeOut": "3000",
-                "progressBar": true,
-                "closeButton": true,
-            }
-
-            if($camera.val() !== '') {
-
-                var formData = new FormData(document.getElementById('fileupload'));
-
-                var token = $("meta[name='_csrf']").attr("content");
-                var header = $("meta[name='_csrf_header']").attr("content");
-                $(document).ajaxSend(function (e, xhr) {
-                    xhr.setRequestHeader(header, token);
-                });
-
-                $.ajax({
-                    url: '/api/mobile/upload',
-                    type: 'post',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    enctype: 'multipart/form-data',
-                    cache: false,
-                    error: function (request) {
-                        ajaxErrorMsg(request);
-                    },
-                    success: function (res) {
-                        if (!Ajax.checkResult(res)) {
-                            return;
-                        }
-                        toastr.success('갤러리에서 확인해주세요.','사진이 저장되었습니다.');
-                        $camera.val('');
-                    }
-                });
-            }else{
-                toastr.error('고객센터로 문의해주세요.','데이터를 받아오지 못했습니다.');
-                $camera.val('');
-            }
-        }
-    }
-
     //admin전용 -> 모바일인지 체크 // 2019.10.11 김민규추가
     function mobileAlert(mobileId) {
         if (navigator.userAgent.match(/iPad/) == null &&

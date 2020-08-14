@@ -36,6 +36,7 @@
 					<ul class="nav__list-depth">
 						<li><a href="#" onclick="mobileCheckIndex();" class="nav__link">출동일지작성</a></li>
 						<li><a href="/record/list" class="nav__link">출동일지조회</a></li>
+						<li><a href="/record/mobilelayout" class="nav__link">갤러리용</a></li>
 					</ul>
 				</li>
 				<li class="nav__item" sec:authorize = "hasRole('ROLE_ADMIN')">
@@ -61,12 +62,9 @@
 
 		<div class="info" sec:authorize="isAuthenticated()">
 			<ul>
-				<!-- <li id="cameralist" style="display: none">
-					<form id ="fileupload" enctype="multipart/form-data">
-						<input type="file" id="camera" name="camera" capture="camera" accept="image/*"/>
-					</form>
-					<button id="uploadBtn" onclick="fileupload()">업로드</button>
-				</li> -->
+				<li>
+					<input class="info__btn" type="button" onclick="fileupload()" value="업로드" />
+				</li>
 				<li>
 					<a href="/mypage" class="info__btn"><div sec:authentication="name"></div></a>
 				</li>

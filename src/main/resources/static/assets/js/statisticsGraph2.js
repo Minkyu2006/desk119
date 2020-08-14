@@ -41,7 +41,7 @@ function dataGraphType() {
 			circle_graph_call(res.data.circle_data_columns);
 			disaster_graph_call(res.data.disaster_data_columns);
 			fac_graph_call(res.data.fac_data_columns);
-			// team_graph_call(res.data.team_data_columns,res.data.teamsData);
+			team_graph_call(res.data.team_data_columns,res.data.teamsData);
 			month_graph_call(res.data.month_data_columns);
 		}
 	})
@@ -69,7 +69,7 @@ function callList(page) {
 	};
 
 	$.ajax({
-		url:'/api/statistics/dataGraphTypeList',
+		url:'/api/statistics/dataGraphTypeList?size='+ perPage + '&page=' + page,
 		type : 'post',
 		data : params,
 		cache:false,
@@ -104,7 +104,7 @@ function callList(page) {
 				html += '<th scope="col">조사시설물</th>'
 				html += '<th scope="col">출동요청기관</th>'
 				html += '<th scope="col">출동지역</th>'
-				html += '<th scope="col">출동부서</th>'
+				html += '<th scope="col">작성자(부서)</th>'
 				html += '<th scope="col">출동일(년.월.)</th>'
 			}else{
 				html += '<th scope="col">번호</th>'
@@ -112,7 +112,7 @@ function callList(page) {
 				html += '<th scope="col">재해·재난유형</th>'
 				html += '<th scope="col">출동요청기관</th>'
 				html += '<th scope="col">출동지역</th>'
-				html += '<th scope="col">출동부서</th>'
+				html += '<th scope="col">작성자(부서)</th>'
 				html += '<th scope="col">출동일(년.월.)</th>'
 			}
 			html += '</tr>'
@@ -126,7 +126,7 @@ function callList(page) {
 					html += '<td >'+ echoNull2Blank(value.arFacItem) +'</td>';
 					html += '<td >'+ echoNull2Blank(value.arRelatedId) +'</td>';
 					html += '<td >'+ echoNull2Blank(value.arLocationCityType) +'</td>';
-					html += '<td >'+ echoNull2Blank(res.data.writeTeam[i]) +'</td>';
+					html += '<td >'+ echoNull2Blank(value.arWriter) + echoNull2Blank("("+res.data.writeTeam[i]+")") +'</td>';
 					html += '<td >'+ echoNull2Blank(value.arIntoStart.substr(0,4)+"년 "+value.arIntoStart.substr(4,2)+"월") +'</td>';
 					html += '</tr >';
 					i++;
@@ -137,7 +137,7 @@ function callList(page) {
 					html += '<td >'+ echoNull2Blank(value.arDisasterItem) +'</td>';
 					html += '<td >'+ echoNull2Blank(value.arRelatedId) +'</td>';
 					html += '<td >'+ echoNull2Blank(value.arLocationCityType) +'</td>';
-					html += '<td >'+ echoNull2Blank(res.data.writeTeam[i]) +'</td>';
+					html += '<td >'+ echoNull2Blank(value.arWriter) + echoNull2Blank("("+res.data.writeTeam[i]+")") +'</td>';
 					html += '<td >'+ echoNull2Blank(value.arIntoStart.substr(0,4)+"년 "+value.arIntoStart.substr(4,2)+"월")+'</td>';
 					html += '</tr >';
 					i++;

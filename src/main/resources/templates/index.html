@@ -128,6 +128,83 @@
 			}
 		}
 
+		function cameraClick() {
+			$('#camera').change(function(){});
+		}
+
+		// 모바일사진을 촬영후, 업로드하는 함수
+		function fileupload(){
+			if(window.location.href==="http://192.168.0.136:8080/" || window.location.href==="https://kict119.broadwave.co.kr/") {
+				var $camera = $("#camera");
+
+				toastr.options = {
+					"positionClass": "toast-top-center",
+					"timeOut": "3000",
+					"progressBar": true,
+					"closeButton": true,
+				}
+
+				if($camera.val() !== '') {
+
+					var formData = new FormData(document.getElementById('fileupload'));
+
+					var token = $("meta[name='_csrf']").attr("content");
+					var header = $("meta[name='_csrf_header']").attr("content");
+					$(document).ajaxSend(function (e, xhr) {xhr.setRequestHeader(header, token);});
+
+					$.ajax({
+						url: '/api/mobile/upload',
+						type: 'post',
+						data: formData,
+						processData: false,
+						contentType: false,
+						enctype: 'multipart/form-data',
+						cache: false,
+						error: function (request) {
+							ajaxErrorMsg(request);
+						},
+						success: function (res) {
+							if (!Ajax.checkResult(res)) {
+								return;
+							}
+							toastr.success('갤러리에서 확인해주세요.','사진이 저장되었습니다.');
+							$camera.val('');
+						}
+					});
+				}else{
+					toastr.error('인터넷 연결을 확인해주세요.','데이터를 받아오지 못했습니다.');
+					$camera.val('');
+				}
+			}
+		}
+
+		// 모바일 파일리스트
+		function mobileUploadList() {
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function (e, xhr) {xhr.setRequestHeader(header, token);});
+
+			$.ajax({
+				url: '/api/mobile/uploadList',
+				type: 'post',
+				cache:false,
+				error:function(request){
+					ajaxErrorMsg(request);
+				},
+				success: function(res){
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+
+					var fileDtoList = res.data.mobileUploadFileDtoList
+					for(i=0; i<fileDtoList.length; i++){
+						console.log("fileDtoList : "+fileDtoList[i]['id']);
+					}
+
+				}
+			});
+		}
+
 	</script>
 </th:block>
 
@@ -136,6 +213,7 @@
 <div layout:fragment="content" class="content">
 	
 	<div class="main">
+
 		<div class="main__text">
 			<p>KICT 건설119</p>
 			<p>"국민과 인프라의 안전 확보를 위하여 전문가로서 최선을 다하겠습니다."</p>
@@ -245,13 +323,20 @@
 				</li>
 			</ul>
 		</div>
-		
-		<div class="fixed-btn fixed-btn--left">
-			<a href="#" class="fixed-btn__gallery">갤러리</a>
+
+		<div id="cameralist" class="info" sec:authorize="isAuthenticated()">
+			<div class="fixed-btn fixed-btn--left">
+				<label onclick="mobileUploadList()" class="fixed-btn__gallery">갤러리</label>
+			</div>
+			<div class="fixed-btn">
+				<label onclick="cameraClick()" class="fixed-btn__camera">카메라
+					<form id="fileupload" enctype="multipart/form-data">
+						<input type="file" id="camera" name="camera" capture="camera" accept="image/*"/>
+					</form>
+				</label>
+			</div>
 		</div>
-		<div class="fixed-btn">
-			<a href="#" class="fixed-btn__camera">카메라</a>
-		</div>
+
 	</div>
 </div>
 </html>

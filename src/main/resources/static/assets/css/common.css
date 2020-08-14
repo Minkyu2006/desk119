@@ -986,7 +986,7 @@ h4.article__heading {
 	right: auto;
 	left: 10px;
 }
-.fixed-btn a {
+.fixed-btn label {
 	opacity: 0.8;
 	display: block;
 	width: 60px;
@@ -997,14 +997,14 @@ h4.article__heading {
 	border-radius: 30px;
 	text-indent: -9999px;
 }
-.fixed-btn__gallery {
+.fixed-btn__gallery{
 	background-image: url(/assets/images/icon__image.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 	-webkit-background-size: 48px 48px;
 	background-size: 48px 48px;
 }
-.fixed-btn__camera {
+.fixed-btn__camera{
 	background-image: url(/assets/images/icon__camera.png);
 	background-repeat: no-repeat;
 	background-position: center center;
@@ -1745,7 +1745,9 @@ h4.article__heading {
 	background: url(/assets/images/icon__close--w.png) no-repeat center center;
 	text-indent: -9999px;
 }
-
+.l-popup__section{
+	margin-top: 10px;
+}
 
 @media (max-width: 1024px) {
 	.l-popup__container {
