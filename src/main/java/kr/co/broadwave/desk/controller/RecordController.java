@@ -355,4 +355,10 @@ public class RecordController {
         return file;
     }
 
+    //모바일갤러리용 테스트페이지
+    @RequestMapping("mobilelayout")
+    public String mobilelayout(){
+        return "record/mobilelayout";
+    }
+
 }
