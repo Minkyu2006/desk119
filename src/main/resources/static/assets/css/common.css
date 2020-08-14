@@ -2168,7 +2168,71 @@ h4.article__heading {
 
 
 
-
+/* 갤러리 */
+.gallery {
+	overflow-y: auto;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: #fff;
+	z-index: 10;
+	padding: 10px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.gallery__date {
+	padding: 5px 2px 2px 2px;
+	color: #666;
+	font-size: 12px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.gallery__grid {
+	
+}
+.gallery__grid:before {
+	content: " ";
+	display: table;
+}
+.gallery__grid:after {
+	content: " ";
+	display: table;
+	clear: both;
+}
+.gallery__grid li {
+	float: left;
+	width: 33.3333%;
+	padding: 2px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.gallery__img {
+	overflow: hidden;
+	display: block;
+	position: relative;
+	width: 100%;
+	height: 0;
+	padding-bottom: 100%;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+.gallery__thumbnail {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 100%;
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	-o-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
 
 
 
