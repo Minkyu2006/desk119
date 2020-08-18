@@ -64,7 +64,7 @@ public class MobileImageService {
     }
 
     // 모바일사진 파일업로드
-    public MobileUploadFile mobileUploadFile(MultipartFile file, Account account) throws Exception {
+    public MobileUploadFile mobileUploadFile(MultipartFile file, Account account,String comment) throws Exception {
         try {
             if (file.isEmpty()) {
                 throw new Exception("Failed to store empty file: " + file.getOriginalFilename());
@@ -81,9 +81,14 @@ public class MobileImageService {
             saveFile.setAfmOriginalFilename(file.getOriginalFilename());
             saveFile.setAfmContentType(file.getContentType());
             saveFile.setAfmFilePath(rootLocation.toString().replace(File.separatorChar, '/') + File.separator + saveFileName);
+            saveFile.setAfmFileThumPath(rootLocation.toString().replace(File.separatorChar, '/') + File.separator + saveFileName.substring(0,11)+"s_"+saveFileName.substring(11));
             saveFile.setAfmSize(resource.contentLength());
             saveFile.setInsertDateTime(LocalDateTime.now());
-            saveFile.setAfmComment(null);
+            if(comment.equals("")){
+                saveFile.setAfmComment("설명없음");
+            }else{
+                saveFile.setAfmComment(comment);
+            }
             saveFile = mobileUploadFileRepository.save(saveFile);
             return saveFile;
         } catch (IOException e) {

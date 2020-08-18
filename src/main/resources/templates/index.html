@@ -32,6 +32,16 @@
 				popWin(1200,620,'yes');
 			});
 
+			$("#commentBtn").on('click',function(){
+				fileupload2();
+				$("#stateLoading").css('display','block');
+			});
+
+			$('#l-popup__close').on('click', function(e) {
+				$('#pop__list').removeClass('open');
+				e.preventDefault();
+			});
+
 			var slider = $('.banner__slide').bxSlider({
 							controls: false,
 							pagerCustom: '.banner__slide-pager'
@@ -132,8 +142,12 @@
 			$('#camera').change(function(){});
 		}
 
+		function fileupload() {
+			$('#pop__list').addClass('open');
+		}
+
 		// 모바일사진을 촬영후, 업로드하는 함수
-		function fileupload(){
+		function fileupload2(){
 			if(window.location.href==="http://192.168.0.136:8080/" || window.location.href==="https://kict119.broadwave.co.kr/") {
 				var $camera = $("#camera");
 
@@ -167,42 +181,19 @@
 							if (!Ajax.checkResult(res)) {
 								return;
 							}
+							$("#stateLoading").css('display','none');
+							$('#pop__list').removeClass('open');
 							toastr.success('갤러리에서 확인해주세요.','사진이 저장되었습니다.');
 							$camera.val('');
 						}
 					});
 				}else{
+					$("#stateLoading").css('display','none');
+					$('#pop__list').removeClass('open');
 					toastr.error('인터넷 연결을 확인해주세요.','데이터를 받아오지 못했습니다.');
 					$camera.val('');
 				}
 			}
-		}
-
-		// 모바일 파일리스트
-		function mobileUploadList() {
-			var token = $("meta[name='_csrf']").attr("content");
-			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function (e, xhr) {xhr.setRequestHeader(header, token);});
-
-			$.ajax({
-				url: '/api/mobile/uploadList',
-				type: 'post',
-				cache:false,
-				error:function(request){
-					ajaxErrorMsg(request);
-				},
-				success: function(res){
-					if (!Ajax.checkResult(res)) {
-						return;
-					}
-
-					var fileDtoList = res.data.mobileUploadFileDtoList
-					for(i=0; i<fileDtoList.length; i++){
-						console.log("fileDtoList : "+fileDtoList[i]['id']);
-					}
-
-				}
-			});
 		}
 
 	</script>
@@ -211,7 +202,7 @@
 
 
 <div layout:fragment="content" class="content">
-	
+
 	<div class="main">
 
 		<div class="main__text">
@@ -326,14 +317,39 @@
 
 		<div id="cameralist" class="info" sec:authorize="isAuthenticated()">
 			<div class="fixed-btn fixed-btn--left">
-				<label onclick="mobileUploadList()" class="fixed-btn__gallery">갤러리</label>
+				<a href="/record/gallery">
+					<label class="fixed-btn__gallery">갤러리</label>
+				</a>
 			</div>
 			<div class="fixed-btn">
-				<label onclick="cameraClick()" class="fixed-btn__camera">카메라
+
 					<form id="fileupload" enctype="multipart/form-data">
-						<input type="file" id="camera" name="camera" capture="camera" accept="image/*"/>
+
+						<div class="l-popup" id="pop__list" style="z-index: 1">
+							<div class="l-popup__container" style="top: 40%">
+								<div class="l-popup__head">
+									<h3 class="l-popup__heading">해당사진의 설명</h3>
+								</div>
+								<div class="l-popup__content">
+									<div id="stateLoading" class="c-loader" style="display:none">
+										<div class="c-loader__active c-loader__active--ring">
+										</div>
+									</div>
+
+									<div class="l-popup__section">input" type="t
+										<input style="width: 80%;" class="c-text__ext" id="comment" name="comment" />
+										<input style="position: absolute; right: 20px; top: 80px;" type="button" readonly="readonly" value="확인" class="c-button c-button--point" id="commentBtn" />
+									</div>
+								</div>
+								<a href="#" id="l-popup__close" class="l-popup__close">팝업닫기</a>
+							</div>
+						</div>
+
+						<label onclick="cameraClick()" class="fixed-btn__camera">카메라
+							<input type="file" id="camera" name="camera" capture="camera" accept="image/*"/>
+						</label>
+
 					</form>
-				</label>
 			</div>
 		</div>
 

@@ -21,11 +21,21 @@ import java.time.format.DateTimeFormatter;
 public class MobileUploadFileDto {
     private Long id;
     private String afmSaveFilename;
+    private String afmSaveFileThumname;
     private String afmComment;
     private LocalDateTime insertDateTime;
+    private LocalDateTime insertDate;
 
     public String getInsertDateTime() {
         return insertDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH시 mm분"));
+    }
+
+    public String getAfmSaveFileThumname() {
+        return afmSaveFileThumname.substring(0,11)+"s_"+afmSaveFileThumname.substring(11);
+    }
+
+    public String getInsertDate() {
+        return insertDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     public String getAfmComment() {

@@ -2,7 +2,6 @@ package kr.co.broadwave.desk.record.file;
 
 import kr.co.broadwave.desk.common.UploadFileUtils;
 import kr.co.broadwave.desk.record.Record;
-import kr.co.broadwave.desk.record.RecordRepository;
 import kr.co.broadwave.desk.record.file.mobilefile.MobileUploadFile;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -19,7 +18,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Minkyu
@@ -31,14 +31,12 @@ import java.util.*;
 public class RecordImageService {
     private static final Logger logger = LoggerFactory.getLogger(RecordImageService.class);
     private final Path rootLocation;
-    private final RecordRepository recordRepository;
     private final RecordUploadFileRepository recordUploadFileRepository;
     private final RecordImageRepositoryCustom recordImageRepositoryCustom;
 
     @Autowired
-    public RecordImageService(String uploadPath, RecordRepository recordRepository, RecordUploadFileRepository recordUploadFileRepository,
+    public RecordImageService(String uploadPath, RecordUploadFileRepository recordUploadFileRepository,
                               RecordImageRepositoryCustom recordImageRepositoryCustom) {
-        this.recordRepository = recordRepository;
         this.recordUploadFileRepository = recordUploadFileRepository;
         this.recordImageRepositoryCustom = recordImageRepositoryCustom;
         logger.info("PATH :: " + uploadPath);

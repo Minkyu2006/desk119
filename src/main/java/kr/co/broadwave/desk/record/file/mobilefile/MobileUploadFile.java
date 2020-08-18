@@ -38,6 +38,8 @@ public class MobileUploadFile {
     private String afmSaveFilename;
     @Column(name="af_m_file_path")
     private String afmFilePath;
+    @Column(name="af_m_file_thum_path")
+    private String afmFileThumPath;
     @Column(name="af_m_content_type")
     private String afmContentType;
     @Column(name="af_m_size")

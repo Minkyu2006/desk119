@@ -1,5 +1,9 @@
 package kr.co.broadwave.desk.common;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifIFD0Directory;
+import lombok.extern.slf4j.Slf4j;
 import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,8 +11,8 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -21,6 +25,7 @@ import java.util.UUID;
  * Remark :  파일 업로드 유틸
  * https://github.com/woobong/spring-boot-jpa-summernote-image-upload-example 소스 참고함
  */
+@Slf4j
 public class UploadFileUtils {
     private static final Logger logger = LoggerFactory.getLogger(UploadFileUtils.class);
 
@@ -59,7 +64,7 @@ public class UploadFileUtils {
     }
 
     // 모바일파일저장(썸네일파일추가)
-    public static String s_fileSave(String uploadPath, MultipartFile file) throws IllegalStateException, IOException {
+    public static String s_fileSave(String uploadPath, MultipartFile file) throws Exception {
 
         File uploadPathDir = new File(uploadPath);
 
@@ -74,26 +79,14 @@ public class UploadFileUtils {
         String originalfileName = file.getOriginalFilename();
         String fileExtension = getExtension(originalfileName);
 
-
-
         String saveFileName = genId + "." + fileExtension;
-//        String saveFileName2 = "s_" + genId + "." + fileExtension;
 
         String savePath = calcPath(uploadPath);
 
-//        // 썸네일 파일 버퍼 생성
-//        BufferedImage originFileBuffer = ImageIO.read((File) file) ;
-//        BufferedImage thumbFileBuffer = new BufferedImage(100, 100, BufferedImage.TYPE_3BYTE_BGR);
-//        Graphics2D graphic = thumbFileBuffer.createGraphics();
-//        graphic.drawImage(originFileBuffer, 0, 0, 100, 100, null);
-//        File thumbFile =  new File(uploadPath + savePath, saveFileName2);
-//        ImageIO.write(thumbFileBuffer,fileExtension,uploadPathDir);
-
         File target = new File(uploadPath + savePath, saveFileName);
-//        File target2 = new File(uploadPath + savePath, saveFileName2);
-
         FileCopyUtils.copy(file.getBytes(), target);
-//        FileCopyUtils.copy(file.getBytes(), target2);
+
+        makeThumbnail(uploadPath, savePath, saveFileName);
 
         return makeFilePath(uploadPath, savePath, saveFileName);
     }
@@ -153,13 +146,50 @@ public class UploadFileUtils {
 
     private static String makeThumbnail(String uploadPath, String path, String fileName) throws Exception {
 
-        BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName));
+//        BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName));
+        File imageFile = new File(uploadPath+'/'+path+'/'+fileName);
+        int orientation = 1;
+        Metadata metadata; // 이미지 메타 데이터 객체
+        ExifIFD0Directory directory; // 이미지의 Exif 데이터를 읽기 위한 객체
 
-        BufferedImage destImg = Scalr.resize(sourceImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, 100);
+        // 사진 회전현상 방지
+        try {
+            metadata = ImageMetadataReader.readMetadata(imageFile);
+            directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+            if(directory != null){
+                orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
+            }
+
+        }catch (Exception e) {
+            orientation=1;
+        }
+//        log.info("orientation : "+orientation);
+        // 회전 시킨다.
+//        sourceImg = Scalr.rotate(sourceImg, Scalr.Rotation.CW_90, (BufferedImageOp) null);
+        BufferedImage srcImg = ImageIO.read(imageFile);
+        switch (orientation) {
+            case 6:
+                srcImg = Scalr.rotate(srcImg, Scalr.Rotation.CW_90, (BufferedImageOp) null);
+                break;
+            case 1:
+                break;
+            case 3:
+                srcImg = Scalr.rotate(srcImg, Scalr.Rotation.CW_180, (BufferedImageOp) null);
+                break;
+            case 8:
+                srcImg = Scalr.rotate(srcImg, Scalr.Rotation.CW_270, (BufferedImageOp) null);
+                break;
+            default:
+                orientation=1;
+                break;
+        }
+//        BufferedImage destImg = Scalr.resize(srcImg, maxWidth, maxHeight);
+        BufferedImage destImg = Scalr.resize(srcImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, 100);
 
         String thumbnailName = uploadPath + path + File.separator + "s_" + fileName;
 
         File newFile = new File(thumbnailName);
+
         String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);
 
         ImageIO.write(destImg, formatName.toUpperCase(), newFile);

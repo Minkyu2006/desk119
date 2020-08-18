@@ -4,8 +4,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.broadwave.desk.accounts.Account;
-import kr.co.broadwave.desk.record.QRecord;
-import kr.co.broadwave.desk.record.RecrodListDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -37,9 +35,12 @@ public class MobileUploadFileRepositoryCustomImpl extends QuerydslRepositorySupp
         return queryFactory.select(Projections.constructor(MobileUploadFileDto.class,
                 mobileUploadFile.id,
                 mobileUploadFile.afmSaveFilename,
+                mobileUploadFile.afmSaveFilename,
                 mobileUploadFile.afmComment,
+                mobileUploadFile.insertDateTime,
                 mobileUploadFile.insertDateTime))
                 .from(mobileUploadFile)
+                .orderBy(mobileUploadFile.id.desc())
                 .where(mobileUploadFile.account.eq(account))
                 .fetch();
     }
@@ -53,7 +54,9 @@ public class MobileUploadFileRepositoryCustomImpl extends QuerydslRepositorySupp
                 .select(Projections.constructor(MobileUploadFileDto.class,
                         mobileUploadFile.id,
                         mobileUploadFile.afmSaveFilename,
+                        mobileUploadFile.afmSaveFilename,
                         mobileUploadFile.afmComment,
+                        mobileUploadFile.insertDateTime,
                         mobileUploadFile.insertDateTime
                 ));
 

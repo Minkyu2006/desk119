@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="layout/default">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+
+</th:block>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+	<script>
+		$(function() {
+			mobileFileList();
+		});
+
+		function mobileFileList() {
+
+			var $photoList = $('#photoList');
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function (e, xhr) {xhr.setRequestHeader(header, token);});
+
+			$.ajax({
+				url:'/api/mobile/uploadList',
+				type: 'post',
+				cache:false,
+				error:function(request){
+					ajaxErrorMsg(request);
+				},
+				success: function(res){
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+
+					var html = '';
+					var mobileUploadFileDtoList = res.data.mobileUploadFileDtoList;
+					var insertDateList = res.data.insertDate;
+
+					for(i=0; i<insertDateList.length; i++) {
+						html += '<h4 class="gallery__date">' + insertDateList[i] + '</h4>'
+						html += '<ul class="gallery__grid">'
+						for (j = 0; j < mobileUploadFileDtoList.length; j++) {
+							if (insertDateList[i] === mobileUploadFileDtoList[j]["insertDate"]) {
+								html += '<li>'
+								html += '<a href="/uploadfiles/recordimages/'+mobileUploadFileDtoList[j]["afmSaveFilename"]+'" class="gallery__img">'
+								html += '<img src="/uploadfiles/recordimages/'+mobileUploadFileDtoList[j]["afmSaveFileThumname"]+'" alt="" class="gallery__thumbnail" />'
+								html += '</a>'
+								html += '</li>'
+							}
+						}
+						html += '</ul>'
+						// console.log("mobileUploadFileDtoList : "+mobileUploadFileDtoList[i]["id"]);
+						// console.log("mobileUploadFileDtoList : "+mobileUploadFileDtoList[i]["insertDate"]);
+					}
+					$photoList.html(html);
+				}
+			});
+		}
+
+	</script>
+
+</th:block>
+
+<div layout:fragment="content" class="content">
+	<div id="photoList" class="gallery">
+	</div>
+</div>
+</html>

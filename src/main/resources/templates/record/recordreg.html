@@ -59,8 +59,6 @@
 				e.preventDefault();
 			});
 
-
-
 			// 파일 항목 추가
 			$('.c-file__control.add').on('click', function(e) {
 				var last = $(this).parents('.c-file-list').children('li').last();
@@ -850,7 +848,7 @@
 					var html = '';
 					$.each(res.data.datalist, function(key, value){
 						html += '<tr >';
-						html += '<td><img style="width: 100px;height: 100px" src="/uploadfiles/recordimages/'+value.afmSaveFilename+'" /></td>';
+						html += '<td><img style="width: 100px;height: 100px" src="/uploadfiles/recordimages/'+value.afmSaveFileThumname+'" /></td>';
 						html += '<td >'+ value.insertDateTime +'</td>';
 						html += '<td >'+ nvl(value.afmComment,"설 명 없 음") +'</td>';
 						html += '<td ><button class="c-button c-button--point" onclick="mobileFileCho(\''+value.id + '\',\'' + num + '\')">선택</button></td>';
@@ -898,7 +896,7 @@
 				return false;
 			}
 		}
-		//포바일파일삭제 실행
+		//모바일파일삭제 실행
 		function mobileDel(id) {
 
 			var params = {

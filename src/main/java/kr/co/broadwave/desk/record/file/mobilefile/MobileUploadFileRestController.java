@@ -19,14 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 
 /**
@@ -50,8 +43,9 @@ public class MobileUploadFileRestController {
 
     // 사진찍은 파일 업로드
     @PostMapping("upload")
-    public ResponseEntity<Map<String,Object>> upload(MultipartHttpServletRequest multi,
-                                                         HttpServletRequest request) throws Exception {
+    public ResponseEntity<Map<String,Object>> upload(@RequestParam(value="comment", defaultValue="") String comment,
+                                                     MultipartHttpServletRequest multi,
+                                                     HttpServletRequest request) throws Exception {
 
         AjaxResponse res = new AjaxResponse();
 
@@ -73,7 +67,7 @@ public class MobileUploadFileRestController {
             assert mFile != null;
 
             if (!mFile.isEmpty()) {
-                mobileImageService.mobileUploadFile(mFile,optionalAccount.get());
+                mobileImageService.mobileUploadFile(mFile,optionalAccount.get(),comment);
             }
         }
 
@@ -88,11 +82,20 @@ public class MobileUploadFileRestController {
 
         String currentuserid = CommonUtils.getCurrentuser(request);
         Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
+        List<String> insertDate = new ArrayList<>();
 
         if(optionalAccount.isPresent()) {
             List<MobileUploadFileDto> mobileUploadFileDtoList = mobileImageService.findByMobileUploadFileList(optionalAccount.get());
 //            log.info("mobileUploadFileDtoList : "+mobileUploadFileDtoList);
+            for (int i = 0; i < mobileUploadFileDtoList.size(); i++) {
+                if (!insertDate.contains(mobileUploadFileDtoList.get(i).getInsertDate())) {
+                    insertDate.add(mobileUploadFileDtoList.get(i).getInsertDate());
+                }
+            }
+//            log.info("insertDate : "+insertDate);
+
             data.put("mobileUploadFileDtoList",mobileUploadFileDtoList);
+            data.put("insertDate",insertDate);
         }
         res.addResponse("data",data);
         return ResponseEntity.ok(res.success());
@@ -154,8 +157,13 @@ public class MobileUploadFileRestController {
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E003.getCode(), ResponseErrorCode.E003.getDesc()));
         }
         String filePath = optional.get().getAfmFilePath();
+        String fileThmPath = optional.get().getAfmFileThumPath();
+        //기존파일삭제
         File file = new File(filePath);
+        //썸네일파일삭제
+        File file2 = new File(fileThmPath);
         file.delete();
+        file2.delete();
         mobileImageService.delete(optional.get());
 
         return ResponseEntity.ok(res.success());
