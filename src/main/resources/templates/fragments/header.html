@@ -52,10 +52,13 @@
 						<li><a href="#" onclick="mobileAlert(5);" class="nav__link">마스터코드등록</a></li>
 					</ul>
 				</li>
-			<li class="nav__item" sec:authorize = "hasRole('ROLE_USER')"><a href="javascript:void(0);" onclick="mobileCheckIndex();" class="nav__link">출동일지작성</a></li>
+
+				<li class="nav__item" sec:authorize = "hasRole('ROLE_USER')"><a href="javascript:void(0);" onclick="mobileCheckIndex();" class="nav__link">출동일지작성</a></li>
 				<li class="nav__item" sec:authorize = "hasRole('ROLE_USER')"><a href="/notice/noticelist" class="nav__link">공지사항조회</a></li>
 				<li class="nav__item" sec:authorize = "hasRole('ROLE_USER')"><a href="/record/list" class="nav__link">출동일지조회</a></li>
-<!--				<li class="nav__item"><a href="/statistics/statisticsview" class="nav__link">통계조회</a></li>-->
+
+				<li style="cursor: pointer" class="nav__item" onclick="mobileAlert(7);"><a class="nav__link">갤러리조회</a></li>
+
 			</ul>
 		</nav>
 
@@ -82,7 +85,107 @@
 			</ul>
 		</div>
 	</div>
+
+	<div class="l-popup" id="gallery__list" style="z-index: 1">
+		<div class="l-popup__container">
+			<div class="l-popup__head">
+				<h3 class="l-popup__heading">갤러리조회</h3>
+			</div>
+			<div class="l-popup__content">
+				<div class="l-popup__section">
+					<table class="c-table c-table--non-border">
+						<colgroup>
+							<col style="width: 110px;">
+							<col>
+							<col style="width: 110px;">
+							<col>
+							<col sec:authorize = "hasRole('ROLE_ADMIN')"style="width: 110px;">
+							<col sec:authorize = "hasRole('ROLE_ADMIN')">
+							<col style="width: 60px;">
+						</colgroup>
+						<tbody>
+						<tr>
+							<th>From. 촬영날짜</th>
+							<td>
+								<div class="c-date">
+									<div class="c-date__input-box">
+										<input type="text" class="c-date__result" id="pop_from" readonly />
+										<button type="button" class="c-date__button">
+											<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
+										</button>
+									</div>
+									<div class="c-date__calendar"></div>
+								</div>
+							</td>
+							<th>To. 촬영날짜</th>
+							<td>
+								<div class="c-date">
+									<div class="c-date__input-box">
+										<input type="text" class="c-date__result" id="pop_to" readonly />
+										<button type="button" class="c-date__button">
+											<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
+										</button>
+									</div>
+									<div class="c-date__calendar"></div>
+								</div>
+							</td>
+							<th sec:authorize = "hasRole('ROLE_ADMIN')">촬영자</th>
+							<td sec:authorize = "hasRole('ROLE_ADMIN')">
+								<div class="c-text">
+									<input type="text" class="c-text__input" id="s_username">
+								</div>
+							</td>
+							<td>
+								<button onclick="popupFileList(1)" class="c-button c-button--point">조회</button>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="l-popup__section">
+					<table class="c-table">
+						<colgroup>
+							<col style="width: 120px;">
+							<col style="width: 100px;">
+							<col style="width: 160px;">
+							<col>
+							<col style="width: 100px;">
+							<col style="width: 100px;">
+						</colgroup>
+						<thead>
+						<tr>
+							<th>이미지</th>
+							<th>촬영자</th>
+							<th>촬영날짜</th>
+							<th>설명</th>
+							<th></th>
+							<th></th>
+						</tr>
+						</thead>
+						<tbody id="fileList">
+						</tbody>
+					</table>
+
+					<div class="c-pager">
+						<div class="c-paging" id="paging">
+							<!-- 페이징 처리되는곳   -->
+						</div>
+						<div class="c-paging__total">
+							<div class="c-paging__total-group">
+								Total
+							</div>
+							<div class="c-paging__total-group" id="totalCnt">0</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<a href="#" onclick="galleryClose()" class="l-popup__close">팝업닫기</a>
+		</div>
+	</div>
+
 	<div id='alertpop'>
 	</div>
+
 </header>
 </html>

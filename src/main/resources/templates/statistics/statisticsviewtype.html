@@ -30,7 +30,41 @@
 	<script src="/assets/js/alert/min_alert.js"></script>
 	<script src="/assets/js/statisticsGraph2.js"></script>
 </head>
+<style>
+	div#twopage {
+		page-break-before: always;
+	}
+	/*div#threepage {*/
+	/*	page-break-before: always;*/
+	/*}*/
+	@media print {
+		#pie_chart1,#locationPage {
+			display:flex;
+			justify-content:center;
+			align-items:center;
 
+			margin: 0;
+			border: initial;
+			border-radius: initial;
+			width: initial;
+			min-height: initial;
+			box-shadow: initial;
+			background: initial;
+			page-break-after: always;
+		}
+		@page {
+			size: A4;
+			margin: 10mm 15mm 10mm 15mm;
+		}
+		body,  div {
+			position: relative;
+		}
+		body {
+			background-repeat: no-repeat;
+			background-position:left top;
+		}
+	}
+</style>
 <script>
 	$(function() {
 		var $typeName = $("#typeName").val();
@@ -55,13 +89,14 @@
 	<br/>
 	<section class="section">
 		<div class="stat">
-			<div class="stat__dual">
+			<div id="onepage" class="stat__dual">
 				<div class="stat__dual-item">
 					<h3 id="gra1" class="stat__title"></h3>
 					<div class="stat__circle" id="pie_chart1"></div>
 				</div>
 				<div class="stat__dual-item">
 					<h3 id="gra2" class="stat__title"></h3>
+					<div id="locationPage">
 					<div class="stat__map-area">
 						<div class="stat__map-tab">
 							<ul>
@@ -222,29 +257,33 @@
 						</table>
 					</div>
 				</div>
+				</div>
 			</div>
-			<div class="stat__item">
-				<h3 id="gra3" class="stat__title"></h3>
-				<div class="stat__chart" id="bar_chart1"></div>
-			</div>
-			<div class="stat__item">
-				<h3 id="gra4" class="stat__title"></h3>
-				<div class="stat__chart" id="bar_chart2"></div>
-			</div>
-			<div class="stat__item">
-				<h3 id="gra5" class="stat__title"></h3>
-				<div class="stat__chart" id="bar_team"></div>
-			</div>
-			<div class="stat__item">
-				<h3 id="gra6" class="stat__title"></h3>
-				<div class="stat__chart" id="bar_chart3"></div>
+			<div id="twopage">
+				<br style='height:0; line-height:0'>
+				<div class="stat__item">
+					<h3 id="gra3" class="stat__title"></h3>
+					<div class="stat__chart" id="bar_chart1"></div>
+				</div>
+				<div class="stat__item">
+					<h3 id="gra4" class="stat__title"></h3>
+					<div class="stat__chart" id="bar_chart2"></div>
+				</div>
+				<div class="stat__item">
+					<h3 id="gra5" class="stat__title"></h3>
+					<div class="stat__chart" id="bar_team"></div>
+				</div>
+				<div class="stat__item">
+					<h3 id="gra6" class="stat__title"></h3>
+					<div class="stat__chart" id="bar_chart3"></div>
+				</div>
 			</div>
 		</div>
 		<br/>
-		<div class="stat__item">
+		<div id="threepage" class="stat__item">
 			<article class="article">
 				<h3 id="statish3" class="stat__title"></h3>
-				<table class="c-retable" id ="schList">
+				<table class="c-retable" id ="statisList">
 
 				</table>
 
@@ -261,6 +300,7 @@
 				</div>
 			</article>
 		</div>
+		<a href="#" id="print" class="print__btn print--none" title="인쇄">인쇄</a>
 	</section>
 	<br/>
 	<br/>

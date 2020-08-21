@@ -27,7 +27,7 @@ public class AccountLineUpDto {
         if(collapseType.getCode().equals("CS07")){
             return "해당없음";
         }else{
-            return collapseType.getDesc();
+            return collapseType.getCode();
         }
     }
 
@@ -40,7 +40,7 @@ public class AccountLineUpDto {
     }
 
     public String getDisasterType() {
-        return disasterType.getDesc();
+        return disasterType.getCode();
     }
 
     public String getPositionname() {

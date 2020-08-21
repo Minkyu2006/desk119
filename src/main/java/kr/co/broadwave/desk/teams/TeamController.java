@@ -35,9 +35,7 @@ public class TeamController {
     @RequestMapping(value="/teamlist.xls" , params = {"teamcode", "teamname"})
     public String getExcelByExt(Model model, HttpServletRequest request,
                                 @RequestParam(value = "teamcode") String teamcode,
-                                @RequestParam(value = "teamname") String teamname
-
-    ) {
+                                @RequestParam(value = "teamname") String teamname) {
 
         //엑셀헤더
         List<String> header = Arrays.asList("부서코드", "팀명", "비고");

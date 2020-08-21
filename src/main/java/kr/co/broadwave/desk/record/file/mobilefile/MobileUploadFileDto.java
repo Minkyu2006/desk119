@@ -20,11 +20,16 @@ import java.time.format.DateTimeFormatter;
 @Setter
 public class MobileUploadFileDto {
     private Long id;
+    private String accountName;
     private String afmSaveFilename;
     private String afmSaveFileThumname;
     private String afmComment;
     private LocalDateTime insertDateTime;
     private LocalDateTime insertDate;
+
+    public String getAccountName() {
+        return accountName;
+    }
 
     public String getInsertDateTime() {
         return insertDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH시 mm분"));

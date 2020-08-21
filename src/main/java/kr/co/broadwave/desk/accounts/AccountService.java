@@ -1,6 +1,8 @@
 package kr.co.broadwave.desk.accounts;
 
 import kr.co.broadwave.desk.bscodes.ApprovalType;
+import kr.co.broadwave.desk.bscodes.CollapseType;
+import kr.co.broadwave.desk.bscodes.DisasterType;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,4 +146,13 @@ public class AccountService implements UserDetailsService {
     public List<AccountLineUpDto> findByLineUpList() {
         return accountRepositoryCustom.findByLineUpList();
     }
+
+    public List<AccountLineDto> findByLineDisList(DisasterType disasterType) {
+        return accountRepositoryCustom.findByLineDisList(disasterType);
+    }
+
+    public List<AccountLineDto> findByLineDisCollList(DisasterType disasterType, CollapseType collapseType) {
+        return accountRepositoryCustom.findByLineDisCollList(disasterType,collapseType);
+    }
+
 }

@@ -3,9 +3,7 @@ package kr.co.broadwave.desk.accounts;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kr.co.broadwave.desk.bscodes.ApprovalType;
-import kr.co.broadwave.desk.bscodes.CollapseType;
-import kr.co.broadwave.desk.bscodes.DisasterType;
+import kr.co.broadwave.desk.bscodes.*;
 import kr.co.broadwave.desk.mastercode.QMasterCode;
 import kr.co.broadwave.desk.teams.QTeam;
 import org.springframework.data.domain.Page;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -153,8 +152,53 @@ public class AccountRepositoryCustomImpl extends QuerydslRepositorySupport imple
                 .from(qAccount)
                 .innerJoin(qAccount.team,qTeam)
                 .innerJoin(qAccount.position,qMasterCode)
+                .where(qAccount.insert_id.eq("signUp"))
+                .where(qAccount.approvalType.eq(ApprovalType.AT02))
+                .fetch();
+    }
+
+    @Override
+    public List<AccountLineDto> findByLineDisList(DisasterType disasterType) {
+
+        JPAQueryFactory queryFactory = new JPAQueryFactory(this.getEntityManager());
+
+        QAccount qAccount  = QAccount.account;
+        QTeam qTeam = QTeam.team;
+        QMasterCode qMasterCode = QMasterCode.masterCode;
+
+        return queryFactory.select(Projections.constructor(AccountLineDto.class,
+                qTeam.teamname,
+                qMasterCode.name,
+                qAccount.username))
+                .from(qAccount)
+                .innerJoin(qAccount.team,qTeam)
+                .innerJoin(qAccount.position,qMasterCode)
                 .where(qAccount.userid.notEqualsIgnoreCase("admin"))
                 .where(qAccount.approvalType.eq(ApprovalType.AT02))
+                .where(qAccount.disasterType.eq(disasterType))
+                .fetch();
+    }
+
+    @Override
+    public List<AccountLineDto> findByLineDisCollList(DisasterType disasterType, CollapseType collapseType) {
+
+        JPAQueryFactory queryFactory = new JPAQueryFactory(this.getEntityManager());
+
+        QAccount qAccount  = QAccount.account;
+        QTeam qTeam = QTeam.team;
+        QMasterCode qMasterCode = QMasterCode.masterCode;
+
+        return queryFactory.select(Projections.constructor(AccountLineDto.class,
+                qTeam.teamname,
+                qMasterCode.name,
+                qAccount.username))
+                .from(qAccount)
+                .innerJoin(qAccount.team,qTeam)
+                .innerJoin(qAccount.position,qMasterCode)
+                .where(qAccount.userid.notEqualsIgnoreCase("admin"))
+                .where(qAccount.approvalType.eq(ApprovalType.AT02))
+                .where(qAccount.disasterType.eq(disasterType))
+                .where(qAccount.collapseType.eq(collapseType))
                 .fetch();
     }
 

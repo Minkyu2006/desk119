@@ -17,7 +17,7 @@
 		$(document).ready(function() {
 
 			// console.log("window.location.href : "+window.location.href);
-			if(window.location.href==="https://kict119.broadwave.co.kr/"){
+			if(window.location.href==="http://192.168.0.136:8080/" || window.location.href==="https://kict119.broadwave.co.kr/"){
 				if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
 					// console.log("mobile")
 					$("#cameralist").css('display', 'block');
@@ -148,9 +148,9 @@
 
 		// 모바일사진을 촬영후, 업로드하는 함수
 		function fileupload2(){
-			if(window.location.href==="http://192.168.0.136:8080/" || window.location.href==="https://kict119.broadwave.co.kr/") {
+			var $camera = $("#camera");
+			if(window.location.href==="http://192.168.0.145:8080/" || window.location.href==="https://kict119.broadwave.co.kr/") {
 				// if(window.location.href==="https://kict119.broadwave.co.kr/") {
-				var $camera = $("#camera");
 
 				toastr.options = {
 					"positionClass": "toast-top-center",
@@ -196,6 +196,12 @@
 					toastr.error('인터넷 연결을 확인해주세요.','데이터를 받아오지 못했습니다.');
 					$camera.val('');
 				}
+			}else{
+				$("#stateLoading").css('display','none');
+				$('#comment').val('');
+				$('#pop__list').removeClass('open');
+				toastr.error('경로가 맞지 않습니다.','고객센터로 연락바랍니다.');
+				$camera.val('');
 			}
 		}
 

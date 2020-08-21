@@ -1,7 +1,11 @@
 package kr.co.broadwave.desk.record.file.mobilefile;
 
 import kr.co.broadwave.desk.accounts.Account;
+import kr.co.broadwave.desk.bscodes.CodeType;
 import kr.co.broadwave.desk.common.UploadFileUtils;
+import kr.co.broadwave.desk.mail.MailService;
+import kr.co.broadwave.desk.mastercode.MasterCodeDto;
+import kr.co.broadwave.desk.mastercode.MasterCodeService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +22,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,11 +39,18 @@ public class MobileImageService {
     private final Path rootLocation;
     private final MobileUploadFileRepository mobileUploadFileRepository;
     private final  MobileUploadFileRepositoryCustom mobileUploadFileRepositoryCustom;
+    private final MailService mailService;
+    private final MasterCodeService masterCodeService;
+
     @Autowired
     public MobileImageService(String uploadPath,MobileUploadFileRepository mobileUploadFileRepository,
-                              MobileUploadFileRepositoryCustom mobileUploadFileRepositoryCustom) {
+                              MobileUploadFileRepositoryCustom mobileUploadFileRepositoryCustom,
+                              MailService mailService,
+                              MasterCodeService masterCodeService) {
         this.mobileUploadFileRepository = mobileUploadFileRepository;
         this.mobileUploadFileRepositoryCustom = mobileUploadFileRepositoryCustom;
+        this.mailService = mailService;
+        this.masterCodeService = masterCodeService;
         logger.info("PATH :: " + uploadPath);
         this.rootLocation = Paths.get(uploadPath + "recordimages");
     }
@@ -85,11 +98,30 @@ public class MobileImageService {
             saveFile.setAfmSize(resource.contentLength());
             saveFile.setInsertDateTime(LocalDateTime.now());
             if(comment.equals("")){
-                saveFile.setAfmComment("설명없음");
+                comment = "설명없음";
+                saveFile.setAfmComment(comment);
             }else{
                 saveFile.setAfmComment(comment);
             }
             saveFile = mobileUploadFileRepository.save(saveFile);
+
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            List<MasterCodeDto> mailListLRaws = masterCodeService.findCodeList(CodeType.C0004);
+            List<String> maillists = new ArrayList<>();
+
+            for (MasterCodeDto masterCodeDto : mailListLRaws) {
+                maillists.add(masterCodeDto.getName());
+            }
+
+            if(maillists.size() != 0) {
+                mailService.mailsend(maillists,
+                        "현장사진이 등록되었습니다.",
+                        "작성자 : " + account.getUsername() + "\r\n\n",
+                        "사진설명 : "+ comment  + "\r\n\n",
+                        " 작성날짜 : " + LocalDateTime.now().format(dateTimeFormatter) + "", "" + "\r\n\n",
+                        "해당사진 보기 : https://kict119.broadwave.co.kr/uploadfiles/recordimages/"+saveFileName);
+            }
+
             return saveFile;
         } catch (IOException e) {
             throw new Exception("Failed to store file " + file.getOriginalFilename(), e);
@@ -101,8 +133,8 @@ public class MobileImageService {
     }
 
 
-    public Page<MobileUploadFileDto> findByMobileUploadFilePage(Account account, LocalDateTime s_from, LocalDateTime s_to, Pageable pageable) {
-        return mobileUploadFileRepositoryCustom.findByMobileUploadFilePage(account,s_from,s_to,pageable);
+    public Page<MobileUploadFileDto> findByMobileUploadFilePage(Account account, LocalDateTime s_from, LocalDateTime s_to,String s_username, Pageable pageable) {
+        return mobileUploadFileRepositoryCustom.findByMobileUploadFilePage(account,s_from,s_to,s_username,pageable);
     }
 
     public Optional<MobileUploadFile> findById(Long mobileid) {

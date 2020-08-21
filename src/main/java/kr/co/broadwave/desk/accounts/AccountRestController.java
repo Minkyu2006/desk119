@@ -530,22 +530,12 @@ public class AccountRestController {
     public ResponseEntity<Map<String,Object>> lineUpSet(){
 
         List<AccountLineUpDto> accountlineUpDtoList = accountService.findByLineUpList();
-        log.info("accountlineUpDtoList : "+accountlineUpDtoList);
+//        log.info("accountlineUpDtoList : "+accountlineUpDtoList);
 
         int listSize = accountlineUpDtoList.size();
 
-//        for(int i=0; i<listSize; i++) {
-//            log.info("username : " + accountlineUpDtoList.get(i).getUsername());
-//            log.info("getDisasterType : " + accountlineUpDtoList.get(i).getDisasterType());
-//            log.info("getCollapseType : " + accountlineUpDtoList.get(i).getCollapseType());
-//            log.info("getTeamname : " + accountlineUpDtoList.get(i).getTeamname());
-//            log.info("getPositionname : " + accountlineUpDtoList.get(i).getPositionname());
-//            System.out.println();
-//        }
-
         List<String> disaterTypeList = new ArrayList<>();
         List<String> collapseTypeList = new ArrayList<>();
-        List<Map<String,String>> disaterCollList = new ArrayList<>();
 
         List<String> teamTypeList = new ArrayList<>();
         List<String> positionnameList = new ArrayList<>();
@@ -554,43 +544,19 @@ public class AccountRestController {
         List<String> chairpersonList = new ArrayList<>();
         List<String> stewardList = new ArrayList<>();
 
-        Map<String,String> team;
-        Map<Map<String,String>,String> team2;
-        List<Map<Map<String,String>,String>> team3 = new ArrayList<>();
-
         for(int i=0; i<listSize; i++){
-            if(accountlineUpDtoList.get(i).getDisasterType().equals("간사")) {
+            if(accountlineUpDtoList.get(i).getDisasterType().equals("DS09")) {
                 stewardList.add(accountlineUpDtoList.get(i).getPositionname()+" "+accountlineUpDtoList.get(i).getUsername());
-            }else if(accountlineUpDtoList.get(i).getDisasterType().equals("위원장")){
+            }else if(accountlineUpDtoList.get(i).getDisasterType().equals("DS08")){
                 chairpersonList.add(accountlineUpDtoList.get(i).getPositionname()+" "+accountlineUpDtoList.get(i).getUsername());
             }else{
                 disaterTypeList.add(accountlineUpDtoList.get(i).getDisasterType());
                 collapseTypeList.add(accountlineUpDtoList.get(i).getCollapseType());
-
-                positionnameList.add(accountlineUpDtoList.get(i).getPositionname());
-                usernameList.add(accountlineUpDtoList.get(i).getUsername());
-
-                team = new HashMap<>();
-                team2 = new HashMap<>();
-                team.put(accountlineUpDtoList.get(i).getDisasterType(),accountlineUpDtoList.get(i).getCollapseType());
-                disaterCollList.add(team);
-                team2.put(team,accountlineUpDtoList.get(i).getTeamname());
-                team3.add(team2);
-
-                teamTypeList.add(accountlineUpDtoList.get(i).getTeamname());
             }
         }
-        log.info("chairpersonList : "+chairpersonList);
-        log.info("stewardList : "+stewardList);
-
-//        log.info("disaterTypeList : "+disaterTypeList);
-//        log.info("collapseTypeList : "+collapseTypeList);
-//        log.info("teamTypeList : "+teamTypeList);
-//        log.info("disaterMapTypeList : "+disaterMapTypeList);
 
         Map<String, Integer> disaterMap = new LinkedHashMap<>();
         Map<String, Integer> collapseMap = new LinkedHashMap<>();
-        Map<Map<Map<String,String>,String>, Integer> teamMap = new LinkedHashMap<>();
 
         disaterTypeList.forEach(e -> {
             Integer count = disaterMap.get(e);
@@ -602,30 +568,83 @@ public class AccountRestController {
                 collapseMap.put(e, count == null ? 1 : count + 1);
             }
         });
-        team3.forEach(e -> {
-            Integer count = teamMap.get(e);
-            teamMap.put(e, count == null ? 1 : count + 1);
-        });
 
-        log.info("disaterMap : "+disaterMap);
-        log.info("collapseMap : "+collapseMap);
+        List<Integer> disaterValue = new ArrayList<>();
+        List<String> collapseKey = new ArrayList<>();
+        List<Integer> collapseValue = new ArrayList<>();
 
-        log.info("positionnameList : "+positionnameList);
-        log.info("usernameList : "+usernameList);
+        boolean key;
+        if(disaterTypeList.contains("DS01")){
+            key=true;
+        }else{
+            key=false;
+        }
 
-        log.info("teamTypeList : "+teamTypeList);
-        log.info("teamMap : "+teamMap);
+        if(key){
+            for (String collapseType : collapseMap.keySet()){
+                collapseKey.add(collapseType);
+                collapseValue.add(collapseMap.get(collapseType));
+            }
+        }
+
+        List<String> htmlDisaterKey = new ArrayList<>();
+        List<String> htmlCollapseKey = new ArrayList<>();
+
+        int i=0;
+        for (String disasterType : disaterMap.keySet()){
+
+            htmlDisaterKey.add(DisasterType.valueOf(disasterType).getDesc());
+            disaterValue.add(disaterMap.get(disasterType));
+
+            List<AccountLineDto> accountLineDto;
+            if(disasterType.equals("DS01")){
+                for(String collapseType : collapseMap.keySet()) {
+                    htmlCollapseKey.add(CollapseType.valueOf(collapseType).getDesc());
+                    accountLineDto = accountService.findByLineDisCollList(DisasterType.valueOf(disasterType), CollapseType.valueOf(collapseType));
+
+                    for (AccountLineDto lineDto : accountLineDto) {
+                        teamTypeList.add(lineDto.getTeamname());
+                        positionnameList.add(lineDto.getPositionname());
+                        usernameList.add(lineDto.getUsername());
+                    }
+                }
+            }else{
+                accountLineDto = accountService.findByLineDisList(DisasterType.valueOf(disasterType));
+
+                for (AccountLineDto lineDto : accountLineDto) {
+                    teamTypeList.add(lineDto.getTeamname());
+                    positionnameList.add(lineDto.getPositionname());
+                    usernameList.add(lineDto.getUsername());
+                }
+            }
+        }
+
+//        log.info("위원장 : "+chairpersonList);
+//        log.info("위원장 : "+chairpersonList.size());
+//        log.info("간사 : "+stewardList);
+//
+//        log.info("key : "+key);
+//
+//        log.info("htmlDisaterKey : "+htmlDisaterKey);
+//        log.info("htmlCollapseKey : "+htmlCollapseKey);
+//        log.info("disaterValue : "+disaterValue);
+//        log.info("collapseValue : "+collapseValue);
+//
+//        log.info("teamTypeList : "+teamTypeList);
+//        log.info("positionnameList : "+positionnameList);
+//        log.info("usernameList : "+usernameList);
+
 
         data.clear();
         data.put("chairpersonList",chairpersonList);
         data.put("stewardList",stewardList);
-        data.put("positionSize",positionnameList.size());
-        data.put("disaterMap",disaterMap);
-        data.put("collapseMap",collapseMap);
+        data.put("htmlDisaterKey",htmlDisaterKey);
+        data.put("htmlCollapseKey",htmlCollapseKey);
+        data.put("disaterValue",disaterValue);
+        data.put("collapseValue",collapseValue);
         data.put("positionnameList",positionnameList);
         data.put("usernameList",usernameList);
         data.put("teamTypeList",teamTypeList);
-        data.put("teamMap",teamMap);
 
         res.addResponse("data",data);
         return ResponseEntity.ok(res.success());

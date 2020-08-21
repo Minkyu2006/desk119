@@ -1,6 +1,8 @@
 package kr.co.broadwave.desk.accounts;
 
 import kr.co.broadwave.desk.bscodes.ApprovalType;
+import kr.co.broadwave.desk.bscodes.CollapseType;
+import kr.co.broadwave.desk.bscodes.DisasterType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,5 +21,10 @@ public interface AccountRepositoryCustom {
 
     List<AccountLineUpDto> findByLineUpList();
 
+    List<AccountLineDto> findByLineDisList(DisasterType madisasterTypepkey);
+
+    List<AccountLineDto> findByLineDisCollList(DisasterType disasterType, CollapseType collapseType);
+
     AccountTeamDto findByTeamUserid(String userid);
+
 }

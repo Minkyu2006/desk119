@@ -1,7 +1,5 @@
 package kr.co.broadwave.desk.accounts;
 
-import kr.co.broadwave.desk.bscodes.CollapseType;
-import kr.co.broadwave.desk.bscodes.DisasterType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;

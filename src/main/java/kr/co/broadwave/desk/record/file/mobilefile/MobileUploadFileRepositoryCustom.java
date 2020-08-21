@@ -15,5 +15,5 @@ import java.util.List;
 public interface MobileUploadFileRepositoryCustom {
     List<MobileUploadFileDto> findByMobileUploadFileList(Account account);
 
-    Page<MobileUploadFileDto> findByMobileUploadFilePage(Account account, LocalDateTime s_from, LocalDateTime s_to, Pageable pageable);
+    Page<MobileUploadFileDto> findByMobileUploadFilePage(Account account, LocalDateTime s_from, LocalDateTime s_to,String s_username,Pageable pageable);
 }

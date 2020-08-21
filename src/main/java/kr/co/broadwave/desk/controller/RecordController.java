@@ -16,6 +16,8 @@ import kr.co.broadwave.desk.record.file.RecordImageService;
 import kr.co.broadwave.desk.record.file.RecordUploadFile;
 import kr.co.broadwave.desk.record.file.RecordUploadFileDto;
 import kr.co.broadwave.desk.record.file.RecordUploadFileRepository;
+import kr.co.broadwave.desk.record.file.mobilefile.MobileImageService;
+import kr.co.broadwave.desk.record.file.mobilefile.MobileUploadFile;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
@@ -58,6 +60,7 @@ public class RecordController {
     private final RecordImageService recordimageService;
     private final TeamService teamService;
     private final AccountService accountService;
+    private final MobileImageService mobileImageService;
 
     @Autowired
     public RecordController(
@@ -66,13 +69,15 @@ public class RecordController {
             RecordImageService recordimageService,
             TeamService teamService,
             AccountService accountService,
-            RecordUploadFileRepository recorduploadFileRepository) {
+            RecordUploadFileRepository recorduploadFileRepository,
+            MobileImageService mobileImageService) {
         this.masterCodeService = masterCodeService;
         this.accountService = accountService;
         this.recordService = recordService;
         this.recorduploadFileRepository = recorduploadFileRepository;
         this.recordimageService = recordimageService;
         this.teamService = teamService;
+        this.mobileImageService = mobileImageService;
     }
 
     //모바일 작성페이지
@@ -359,6 +364,24 @@ public class RecordController {
     @RequestMapping("gallery")
     public String gallery(){
         return "record/gallery";
+    }
+
+    // 파일다운로드 컨트롤러
+    @RequestMapping("mobileDownload/{fileid}")
+    @ResponseBody
+    public byte[] downProcess2(HttpServletResponse response,
+                              @PathVariable Long fileid) throws IOException {
+
+        Optional<MobileUploadFile> optionalUploadFile = mobileImageService.findById(fileid);
+        String filePath = optionalUploadFile.get().getAfmFilePath();
+        String filename = URLEncoder.encode(optionalUploadFile.get().getAfmFilename(),"UTF-8").replaceAll("\\+", "%20");
+        File file = new File(filePath);
+        byte[] bytes = FileCopyUtils.copyToByteArray(file);
+
+        response.setHeader("Content-Disposition",
+                "attachment;filename=\"" + filename + "\"");
+        response.setContentLength(bytes.length);
+        return bytes;
     }
 
 }

@@ -883,49 +883,6 @@
 			$('.l-popup').removeClass('open');
 		}
 
-		// 모바일파일삭제 여부
-		function mobileFileDel(id){
-			alertCheck("정말 사진을 삭제하겠습니까?",id,1);
-		}
-		// 모바일파일삭제 시작
-		function mobileDelStart(id,booleanValue) {
-			$('#popupId').remove();
-			if(booleanValue===true){
-				mobileDel(id)
-			}else{
-				return false;
-			}
-		}
-		//모바일파일삭제 실행
-		function mobileDel(id) {
-
-			var params = {
-				mobileid: id
-			};
-
-			var token = $("meta[name='_csrf']").attr("content");
-			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function (e, xhr) {
-				xhr.setRequestHeader(header, token);
-			});
-
-			$.ajax({
-				url: '/api/mobile/mobileFileDel',
-				type: 'post',
-				data: params,
-				cache: false,
-				error: function (request) {
-					ajaxErrorMsg(request);
-				},
-				success: function (res) {
-					if (!Ajax.checkResult(res)) {
-						return;
-					}
-					mobileFileList(1);
-				}
-			})
-		}
-
 		function popOpen(inputId) {
 			// console.log("inputId : "+inputId);
 			$('#pop__list').addClass('open');

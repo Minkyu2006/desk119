@@ -1,4 +1,9 @@
 $(function(){
+
+	$('#print').on('click', function() {
+		window.print();
+	});
+
 	callList(1);
 	dataGraphType();
 
@@ -51,11 +56,11 @@ function callList(page) {
 	page = page - 1;
 	if (page < 0) page = 0;
 
-	var perPage = 10;
+	var perPage = 50;
 	var perArea = 5;
 	var totCnt = 0;
 
-	var $schList = $('#schList');
+	var $schList = $('#statisList');
 	var $totalCnt = $('#totalCnt');
 
 	var token = $("meta[name='_csrf']").attr("content");

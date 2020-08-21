@@ -34,6 +34,7 @@ public class MobileUploadFileRestController {
 
     private final AccountService accountService;
     private final MobileImageService mobileImageService;
+
     @Autowired
     public MobileUploadFileRestController(MobileImageService mobileImageService,
                                           AccountService accountService) {
@@ -82,10 +83,17 @@ public class MobileUploadFileRestController {
 
         String currentuserid = CommonUtils.getCurrentuser(request);
         Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
+
         List<String> insertDate = new ArrayList<>();
 
         if(optionalAccount.isPresent()) {
-            List<MobileUploadFileDto> mobileUploadFileDtoList = mobileImageService.findByMobileUploadFileList(optionalAccount.get());
+            String role = optionalAccount.get().getRole().getCode();
+            List<MobileUploadFileDto> mobileUploadFileDtoList;
+            if(role.equals("ROLE_ADMIN")){
+                mobileUploadFileDtoList =  mobileImageService.findByMobileUploadFileList(null);
+            }else{
+                mobileUploadFileDtoList =  mobileImageService.findByMobileUploadFileList(optionalAccount.get());
+            }
 //            log.info("mobileUploadFileDtoList : "+mobileUploadFileDtoList);
             for (int i = 0; i < mobileUploadFileDtoList.size(); i++) {
                 if (!insertDate.contains(mobileUploadFileDtoList.get(i).getInsertDate())) {
@@ -105,6 +113,7 @@ public class MobileUploadFileRestController {
     public ResponseEntity<Map<String,Object>> uploadPage(HttpServletRequest request,
                                                          @RequestParam(value="s_from", defaultValue="") String s_from,
                                                          @RequestParam(value="s_to", defaultValue="") String s_to,
+                                                         @RequestParam(value="s_username", defaultValue="") String s_username,
                                                          Pageable pageable){
         AjaxResponse res = new AjaxResponse();
         HashMap<String, Object> data = new HashMap<>();
@@ -123,7 +132,13 @@ public class MobileUploadFileRestController {
         Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
 
         if(optionalAccount.isPresent()) {
-            Page<MobileUploadFileDto> mobileUploadFileDtoPage =  mobileImageService.findByMobileUploadFilePage(optionalAccount.get(),fromVal,toVal,pageable);
+            String role = optionalAccount.get().getRole().getCode();
+            Page<MobileUploadFileDto> mobileUploadFileDtoPage;
+            if(role.equals("ROLE_ADMIN")){
+                mobileUploadFileDtoPage =  mobileImageService.findByMobileUploadFilePage(null,fromVal,toVal,s_username,pageable);
+            }else{
+                mobileUploadFileDtoPage =  mobileImageService.findByMobileUploadFilePage(optionalAccount.get(),fromVal,toVal,s_username,pageable);
+            }
 //            log.info("mobileUploadFileDtoPage : "+mobileUploadFileDtoPage.getContent());
             if (mobileUploadFileDtoPage.getTotalElements() > 0) {
                 data.put("datalist", mobileUploadFileDtoPage.getContent());

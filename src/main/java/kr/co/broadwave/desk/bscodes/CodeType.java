@@ -8,10 +8,11 @@ package kr.co.broadwave.desk.bscodes;
 public enum CodeType {
     C0001("C0001", "직급"),
     C0002("C0002", "관련부처"),
-    C0003("C0003", "출동일지완료후메일수신자");
+    C0003("C0003", "메일수신자"),
+    C0004("C0004", "명령지정자");
 
-    private String code;
-    private String desc;
+    private final String code;
+    private final String desc;
 
     CodeType(String code, String desc) {
         this.code = code;
@@ -25,4 +26,5 @@ public enum CodeType {
     public String getDesc() {
         return desc;
     }
+
 }

@@ -220,7 +220,7 @@
 								for (var a = 0; a < recordUploadFilePrint0.length; a++) {
 									if(idValue===recordUploadFilePrint0[a]["recordId"]) {
 										html += '<div class="report__picture">'
-										html += '<img style="width: 700px" src="/uploadfiles/recordimages/'+recordUploadFilePrint0[a]['afSaveFileName']+'"/>'
+										html += '<img style="width: 400px" src="/uploadfiles/recordimages/'+recordUploadFilePrint0[a]['afSaveFileName']+'"/>'
 										html += '</div>'
 									}
 								}
@@ -236,7 +236,7 @@
                                 for (var b = 0; b < recordUploadFilePrint1.length; b++) {
                                     if(idValue===recordUploadFilePrint1[b]["recordId"]) {
                                         html += '<div class="report__picture">'
-                                        html += '<img style="width: 700px" src="/uploadfiles/recordimages/'+recordUploadFilePrint1[b]['afSaveFileName']+'"/>'
+                                        html += '<img style="width: 400px" src="/uploadfiles/recordimages/'+recordUploadFilePrint1[b]['afSaveFileName']+'"/>'
                                         html += '</div>'
                                     }
                                 }
@@ -252,7 +252,7 @@
                                 for (var c = 0; c < recordUploadFilePrint2.length; c++) {
                                     if(idValue===recordUploadFilePrint2[c]["recordId"]) {
                                         html += '<div class="report__picture">'
-                                        html += '<img style="width: 700px" src="/uploadfiles/recordimages/'+recordUploadFilePrint2[c]['afSaveFileName']+'"/>'
+                                        html += '<img style="width: 400px" src="/uploadfiles/recordimages/'+recordUploadFilePrint2[c]['afSaveFileName']+'"/>'
                                         html += '</div>'
                                     }
                                 }
@@ -261,16 +261,20 @@
                             html += '<tr>'
                             html += '<th>기타사진</th>'
                             html += '<td colspan=3>'
+                            html += '<ul class="report__picture-list">'
                             if(recordUploadFileListPrint!=="") {
                                 for (var d = 0; d < recordUploadFileListPrint.length; d++) {
                                     if(idValue===recordUploadFileListPrint[d]["recordId"]) {
+                                        html += '<li>'
                                         html += '<div class="report__picture">'
-                                        html += '<img style="width: 700px" src="/uploadfiles/recordimages/'+recordUploadFileListPrint[d]['afSaveFileName']+'"/>'
+                                        html += '<img style="width: 300px" src="/uploadfiles/recordimages/'+recordUploadFileListPrint[d]['afSaveFileName']+'"/>'
                                         html += '<p>'+'<'+'<span>'+recordUploadFileListPrint[d]['afComment']+'</span>'+'>'+'</p>'
                                         html += '</div>'
+                                        html += '</li>'
                                     }
                                 }
                             }
+                            html += '</ul>'
                             html += '</td>'
                             html += '</tr>'
 

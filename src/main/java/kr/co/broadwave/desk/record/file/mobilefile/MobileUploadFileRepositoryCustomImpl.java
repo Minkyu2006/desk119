@@ -29,30 +29,12 @@ public class MobileUploadFileRepositoryCustomImpl extends QuerydslRepositorySupp
     @Override
     public List<MobileUploadFileDto> findByMobileUploadFileList(Account account) {
 
-        JPAQueryFactory queryFactory = new JPAQueryFactory(this.getEntityManager());
-        QMobileUploadFile mobileUploadFile = QMobileUploadFile.mobileUploadFile;
-
-        return queryFactory.select(Projections.constructor(MobileUploadFileDto.class,
-                mobileUploadFile.id,
-                mobileUploadFile.afmSaveFilename,
-                mobileUploadFile.afmSaveFilename,
-                mobileUploadFile.afmComment,
-                mobileUploadFile.insertDateTime,
-                mobileUploadFile.insertDateTime))
-                .from(mobileUploadFile)
-                .orderBy(mobileUploadFile.id.desc())
-                .where(mobileUploadFile.account.eq(account))
-                .fetch();
-    }
-
-    @Override
-    public Page<MobileUploadFileDto> findByMobileUploadFilePage(Account account, LocalDateTime s_from, LocalDateTime s_to, Pageable pageable){
-
         QMobileUploadFile mobileUploadFile = QMobileUploadFile.mobileUploadFile;
 
         JPQLQuery<MobileUploadFileDto> query = from(mobileUploadFile)
                 .select(Projections.constructor(MobileUploadFileDto.class,
                         mobileUploadFile.id,
+                        mobileUploadFile.account.username,
                         mobileUploadFile.afmSaveFilename,
                         mobileUploadFile.afmSaveFilename,
                         mobileUploadFile.afmComment,
@@ -60,7 +42,38 @@ public class MobileUploadFileRepositoryCustomImpl extends QuerydslRepositorySupp
                         mobileUploadFile.insertDateTime
                 ));
 
-        query.where(mobileUploadFile.account.eq(account));
+        if(account!=null) {
+            query.where(mobileUploadFile.account.eq(account));
+        }
+
+        query.orderBy(mobileUploadFile.id.desc());
+
+        return query.fetch();
+    }
+
+    @Override
+    public Page<MobileUploadFileDto> findByMobileUploadFilePage(Account account, LocalDateTime s_from, LocalDateTime s_to,String s_username, Pageable pageable){
+
+        QMobileUploadFile mobileUploadFile = QMobileUploadFile.mobileUploadFile;
+
+        JPQLQuery<MobileUploadFileDto> query = from(mobileUploadFile)
+                .select(Projections.constructor(MobileUploadFileDto.class,
+                        mobileUploadFile.id,
+                        mobileUploadFile.account.username,
+                        mobileUploadFile.afmSaveFilename,
+                        mobileUploadFile.afmSaveFilename,
+                        mobileUploadFile.afmComment,
+                        mobileUploadFile.insertDateTime,
+                        mobileUploadFile.insertDateTime
+                ));
+
+        if(account!=null) {
+            query.where(mobileUploadFile.account.eq(account));
+        }
+
+        if (s_username != null && !s_username.isEmpty()){
+            query.where(mobileUploadFile.account.username.likeIgnoreCase(s_username.concat("%")));
+        }
 
         if(s_from != null && s_to != null){
             query.where(mobileUploadFile.insertDateTime.between(s_from,s_to));
