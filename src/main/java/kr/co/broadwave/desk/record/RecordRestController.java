@@ -19,6 +19,7 @@ import kr.co.broadwave.desk.record.file.RecordUploadFileRepository;
 import kr.co.broadwave.desk.record.file.mobilefile.MobileImageService;
 import kr.co.broadwave.desk.record.file.mobilefile.MobileUploadFile;
 import kr.co.broadwave.desk.record.responsibil.Responsibil;
+import kr.co.broadwave.desk.record.responsibil.ResponsibilService;
 import kr.co.broadwave.desk.teams.Team;
 import kr.co.broadwave.desk.teams.TeamDto;
 import kr.co.broadwave.desk.teams.TeamService;
@@ -58,7 +59,9 @@ public class RecordRestController {
     private final MailService mailService;
     private final TeamService teamService;
     private final MobileImageService mobileImageService;
+    private final ResponsibilService responsibilService;
     private final RecordUploadFileRepository recordUploadFileRepository;
+
     @Autowired
     public RecordRestController(RecordService recordService,
                                 AccountService accountService,
@@ -69,7 +72,8 @@ public class RecordRestController {
                                 TeamService teamService,
                                 MasterCodeService masterCodeService,
                                 RecordUploadFileRepository recordUploadFileRepository,
-                                MobileImageService mobileImageService) {
+                                MobileImageService mobileImageService,
+                                ResponsibilService responsibilService) {
         this.recordService = recordService;
         this.accountService = accountService;
         this.modelMapper = modelMapper;
@@ -80,6 +84,7 @@ public class RecordRestController {
         this.teamService = teamService;
         this.mobileImageService = mobileImageService;
         this.recordUploadFileRepository = recordUploadFileRepository;
+        this.responsibilService = responsibilService;
     }
 
     // 출동일지작성 저장기능
@@ -517,6 +522,7 @@ public class RecordRestController {
         }
 
         recordService.delete(optionalRecord.get());
+        responsibilService.resDel(optionalRecord.get());
         recordImageService.fileDel(optionalRecord.get());
 
 //        log.info("출동일지 삭제 성공 / 고유번호 ID : '" + recordid + "'");

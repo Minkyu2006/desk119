@@ -21,13 +21,19 @@ import java.util.Optional;
 @Service
 public class ResponsibilService {
     private final ResponsibilRepository responsibilRepository;
-
+    private final ResponsibilRepositoryCustom responsibilRepositoryCustom;
     @Autowired
-    public ResponsibilService(ResponsibilRepository responsibilRepository) {
+    public ResponsibilService(ResponsibilRepository responsibilRepository,
+                              ResponsibilRepositoryCustom responsibilRepositoryCustom) {
         this.responsibilRepository = responsibilRepository;
+        this.responsibilRepositoryCustom = responsibilRepositoryCustom;
     }
 
     public void delete(Responsibil responsibil) {
         responsibilRepository.delete(responsibil);
+    }
+
+    public long resDel(Record record) {
+        return responsibilRepositoryCustom.resDel(record);
     }
 }
