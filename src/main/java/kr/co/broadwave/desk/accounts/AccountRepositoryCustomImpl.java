@@ -55,7 +55,6 @@ public class AccountRepositoryCustomImpl extends QuerydslRepositorySupport imple
 
                 ));
 
-
         if (userid != null && !userid.isEmpty()){
             query.where(qAccount.userid.containsIgnoreCase(userid));
         }

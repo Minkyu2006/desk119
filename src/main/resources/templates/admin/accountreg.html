@@ -222,7 +222,7 @@
 
 		function searchclear(){
 			$("#s_userid").val('');
-			$("#s_username").val('');
+			$("#ser_username").val('');
 			$("#s_email").val('');
 		}
 
@@ -237,9 +237,10 @@
 
 			var $schList = $('#schList');
 			var $totalCnt = $('#totalCnt');
+
 			var params = {
 				userid:$("#s_userid").val(),
-				username:$("#s_username").val(),
+				username:$("#ser_username").val(),
 				email:$("#s_email").val()
 			};
 
@@ -357,9 +358,6 @@
 		<h2 class="section__heading">사용자조회</h2>
 		<article class="article">
 			<div class="l-float-heading">
-				<div class="l-float-heading--left">
-					<h4 class="article__head">검색조건</h4>
-				</div>
 				<div class="l-float-heading--right"><button class="c-button c-button--small" id="btnClear" >조건 초기화</button></div>
 			</div>
 			<table class="c-table c-tabe--non-border">
@@ -380,7 +378,7 @@
 						</td>
 						<th>이름</th>
 						<td>
-							<div class="c-text"><input type="text" class="c-text__input" id="s_username" /></div>
+							<div class="c-text"><input type="text" class="c-text__input" id="ser_username" /></div>
 						</td>
 						<th>이메일</th>
 						<td>
