@@ -464,23 +464,17 @@ public class AccountRestController {
     public ResponseEntity<Map<String,Object>> accountdel(@RequestParam (value="userid", defaultValue="") String userid,
                                                          HttpServletRequest request){
 
+        Account account = new Account();
+
         String currentuserid = CommonUtils.getCurrentuser(request);
 
-        log.info("사용자 삭제 / userid: " + userid );
+//        log.info("사용자 삭제 / userid: " + userid );
         Optional<Account> optionalAccount = accountService.findByUserid(userid);
         //정보가있는지 체크
         if (!optionalAccount.isPresent()){
             log.info("사용자삭제실패 : 삭제할 데이터가 존재하지않음 , 삭제대상 userid : '" + userid + "'");
             return ResponseEntity.ok(res.fail(ResponseErrorCode.E003.getCode(),ResponseErrorCode.E003.getDesc()));
-        }
-        Account account = optionalAccount.get();
-
-        //사용중인지체크
-        if( loginlogService.countByLoginAccount(account) > 0){
-            log.info("사용자삭제실패 : LoginLog에서 사용중인데이터 , 삭제대상 userid : '" + userid + "'");
-            return ResponseEntity.ok(res.fail(ResponseErrorCode.E002.getCode(),ResponseErrorCode.E002.getDesc()));
         }else{
-            //수정시작
             account.setId(optionalAccount.get().getId());
             account.setUserid(optionalAccount.get().getUserid());
             account.setUsername(optionalAccount.get().getUsername());
@@ -500,6 +494,7 @@ public class AccountRestController {
             account.setModify_id(currentuserid);
             account.setModifyDateTime(LocalDateTime.now());
         }
+
         accountService.updateAccount(account);
         return ResponseEntity.ok(res.success());
     }
