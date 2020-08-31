@@ -36,7 +36,7 @@
 	}
 
 	@media print {
-		#pie_chart1,#locationPage {
+		#pie_chart1,#locationPage,#locationPage2 {
 			display:flex;
 			justify-content:center;
 			align-items:center;
@@ -64,6 +64,7 @@
 		}
 	}
 </style>
+
 <div>
 	<br/>
 	<section class="section">
@@ -77,62 +78,62 @@
 				<div class="stat__dual-item">
 					<h3 class="stat__title">출동지역</h3>
 					<div id="locationPage">
-					<div class="stat__map-area">
-						<div class="stat__map-tab">
-							<ul>
-								<li>
-									<a href="#" class="stat__tab-link" th:text="${productionYear}"></a>
-								</li>
-								<li>
-									<a href="#" class="stat__tab-link" th:text="${nowYear}"></a>
-								</li>
-							</ul>
+						<div class="stat__map-area">
+							<div class="stat__map-tab">
+								<ul>
+									<li>
+										<a href="#" class="stat__tab-link" th:text="${productionYear}"></a>
+									</li>
+									<li>
+										<a href="#" class="stat__tab-link" th:text="${nowYear}"></a>
+									</li>
+								</ul>
+							</div>
+							<div class="stat__map">
+								<img src="/assets/images/map.png" alt="" />
+								<ul class="stat__tab-content">
+									<li>
+										<span class="stat__map-point seoul" title="서울특별시" th:text="${productionYearCitys} ? ${productionYearCitys[0]} : ''"></span>
+										<span class="stat__map-point busan" title="부산광역시" th:text="${productionYearCitys} ? ${productionYearCitys[3]} : ''"></span>
+										<span class="stat__map-point daegu" title="대구광역시" th:text="${productionYearCitys} ? ${productionYearCitys[2]} : ''"></span>
+										<span class="stat__map-point incheon" title="인천광역시" th:text="${productionYearCitys} ? ${productionYearCitys[1]} : ''"></span>
+										<span class="stat__map-point gwangju" title="광주광역시" th:text="${productionYearCitys} ? ${productionYearCitys[6]} : ''"></span>
+										<span class="stat__map-point daejeon" title="대전광역시" th:text="${productionYearCitys} ? ${productionYearCitys[4]} : ''"></span>
+										<span class="stat__map-point ulsan" title="울산광역시" th:text="${productionYearCitys} ? ${productionYearCitys[5]} : ''"></span>
+										<span class="stat__map-point sejong" title="세종특별자치시" th:text="${productionYearCitys} ? ${productionYearCitys[16]} : ''"></span>
+										<span class="stat__map-point gyenggi" title="경기도" th:text="${productionYearCitys} ? ${productionYearCitys[7]} : ''"></span>
+										<span class="stat__map-point gangwon" title="강원도" th:text="${productionYearCitys} ? ${productionYearCitys[8]} : ''"></span>
+										<span class="stat__map-point chungnam" title="충청남도" th:text="${productionYearCitys} ? ${productionYearCitys[10]} : ''"></span>
+										<span class="stat__map-point chungbuk" title="충청북도" th:text="${productionYearCitys} ? ${productionYearCitys[9]} : ''"></span>
+										<span class="stat__map-point jeonnam" title="전라남도" th:text="${productionYearCitys} ? ${productionYearCitys[12]} : ''"></span>
+										<span class="stat__map-point jeonbuk" title="전라북도" th:text="${productionYearCitys} ? ${productionYearCitys[11]} : ''"></span>
+										<span class="stat__map-point gyeongnam" title="경상남도" th:text="${productionYearCitys} ? ${productionYearCitys[14]} : ''"></span>
+										<span class="stat__map-point gyeongbuk" title="경상북도" th:text="${productionYearCitys} ? ${productionYearCitys[13]} : ''"></span>
+										<span class="stat__map-point jeju" title="제주특별자치도" th:text="${productionYearCitys} ? ${productionYearCitys[15]} : ''"></span>
+									</li>
+									<li>
+										<span class="stat__map-point seoul" title="서울특별시" th:text="${nowYearCitys} ? ${nowYearCitys[0]} : ''"></span>
+										<span class="stat__map-point busan" title="부산광역시" th:text="${nowYearCitys} ? ${nowYearCitys[3]} : ''"></span>
+										<span class="stat__map-point daegu" title="대구광역시" th:text="${nowYearCitys} ? ${nowYearCitys[2]} : ''"></span>
+										<span class="stat__map-point incheon" title="인천광역시" th:text="${nowYearCitys} ? ${nowYearCitys[1]} : ''"></span>
+										<span class="stat__map-point gwangju" title="광주광역시" th:text="${nowYearCitys} ? ${nowYearCitys[6]} : ''"></span>
+										<span class="stat__map-point daejeon" title="대전광역시" th:text="${nowYearCitys} ? ${nowYearCitys[4]} : ''"></span>
+										<span class="stat__map-point ulsan" title="울산광역시" th:text="${nowYearCitys} ? ${nowYearCitys[5]} : ''"></span>
+										<span class="stat__map-point sejong" title="세종특별자치시" th:text="${nowYearCitys} ? ${nowYearCitys[16]} : ''"></span>
+										<span class="stat__map-point gyenggi" title="경기도" th:text="${nowYearCitys} ? ${nowYearCitys[7]} : ''"></span>
+										<span class="stat__map-point gangwon" title="강원도" th:text="${nowYearCitys} ? ${nowYearCitys[8]} : ''"></span>
+										<span class="stat__map-point chungnam" title="충청남도" th:text="${nowYearCitys} ? ${nowYearCitys[10]} : ''"></span>
+										<span class="stat__map-point chungbuk" title="충청북도" th:text="${nowYearCitys} ? ${nowYearCitys[9]} : ''"></span>
+										<span class="stat__map-point jeonnam" title="전라남도" th:text="${nowYearCitys} ? ${nowYearCitys[12]} : ''"></span>
+										<span class="stat__map-point jeonbuk" title="전라북도" th:text="${nowYearCitys} ? ${nowYearCitys[11]} : ''"></span>
+										<span class="stat__map-point gyeongnam" title="경상남도" th:text="${nowYearCitys} ? ${nowYearCitys[14]} : ''"></span>
+										<span class="stat__map-point gyeongbuk" title="경상북도" th:text="${nowYearCitys} ? ${nowYearCitys[13]} : ''"></span>
+										<span class="stat__map-point jeju" title="제주특별자치도" th:text="${nowYearCitys} ? ${nowYearCitys[15]} : ''"></span>
+									</li>
+								</ul>
+							</div>
 						</div>
-						<div class="stat__map">
-							<img src="/assets/images/map.png" alt="" />
-							<ul class="stat__tab-content">
-								<li>
-									<span class="stat__map-point seoul" title="서울특별시" th:text="${productionYearCitys} ? ${productionYearCitys[0]} : ''"></span>
-									<span class="stat__map-point busan" title="부산광역시" th:text="${productionYearCitys} ? ${productionYearCitys[3]} : ''"></span>
-									<span class="stat__map-point daegu" title="대구광역시" th:text="${productionYearCitys} ? ${productionYearCitys[2]} : ''"></span>
-									<span class="stat__map-point incheon" title="인천광역시" th:text="${productionYearCitys} ? ${productionYearCitys[1]} : ''"></span>
-									<span class="stat__map-point gwangju" title="광주광역시" th:text="${productionYearCitys} ? ${productionYearCitys[6]} : ''"></span>
-									<span class="stat__map-point daejeon" title="대전광역시" th:text="${productionYearCitys} ? ${productionYearCitys[4]} : ''"></span>
-									<span class="stat__map-point ulsan" title="울산광역시" th:text="${productionYearCitys} ? ${productionYearCitys[5]} : ''"></span>
-									<span class="stat__map-point sejong" title="세종특별자치시" th:text="${productionYearCitys} ? ${productionYearCitys[16]} : ''"></span>
-									<span class="stat__map-point gyenggi" title="경기도" th:text="${productionYearCitys} ? ${productionYearCitys[7]} : ''"></span>
-									<span class="stat__map-point gangwon" title="강원도" th:text="${productionYearCitys} ? ${productionYearCitys[8]} : ''"></span>
-									<span class="stat__map-point chungnam" title="충청남도" th:text="${productionYearCitys} ? ${productionYearCitys[10]} : ''"></span>
-									<span class="stat__map-point chungbuk" title="충청북도" th:text="${productionYearCitys} ? ${productionYearCitys[9]} : ''"></span>
-									<span class="stat__map-point jeonnam" title="전라남도" th:text="${productionYearCitys} ? ${productionYearCitys[12]} : ''"></span>
-									<span class="stat__map-point jeonbuk" title="전라북도" th:text="${productionYearCitys} ? ${productionYearCitys[11]} : ''"></span>
-									<span class="stat__map-point gyeongnam" title="경상남도" th:text="${productionYearCitys} ? ${productionYearCitys[14]} : ''"></span>
-									<span class="stat__map-point gyeongbuk" title="경상북도" th:text="${productionYearCitys} ? ${productionYearCitys[13]} : ''"></span>
-									<span class="stat__map-point jeju" title="제주특별자치도" th:text="${productionYearCitys} ? ${productionYearCitys[15]} : ''"></span>
-								</li>
-								<li>
-									<span class="stat__map-point seoul" title="서울특별시" th:text="${nowYearCitys} ? ${nowYearCitys[0]} : ''"></span>
-									<span class="stat__map-point busan" title="부산광역시" th:text="${nowYearCitys} ? ${nowYearCitys[3]} : ''"></span>
-									<span class="stat__map-point daegu" title="대구광역시" th:text="${nowYearCitys} ? ${nowYearCitys[2]} : ''"></span>
-									<span class="stat__map-point incheon" title="인천광역시" th:text="${nowYearCitys} ? ${nowYearCitys[1]} : ''"></span>
-									<span class="stat__map-point gwangju" title="광주광역시" th:text="${nowYearCitys} ? ${nowYearCitys[6]} : ''"></span>
-									<span class="stat__map-point daejeon" title="대전광역시" th:text="${nowYearCitys} ? ${nowYearCitys[4]} : ''"></span>
-									<span class="stat__map-point ulsan" title="울산광역시" th:text="${nowYearCitys} ? ${nowYearCitys[5]} : ''"></span>
-									<span class="stat__map-point sejong" title="세종특별자치시" th:text="${nowYearCitys} ? ${nowYearCitys[16]} : ''"></span>
-									<span class="stat__map-point gyenggi" title="경기도" th:text="${nowYearCitys} ? ${nowYearCitys[7]} : ''"></span>
-									<span class="stat__map-point gangwon" title="강원도" th:text="${nowYearCitys} ? ${nowYearCitys[8]} : ''"></span>
-									<span class="stat__map-point chungnam" title="충청남도" th:text="${nowYearCitys} ? ${nowYearCitys[10]} : ''"></span>
-									<span class="stat__map-point chungbuk" title="충청북도" th:text="${nowYearCitys} ? ${nowYearCitys[9]} : ''"></span>
-									<span class="stat__map-point jeonnam" title="전라남도" th:text="${nowYearCitys} ? ${nowYearCitys[12]} : ''"></span>
-									<span class="stat__map-point jeonbuk" title="전라북도" th:text="${nowYearCitys} ? ${nowYearCitys[11]} : ''"></span>
-									<span class="stat__map-point gyeongnam" title="경상남도" th:text="${nowYearCitys} ? ${nowYearCitys[14]} : ''"></span>
-									<span class="stat__map-point gyeongbuk" title="경상북도" th:text="${nowYearCitys} ? ${nowYearCitys[13]} : ''"></span>
-									<span class="stat__map-point jeju" title="제주특별자치도" th:text="${nowYearCitys} ? ${nowYearCitys[15]} : ''"></span>
-								</li>
-							</ul>
-						</div>
-					</div>
-					<div class="stat__local-table">
+						<div class="stat__local-table">
 						<div class="stat__unit">단위: 건</div>
 						<table class="c-table c-table--small">
 							<colgroup>
@@ -236,8 +237,24 @@
 							</tbody>
 						</table>
 					</div>
+					</div>
 				</div>
+			</div>
+
+			<div class="stat__item">
+				<h3 class="stat__title">통합 출동건수 TOP10</h3>
+				<div class="stat__map-tab">
+					<ul>
+						<li style="border: 3px solid #ffa143">
+							<a id="productionYear" style="color: #ffa143" href="#" class="stat__tab-link" th:text="${productionYear}"></a>
+						</li>
+						<li style="border: 3px solid #ffa143">
+							<a id="nowYear" style="background-color: #ffa143;color: #fff" href="#" class="stat__tab-link" th:text="${nowYear}"></a>
+						</li>
+					</ul>
 				</div>
+				<div class="stat__chart" id="rank_chart"></div>
+				<div style="display: none" class="stat__chart" id="rank_chart2"></div>
 			</div>
 
 			<div id="twopage">

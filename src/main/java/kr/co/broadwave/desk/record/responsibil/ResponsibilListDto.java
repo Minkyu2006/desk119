@@ -31,6 +31,12 @@ public class ResponsibilListDto {
 
     private String team;
 
+    private String insertYear;
+
+    public String getInsertYear() {
+        return insertYear;
+    }
+
     public Long getRecordId() {
         return recordId;
     }

@@ -275,6 +275,7 @@ public class RecordRestController {
                         .arEmployeeNumber(arEmployeeNumber[i])
                         .arEmployeeName(arEmployeeName[i])
                         .team(byTeamcode.get())
+                        .insertYear(String.valueOf(LocalDateTime.now().getYear()))
                         .build();
                 if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty()){
                     responsibils.add(responsibils2);
@@ -457,6 +458,7 @@ public class RecordRestController {
                         .arEmployeeNumber(arEmployeeNumber[i])
                         .arEmployeeName(arEmployeeName[i])
                         .team(byTeamcode.get())
+                        .insertYear(String.valueOf(LocalDateTime.now().getYear()))
                         .build();
                 if ( !arEmployeeNumber[i].isEmpty() || !arEmployeeName[i].isEmpty()){
                     responsibils.add(responsibils2);

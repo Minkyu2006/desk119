@@ -502,7 +502,82 @@ public class StatisticsRestController {
         List<String> teamNames = new ArrayList<>();
         List<String> teamName = new ArrayList<>();
 
-//        responsibils.forEach(x -> teamNames.add(x.getTeam().getTeamname()));
+        List<String> rankNames = new ArrayList<>();
+        List<String> rankNamesNow = new ArrayList<>();
+        List<String> rankNamesProduction = new ArrayList<>();
+        List<String> rankNamesSize = new ArrayList<>();
+        List<String> rankNamesCountNow = new ArrayList<>();
+        List<String> rankNamesCountPro = new ArrayList<>();
+
+        for (int i=0; i<responsibils.size(); i++) {
+            if (responsibils.get(i).getInsertYear().equals(now)) {
+                rankNamesNow.add(responsibils.get(i).getArEmployeeName());
+            } else if (responsibils.get(i).getInsertYear().equals(production)) {
+                rankNamesProduction.add(responsibils.get(i).getArEmployeeName());
+            } else {
+                rankNames.add(responsibils.get(i).getArEmployeeName());
+            }
+        }
+        Map<String,Integer> map = new HashMap<>();
+        List<String> nameList = null;
+        List<String> nameList2 = null;
+        if(rankNamesNow.size()>0) {
+            map.clear();
+            rankNamesSize.clear();
+            for (int i = 0; i < rankNamesNow.size(); i++) {
+                if (!rankNamesSize.contains(rankNamesNow.get(i))) {
+                    rankNamesSize.add(rankNamesNow.get(i));
+                    String name = rankNamesNow.get(i);
+                    int cnt = 0;
+                    for(int j=0; j<rankNamesNow.size(); j++){
+                        if(rankNamesNow.get(j).equals(name)){
+                            cnt++;
+                        }
+                    }
+                    rankNamesCountNow.add(String.valueOf(cnt));
+                    map.put(name,cnt);
+                }
+            }
+            Collections.sort(rankNamesCountNow, Collections.reverseOrder() );
+            nameList = new ArrayList<>(map.keySet());
+            // 내림차순 //
+            Collections.sort(nameList, new Comparator<String>() {
+                @Override
+                public int compare(String o1, String o2) {
+                    return map.get(o2).compareTo(map.get(o1));
+                }
+            });
+            rankNamesCountNow.add(0,now+"년도 출동건수");
+        }
+        if(rankNamesProduction.size()>0) {
+            map.clear();
+            rankNamesSize.clear();
+            for (int i = 0; i < rankNamesProduction.size(); i++) {
+                if (!rankNamesSize.contains(rankNamesProduction.get(i))) {
+                    rankNamesSize.add(rankNamesProduction.get(i));
+                    String name = rankNamesProduction.get(i);
+                    int cnt = 0;
+                    for(int j=0; j<rankNamesProduction.size(); j++){
+                        if(rankNamesProduction.get(j).equals(name)){
+                            cnt++;
+                        }
+                    }
+                    rankNamesCountPro.add(String.valueOf(cnt));
+                    map.put(name,cnt);
+                }
+            }
+            Collections.sort(rankNamesCountPro, Collections.reverseOrder() );
+            nameList2 = new ArrayList<>(map.keySet());
+            // 내림차순 //
+            Collections.sort(nameList2, new Comparator<String>() {
+                @Override
+                public int compare(String o1, String o2) {
+                    return map.get(o2).compareTo(map.get(o1));
+                }
+            });
+            rankNamesCountPro.add(0,production+"년도 출동건수");
+        }
+
 
 //        log.info("스테이트번호 arState :"+arState);
         responsibils.forEach(x -> teamNames.add(x.getTeam().getTeamname()));
@@ -544,6 +619,13 @@ public class StatisticsRestController {
         data.put("teamsData", teamsData);
         // 월별 출동현황 그래프데이터
         data.put("month_data_columns", monthgraphDataColumns);
+
+        // now 년도 출동랭킹 데이터
+        data.put("nameList",nameList);
+        data.put("rankNamesCountNow",rankNamesCountNow);
+        // pro 년도 출동랭킹 데이터
+        data.put("nameList2",nameList2);
+        data.put("rankNamesCountPro",rankNamesCountPro);
 
         res.addResponse("data", data);
         return ResponseEntity.ok(res.success());
@@ -650,7 +732,7 @@ public class StatisticsRestController {
             circleDataColumns.add(Arrays.asList(masterCodeNames.get(cnt),masterCodeNames.get(cnt2)));
             count = 0;
         }
-
+//        System.out.println("circleDataColumns : "+circleDataColumns);
 
 
         List<List<String>> disastergraphDataColumns = new ArrayList<>();  // 재해재난 그래프데이터
@@ -1005,20 +1087,95 @@ public class StatisticsRestController {
 //        System.out.println("월별 출동 현황 데이터 : "+monthgraphDataColumns);
 
 
-//        // 부서별 출동 현황
+        // 부서별 출동 현황
+//        log.info("now : "+now);
+//        log.info("production : "+production);
         List<ResponsibilListDto> responsibils = recordService.recordResponList(ids);
-        log.info("responsibils : "+responsibils);
+//        log.info("responsibils : "+responsibils);
         List<String> teamsData = new ArrayList<>();
         List<String> teamgraphDataColumns = new ArrayList<>();
 
         List<String> teamNames = new ArrayList<>();
         List<String> teamName = new ArrayList<>();
 
-//        responsibils.forEach(x -> teamNames.add(x.getTeam().getTeamname()));
+        List<String> rankNames = new ArrayList<>();
+        List<String> rankNamesNow = new ArrayList<>();
+        List<String> rankNamesProduction = new ArrayList<>();
+        List<String> rankNamesSize = new ArrayList<>();
+        List<String> rankNamesCountNow = new ArrayList<>();
+        List<String> rankNamesCountPro = new ArrayList<>();
+
+        for (int i=0; i<responsibils.size(); i++) {
+            if (responsibils.get(i).getInsertYear().equals(now)) {
+                rankNamesNow.add(responsibils.get(i).getArEmployeeName());
+            } else if (responsibils.get(i).getInsertYear().equals(production)) {
+                rankNamesProduction.add(responsibils.get(i).getArEmployeeName());
+            } else {
+                rankNames.add(responsibils.get(i).getArEmployeeName());
+            }
+        }
+        Map<String,Integer> map = new HashMap<>();
+        List<String> nameList = null;
+        List<String> nameList2 = null;
+        if(rankNamesNow.size()>0) {
+            map.clear();
+            rankNamesSize.clear();
+            for (int i = 0; i < rankNamesNow.size(); i++) {
+                if (!rankNamesSize.contains(rankNamesNow.get(i))) {
+                    rankNamesSize.add(rankNamesNow.get(i));
+                    String name = rankNamesNow.get(i);
+                    int cnt = 0;
+                    for(int j=0; j<rankNamesNow.size(); j++){
+                        if(rankNamesNow.get(j).equals(name)){
+                            cnt++;
+                        }
+                    }
+                    rankNamesCountNow.add(String.valueOf(cnt));
+                    map.put(name,cnt);
+                }
+            }
+            Collections.sort(rankNamesCountNow, Collections.reverseOrder() );
+            nameList = new ArrayList<>(map.keySet());
+            // 내림차순 //
+            Collections.sort(nameList, new Comparator<String>() {
+                @Override
+                public int compare(String o1, String o2) {
+                    return map.get(o2).compareTo(map.get(o1));
+                }
+            });
+            rankNamesCountNow.add(0,now+"년도 출동건수");
+        }
+        if(rankNamesProduction.size()>0) {
+            map.clear();
+            rankNamesSize.clear();
+            for (int i = 0; i < rankNamesProduction.size(); i++) {
+                if (!rankNamesSize.contains(rankNamesProduction.get(i))) {
+                    rankNamesSize.add(rankNamesProduction.get(i));
+                    String name = rankNamesProduction.get(i);
+                    int cnt = 0;
+                    for(int j=0; j<rankNamesProduction.size(); j++){
+                        if(rankNamesProduction.get(j).equals(name)){
+                            cnt++;
+                        }
+                    }
+                    rankNamesCountPro.add(String.valueOf(cnt));
+                    map.put(name,cnt);
+                }
+            }
+            Collections.sort(rankNamesCountPro, Collections.reverseOrder() );
+            nameList2 = new ArrayList<>(map.keySet());
+            // 내림차순 //
+            Collections.sort(nameList2, new Comparator<String>() {
+                @Override
+                public int compare(String o1, String o2) {
+                    return map.get(o2).compareTo(map.get(o1));
+                }
+            });
+            rankNamesCountPro.add(0,production+"년도 출동건수");
+        }
 
 //        log.info("스테이트번호 arState :"+arState);
         responsibils.forEach(x -> teamNames.add(x.getTeam()));
-//        log.info("팀이름들 : "+teamNames);
 
         //배열 맨앞 빈칸채우기
         teamgraphDataColumns.add(" ");
@@ -1045,6 +1202,8 @@ public class StatisticsRestController {
 //        System.out.println("등록된 부서팀 teamsData : "+teamsData);
 
 
+
+
         // 원형 그래프데이터
         data.put("circle_data_columns",circleDataColumns);
         // 재해재난 그래프데이터
@@ -1056,6 +1215,13 @@ public class StatisticsRestController {
         data.put("teamsData",teamsData);
         // 월별 출동현황 그래프데이터
         data.put("month_data_columns",monthgraphDataColumns);
+
+        // now 년도 출동랭킹 데이터
+        data.put("nameList",nameList);
+        data.put("rankNamesCountNow",rankNamesCountNow);
+        // pro 년도 출동랭킹 데이터
+        data.put("nameList2",nameList2);
+        data.put("rankNamesCountPro",rankNamesCountPro);
 
         res.addResponse("data",data);
         return ResponseEntity.ok(res.success());

@@ -4,6 +4,20 @@ $(function(){
 		window.print();
 	});
 
+	$("#productionYear").on('click',function () {
+		$("#productionYear").css('background-color','#ffa143').css('color','#fff');
+		$("#nowYear").css('background-color','#fff').css('color','#ffa143');
+		$("#rank_chart2").css('display','block');
+		$("#rank_chart").css('display','none');
+	});
+
+	$("#nowYear").on('click',function () {
+		$("#nowYear").css('background-color','#ffa143').css('color','#fff');
+		$("#productionYear").css('background-color','#fff').css('color','#ffa143');
+		$("#rank_chart").css('display','block');
+		$("#rank_chart2").css('display','none');
+	});
+
 	callList(1);
 	dataGraphType();
 
@@ -48,6 +62,51 @@ function dataGraphType() {
 			fac_graph_call(res.data.fac_data_columns);
 			team_graph_call(res.data.team_data_columns,res.data.teamsData);
 			month_graph_call(res.data.month_data_columns);
+
+			var nameData = [];
+			var cntData = [];
+			var nameData2 = [];
+			var cntData2 = [];
+			if(res.data.nameList.length>11){
+				for(i=0; i<10; i++){
+					nameData.push(res.data.nameList[i]);
+				}
+			}else{
+				for(i=0; i<res.data.nameList.length; i++){
+					nameData.push(res.data.nameList[i]);
+				}
+			}
+			if(res.data.rankNamesCountNow.length>12){
+				for(i=0; i<11; i++){
+					cntData.push(res.data.rankNamesCountNow[i]);
+				}
+			}else{
+				for(i=0; i<res.data.rankNamesCountNow.length; i++){
+					cntData.push(res.data.rankNamesCountNow[i]);
+				}
+			}
+
+			if(res.data.nameList2.length>11){
+				for(i=0; i<10; i++){
+					nameData2.push(res.data.nameList2[i]);
+				}
+			}else{
+				for(i=0; i<res.data.nameList2.length; i++){
+					nameData2.push(res.data.nameList2[i]);
+				}
+			}
+			if(res.data.rankNamesCountPro.length>12){
+				for(i=0; i<11; i++){
+					cntData2.push(res.data.rankNamesCountPro[i]);
+				}
+			}else{
+				for(i=0; i<res.data.rankNamesCountPro.length; i++){
+					cntData2.push(res.data.rankNamesCountPro[i]);
+				}
+			}
+			team_rank_graph_call(nameData,cntData);
+			team_rank_graph_call2(nameData2,cntData2);
+
 		}
 	})
 }
@@ -169,6 +228,65 @@ function circle_graph_call(circle_data_columns) {
 					return value + '건';
 				}
 			}
+		}
+	})
+}
+
+// 조사담당자 랭킹그래프
+function team_rank_graph_call(nameList,rankNamesCountNow) {
+	c3.generate({
+		bindto: "#rank_chart",
+		data: {
+			columns: [
+				rankNamesCountNow
+			],
+			type: 'bar'
+		},
+		axis: {
+			rotated: true,
+			x: {
+				type: 'category',
+				categories: nameList
+			}
+		},
+		tooltip: {
+			format: {
+				value: function (value) {
+					return value + '건';
+				}
+			}
+		},
+		size: {
+			height: 500
+		}
+	})
+}
+
+function team_rank_graph_call2(nameList,rankNamesCountPro){
+	c3.generate({
+		bindto: "#rank_chart2",
+		data: {
+			columns: [
+				rankNamesCountPro
+			],
+			type: 'bar'
+		},
+		axis: {
+			rotated: true,
+			x: {
+				type: 'category',
+				categories: nameList
+			}
+		},
+		tooltip: {
+			format: {
+				value: function (value) {
+					return value + '건';
+				}
+			}
+		},
+		size: {
+			height: 500
 		}
 	})
 }

@@ -103,7 +103,8 @@ public class RecordRepositoryCustomImpl extends QuerydslRepositorySupport implem
         QTeam team = QTeam.team;
 
         return queryFactory.select(Projections.constructor(ResponsibilListDto.class,
-                responsibil.record.id,responsibil.arEmployeeNumber,responsibil.arEmployeeName,team.teamname))
+                responsibil.record.id,responsibil.arEmployeeNumber
+                ,responsibil.arEmployeeName,team.teamname,responsibil.insertYear))
                 .from(responsibil)
                 .where(responsibil.record.id.in(recordList))
                 .innerJoin(responsibil.team,team)
