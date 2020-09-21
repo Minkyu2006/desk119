@@ -20,10 +20,10 @@ $(function(){
 				return;
 			}
 			circle_graph_call(res.data.circle_data_columns);
-			disaster_graph_call(res.data.nowYear,res.data.production,res.data.disaster_data_columns);
-			fac_graph_call(res.data.fac_data_columns);
+			disaster_graph_call(res.data.disaster_data_columns,res.data.nowYear,res.data.production);
+			fac_graph_call(res.data.fac_data_columns,res.data.nowYear,res.data.production);
 			team_graph_call(res.data.team_data_columns,res.data.teamsData);
-			month_graph_call(res.data.month_data_columns);
+			month_graph_call(res.data.month_data_columns,res.data.nowYear,res.data.production);
 			var nameData = [];
 			var cntData = [];
 			var nameData2 = [];
@@ -199,12 +199,12 @@ function team_rank_graph_call2(nameList,rankNamesCountPro,max2){
 }
 
 // 재해재난 그래프데이터
-function disaster_graph_call(now,production,disaster_data_columns) {
+function disaster_graph_call(disaster_data_columns,now,production) {
 	var categories = ['붕괴', '화재/폭발', '지진', '싱크홀', '교통사고', '홍수/가뭄', '환경오염'];
 	var colors = {
-		"2019":'#000000',
-		"2020":'#ff9b00',
-	};
+		[now]:'#ff9b00',
+		[production]:'#000000',
+	}
 
 	c3.generate({
 		bindto: "#bar_chart1",
@@ -223,6 +223,20 @@ function disaster_graph_call(now,production,disaster_data_columns) {
 			x: {
 				type: 'category',
 				categories: categories
+			},
+			y: {
+				tick: {
+					format: function (x) {
+						if (x !== Math.floor(x)) {
+							d3.selectAll('.c3-axis-y g.tick').filter(function () {
+								var text = d3.select(this).select('text').text();
+								return +text === x;
+							}).style('opacity', 0);
+							return '';
+						}
+						return x;
+					}
+				}
 			}
 		},
 		tooltip: {
@@ -236,11 +250,11 @@ function disaster_graph_call(now,production,disaster_data_columns) {
 }
 
 // 조사시설물 그래프데이터
-function fac_graph_call(fac_data_columns) {
+function fac_graph_call(fac_data_columns,now,production) {
 	var colors = {
-		"2019":'#000000',
-		"2020":'#ff9b00',
-	};
+		[now]:'#ff9b00',
+		[production]:'#000000',
+	}
 
 	c3.generate({
 		bindto: "#bar_chart2",
@@ -259,6 +273,20 @@ function fac_graph_call(fac_data_columns) {
 			x: {
 				type: 'category',
 				categories: ['교량', '옹벽', '비탈면', '터널', '도로', '기타도로시설', '건축물', '지반', '지하시설물', '기타']
+			},
+			y: {
+				tick: {
+					format: function (x) {
+						if (x !== Math.floor(x)) {
+							d3.selectAll('.c3-axis-y g.tick').filter(function () {
+								var text = d3.select(this).select('text').text();
+								return +text === x;
+							}).style('opacity', 0);
+							return '';
+						}
+						return x;
+					}
+				}
 			}
 		},
 		tooltip: {
@@ -286,6 +314,20 @@ function team_graph_call(team_data_columns,teamsData) {
 			x: {
 				type: 'category',
 				categories: teamsData
+			},
+			y: {
+				tick: {
+					format: function (x) {
+						if (x !== Math.floor(x)) {
+							d3.selectAll('.c3-axis-y g.tick').filter(function () {
+								var text = d3.select(this).select('text').text();
+								return +text === x;
+							}).style('opacity', 0);
+							return '';
+						}
+						return x;
+					}
+				}
 			}
 		},
 		tooltip: {
@@ -302,11 +344,11 @@ function team_graph_call(team_data_columns,teamsData) {
 }
 
 // 월별 출동현황 그래프데이터
-function month_graph_call(month_data_columns) {
+function month_graph_call(month_data_columns,now,production) {
 	var colors = {
-		"2019":'#000000',
-		"2020":'#ff9b00',
-	};
+		[now]:'#ff9b00',
+		[production]:'#000000',
+	}
 
 	c3.generate({
 		bindto: "#bar_chart3",
@@ -325,6 +367,20 @@ function month_graph_call(month_data_columns) {
 			x: {
 				type: 'category',
 				categories: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+			},
+			y: {
+				tick: {
+					format: function (x) {
+						if (x !== Math.floor(x)) {
+							d3.selectAll('.c3-axis-y g.tick').filter(function () {
+								var text = d3.select(this).select('text').text();
+								return +text === x;
+							}).style('opacity', 0);
+							return '';
+						}
+						return x;
+					}
+				}
 			}
 		},
 		tooltip: {
