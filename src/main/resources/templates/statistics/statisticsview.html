@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"
-	  xmlns:th="http://www.thymeleaf.org">
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
 	<meta charset="UTF-8" />
@@ -31,6 +32,14 @@
 	<script src="/assets/js/statisticsGraph.js"></script>
 </head>
 <style>
+	.c3-axis-y text {
+		font-size: 15px;
+	}
+
+	.c3-axis-x text {
+		font-size: 15px;
+	}
+
 	div#twopage {
 		page-break-before: always;
 	}
@@ -241,8 +250,8 @@
 				</div>
 			</div>
 
-			<div class="stat__item">
-				<h3 class="stat__title">통합 출동건수 TOP10</h3>
+			<div sec:authorize="isAuthenticated()" class="stat__item">
+				<h3 class="stat__title">출동대원별 출동건수(통합)</h3>
 				<div class="stat__map-tab">
 					<ul>
 						<li style="border: 3px solid #ffa143">
@@ -253,6 +262,7 @@
 						</li>
 					</ul>
 				</div>
+				<br/>
 				<div class="stat__chart" id="rank_chart"></div>
 				<div style="display: none" class="stat__chart" id="rank_chart2"></div>
 			</div>

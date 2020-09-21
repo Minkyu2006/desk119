@@ -522,6 +522,7 @@ public class StatisticsRestController {
         List<String> nameList = null;
         List<String> nameList2 = null;
         if(rankNamesNow.size()>0) {
+            int max1 = 0;
             map.clear();
             rankNamesSize.clear();
             for (int i = 0; i < rankNamesNow.size(); i++) {
@@ -534,6 +535,10 @@ public class StatisticsRestController {
                             cnt++;
                         }
                     }
+                    if(max1<cnt) {
+                        max1 = cnt;
+                    }
+
                     rankNamesCountNow.add(String.valueOf(cnt));
                     map.put(name,cnt);
                 }
@@ -547,9 +552,12 @@ public class StatisticsRestController {
                     return map.get(o2).compareTo(map.get(o1));
                 }
             });
+
+            data.put("max1",  max1);
             rankNamesCountNow.add(0,now+"년도 출동건수");
         }
         if(rankNamesProduction.size()>0) {
+            int max2 = 0;
             map.clear();
             rankNamesSize.clear();
             for (int i = 0; i < rankNamesProduction.size(); i++) {
@@ -561,6 +569,9 @@ public class StatisticsRestController {
                         if(rankNamesProduction.get(j).equals(name)){
                             cnt++;
                         }
+                    }
+                    if(max2<cnt) {
+                        max2 = cnt;
                     }
                     rankNamesCountPro.add(String.valueOf(cnt));
                     map.put(name,cnt);
@@ -575,6 +586,8 @@ public class StatisticsRestController {
                     return map.get(o2).compareTo(map.get(o1));
                 }
             });
+
+            data.put("max2",  max2);
             rankNamesCountPro.add(0,production+"년도 출동건수");
         }
 
@@ -607,6 +620,8 @@ public class StatisticsRestController {
 //        System.out.println("등록된 팀당 건수 team_data_columns : "+teamgraphDataColumns);
 //        System.out.println("등록된 부서팀 teamsData : "+teamsData);
 
+        data.put("nowYear", now);
+        data.put("production", production);
 
         // 원형 그래프데이터
         data.put("circle_data_columns", circleDataColumns);
@@ -619,7 +634,6 @@ public class StatisticsRestController {
         data.put("teamsData", teamsData);
         // 월별 출동현황 그래프데이터
         data.put("month_data_columns", monthgraphDataColumns);
-
         // now 년도 출동랭킹 데이터
         data.put("nameList",nameList);
         data.put("rankNamesCountNow",rankNamesCountNow);

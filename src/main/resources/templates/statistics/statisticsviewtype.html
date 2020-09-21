@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko"
-	  xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
 	<meta charset="UTF-8" />
@@ -31,6 +31,14 @@
 	<script src="/assets/js/statisticsGraph2.js"></script>
 </head>
 <style>
+	.c3-axis-y text {
+		font-size: 15px;
+	}
+
+	.c3-axis-x text {
+		font-size: 15px;
+	}
+
 	div#twopage {
 		page-break-before: always;
 	}
@@ -71,7 +79,7 @@
 		//타이틀설정
 		$("#titleName").text($typeName+"통계 상세보기");
 		$("#statish3").text($typeName+" 항목의 출동 일지 리스트");
-		$("#statish4").text($typeName+" 항목의 출동건수 TOP10");
+		$("#statish4").text("출동대원별 출동건수("+$typeName+")");
 		$("#gra1").text($typeName+" 항목의 출동 요청기관");
 		$("#gra2").text($typeName+" 항목의 출동 지역");
 		$("#gra3").text($typeName+" 항목의 재해·재난 유형");
@@ -261,7 +269,7 @@
 				</div>
 			</div>
 
-			<div class="stat__item">
+			<div sec:authorize="isAuthenticated()" class="stat__item">
 				<h3 id="statish4" class="stat__title"></h3>
 				<div class="stat__map-tab">
 					<ul>
@@ -273,6 +281,7 @@
 						</li>
 					</ul>
 				</div>
+				<br/>
 				<div class="stat__chart" id="rank_chart"></div>
 				<div style="display: none" class="stat__chart" id="rank_chart2"></div>
 			</div>

@@ -20,7 +20,7 @@ $(function(){
 				return;
 			}
 			circle_graph_call(res.data.circle_data_columns);
-			disaster_graph_call(res.data.disaster_data_columns);
+			disaster_graph_call(res.data.nowYear,res.data.production,res.data.disaster_data_columns);
 			fac_graph_call(res.data.fac_data_columns);
 			team_graph_call(res.data.team_data_columns,res.data.teamsData);
 			month_graph_call(res.data.month_data_columns);
@@ -65,8 +65,8 @@ $(function(){
 					cntData2.push(res.data.rankNamesCountPro[i]);
 				}
 			}
-			team_rank_graph_call(nameData,cntData);
-			team_rank_graph_call2(nameData2,cntData2);
+			team_rank_graph_call(nameData,cntData,res.data.max1);
+			team_rank_graph_call2(nameData2,cntData2,res.data.max2);
 		}
 	})
 
@@ -98,6 +98,8 @@ $(function(){
 
 // 원형 그래프데이터
 function circle_graph_call(circle_data_columns) {
+	// console.log("circle_data_columns : "+circle_data_columns);
+
 	c3.generate({
 		bindto: "#pie_chart1",
 		data: {
@@ -115,20 +117,31 @@ function circle_graph_call(circle_data_columns) {
 }
 
 // 조사담당자 랭킹그래프
-function team_rank_graph_call(nameList,rankNamesCountNow) {
+function team_rank_graph_call(nameList,rankNamesCountNow,max1) {
+
+	var maxPlus = 0;
+	if(max1<7) {
+		maxPlus = Number(7-max1);
+	}
+
 	c3.generate({
 		bindto: "#rank_chart",
 		data: {
 			columns: [
 				rankNamesCountNow
 			],
-			type: 'bar'
+			type: 'bar',
+			color: function () {
+				return "#000000"
+			}
 		},
 		axis: {
-			rotated: true,
 			x: {
 				type: 'category',
 				categories: nameList
+			},
+			y: {
+				max: Number(max1+maxPlus)
 			}
 		},
 		tooltip: {
@@ -144,20 +157,32 @@ function team_rank_graph_call(nameList,rankNamesCountNow) {
 	})
 }
 
-function team_rank_graph_call2(nameList,rankNamesCountPro){
+function team_rank_graph_call2(nameList,rankNamesCountPro,max2){
+
+	var maxPlus = 0;
+	if(max2<7) {
+		maxPlus = Number(7-max2);
+	}
+
 	c3.generate({
 		bindto: "#rank_chart2",
 		data: {
 			columns: [
 				rankNamesCountPro
 			],
-			type: 'bar'
+			type: 'bar',
+			color: function () {
+				return "#000000"
+			}
 		},
+
 		axis: {
-			rotated: true,
 			x: {
 				type: 'category',
 				categories: nameList
+			},
+			y: {
+				max: Number(max2+maxPlus)
 			}
 		},
 		tooltip: {
@@ -174,17 +199,30 @@ function team_rank_graph_call2(nameList,rankNamesCountPro){
 }
 
 // 재해재난 그래프데이터
-function disaster_graph_call(disaster_data_columns) {
+function disaster_graph_call(now,production,disaster_data_columns) {
+	var categories = ['붕괴', '화재/폭발', '지진', '싱크홀', '교통사고', '홍수/가뭄', '환경오염'];
+	var colors = {
+		"2019":'#000000',
+		"2020":'#ff9b00',
+	};
+
 	c3.generate({
 		bindto: "#bar_chart1",
 		data: {
 			columns: disaster_data_columns,
-			type: 'bar'
+			type: 'bar',
+			color: function(color, d) {
+				if(typeof d === 'object') {
+					return colors[d.id];
+				}else {
+					return colors[d];
+				}
+			}
 		},
 		axis: {
 			x: {
 				type: 'category',
-				categories: ['붕괴', '화재/폭발', '지진', '싱크홀', '교통사고', '홍수/가뭄', '환경오염']
+				categories: categories
 			}
 		},
 		tooltip: {
@@ -199,11 +237,23 @@ function disaster_graph_call(disaster_data_columns) {
 
 // 조사시설물 그래프데이터
 function fac_graph_call(fac_data_columns) {
+	var colors = {
+		"2019":'#000000',
+		"2020":'#ff9b00',
+	};
+
 	c3.generate({
 		bindto: "#bar_chart2",
 		data: {
 			columns: fac_data_columns,
-			type: 'bar'
+			type: 'bar',
+			color: function(color, d) {
+				if(typeof d === 'object') {
+					return colors[d.id];
+				}else {
+					return colors[d];
+				}
+			}
 		},
 		axis: {
 			x: {
@@ -227,7 +277,10 @@ function team_graph_call(team_data_columns,teamsData) {
 		bindto: "#bar_team",
 		data: {
 			columns: [team_data_columns],
-			type: 'bar'
+			type: 'bar',
+			color: function () {
+				return "#000000"
+			}
 		},
 		axis: {
 			x: {
@@ -250,11 +303,23 @@ function team_graph_call(team_data_columns,teamsData) {
 
 // 월별 출동현황 그래프데이터
 function month_graph_call(month_data_columns) {
+	var colors = {
+		"2019":'#000000',
+		"2020":'#ff9b00',
+	};
+
 	c3.generate({
 		bindto: "#bar_chart3",
 		data: {
 			columns: month_data_columns,
-			type: 'bar'
+			type: 'bar',
+			color: function(color, d) {
+				if(typeof d === 'object') {
+					return colors[d.id];
+				}else {
+					return colors[d];
+				}
+			}
 		},
 		axis: {
 			x: {

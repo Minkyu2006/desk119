@@ -240,10 +240,12 @@ function team_rank_graph_call(nameList,rankNamesCountNow) {
 			columns: [
 				rankNamesCountNow
 			],
-			type: 'bar'
+			type: 'bar',
+			color: function () {
+				return "#000000"
+			}
 		},
 		axis: {
-			rotated: true,
 			x: {
 				type: 'category',
 				categories: nameList
@@ -269,10 +271,12 @@ function team_rank_graph_call2(nameList,rankNamesCountPro){
 			columns: [
 				rankNamesCountPro
 			],
-			type: 'bar'
+			type: 'bar',
+			color: function () {
+				return "#000000"
+			}
 		},
 		axis: {
-			rotated: true,
 			x: {
 				type: 'category',
 				categories: nameList
@@ -293,11 +297,23 @@ function team_rank_graph_call2(nameList,rankNamesCountPro){
 
 // 재해재난 그래프데이터
 function disaster_graph_call(disaster_data_columns) {
+	var colors = {
+		"2019":'#000000',
+		"2020":'#ff9b00',
+	};
+
 	c3.generate({
 		bindto: "#bar_chart1",
 		data: {
 			columns: disaster_data_columns,
-			type: 'bar'
+			type: 'bar',
+			color: function(color, d) {
+				if(typeof d === 'object') {
+					return colors[d.id];
+				}else {
+					return colors[d];
+				}
+			}
 		},
 		axis: {
 			x: {
@@ -317,11 +333,23 @@ function disaster_graph_call(disaster_data_columns) {
 
 // 조사시설물 그래프데이터
 function fac_graph_call(fac_data_columns) {
+	var colors = {
+		"2019":'#000000',
+		"2020":'#ff9b00',
+	};
+
 	c3.generate({
 		bindto: "#bar_chart2",
 		data: {
 			columns: fac_data_columns,
-			type: 'bar'
+			type: 'bar',
+			color: function(color, d) {
+				if(typeof d === 'object') {
+					return colors[d.id];
+				}else {
+					return colors[d];
+				}
+			}
 		},
 		axis: {
 			x: {
@@ -345,7 +373,10 @@ function team_graph_call(team_data_columns,teamsData) {
 		bindto: "#bar_team",
 		data: {
 			columns: [team_data_columns],
-			type: 'bar'
+			type: 'bar',
+			color: function () {
+				return "#000000"
+			}
 		},
 		axis: {
 			x: {
@@ -368,11 +399,22 @@ function team_graph_call(team_data_columns,teamsData) {
 
 // 월별 출동현황 그래프데이터
 function month_graph_call(month_data_columns) {
+	var colors = {
+		"2019":'#000000',
+		"2020":'#ff9b00',
+	};
 	c3.generate({
 		bindto: "#bar_chart3",
 		data: {
 			columns: month_data_columns,
-			type: 'bar'
+			type: 'bar',
+			color: function(color, d) {
+				if(typeof d === 'object') {
+					return colors[d.id];
+				}else {
+					return colors[d];
+				}
+			}
 		},
 		axis: {
 			x: {
