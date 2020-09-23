@@ -314,24 +314,24 @@ function team_rank_graph_call2(nameList,rankNamesCountPro,max2){
 
 // 재해재난 그래프데이터
 function disaster_graph_call(disaster_data_columns,now,production) {
-	var colors = {
-		[now]:'#ff9b00',
-		[production]:'#000000',
-	}
+	// var colors = {
+	// 	[now]:'#ff9b00',
+	// 	[production]:'#000000',
+	// }
 
 
 	c3.generate({
 		bindto: "#bar_chart1",
 		data: {
 			columns: disaster_data_columns,
-			type: 'bar',
-			color: function(color, d) {
-				if(typeof d === 'object') {
-					return colors[d.id];
-				}else {
-					return colors[d];
-				}
-			}
+			type: 'bar'
+			// color: function(color, d) {
+			// 	if(typeof d === 'object') {
+			// 		return colors[d.id];
+			// 	}else {
+			// 		return colors[d];
+			// 	}
+			// }
 		},
 		axis: {
 			x: {
@@ -365,24 +365,24 @@ function disaster_graph_call(disaster_data_columns,now,production) {
 
 // 조사시설물 그래프데이터
 function fac_graph_call(fac_data_columns,now,production) {
-	var colors = {
-		[now]:'#ff9b00',
-		[production]:'#000000',
-	}
+	// var colors = {
+	// 	[now]:'#ff9b00',
+	// 	[production]:'#000000',
+	// }
 
 
 	c3.generate({
 		bindto: "#bar_chart2",
 		data: {
 			columns: fac_data_columns,
-			type: 'bar',
-			color: function(color, d) {
-				if(typeof d === 'object') {
-					return colors[d.id];
-				}else {
-					return colors[d];
-				}
-			}
+			type: 'bar'
+			// color: function(color, d) {
+			// 	if(typeof d === 'object') {
+			// 		return colors[d.id];
+			// 	}else {
+			// 		return colors[d];
+			// 	}
+			// }
 		},
 		axis: {
 			x: {
@@ -420,10 +420,10 @@ function team_graph_call(team_data_columns,teamsData) {
 		bindto: "#bar_team",
 		data: {
 			columns: [team_data_columns],
-			type: 'bar',
-			color: function () {
-				return "#000000"
-			}
+			type: 'bar'
+			// color: function () {
+			// 	return "#000000"
+			// }
 		},
 		axis: {
 			x: {
@@ -461,24 +461,24 @@ function team_graph_call(team_data_columns,teamsData) {
 // 월별 출동현황 그래프데이터
 function month_graph_call(month_data_columns,now,production) {
 
-	var colors = {
-		[now]:'#ff9b00',
-		[production]:'#000000',
-	}
+	// var colors = {
+	// 	[now]:'#ff9b00',
+	// 	[production]:'#000000',
+	// }
 
 
 	c3.generate({
 		bindto: "#bar_chart3",
 		data: {
 			columns: month_data_columns,
-			type: 'bar',
-			color: function(color, d) {
-				if(typeof d === 'object') {
-					return colors[d.id];
-				}else {
-					return colors[d];
-				}
-			}
+			type: 'bar'
+			// color: function(color, d) {
+			// 	if(typeof d === 'object') {
+			// 		return colors[d.id];
+			// 	}else {
+			// 		return colors[d];
+			// 	}
+			// }
 		},
 		axis: {
 			x: {
