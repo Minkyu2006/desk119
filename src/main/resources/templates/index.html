@@ -2,8 +2,8 @@
 <html lang="ko"
 	  xmlns:th="http://www.thymeleaf.org"
 	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorator="layout/default">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -11,11 +11,357 @@
 
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
+	<script src="/assets/js/bxslider/jquery.bxslider.min.js"></script>
+
 	<script>
+		$(document).ready(function() {
+
+			// console.log("window.location.href : "+window.location.href);
+			if(window.location.href==="http://192.168.0.136:8080/" || window.location.href==="https://kict119.broadwave.co.kr/"){
+				if (navigator.userAgent.match(/iPad/) == null && navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
+					// console.log("mobile")
+					$("#cameralist").css('display', 'block');
+				}else{
+					// console.log("pc")
+					$("#cameralist").css('display', 'none');
+					noticePopUp();
+				}
+			}
+
+			$("#popWin").on('click',function(){
+				popWin(1120,720,'yes');
+			});
+
+			$("#commentBtn").on('click',function(){
+				fileupload2();
+				$("#stateLoading").css('display','block');
+			});
+
+			$('#l-popup__close').on('click', function(e) {
+				$('#pop__list').removeClass('open');
+				e.preventDefault();
+			});
+
+			var slider = $('.banner__slide').bxSlider({
+							controls: false,
+							pagerCustom: '.banner__slide-pager'
+						});
+			
+			$(window).load(function() {
+				var width_size = window.outerWidth;
+				var height_size = window.outerHeight;
+				
+				if(width_size >768 && height_size <= 990) {
+					slider.reloadSlider();
+				} else if(width_size > 768 && height_size > 990) {
+					slider.destroySlider();
+				}
+			});
+			
+			$(window).resize(function () {
+				var width_size = window.outerWidth;
+				var height_size = window.outerHeight;
+				
+				if(width_size >768 && height_size <= 990) {
+					slider.reloadSlider();
+				} else if(width_size > 768 && height_size > 990) {
+					slider.destroySlider();
+				}
+			});
+
+		})
+		var setting;
+
+		// 공지사항 팝업
+		function noticePopUp() {
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
+
+			$.ajax({
+				url:'/api/notice/Popup',
+				type : 'post',
+				cache:false,
+				error:function(request){
+					ajaxErrorMsg(request);
+				},
+				success: function(res) {
+					var cookiedata = document.cookie;
+					var i;
+					// console.log("cookiedata : "+cookiedata);
+					if(cookiedata===""){
+						// console.log("쿠키없음")
+						for(i=0; i<res.data.noticeId.length; i++) {
+							winPop(res.data.noticeId[i]);
+						}
+					}else{
+						// console.log("쿠키있음")
+						for(i=0; i<res.data.noticeId.length; i++) {
+							if (cookiedata.indexOf(res.data.noticeId[i]+"=admin") < 0) {
+								winPop(res.data.noticeId[i]);
+							}
+						}
+					}
+				}
+			});
+		}
+
+		function winPop(id) {
+			var noticePop
+			var href = "/notice/noticeviewPopup/"+id;
+			setting = "width=" + 650 + ", height=" + 580 + ", top=5, left=20, scrollbar=yes"
+			noticePop = window.open(href,"",setting);
+			noticePop.focus();
+		}
+
+		function sweetalertclick() {
+			alertCaution('권한이 필요합니다.<br> 로그인해주시길 바랍니다');
+		}
+
+		function popWin(width, height, scroll) {
+			var newWindow;
+			setting = "width=" + width + ", height=" + height + ", top=5, left=20, scrollbars=" + scroll
+			newWindow = window.open ("/statistics/statisticsview" ,"", setting);
+			newWindow.focus();
+		}
+
+		function popWinType(width, height, scroll,type,num,text) {
+			// console.log("text : "+text.innerHTML);
+			if(text.innerHTML !== "0") {
+				var newWindow;
+				setting = "width=" + width + ", height=" + height + ", top=5, left=20, scrollbars=" + scroll
+				newWindow = window.open("/statistics/statisticsviewtype/" + type + "/" + num, "", setting);
+				newWindow.focus();
+			}else{
+				alertCaution("선택하신 항목의 출동일지보고서<br>기록이 존재하지 않습니다.")
+			}
+		}
+
+		function cameraClick() {
+			$('#camera').change(function(){});
+		}
+
+		function fileupload() {
+			$('#pop__list').addClass('open');
+		}
+
+		// 모바일사진을 촬영후, 업로드하는 함수
+		function fileupload2(){
+			var $camera = $("#camera");
+			if(window.location.href==="http://192.168.0.145:8080/" || window.location.href==="https://kict119.broadwave.co.kr/") {
+				// if(window.location.href==="https://kict119.broadwave.co.kr/") {
+
+				toastr.options = {
+					"positionClass": "toast-top-center",
+					"timeOut": "3000",
+					"progressBar": true,
+					"closeButton": true,
+				}
+
+				if($camera.val() !== '') {
+
+					var formData = new FormData(document.getElementById('fileupload'));
+
+					var token = $("meta[name='_csrf']").attr("content");
+					var header = $("meta[name='_csrf_header']").attr("content");
+					$(document).ajaxSend(function (e, xhr) {xhr.setRequestHeader(header, token);});
+
+					$.ajax({
+						url: '/api/mobile/upload',
+						type: 'post',
+						data: formData,
+						processData: false,
+						contentType: false,
+						enctype: 'multipart/form-data',
+						cache: false,
+						error: function (request) {
+							ajaxErrorMsg(request);
+						},
+						success: function (res) {
+							if (!Ajax.checkResult(res)) {
+								return;
+							}
+							$("#stateLoading").css('display','none');
+							$('#comment').val('');
+							$('#pop__list').removeClass('open');
+							toastr.success('갤러리에서 확인해주세요.','사진이 저장되었습니다.');
+							$camera.val('');
+						}
+					});
+				}else{
+					$("#stateLoading").css('display','none');
+					$('#comment').val('');
+					$('#pop__list').removeClass('open');
+					toastr.error('인터넷 연결을 확인해주세요.','데이터를 받아오지 못했습니다.');
+					$camera.val('');
+				}
+			}else{
+				$("#stateLoading").css('display','none');
+				$('#comment').val('');
+				$('#pop__list').removeClass('open');
+				toastr.error('경로가 맞지 않습니다.','고객센터로 연락바랍니다.');
+				$camera.val('');
+			}
+		}
+
 	</script>
 </th:block>
 
+
+
 <div layout:fragment="content" class="content">
-	<h1>로그인하지 않은 메인페이지 입니다.</h1>
+
+	<div class="main">
+
+		<div class="main__text">
+			<p>KICT 건설119</p>
+			<p>"국민과 인프라의 안전 확보를 위하여 전문가로서 최선을 다하겠습니다."</p>
+			<div class="main__img"></div>
+		</div>
+		<div class="banner">
+			<ul class="banner__list">
+
+				<li class="banner__item banner__item--write" sec:authorize="isAuthenticated()"><a href="javascript:void(0);" onclick="mobileCheckIndex();" class="banner__link">출동일지작성</a></li>
+				<li class="banner__item banner__item--write-list" sec:authorize="isAuthenticated()"><a href="/record/list" class="banner__link">출동일지조회</a></li>
+				<li class="banner__item banner__item--line" sec:authorize="isAuthenticated()"><a href="about/lineup" class="banner__link">건설 119 출동대원 라인업</a></li>
+				<li class="banner__item banner__item--guide" sec:authorize="isAuthenticated()"><a href="/record/GuideLine" target="_blank" class="banner__link">건설 119 주요 활동 가이드라인</a></li>
+				<li class="banner__item banner__item--notice" sec:authorize="isAuthenticated()"><a href="/notice/noticelist" class="banner__link">공지사항</a></li>
+
+				<li class="banner__item banner__item--write" sec:authorize="!isAuthenticated()"><a style="cursor:pointer" onclick="sweetalertclick()" class="banner__link">출동일지작성</a></li>
+				<li class="banner__item banner__item--write-list" sec:authorize="!isAuthenticated()"><a href="/record/list" class="banner__link">출동일지조회</a></li>
+				<li class="banner__item banner__item--line" sec:authorize="!isAuthenticated()"><a href="about/lineup" class="banner__link">건설 119 출동대원 라인업</a></li>
+				<li class="banner__item banner__item--guide" sec:authorize="!isAuthenticated()"><a style="cursor:pointer" onclick="sweetalertclick()" class="banner__link">건설 119 주요 활동 가이드라인</a></li>
+				<li class="banner__item banner__item--notice" sec:authorize="!isAuthenticated()" ><a href="/notice/noticelist" class="banner__link">공지사항</a></li>
+
+				<li class="banner__item banner__item--table">
+					<div class="banner__stat">
+						<h3 class="banner__title">KICT 건설119 활동 통계</h3>
+						<span class="main-table__unit">단위: 건</span>
+						<div class="banner__slide">
+							<div class="banner__slide-item">
+								<table class="main-table">
+									<colgroup>
+										<col />
+										<col />
+										<col />
+										<col />
+									</colgroup>
+									<tbody>
+										<tr>
+											<th>붕괴</th>
+											<th>화재 &frasl; 폭발</th>
+											<th>지진</th>
+											<th>싱크홀</th>
+										</tr>
+										<tr>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','붕괴','1',this)" th:text="${arDisasters[0]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','화재','1',this)" th:text="${arDisasters[1]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','지진','1',this)" th:text="${arDisasters[2]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','싱크홀','1',this)" th:text="${arDisasters[3]}"></td>
+										</tr>
+										<tr>
+											<th>교통사고</th>
+											<th>홍수 &frasl; 가뭄</th>
+											<th>환경오염</th>
+											<th class="sum">합계</th>
+										</tr>
+										<tr>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','교통사고','1',this)" th:text="${arDisasters[4]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','홍수','1',this)" th:text="${arDisasters[5]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','환경오염','1',this)" th:text="${arDisasters[6]}"></td>
+											<td  th:text="${arDisasters[7]}"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="banner__slide-item">
+								<table class="main-table">
+									<colgroup>
+										<col />
+										<col />
+										<col />
+										<col />
+									</colgroup>
+									<tbody>
+										<tr>
+											<th>교량</th>
+											<th>옹벽 &frasl; 비탈면</th>
+											<th>터널</th>
+											<th>건축물</th>
+										</tr>
+										<tr>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','교량','2',this)" th:text="${arFacs[0]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','옹벽','2',this)" th:text="${arFacs[1]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','터널','2',this)" th:text="${arFacs[2]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','건축물','2',this)" th:text="${arFacs[3]}"></td>
+										</tr>
+										<tr>
+											<th>도로 &frasl; 시설물</th>
+											<th>지반 &frasl; 지하</th>
+											<th>기타</th>
+											<th>합계</th>
+										</tr>
+										<tr>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','도로','2',this)" th:text="${arFacs[4]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','지반','2',this)" th:text="${arFacs[5]}"></td>
+											<td style="cursor:pointer" onclick="popWinType(1200,620,'yes','기타','2',this)" th:text="${arFacs[6]}"></td>
+											<td th:text="${arFacs[7]}"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="banner__slide-pager">
+							<ul>
+								<li><a href="#" data-slide-index="0">1</a></li>
+								<li><a href="#" data-slide-index="1">2</a></li>
+							</ul>
+						</div>
+						<a id="popWin" style="cursor:pointer" class="banner__stat-link">상세보기&gt;&gt;</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<div id="cameralist" class="info" sec:authorize="isAuthenticated()">
+			<div class="fixed-btn fixed-btn--left">
+				<a href="/record/gallery">
+					<label class="fixed-btn__gallery">갤러리</label>
+				</a>
+			</div>
+			<div class="fixed-btn">
+
+					<form id="fileupload" enctype="multipart/form-data">
+
+						<div class="l-popup" id="pop__list" style="z-index: 1">
+							<div class="l-popup__container" style="top: 40%">
+								<div class="l-popup__head">
+									<h3 class="l-popup__heading">해당사진의 설명</h3>
+								</div>
+								<div class="l-popup__content">
+									<div id="stateLoading" class="c-loader" style="display:none">
+										<div class="c-loader__active c-loader__active--ring">
+										</div>
+									</div>
+
+									<div class="l-popup__section">
+										<input style="width: 80%;" class="c-text__input" type="text" id="comment" name="comment" />
+										<input style="position: absolute; right: 20px; top: 80px;" type="button" readonly="readonly" value="확인" class="c-button c-button--point" id="commentBtn" />
+									</div>
+								</div>
+								<a href="#" id="l-popup__close" class="l-popup__close">팝업닫기</a>
+							</div>
+						</div>
+
+						<label onclick="cameraClick()" class="fixed-btn__camera">카메라
+							<input type="file" id="camera" name="camera" capture="camera" accept="image/*"/>
+						</label>
+
+					</form>
+			</div>
+		</div>
+
+	</div>
 </div>
 </html>

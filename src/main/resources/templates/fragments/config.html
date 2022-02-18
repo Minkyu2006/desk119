@@ -13,14 +13,178 @@
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
 
     <!-- 공통으로 쓰이는 css파일을넣는다.-->
-<!--    <link rel="stylesheet" href="/assets/css/main.css" />-->
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    <link rel="stylesheet" href="/assets/css/component.css" />
+    <link rel="stylesheet" href="/assets/css/common.css" />
+    <link rel="stylesheet" href="/assets/js/c3/c3.css" />
+    <link rel="stylesheet" href="/assets/js/alert/min_alert.css" />
+    <link rel="stylesheet" href="/assets/js/toastr/toastr.min.css">
 
     <!-- 사용자 CSS 영역이 들어감 -->
     <th:block layout:fragment="css"></th:block>
 
     <!-- 공통으로 쓰이는 js파일을넣는다.-->
-<!--    <script src="/assets/js/jquery.min.js"></script>-->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.min.js"></script>
+    <script src="/assets/js/broadwave.common.js"></script>
+    <script src="/assets/js/common-pc.js"></script>
+    <script src="/assets/js/broadwave.ajax.js"></script>
+    <script src="/assets/js/d3/d3.js"></script>
+    <script src="/assets/js/c3/c3.js"></script>
+    <script src="/assets/js/alert/min_alert.js"></script>
+    <script src="/assets/js/toastr/toastr.min.js"></script>
+<script>
+    //admin전용 -> 모바일인지 체크 // 2019.10.11 김민규추가
+    function mobileAlert(mobileId) {
+        if (navigator.userAgent.match(/iPad/) == null &&
+            navigator.userAgent.match(/iPhone|Mobile|UP.Browser|Android|BlackBerry|Windows CE|Nokia|webOS|Opera Mini|SonyEricsson|opera mobi|Windows Phone|IEMobile|POLARIS/) != null) {
+            alertCaution("PC에서 이용가능합니다.");
+            return false;
+        }else{
+            if(mobileId===1){
+                return location.href = "/admin/accountapproval";
+            }else if(mobileId===2) {
+                return location.href = "/admin/accountreg";
+            }else if(mobileId===3){
+                return location.href = "/admin/noticereg";
+            }else if(mobileId===4){
+                return location.href = "/admin/teamreg";
+            }else if(mobileId===5){
+                return location.href = "/admin/mastercodereg";
+            }else if(mobileId===6){
+                return location.href = "/admin/mreg";
+            }else if(mobileId===7){
+                galleryOpen();
+            }else{
+                alertCancel("잘못된 접근입니다.");
+                false;
+            }
+        }
+    }
 
+
+    function galleryOpen() {
+        $('#gallery__list').addClass('open');
+        popupFileList(1);
+    }
+
+    function galleryClose() {
+        $('#gallery__list').removeClass('open');
+        popupFileList(1);
+    }
+
+    function popupFileList(page) {
+
+        page = page - 1;
+        if (page < 0) page = 0
+
+        var perPage = 5;
+        var perArea = 5;
+        var totCnt = 0;
+        var $schList = $('#fileList');
+        var $totalCnt = $('#totalCnt1');
+
+        var params = {
+            s_from : $("#pop_from").val(),
+            s_to :$("#pop_to").val(),
+            s_username :$("#s_username").val()
+        };
+
+        $schList.empty().append('<tr ><td colspan="6" align = "center">조회 중</td></tr>');
+        $totalCnt.text('0');
+
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function (e, xhr) {xhr.setRequestHeader(header, token);});
+
+        $.ajax({
+            url:'/api/mobile/uploadPage?size='+ perPage + '&page=' + page,
+            type: 'post',
+            data : params,
+            cache:false,
+            error:function(request){
+                ajaxErrorMsg(request);
+            },
+            success: function(res){
+                if (!Ajax.checkResult(res)) {
+                    return;
+                }
+
+                //화면 출력
+                totCnt = res.data.total_rows;
+                $("#paging").jqueryPager({pageSize: perPage,
+                    pageBlock: perArea,
+                    currentPage: page + 1,
+                    pageTotal: totCnt,
+                    clickEvent: 'popupFileList'});
+
+                if (totCnt === 0) {
+                    $schList.empty().append('<tr class="t-c"><td colspan="6" align="center">조회된 데이터가 없습니다.</td></tr>');
+                    return;
+                }
+
+                $totalCnt.text(totCnt);
+
+                var html = '';
+                $.each(res.data.datalist, function(key, value){
+                    html += '<tr >';
+                    html += '<td><img style="width: 100px;height: 100px" src="/uploadfiles/recordimages/'+value.afmSaveFileThumname+'" /></td>';
+                    html += '<td >'+ value.accountName +'</td>';
+                    html += '<td >'+ value.insertDateTime +'</td>';
+                    html += '<td >'+ nvl(value.afmComment,"설 명 없 음") +'</td>';
+                    html += '<td><a href="/record/mobileDownload/'+value.id+'" style="color:#3131ff">다운로드</a></td>';
+                    html += '<td ><button class="c-button c-button--point" onclick="mobileFileDel(\''+value.id+'\');">삭제</button></td>';
+                    html += '</tr>';
+                });
+                $schList.html(html);
+            }
+        });
+    }
+
+    // 모바일파일삭제 여부
+    function mobileFileDel(id){
+        alertCheck("정말 사진을 삭제하겠습니까?",id,1);
+    }
+    // 모바일파일삭제 시작
+    function mobileDelStart(id,booleanValue) {
+        $('#popupId').remove();
+        if(booleanValue===true){
+            mobileDel(id)
+        }else{
+            return false;
+        }
+    }
+    //모바일파일삭제 실행
+    function mobileDel(id) {
+
+        var params = {
+            mobileid: id
+        };
+
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function (e, xhr) {
+            xhr.setRequestHeader(header, token);
+        });
+
+        $.ajax({
+            url: '/api/mobile/mobileFileDel',
+            type: 'post',
+            data: params,
+            cache: false,
+            error: function (request) {
+                ajaxErrorMsg(request);
+            },
+            success: function (res) {
+                if (!Ajax.checkResult(res)) {
+                    return;
+                }
+                popupFileList(1);
+            }
+        })
+    }
+
+</script>
     <!-- 사용자 스크립트 영역이 들어감 -->
     <th:block layout:fragment="script"></th:block>
 </head>
