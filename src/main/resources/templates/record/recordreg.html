@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+
+</th:block>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+	<script>
+		var fileValue = 0;
+		$(function() {
+
+			if($("#recordupload0").val()==="false"){
+				$("#outlineFileDiv").css('display','block');
+			}else{
+				fileValue++
+			}
+			if($("#recordupload1").val()==="false"){
+				$("#resultFileDiv").css('display','block');
+			}else{
+				fileValue++
+			}
+			if($("#recordupload2").val()==="false"){
+				$("#opinionFileDiv").css('display','block');
+			}else{
+				fileValue++
+			}
+			$("#fileValue").val(fileValue);
+
+			//저장
+			$("#btnSave").on('click', function () {
+				save();
+			});
+			//임시저장
+			$("#btnTemSave").on('click', function () {
+				temsave();
+			});
+			//삭제
+			$("#btnDel").on('click', function () {
+				delCheck();
+			});
+			//조사담당자 추가버튼
+			$("#responsibilBtn").on('click', function () {
+				responsibiladd();
+			});
+
+			$("#fileListBtn").on('click', function () {
+				mobileFileList(1);
+			});
+
+			$('.l-popup__close').on('click', function(e) {
+				$('.l-popup').removeClass('open');
+				e.preventDefault();
+			});
+
+			// 파일 항목 추가
+			$('.c-file__control.add').on('click', function(e) {
+				var last = $(this).parents('.c-file-list').children('li').last();
+				var clName = last.attr('class');
+				var num = Number(clName.replace(/[^0-9]/g,''));
+				var idx = num + 1;
+				var filename = 'filename'+idx;
+				var filearea =
+						'<li class="c-file-list__item' + idx + '">' +
+						'<div class="c-file c-file--comment">' +
+						'<input type="text" readonly="readonly"  id="filename'+ idx +'" class="c-file__input" />' +
+						'<label onclick="popName2(\'' + filename + '\')" class="c-file__button">PC선택<input type="file" id="s_filename' + idx + '" name="file' + idx + '" /></label>' +
+						'<label onclick="popOpen2(\'' + filename + '\')" class="c-file__button">DB선택</label>' +
+						'<input type="hidden" readonly="readonly"  name="filename'+ idx +'" class="c-file_id" />' +
+						'<input type="text" class="c-text__input" id="arComment'+ idx +'" placeholder="사진의 코멘트를 입력해주세요" />' +
+						'<a href="#" class="c-file__control remove">삭제</a>' +
+						'</div>' +
+						'</li>';
+				$(this).parents('.c-file-list').append(filearea);
+
+				var text = [];
+				var comments = [];
+				var $photoUl = $("#photoUl").children('li');
+				for(i=0; i<$photoUl.length; i++){
+					text.push($("#filename"+i).val());
+					comments.push($("#arComment"+i).val());
+				}
+				// console.log("text : "+text);
+				$('.c-file__button input').change(function(){
+					var fileValue = $(this).val().split("\\");
+					var fileName = fileValue[fileValue.length-1]; // 파일명
+					$(this).parent().prev('.c-file__input').val(fileName);
+				}).change();
+
+				for(i=0; i<text.length; i++){
+					if(text[i]!==''){
+						$("#filename"+i).val(text[i]);
+						$("#arComment"+i).val(comments[i]);
+					}
+				}
+
+				e.preventDefault();
+			});
+
+			$('.c-file__button input').change(function () {
+				var fileValue = $(this).val().split("\\");
+				var fileName = fileValue[fileValue.length-1]; // 파일명
+				$(this).parent().prev('.c-file__input').val(fileName);
+			}).change();
+
+			$('.c-file__button2 input').change(function () {
+				var fileValue = $(this).val().split("\\");
+				var fileName = fileValue[fileValue.length-1]; // 파일명
+				$(this).parent().prev('.c-file__input').val(fileName);
+			}).change();
+
+			// 파일 항목 삭제
+			$(document).on('click', '.c-file__control.remove', function(e) {
+				var idx = $(this).parents('li');
+				idx.remove();
+				e.preventDefault();
+			});
+
+			// 조사담당자 항목 삭제
+			$(document).on('click', '.c-button.remove', function(e) {
+				var idx = $(this).parents('.c-input-list');
+				idx.remove();
+				e.preventDefault();
+			});
+
+			//재해.재난.분과 체크박스 값넣기
+			var $checkbox__input = $(".c-checkbox__input");
+			$checkbox__input.change(function(){
+				var listsArr = [0, 0, 0, 0, 0, 0, 0, 0];
+				var $branch01 = $("#branch01");
+				var $branch02 = $("#branch02");
+				var $branch03 = $("#branch03");
+				var $branch04 = $("#branch04");
+				var $branch05 = $("#branch05");
+				var $branch06 = $("#branch06");
+				var $branch07 = $("#branch07");
+				var $branch08 = $("#branch08");
+				var $arDisasterGita = $("#arDisasterGita");
+				if($("input[name=branch]").is(":checked") === true) {
+					var arDisasterArr = [];
+					var arDisasterArrFilename = [];
+					if ($branch01.is(":checked") === true) {
+						listsArr[0] = 1;
+						arDisasterArr[0] = $branch01.attr('value');
+						arDisasterArrFilename[0] = $branch01.attr('value');
+					} else {
+						listsArr[0] = 0;
+					}
+					if ($branch02.is(":checked") === true) {
+						listsArr[1] = 1;
+						arDisasterArr[1] = $branch02.attr('value');
+						arDisasterArrFilename[1] = $branch02.attr('value');
+					} else {
+						listsArr[1] = 0;
+
+					}
+					if ($branch03.is(":checked") === true) {
+						listsArr[2] = 1;
+						arDisasterArr[2] = $branch03.attr('value');
+						arDisasterArrFilename[2] = $branch03.attr('value');
+					} else {
+						listsArr[2] = 0;
+
+					}
+					if ($branch04.is(":checked") === true) {
+						listsArr[3] = 1;
+						arDisasterArr[3] = $branch04.attr('value');
+						arDisasterArrFilename[3] = $branch04.attr('value');
+					} else {
+						listsArr[3] = 0;
+					}
+					if ($branch05.is(":checked") === true) {
+						listsArr[4] = 1;
+						arDisasterArr[4] = $branch05.attr('value');
+						arDisasterArrFilename[4] = $branch05.attr('value');
+					} else {
+						listsArr[4] = 0;
+					}
+					if ($branch06.is(":checked") === true) {
+						listsArr[5] = 1;
+						arDisasterArr[5] = $branch06.attr('value');
+						arDisasterArrFilename[5] = $branch06.attr('value');
+					} else {
+						listsArr[5] = 0;
+					}
+					if ($branch07.is(":checked") === true) {
+						listsArr[6] = 1;
+						arDisasterArr[6] = $branch07.attr('value');
+						arDisasterArrFilename[6] = $branch07.attr('value');
+					} else {
+						listsArr[6] = 0;
+					}
+					if ($branch08.is(":checked") === true) {
+						listsArr[7] = 1;
+						arDisasterArr[7] = $branch08.attr('value');
+						arDisasterArrFilename[7] = $branch08.attr('value');
+						$arDisasterGita.attr("readonly",false);
+					} else {
+						listsArr[7] = 0;
+						$arDisasterGita.attr("readonly",true);
+						$arDisasterGita.val(" ");
+					}
+
+					$("#arDisasterType").val(listsArr.join(","));
+					$("#arDisasterItem").val(arDisasterArr.join(" "));
+					$("#arDisasterItemFilename").val(arDisasterArrFilename.join(""));
+				}
+			});
+			//조사시설물 체크박스 값넣기
+			$checkbox__input.change(function(){
+				var facArr = [0, 0, 0, 0, 0, 0, 0];
+				var $argita = $("#argita");
+				if($("input[name=scan]").is(":checked") === true) {
+					var arFacItemArr = [];
+					var $scan01 = $("#scan01");
+					if ($scan01.is(":checked") === true) {
+						facArr[0] = 1;
+						arFacItemArr[0] = $scan01.attr('value');
+					} else {
+						facArr[0] = 0;
+					}
+					var $scan02 = $("#scan02");
+					if ($scan02.is(":checked") === true) {
+						facArr[1] = 1;
+						arFacItemArr[1] = $scan02.attr('value');
+					} else {
+						facArr[1] = 0;
+					}
+					var $scan03 = $("#scan03");
+					if ($scan03.is(":checked") === true) {
+						facArr[2] = 1;
+						arFacItemArr[2] = $scan03.attr('value');
+					} else {
+						facArr[2] = 0;
+					}
+					var $scan04 = $("#scan04");
+					if ($scan04.is(":checked") === true) {
+						facArr[3] = 1;
+						arFacItemArr[3] = $scan04.attr('value');
+					} else {
+						facArr[3] = 0;
+					}
+					var $scan05 = $("#scan05");
+					if ($scan05.is(":checked") === true) {
+						facArr[4] = 1;
+						arFacItemArr[4] = $scan05.attr('value');
+					} else {
+						facArr[4] = 0;
+					}
+					var $scan06 = $("#scan06");
+					if ($scan06.is(":checked") === true) {
+						facArr[5] = 1;
+						arFacItemArr[5] = $scan06.attr('value');
+					} else {
+						facArr[5] = 0;
+					}
+					var $scan07 = $("#scan07");
+					if ($scan07.is(":checked") === true) {
+						facArr[6] = 1;
+						arFacItemArr[6] = $scan07.attr('value');
+					} else {
+						facArr[6] = 0;
+					}
+					var $scan08 = $("#scan08");
+					if ($scan08.is(":checked") === true) {
+						facArr[7] = 1;
+						arFacItemArr[7] = $scan08.attr('value');
+					} else {
+						facArr[7] = 0;
+					}
+					var $scan09 = $("#scan09");
+					if ($scan09.is(":checked") === true) {
+						facArr[8] = 1;
+						arFacItemArr[8] = $scan09.attr('value');
+					} else {
+						facArr[8] = 0;
+					}
+					var $scan10 = $("#scan10");
+					if ($scan10.is(":checked") === true) {
+						facArr[9] = 1;
+						arFacItemArr[9] = $scan10.attr('value');
+						$argita.attr("readonly",false);
+					} else {
+						facArr[9] = 0;
+						$argita.attr("readonly",true);
+						$argita.val("");
+					}
+					$("#arFac").val(facArr.join(","));
+					$("#arFacItem").val(arFacItemArr.join(" "));
+				}
+			});
+
+			//재해.재난.분과 체크박스 여부확인
+			if($("#arDisasterType").val() !== "") {
+				var disasterType = $('#arDisasterType').val();
+				var listsArr = disasterType.split(',')
+				var check = "1";
+
+				if(listsArr[0] === check){
+					$("#branch01").prop('checked', true);
+				}
+				if(listsArr[1] === check){
+					$("#branch02").prop('checked', true);
+				}
+				if(listsArr[2] === check){
+					$("#branch03").prop('checked', true);
+				}
+				if(listsArr[3] === check){
+					$("#branch04").prop('checked', true);
+				}
+				if(listsArr[4] === check){
+					$("#branch05").prop('checked', true);
+				}
+				if(listsArr[5] === check){
+					$("#branch06").prop('checked', true);
+				}
+				if(listsArr[6] === check){
+					$("#branch07").prop('checked', true);
+				}
+				if(listsArr[7] === check){
+					$("#arDisasterGita").attr("readonly",false);
+					$("#branch08").prop('checked', true);
+				}
+			}
+			//조사시설물 체크박스 여부확인
+			if($("#arFac").val() !== "") {
+				var fac = $('#arFac').val();
+				var facArr = fac.split(',');
+
+				var check2 = "1";
+
+				if(facArr[0] === check2){
+					$("#scan01").prop('checked', true);
+				}
+				if(facArr[1] === check2){
+					$("#scan02").prop('checked', true);
+				}
+				if(facArr[2] === check2){
+					$("#scan03").prop('checked', true);
+				}
+				if(facArr[3] === check2){
+					$("#scan04").prop('checked', true);
+				}
+				if(facArr[4] === check2){
+					$("#scan05").prop('checked', true);
+				}
+				if(facArr[5] === check2){
+					$("#scan06").prop('checked', true);
+				}
+				if(facArr[6] === check2){
+					$("#scan07").prop('checked', true);
+				}
+				if(facArr[7] === check2){
+					$("#scan08").prop('checked', true);
+				}
+				if(facArr[8] === check2){
+					$("#scan09").prop('checked', true);
+				}
+				if(facArr[9] === check2){
+					$("#scan10").prop('checked', true);
+					$("#argita").attr("readonly",false);
+				}
+			}
+
+			// 날짜뷰 DATABASE(YYYYMMDD) -> VIEW(YYYY-MM-DD)
+			if($("#arIntoStart").val() !== "" && $("#arIntoEnd").val() !== "") {
+				var start = $('#arIntoStart').val();
+				var end = $('#arIntoEnd').val();
+				var start2 = [start[0],start[1],start[2],start[3],"-",start[4],start[5],"-",start[6],start[7]];
+				var end2 = [end[0],end[1],end[2],end[3],"-",end[4],end[5],"-",end[6],end[7]];
+				var startArray = start2.join('');
+				var endArray = end2.join('');
+				arIntoStart(startArray);
+				arIntoEnd(endArray);
+			}
+
+			LocationSetting(); //행정구역 onchange실행
+
+		});
+
+		var i;
+		// 조사담당자 추가버튼
+		function responsibiladd() {
+			var $responAdd = $('#responAdd');
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function (e, xhr) {
+				xhr.setRequestHeader(header, token);
+			});
+
+			$.ajax({
+				url: '/api/record/recordteam',
+				type: 'post',
+				cache: false,
+				error:function(request){
+					ajaxErrorMsg(request);
+				},
+				success: function (res) {
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+					var html = '';
+					html += '<li class="c-input-list">'
+					html += '<ul>'
+					html += '<li>'
+					html += '<div class="c-text">'
+					html += '<input type="text" class="c-text__input" name="arEmployeeNumber" placeholder="사번" />'
+					html += '</div>'
+					html += '</li>'
+					html += '<li>'
+					html += '<div class="c-text">'
+					html += '<input type="text" class="c-text__input" name="arEmployeeName" placeholder="이름" />'
+					html += '</div>'
+					html += '</li>'
+					html += '<li>'
+					html += '<div class="c-select">'
+					html += '<select name="teamcode" class="c-select__input">'
+					$.each(res.data.teamdata, function (key,value) {
+						html += '<option value="'+ value.teamcode +'">' + value.teamname + '</option>'
+					});
+					html += '</select>'
+					html += '</div>'
+					html += '</li>'
+					html += '<li>'
+					html += '<input type="button" class="c-button remove" value="삭제" />'
+					html += '</li>'
+					html += '</ul>'
+					html += '</li>'
+					$responAdd.append(html);
+				}
+			});
+		}
+
+		//출동일지 임시저장
+		function temsave() {
+			// 기타사진 고유아이디값 배열하기
+			var $photoUlLength = $("#photoUl").children('li').length;
+			var $filenamedbIds = $("#filenamedbIds");
+			var $arComments = $("#arComments");
+			var idVal;
+			var commentVal;
+			for(i=0; i<$photoUlLength; i++){
+				if(i===0){
+					idVal = $("input[name=filename"+i+"]").val();
+					commentVal = $("#arComment"+i).val();
+				}else{
+					idVal = $filenamedbIds.val()+','+$("input[name=filename"+i+"]").val();
+					commentVal = $arComments.val()+','+$("#arComment"+i).val();
+				}
+				$filenamedbIds.val(idVal);
+				$arComments.val(commentVal);
+			}
+			if($("#arIntoStart").val().length===10) {
+				var start = $('#arIntoStart').val();
+				var startArray = start.split("");
+				for(i = 0; i<2; i++) {
+					startArray.splice(startArray.indexOf("-"), 1);
+				}
+				var realstart = startArray.join("");
+				arIntoStart(realstart);
+			}
+			if($("#arIntoEnd").val().length===10) {
+				var end = $('#arIntoEnd').val();
+				var endArray = end.split("");
+				for(i = 0; i<2; i++) {
+					endArray.splice(endArray.indexOf("-"), 1);
+				}
+				var realend = endArray.join("");
+				arIntoEnd(realend);
+			}
+
+			// 체크값이없으면 0으로 반환
+			if($("#arDisasterType").val() === "") {
+				var zeroType = "0,0,0,0,0,0,0,0";
+				$('#arDisasterType').val(zeroType);
+			}
+			if($("#arFac").val() === "") {
+				var zeroType2 = "0,0,0,0,0,0,0,0,0,0";
+				$('#arFac').val(zeroType2);
+			}
+
+			var formData = new FormData(document.getElementById('frmreg'));
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function (e, xhr) {
+				xhr.setRequestHeader(header, token);
+			});
+
+			$.ajax({
+				url: '/api/record/temreg',
+				type: 'post',
+				data: formData,
+				processData: false,
+				contentType: false,
+				enctype: 'multipart/form-data',
+				cache: false,
+				error:function(request){
+					ajaxErrorMsg(request);
+				},
+				success: function (res) {
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+					alertSuccess('임시저장이 되었습니다.',1)
+				}
+			});
+		}
+
+		//출동일지 저장
+		function save() {
+			if ($("#arTitle").val().trim() === '') {
+				alertCaution("제목을 입력하세요.");
+				return false;
+			}
+			if ($("#arWriter").val().trim() === '') {
+				alertCaution("작성자를 입력하세요.");
+				return false;
+			}
+			if ($(":checkbox[name='branch']:checked").length === 0) {
+				alertCaution("재해.재난.분과 항목을 <br> 하나이상 체크해주세요.");
+				return;
+			}
+			if ($(":checkbox[name='scan']:checked").length === 0) {
+				alertCaution("조사시시설물 항목을 <br> 하나이상 체크해주세요.");
+				return;
+			}
+			var $arIntoStart = $("#arIntoStart");
+			var $arIntoEnd = $("#arIntoEnd");
+			if ($arIntoStart.val().trim() === '') {
+				alertCaution("시작날짜를 설정해주세요.");
+				return;
+			}
+			if ($arIntoEnd.val().trim() === '') {
+				alertCaution("끝난날짜를 설정해주세요.");
+				return;
+			}
+			if ($("#arLocationAddressType option:selected").val()==null) {
+				alertCaution("행정구역을 설정해주세요.");
+				return;
+			}
+
+			// 기타사진 고유아이디값 배열하기
+			var $photoUlLength = $("#photoUl").children('li').length;
+			var $filenamedbIds = $("#filenamedbIds");
+			var $arComments = $("#arComments");
+			var idVal;
+			var commentVal;
+			for(i=0; i<$photoUlLength; i++){
+				if(i===0){
+					idVal = $("input[name=filename"+i+"]").val();
+					commentVal = $("#arComment"+i).val();
+				}else{
+					idVal = $filenamedbIds.val()+','+$("input[name=filename"+i+"]").val();
+					commentVal = $arComments.val()+','+$("#arComment"+i).val();
+				}
+				$filenamedbIds.val(idVal);
+				$arComments.val(commentVal);
+			}
+
+			// 날짜저장 VIEW(YYYY-MM-DD) -> DATABASE(YYYYMMDD)
+			if($arIntoStart.val() !== "") {
+				var start = $('#arIntoStart').val();
+				var startArray = start.split("");
+				for(var i = 0; i<2; i++) {
+					startArray.splice(startArray.indexOf("-"), 1);
+				}
+				var realstart = startArray.join("");
+				arIntoStart(realstart);
+			}
+			if($arIntoEnd.val() !== "") {
+				var end = $('#arIntoEnd').val();
+				var endArray = end.split("");
+
+				for(i = 0; i<2; i++) {
+					endArray.splice(endArray.indexOf("-"), 1);
+				}
+				var realend = endArray.join("");
+				arIntoEnd(realend);
+			}
+			if($arIntoStart.val().length !== 8){
+				alertCaution("시작날짜를 확인해주세요.");
+				return;
+			}
+			if($arIntoEnd.val().length !== 8){
+				alertCaution("끝난날짜를 확인해주세요.");
+				return;
+			}
+
+			var formData = new FormData(document.getElementById('frmreg'));
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function (e, xhr) {
+				xhr.setRequestHeader(header, token);
+			});
+
+			$.ajax({
+				url: '/api/record/reg',
+				type: 'post',
+				data: formData,
+				processData: false,
+				contentType: false,
+				enctype: 'multipart/form-data',
+				cache: false,
+				error:function(request){
+					ajaxErrorMsg(request);
+				},
+				success: function (res) {
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+					alertSuccess('출동일지가 등록 되었습니다.',1);
+				}
+			});
+		}
+
+		function delCheck(){
+			alertCheck("정말 출동일지를 삭제하겠습니까?",$("#id").val());
+		}
+		// 삭제실행여부확인
+		function startDel(id,booleanValue) {
+			$('#popupId').remove();
+			if(booleanValue===true){
+				del(id)
+			}else{
+				return false;
+			}
+		}
+		//삭제버튼 실행
+		function del(id) {
+
+				var params = {
+					recordid: id
+				};
+
+				var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
+				$(document).ajaxSend(function (e, xhr) {
+					xhr.setRequestHeader(header, token);
+				});
+
+				$.ajax({
+					url: '/api/record/del',
+					type: 'post',
+					data: params,
+					cache: false,
+					error: function (request) {
+						ajaxErrorMsg(request);
+					},
+					success: function (res) {
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+					alertSuccess('출동일지가 삭제 되었습니다.',1);
+				}
+			})
+		}
+
+		// 행정구역 onchange Post
+		function LocationSetting() {
+			var params = {
+				locationCityType: $("#arLocationCityType").val()
+			};
+
+			var $schList = $('#arLocationAddressType');
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function (e, xhr) { xhr.setRequestHeader(header, token); });
+
+			$.ajax({
+				url: '/api/record/location',
+				type: 'post',
+				data: params,
+				cache: false,
+				error:function(request){
+					ajaxErrorMsg(request);
+				},
+				success: function (res) {
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+
+					var html = '';
+					 $.each(res.data.dataselect, function (key, value) {
+						html += '<option value ="' + echoNull2Blank(value.code) + '">' + echoNull2Blank(value.name)+ '</option>';
+					});
+					$schList.html(html);
+
+					var $addSel = $("#addSel");
+					if($addSel.val() !== ''){
+						var addressSelect = $addSel.val();
+						setarLocationAddressType(addressSelect);
+					}
+				}
+			});
+		}
+		function setarLocationAddressType(value){
+			$("#arLocationAddressType").val(value);
+		}
+
+		function arIntoStart(value){
+			$("#arIntoStart").val(value);
+		}
+		function arIntoEnd(value){
+			$("#arIntoEnd").val(value);
+		}
+
+		//첨부파일삭제
+		function fileDelete(th,fileid,checkLine,dblocal) {
+
+			var params = {
+				fileid:fileid
+			};
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
+
+			var $url;
+			console.log("dblocal : "+dblocal);
+			if(dblocal==='1'){
+				$url = '/api/record/dbfiledel';
+			}else{
+				$url = '/api/record/filedel';
+			}
+
+			$.ajax({
+				url: $url,
+				type : 'post',
+				data : params,
+				cache:false,
+				error:function(request){
+					ajaxErrorMsg(request);
+				},
+				success: function(res){
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+
+					if(checkLine==="outline"){
+						$("#recordupload0").val("false")
+						$("#outlineFileDiv").css('display','block');
+						fileValue--;
+					}else if(checkLine==="result"){
+						$("#recordupload1").val("false")
+						$("#resultFileDiv").css('display','block');
+						fileValue--;
+					}else if(checkLine==="opinion"){
+						$("#recordupload2").val("false")
+						$("#opinionFileDiv").css('display','block');
+						fileValue--;
+					}
+					$("#fileValue").val(fileValue);
+
+					//파일삭제 성공후 해당 라인 화면에서 제거
+					var obj = $(th).parent('li').parent('ul');
+					obj.remove();
+				}
+			});
+		}
+
+		//조사담당자 삭제
+		function responDelete(th,rsid) {
+			var params = {
+				rsid:rsid
+			};
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
+			$.ajax({
+				url:'/api/record/respondel',
+				type : 'post',
+				data : params,
+				cache:false,
+				error:function(request){
+					ajaxErrorMsg(request);
+				},
+				success: function(res){
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+					var obj = $(th).parent('p');
+					obj.remove();
+				}
+			});
+		}
+
+		function mobileFileList(page,num) {
+
+			page = page - 1;
+			if (page < 0) page = 0
+
+			var perPage = 5;
+			var perArea = 5;
+			var totCnt = 0;
+			var $schList = $('#schList');
+			var $totalCnt = $('#totalCnt');
+
+			var params = {
+				s_from : $("#s_from").val(),
+				s_to :$("#s_to").val()
+			};
+
+			$schList.empty().append('<tr ><td colspan="5" align = "center">조회 중</td></tr>');
+			$totalCnt.text('0');
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function (e, xhr) {xhr.setRequestHeader(header, token);});
+
+			$.ajax({
+				url:'/api/mobile/uploadPage?size='+ perPage + '&page=' + page,
+				type: 'post',
+				data : params,
+				cache:false,
+				error:function(request){
+					ajaxErrorMsg(request);
+				},
+				success: function(res){
+					if (!Ajax.checkResult(res)) {
+						return;
+					}
+
+					//화면 출력
+					totCnt = res.data.total_rows;
+					$("#paging").jqueryPager({pageSize: perPage,
+						pageBlock: perArea,
+						currentPage: page + 1,
+						pageTotal: totCnt,
+						clickEvent: 'mobileFileList'});
+
+					if (totCnt === 0) {
+						$schList.empty().append('<tr class="t-c"><td colspan="5" align="center">조회된 데이터가 없습니다.</td></tr>');
+						return;
+					}
+
+					$totalCnt.text(totCnt);
+
+					var html = '';
+					$.each(res.data.datalist, function(key, value){
+						html += '<tr >';
+						html += '<td><img style="width: 100px;height: 100px" src="/uploadfiles/recordimages/'+value.afmSaveFileThumname+'" /></td>';
+						html += '<td >'+ value.insertDateTime +'</td>';
+						html += '<td >'+ nvl(value.afmComment,"설 명 없 음") +'</td>';
+						html += '<td ><button class="c-button c-button--point" onclick="mobileFileCho(\''+value.id + '\',\'' + num + '\')">선택</button></td>';
+						html += '<td ><button class="c-button c-button--point" onclick="mobileFileDel(\''+value.id+'\');">삭제</button></td>';
+						html += '</tr>';
+					});
+
+					$schList.html(html);
+
+				}
+			});
+		}
+
+		// 모바일파일 선택
+		function mobileFileCho(id,num) {
+			var $inputFileName;
+			if(num==='1') {
+				$inputFileName = $("#inputFileName").val();
+				if ($inputFileName !== '') {
+					$("#" + $inputFileName).val("스마트폰촬영사진.png");
+					$("input[name=" + $inputFileName + "]").val(id);
+				}
+			}else{
+				$inputFileNames = $("#inputFileNames").val();
+				if ($inputFileNames !== '') {
+					$("#" + $inputFileNames).val("스마트폰촬영사진.png");
+					$("input[name=" + $inputFileNames + "]").val(id);
+					$("#s_" + $inputFileNames).val('');
+				}
+			}
+			// console.log("id : "+id);
+			$('.l-popup').removeClass('open');
+		}
+
+		function popOpen(inputId) {
+			// console.log("inputId : "+inputId);
+			$('#pop__list').addClass('open');
+			mobileFileList(1,1);
+			$("#inputFileName").val(inputId);
+		}
+		function popOpen2(inputId) {
+			// console.log("inputId : "+inputId);
+			$('#pop__list').addClass('open');
+			mobileFileList(1,2);
+			$("#inputFileNames").val(inputId);
+		}
+
+		function popName(inputId) {
+			$("#inputFileName").val(inputId);
+		}
+		function popName2(inputId) {
+			$("#inputFileNames").val(inputId);
+		}
+
+	</script>
+
+</th:block>
+<div layout:fragment="content" class="content">
+<section class="report">
+	<h2 class="report__heading">재난·재해 발생현장 조사 및 분석결과보고서</h2>
+	<form id ="frmreg" name="frmreg" enctype="multipart/form-data">
+	<table class="c-input-table">
+		<colgroup>
+			<col style="width: 100px;" />
+			<col style="width: 400px;" />
+			<col style="width: 100px;" />
+		<col />
+		</colgroup>
+		<tbody>
+			<tr>
+				<th>출동일지 번호</th>
+				<td>
+					<input type="hidden" readonly="readonly" id="id" name="id"
+						   th:value="${record} ? ${record.id} : ''" />
+					<div class="c-text c-text--duo">
+						<input type="text" class="c-text__input only-child" name="arNumber" id="arNumber"
+							   th:value="${record} ? ${record.arNumber} : ''" readonly />
+					</div>
+				</td>
+				<th>출동일지 제목</th>
+				<td>
+					<div class="c-text"><input name="arTitle" id="arTitle" type="text" class="c-text__input"
+							th:value="${record} ? ${record.arTitle} : ''" />
+					</div>
+
+				</td>
+			</tr>
+			<tr>
+				<th>작성자</th>
+				<td>
+					<div class="c-text"><input name="arWriter" id="arWriter" type="text" class="c-text__input"
+							th:value="${record} ? ${record.arWriter} : ''"/>
+					</div>
+				</td>
+				<th>재해·재난 분과</th>
+				<td>
+					<ul class="c-input-list">
+						<li>
+							<div class="c-checkbox">
+								<input type="checkbox" class="c-checkbox__input" name="branch" value="붕괴" id="branch01"/>
+								<label for="branch01" class="c-checkbox__label">붕괴</label>
+							</div>
+						</li>
+						<li>
+							<div class="c-checkbox">
+								<input type="checkbox" class="c-checkbox__input" name="branch" value="화재/폭발" id="branch02"/>
+								<label for="branch02" class="c-checkbox__label">화재/폭발</label>
+							</div>
+						</li>
+						<li>
+							<div class="c-checkbox">
+								<input type="checkbox" class="c-checkbox__input" name="branch" value="지진" id="branch03"/>
+								<label for="branch03" class="c-checkbox__label">지진</label>
+							</div>
+						</li>
+						<li>
+							<div class="c-checkbox">
+								<input type="checkbox" class="c-checkbox__input" name="branch" value="싱크홀" id="branch04"/>
+								<label for="branch04" class="c-checkbox__label">싱크홀</label>
+							</div>
+						</li>
+						<li>
+							<div class="c-checkbox">
+								<input type="checkbox" class="c-checkbox__input" name="branch" value="교통사고" id="branch05"/>
+								<label for="branch05" class="c-checkbox__label">교통사고</label>
+							</div>
+						</li>
+						<li>
+							<div class="c-checkbox">
+								<input type="checkbox" class="c-checkbox__input" name="branch" value="홍수/가뭄" id="branch06"/>
+								<label for="branch06" class="c-checkbox__label">홍수/가뭄</label>
+							</div>
+						</li>
+						<li>
+							<div class="c-checkbox">
+								<input type="checkbox" class="c-checkbox__input" name="branch" value="환경오염" id="branch07"/>
+								<label for="branch07" class="c-checkbox__label">환경오염</label>
+							</div>
+						</li>
+						<li>
+							<div class="c-checkbox c-checkbox--input">
+								<input type="checkbox" name="branch" class="c-checkbox__input" value="기타" id="branch08"/>
+								<label for="branch08" class="c-checkbox__label">기타</label>
+								<div class="c-text c-text--small">
+									<input id="arDisasterGita" name="arDisasterGita" type="text" class="c-text__input"
+										   th:value="${record} ? ${record.arDisasterGita} : ''" readonly="readonly" />
+								</div>
+							</div>
+						</li>
+						<input type="hidden" name="arDisasterType" id="arDisasterType" value=""
+							   th:value="${record} ? ${record.arDisasterType} : ''" readonly />
+						<input type="hidden" name="arDisasterItem" id="arDisasterItem" value=""
+							   th:value="${record} ? ${record.arDisasterItem} : ''" readonly />
+						<input type="hidden" name="arDisasterItemFilename" id="arDisasterItemFilename" value=""
+							   th:value="${record} ? ${record.arDisasterItemFilename} : ''" readonly />
+						<input type="hidden" id="fileValue" name="fileValue" readonly />
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<th>관련부처</th>
+				<td>
+					<div for="arRelatedId" class="c-select">
+						<select class="c-select__input" name="arRelatedId" id="arRelatedId">
+							<option th:each ="arRelatedId : ${arRelatedIds}"
+									th:value="${arRelatedId.id}"
+									th:text="${arRelatedId.name}"
+									th:selected="${arRelatedId.id} == (${record} ? ${record.arRelatedId} : '')"
+							></option>
+						</select>
+					</div>
+				</td>
+				<th>관련부처 상세정보</th>
+				<td>
+					<div class="c-text">
+						<input id="arRelatedDetail" name="arRelatedDetail" type="text" class="c-text__input"
+							   th:value="${record} ? ${record.arRelatedDetail} : ''" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>관련문서</th>
+				<td colspan="3">
+					<div class="c-text">
+						<input id="arPapers" name="arPapers" type="text" class="c-text__input" placeholder="공문명을 입력하세요"
+							   th:value="${record} ? ${record.arPapers} : ''"/>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>조사일자</th>
+				<td>
+					<div class="c-calendar-layout">
+						<div class="c-date">
+							<div class="c-date__input-box">
+								<input type="text" class="c-date__result" id="arIntoStart" name="arIntoStart" th:value="${record} ? ${record.arIntoStart} : ''" readonly/>
+								<button type="button" class="c-date__button">
+									<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
+								</button>
+							</div>
+							<div class="c-date__calendar"></div>
+						</div>
+						<span>-</span>
+						<div class="c-date">
+							<div class="c-date__input-box">
+								<input type="text" class="c-date__result" id="arIntoEnd" name="arIntoEnd" th:value="${record} ? ${record.arIntoEnd} : ''" readonly/>
+								<button type="button" class="c-date__button">
+									<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
+								</button>
+							</div>
+							<div class="c-date__calendar"></div>
+						</div>
+						
+					</div>
+				</td>
+				<th>조사위치</th>
+				<td class="c-input-table__non-padding">
+					<table class="c-input-table c-input-table--inner">
+						<colgroup>
+							<col style="width: 100px;" />
+							<col />
+						</colgroup>
+						<tbody>
+							<tr>
+								<th>행정구역</th>
+								<td>
+									<ul class="c-input-list">
+									<li>
+										<div class="c-select" style="width: 110px;">
+											<select name="arLocationCityType" id="arLocationCityType" class="c-select__input" onchange="LocationSetting()">
+												<option th:each ="LocationCityType : ${LocationCityTypes}"
+														th:value="${LocationCityType.getCode()}"
+														th:text="${LocationCityType.getDesc()}"
+														th:selected="${LocationCityType} == (${record} ? ${record.arLocationCityType} : '')">
+												</option>
+											</select>
+										</div>
+									</li>
+									<li>
+										<input id="addSel" type="hidden" class="c-select__input" th:value="${record} ? ${record.arLocationAddressType}: ''"/>
+										<div class="c-select" style="width: 100px;">
+											<select name="arLocationAddressType" id="arLocationAddressType" class="c-select__input" >
+											</select>
+										</div>
+									</li>
+								</ul>
+								</td>
+							</tr>
+							<tr>
+								<th>상세위치</th>
+								<td>
+									<div class="c-text"><input name="arLocationDetail" id="arLocationDetail" type="text" class="c-text__input"
+															   th:value="${record} ? ${record.arLocationDetail} : ''"/>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th>조사시설물</th>
+				<td colspan="3">
+					<ul class="c-input-list">
+						<li>
+							<div class="c-checkbox">
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan01" value="교량"/>
+								<label for="scan01" class="c-checkbox__label">교량</label>
+							</div>
+						</li>
+						<li>
+							<div class="c-checkbox">
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan02" value="옹벽"/>
+								<label for="scan02" class="c-checkbox__label">옹벽</label>
+							</div>
+						</li>
+						<li>
+							<div class="c-checkbox">
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan03" value="비탈면"/>
+								<label for="scan03" class="c-checkbox__label">비탈면</label>
+							</div>
+						</li>
+						<li>
+							<div class="c-checkbox">
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan04" value="터널"/>
+								<label for="scan04" class="c-checkbox__label">터널</label>
+							</div>
+						</li>
+						<li>
+							<div class="c-checkbox">
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan05" value="도로"/>
+								<label for="scan05" class="c-checkbox__label">도로</label>
+							</div>
+						</li>
+						<li>
+							<div class="c-checkbox">
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan06" value="도로시설물"/>
+								<label for="scan06" class="c-checkbox__label">도로시설물</label>
+							</div>
+						</li>
+						<li>
+							<div class="c-checkbox">
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan07" value="건축물"/>
+								<label for="scan07" class="c-checkbox__label">건축물</label>
+							</div>
+						</li>
+						<li>
+							<div class="c-checkbox">
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan08" value="지반"/>
+								<label for="scan08" class="c-checkbox__label">지반</label>
+							</div>
+						</li>
+						<li>
+							<div class="c-checkbox">
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan09" value="지하시설물"/>
+								<label for="scan09" class="c-checkbox__label">지하시설물</label>
+							</div>
+						</li>
+						<li>
+							<div class="c-checkbox c-checkbox--input">
+								<input type="checkbox" name="scan" class="c-checkbox__input" id="scan10" value="기타" />
+								<label for="scan10" class="c-checkbox__label">기타</label>
+								<div class="c-text c-text--small">
+									<input id="argita" name="argita" type="text" class="c-text__input"
+										   th:value="${record} ? ${record.argita} : ''" readonly="readonly"/>
+								</div>
+							</div>
+						</li>
+						<input type="hidden" name="arFac" id="arFac" value=""
+							   th:value="${record} ? ${record.arFac} : ''" />
+						<input type="hidden" name="arFacItem" id="arFacItem" value=""
+							   th:value="${record} ? ${record.arFacItem} : ''" />
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<th>조사목적</th>
+				<td colspan="3">
+					<textarea name="arPurpose" id="arPurpose" class="c-textarea"
+							  th:text="${record} ? ${record.arPurpose} : ''"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<th>조사담당자</th>
+				<td colspan="3">
+
+					<ul class="c-file-list" id="responAdd">
+						<li>
+							<ul class="c-input-list">
+								<li>
+									<div class="c-text">
+										<input type="text" name="arEmployeeNumber" class="c-text__input" placeholder="사번" />
+									</div>
+								</li>
+								<li>
+									<div class="c-text">
+										<input type="text" name="arEmployeeName" class="c-text__input" placeholder="이름" />
+									</div>
+								</li>
+								<li>
+									<div class="c-select">
+										<select name="teamcode" class="c-select__input">
+											<option th:each ="team : ${teams}"
+													th:value="${team.teamcode}"
+													th:text="${team.teamname}"></option>
+										</select>
+									</div>
+								</li>
+								<li>
+									<input type="button" class="c-button" id="responsibilBtn" value="추가"/>
+								</li>
+							</ul>
+						</li>
+					</ul>
+
+					<ul class="c-result-list" style="margin-top: 10px;">
+						<li>
+							<p class="c-input-list"  th:each ="responsibil : ${responsibils}">
+								<span th:text="${responsibil} ? ${responsibil.arEmployeeNumber} : ''"></span>
+								<span th:text="${responsibil} ? ${responsibil.arEmployeeName} : ''"></span>
+								<span th:text="${responsibil} ? ${responsibil.team.getTeamname()} : ''"></span>
+								<button type="button" class="c-button c-button--small" th:onclick="|javascript:responDelete(this,'${responsibil.getId()}')|">삭제</button>
+							</p>
+						</li>
+					</ul>
+
+				</td>
+			</tr>
+			<tr>
+				<th>공동 참여기관</th>
+				<td colspan="3">
+					<textarea name="arEngine" id="arEngine" class="c-textarea"
+							  th:text="${record} ? ${record.arEngine} : ''"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<th>현장개요</th>
+				<td colspan="3" style="height: auto;">
+					<textarea name="arOutline" id="arOutline" class="c-textarea"
+							  th:text="${record} ? ${record.arOutline} : ''"></textarea>
+					<input type="hidden" id="recordupload0" th:value="${recordupload0}" readonly />
+					<div id="outlineFileDiv" class="c-file c-file--comment" style="margin-top: 5px;display: none">
+						<input type="text" readonly="readonly" id="outlineFileName" class="c-file__input" />
+						<label onclick="popName('outlineFileName')" class="c-file__button2">PC선택<input type="file" name="outlineFile" /></label>
+						<label onclick="popOpen('outlineFileName')" class="c-file__button2">DB선택</label>
+						<input type="hidden" readonly="readonly" name="outlineFileName" />
+					</div>
+					<ul class="c-result-list">
+						<li th:each ="recorduploadFile0 : ${recorduploadFile0}">
+							<ul class="c-input-list">
+								<li >
+									<a th:href="@{/record/download/{id}(id=${recorduploadFile0.getId()})}"
+									   th:text="${recorduploadFile0.getAfFileName()}"></a>
+								</li>
+								<li>
+									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile0.getId()}','outline','${recorduploadFile0.getAfDblocal()}')|">삭제</button>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<th>조사·분석 결과</th>
+				<td colspan="3" style="height: auto;">
+					<textarea name="arResult" id="arResult" class="c-textarea"
+							  th:text="${record} ? ${record.arResult} : ''"></textarea>
+					<input type="hidden" id="recordupload1" th:value="${recordupload1}" readonly />
+					<div id="resultFileDiv" class="c-file c-file--comment" style="margin-top: 5px;display: none">
+						<input type="text" readonly="readonly" id="resultFileName" class="c-file__input" />
+						<label onclick="popName('resultFileName')" class="c-file__button2">PC선택<input type="file" name="resultFile" /></label>
+						<label onclick="popOpen('resultFileName')" class="c-file__button2">DB선택</label>
+						<input type="hidden" readonly="readonly" name="resultFileName" />
+					</div>
+					<ul class="c-result-list">
+						<li th:each ="recorduploadFile1 : ${recorduploadFile1}">
+							<ul class="c-input-list">
+								<li >
+									<a th:href="@{/record/download/{id}(id=${recorduploadFile1.getId()})}"
+									   th:text="${recorduploadFile1.getAfFileName()}"></a>
+								</li>
+								<li>
+									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile1.getId()}','result','${recorduploadFile1.getAfDblocal()}')|">삭제</button>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<th>검토의견 (대응방안)</th>
+				<td colspan="3" style="height: auto;">
+					<textarea name="arOpinion" id="arOpinion" class="c-textarea"
+							  th:text="${record} ? ${record.arOpinion} : ''"></textarea>
+					<input type="hidden" id="recordupload2" th:value="${recordupload2}" readonly />
+					<div id="opinionFileDiv" class="c-file c-file--comment" style="margin-top: 5px;display: none">
+						<input type="text" readonly="readonly" id="opinionFileName" class="c-file__input" />
+						<label onclick="popName('opinionFileName')" class="c-file__button2">PC선택<input type="file" name="opinionFile" /></label>
+						<label onclick="popOpen('opinionFileName')" class="c-file__button2">DB선택</label>
+						<input type="hidden" readonly="readonly" name="opinionFileName" />
+					</div>
+					<ul class="c-result-list">
+						<li th:each ="recorduploadFile2 : ${recorduploadFile2}">
+							<ul class="c-input-list">
+								<li >
+									<a th:href="@{/record/download/{id}(id=${recorduploadFile2.getId()})}"
+									   th:text="${recorduploadFile2.getAfFileName()}"></a>
+								</li>
+								<li>
+									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFile2.getId()}','opinion','${recorduploadFile2.getAfDblocal()}')|">삭제</button>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<th>기타사진</th>
+				<td colspan="3">
+					<input type="hidden" id="filenamedbIds" name="filenamedbIds" />
+					<input type="hidden" id="arComments" name="arComments" />
+					<ul class="c-file-list" id="photoUl">
+						<li class="c-file-list__item0">
+							<div class="c-file c-file--comment">
+								<input type="text" readonly="readonly" id="filename0" class="c-file__input" />
+								<label onclick="popName2('filename0')" class="c-file__button">PC선택<input type="file" name="file0" id="s_filename0" /></label>
+								<label onclick="popOpen2('filename0')" class="c-file__button">DB선택</label>
+								<input type="hidden" readonly="readonly" name="filename0" class="c-file_id" />
+								<input type="text" class="c-text__input" id="arComment0" placeholder="사진의 코멘트를 입력해주세요" />
+								<a href="#" class="c-file__control add">추가</a>
+							</div>
+						</li>
+					</ul>
+					<ul class="c-result-list" style="margin-top: 10px;">
+						<li th:each ="recorduploadFilesList : ${recorduploadFilesList}">
+							<ul class="c-input-list">
+								<li >
+									<a th:href="@{/record/download/{id}(id=${recorduploadFilesList.getId()})}"
+									   th:text="${recorduploadFilesList.getAfFileName()}"></a>
+								</li>
+								<li>
+									<button type="button" class="c-button c-button--small" th:onclick="|javascript:fileDelete(this,'${recorduploadFilesList.getId()}','','${recorduploadFilesList.getAfDblocal()}')|">삭제</button>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	</form>
+
+	<div class="c-function">
+		<div class="c-function__group c-function__group--right">
+			<div class="c-function__item"><button id="btnSave" class="c-button c-button--point">제출완료</button></div>
+			<div class="c-function__item"><button id="btnTemSave" class="c-button c-button--point">임시저장</button></div>
+			<div class="c-function__item"><button id="btnDel" class="c-button c-button--point">삭제</button></div>
+		</div>
+	</div>
+
+	<div class="l-popup" id="pop__list" style="z-index: 1">
+		<div class="l-popup__container">
+			<input type="hidden" id="inputFileName" />
+			<input type="hidden" id="inputFileNames" />
+			<div class="l-popup__head">
+				<h3 class="l-popup__heading">DB파일 조회</h3>
+			</div>
+			<div class="l-popup__content">
+				<div class="l-popup__section">
+					<table class="c-table c-table--non-border">
+						<colgroup>
+							<col style="width: 110px;">
+							<col>
+							<col style="width: 110px;">
+							<col>
+							<col style="width: 60px;">
+						</colgroup>
+						<tbody>
+						<tr>
+							<th>From. 촬영날짜</th>
+							<td>
+								<div class="c-date">
+									<div class="c-date__input-box">
+										<input type="text" class="c-date__result" id="s_from" readonly />
+										<button type="button" class="c-date__button">
+											<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
+										</button>
+									</div>
+									<div class="c-date__calendar"></div>
+								</div>
+							</td>
+							<th>To. 촬영날짜</th>
+							<td>
+								<div class="c-date">
+									<div class="c-date__input-box">
+										<input type="text" class="c-date__result" id="s_to" readonly />
+										<button type="button" class="c-date__button">
+											<img src="/assets/images/icon__calendar.svg" alt="달력" title="달력">
+										</button>
+									</div>
+									<div class="c-date__calendar"></div>
+								</div>
+							</td>
+							<td>
+								<button class="c-button c-button--point" id="fileListBtn">조회</button>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="l-popup__section">
+					<table class="c-table">
+						<colgroup>
+							<col style="width: 120px;">
+							<col style="width: 160px;">
+							<col>
+							<col style="width: 80px;">
+							<col style="width: 80px;">
+						</colgroup>
+						<thead>
+						<tr>
+							<th>이미지</th>
+							<th>촬영날짜</th>
+							<th>설명</th>
+							<th></th>
+							<th></th>
+						</tr>
+						</thead>
+						<tbody id="schList">
+						</tbody>
+					</table>
+
+					<div class="c-pager">
+						<div class="c-paging" id="paging">
+							<!-- 페이징 처리되는곳   -->
+						</div>
+						<div class="c-paging__total">
+							<div class="c-paging__total-group">
+								Total
+							</div>
+							<div class="c-paging__total-group" id="totalCnt">0</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<a href="#" class="l-popup__close">팝업닫기</a>
+		</div>
+	</div>
+
+
+
+</section>
+</div>
+</html>

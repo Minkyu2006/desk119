@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Print</title>
+    
+    <!-- 공통으로 쓰이는 css파일을넣는다.-->
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    <link rel="stylesheet" href="/assets/css/component.css" />
+    <link rel="stylesheet" href="/assets/css/common.css" />
+    
+    <!-- 공통으로 쓰이는 js파일을넣는다.-->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.min.js"></script>
+    <script src="/assets/js/broadwave.common.js"></script>
+    <script src="/assets/js/common-pc.js"></script>
+
+    <script>
+    	$(function() {
+    		$('#print').on('click', function() {
+    			window.print();
+    		});
+
+		// 	multiPrint();
+
+		})
+
+		function onloadPrint() {
+			window.print();
+			setTimeout("self.close();", 100);
+		}
+
+    </script>
+
+</head>
+<body onload="onloadPrint()">
+    <section class="report print">
+		<h2 class="report__heading">재난·재해 발생현장 조사 및 분석결과보고서</h2>
+		
+		<table class="c-input-table">
+			<colgroup>
+				<col style="width: 140px;" />
+				<col style="width: 340px;" />
+				<col style="width: 140px;" />
+				<col />
+			</colgroup>
+			<tbody>
+				<tr class="print--none">
+					<th>출동일지 번호</th>
+					<td class="c-text c-text--duo" th:text="${record} ? ${record.arNumber} : ''"></td>
+					<th>출동일지 제목</th>
+					<td th:text="${record} ? ${record.arTitle} : ''"></td>
+				</tr>
+				<tr>
+					<th>작성자</th>
+					<td th:text="${record} ? ${record.arWriter} : ''"></td>
+					<th>재해·재난 분과</th>
+					<td th:text="${record} ? ${record.arDisasterItem} : ''"></td>
+				</tr>
+				<tr>
+					<th>관련부처</th>
+					<td th:text="${record} ? ${record.arRelatedId} : ''"></td>
+					<th>관련부처 상세정보</th>
+					<td th:text="${record} ? ${record.arRelatedDetail} : ''"></td>
+				</tr>
+				<tr>
+					<th>조사일시</th>
+					<td>
+						<span th:text="${record} ? ${record.arIntoStart} : ''"></span> ~
+						<span th:text="${record} ? ${record.arIntoEnd} : ''"></span>
+					</td>
+
+					<th>조사위치</th>
+					<td class="c-input-table__non-padding">
+						<table class="c-input-table c-input-table--inner">
+							<colgroup>
+								<col style="width: 100px;" />
+								<col />
+							</colgroup>
+							<tbody>
+								<tr>
+									<th>행정구역</th>
+									<td>
+										<span th:text="${record} ? ${record.arLocationCityType} : ''"></span>
+										<span th:text="${record} ? ${record.arLocationAddressType} : ''"></span>
+									</td>
+								</tr>
+								<tr>
+									<th>상세위치</th>
+									<td th:text="${record} ? ${record.arLocationDetail} : ''"></td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<th>조사시설물</th>
+					<td colspan=3>
+						<span th:text="${record} ? ${record.arFacItem} : ''"></span>
+						<span th:text="${record} ? ${record.argita} : ''"></span>
+					</td>
+				</tr>
+				<tr>
+					<th>조사목적</th>
+					<td colspan=3 th:text="${record} ? ${record.arPurpose} : ''"></td>
+				</tr>
+				<tr>
+					<th>KICT 조사담당자</th>
+					<td colspan=3>
+						<p class="c-input-list" th:each ="responsibil : ${responsibils}">
+							<span th:text="${responsibil} ? ${responsibil.arEmployeeNumber} : ''"></span>
+							<span th:text="${responsibil} ? ${responsibil.arEmployeeName} : ''"></span>
+							<span th:text="${responsibil} ? ${responsibil.team.getTeamname()} : ''"></span>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th>공동 참여기관</th>
+					<td colspan=3 th:text="${record} ? ${record.arEngine} : ''"></td>
+				</tr>
+				<tr>
+					<th>관련문서</th>
+					<td colspan=3 th:text="${record} ? ${record.arPapers} : ''"></td>
+				</tr>
+				<tr>
+					<th>현장개요</th>
+					<td colspan=3>
+						<pre th:text="${record} ? ${record.arOutline} : ''">
+						</pre>
+						<div class="report__picture">
+							<img style="width: 700px" th:src="${recorduploadFile0} ? '/uploadfiles/recordimages/'+${recorduploadFile0.afSaveFileName} : ''" />
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th>조사·분석 결과</th>
+					<td colspan=3>
+						<pre th:text="${record} ? ${record.arResult} : ''">
+						</pre>
+						<div class="report__picture">
+							<img style="width: 700px" th:src="${recorduploadFile1} ? '/uploadfiles/recordimages/'+${recorduploadFile1.afSaveFileName} : ''" />
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th>검토의견(대응방안)</th>
+					<td colspan=3>
+						<pre th:text="${record} ? ${record.arOpinion} : ''">
+						</pre>
+						<div class="report__picture">
+							<img style="width: 700px" th:src="${recorduploadFile2} ? '/uploadfiles/recordimages/'+${recorduploadFile2.afSaveFileName} : ''" />
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th>기타사진</th>
+					<td colspan=3>
+						<ul class="report__picture-list">
+							<li th:each ="recorduploadFilesList : ${recorduploadFilesList}">
+								<div class="report__picture">
+									<img style="width: 700px" th:src="${recorduploadFilesList} ? '/uploadfiles/recordimages/'+${recorduploadFilesList.afSaveFileName} : ''" />
+									<p>&lt;<span th:text="${recorduploadFilesList.afComment}"></span>&gt;</p>
+								</div>
+							</li>
+						</ul>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<a href="#" id="print" class="print__btn print--none" title="인쇄">인쇄</a>
+	</section>
+</body>
+</html>

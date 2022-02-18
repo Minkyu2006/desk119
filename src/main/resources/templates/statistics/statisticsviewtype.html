@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title id="titleName">활동통계 상세보기</title>
+
+	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+	<!-- default header name is X-CSRF-TOKEN -->
+	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+	<!-- 공통으로 쓰이는 css파일을넣는다.-->
+	<link rel="stylesheet" href="/assets/css/main.css" />
+	<link rel="stylesheet" href="/assets/css/component.css" />
+	<link rel="stylesheet" href="/assets/css/common.css" />
+	<link rel="stylesheet" href="/assets/js/c3/c3.css" />
+	<link rel="stylesheet" href="/assets/js/alert/min_alert.css" />
+
+	<!-- 공통으로 쓰이는 js파일을넣는다.-->
+	<script src="/assets/js/jquery.min.js"></script>
+	<script src="/assets/js/jquery-ui.min.js"></script>
+	<script src="/assets/js/broadwave.common.js"></script>
+	<script src="/assets/js/common-pc.js"></script>
+	<script src="/assets/js/broadwave.ajax.js"></script>
+	<script src="/assets/js/d3/d3.js"></script>
+	<script src="/assets/js/c3/c3.js"></script>
+	<script src="/assets/js/alert/min_alert.js"></script>
+	<script src="/assets/js/statisticsGraph2.js"></script>
+</head>
+<style>
+	.c3-axis-y text {
+		font-size: 15px;
+	}
+
+	.c3-axis-x text {
+		font-size: 15px;
+	}
+
+	div#twopage {
+		page-break-before: always;
+	}
+	/*div#threepage {*/
+	/*	page-break-before: always;*/
+	/*}*/
+	@media print {
+		#pie_chart1,#locationPage {
+			display:flex;
+			justify-content:center;
+			align-items:center;
+
+			margin: 0;
+			border: initial;
+			border-radius: initial;
+			width: initial;
+			min-height: initial;
+			box-shadow: initial;
+			background: initial;
+			page-break-after: always;
+		}
+		@page {
+			size: A4;
+			margin: 10mm 15mm 10mm 15mm;
+		}
+		body,  div {
+			position: relative;
+		}
+		body {
+			background-repeat: no-repeat;
+			background-position:left top;
+		}
+	}
+</style>
+<script>
+	$(function() {
+		var $typeName = $("#typeName").val();
+		//타이틀설정
+		$("#titleName").text($typeName+"통계 상세보기");
+		$("#statish3").text($typeName+" 항목의 출동 일지 리스트");
+		$("#statish4").text("출동대원별 출동건수("+$typeName+")");
+		$("#gra1").text($typeName+" 항목의 출동 요청기관");
+		$("#gra2").text($typeName+" 항목의 출동 지역");
+		$("#gra3").text($typeName+" 항목의 재해·재난 유형");
+		$("#gra4").text($typeName+" 항목의 조사시설물");
+		$("#gra5").text($typeName+" 항목의 부서별 출동 현황");
+		$("#gra6").text($typeName+" 항목의 월별 출동 현황");
+	});
+</script>
+
+<div>
+	<input type="hidden" th:value="${typeName}" id="typeName" />
+	<input type="hidden" th:value="${num}" id="num" />
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	<section class="section">
+		<div class="stat">
+			<div id="onepage" class="stat__dual">
+				<div class="stat__dual-item">
+					<h3 id="gra1" class="stat__title"></h3>
+					<div class="stat__circle" id="pie_chart1"></div>
+				</div>
+				<div class="stat__dual-item">
+					<h3 id="gra2" class="stat__title"></h3>
+					<div id="locationPage">
+					<div class="stat__map-area">
+						<div class="stat__map-tab">
+							<ul>
+								<li>
+									<a href="#" class="stat__tab-link" th:text="${productionYear}"></a>
+								</li>
+								<li>
+									<a href="#" class="stat__tab-link" th:text="${nowYear}"></a>
+								</li>
+							</ul>
+						</div>
+						<div class="stat__map">
+							<img src="/assets/images/map.png" alt="" />
+							<ul class="stat__tab-content">
+								<li>
+									<span class="stat__map-point seoul" title="서울특별시" th:text="${productionYearCitys} ? ${productionYearCitys[0]} : ''"></span>
+									<span class="stat__map-point busan" title="부산광역시" th:text="${productionYearCitys} ? ${productionYearCitys[3]} : ''"></span>
+									<span class="stat__map-point daegu" title="대구광역시" th:text="${productionYearCitys} ? ${productionYearCitys[2]} : ''"></span>
+									<span class="stat__map-point incheon" title="인천광역시" th:text="${productionYearCitys} ? ${productionYearCitys[1]} : ''"></span>
+									<span class="stat__map-point gwangju" title="광주광역시" th:text="${productionYearCitys} ? ${productionYearCitys[6]} : ''"></span>
+									<span class="stat__map-point daejeon" title="대전광역시" th:text="${productionYearCitys} ? ${productionYearCitys[4]} : ''"></span>
+									<span class="stat__map-point ulsan" title="울산광역시" th:text="${productionYearCitys} ? ${productionYearCitys[5]} : ''"></span>
+									<span class="stat__map-point sejong" title="세종특별자치시" th:text="${productionYearCitys} ? ${productionYearCitys[16]} : ''"></span>
+									<span class="stat__map-point gyenggi" title="경기도" th:text="${productionYearCitys} ? ${productionYearCitys[7]} : ''"></span>
+									<span class="stat__map-point gangwon" title="강원도" th:text="${productionYearCitys} ? ${productionYearCitys[8]} : ''"></span>
+									<span class="stat__map-point chungnam" title="충청남도" th:text="${productionYearCitys} ? ${productionYearCitys[10]} : ''"></span>
+									<span class="stat__map-point chungbuk" title="충청북도" th:text="${productionYearCitys} ? ${productionYearCitys[9]} : ''"></span>
+									<span class="stat__map-point jeonnam" title="전라남도" th:text="${productionYearCitys} ? ${productionYearCitys[12]} : ''"></span>
+									<span class="stat__map-point jeonbuk" title="전라북도" th:text="${productionYearCitys} ? ${productionYearCitys[11]} : ''"></span>
+									<span class="stat__map-point gyeongnam" title="경상남도" th:text="${productionYearCitys} ? ${productionYearCitys[14]} : ''"></span>
+									<span class="stat__map-point gyeongbuk" title="경상북도" th:text="${productionYearCitys} ? ${productionYearCitys[13]} : ''"></span>
+									<span class="stat__map-point jeju" title="제주특별자치도" th:text="${productionYearCitys} ? ${productionYearCitys[15]} : ''"></span>
+								</li>
+								<li>
+									<span class="stat__map-point seoul" title="서울특별시" th:text="${nowYearCitys} ? ${nowYearCitys[0]} : ''"></span>
+									<span class="stat__map-point busan" title="부산광역시" th:text="${nowYearCitys} ? ${nowYearCitys[3]} : ''"></span>
+									<span class="stat__map-point daegu" title="대구광역시" th:text="${nowYearCitys} ? ${nowYearCitys[2]} : ''"></span>
+									<span class="stat__map-point incheon" title="인천광역시" th:text="${nowYearCitys} ? ${nowYearCitys[1]} : ''"></span>
+									<span class="stat__map-point gwangju" title="광주광역시" th:text="${nowYearCitys} ? ${nowYearCitys[6]} : ''"></span>
+									<span class="stat__map-point daejeon" title="대전광역시" th:text="${nowYearCitys} ? ${nowYearCitys[4]} : ''"></span>
+									<span class="stat__map-point ulsan" title="울산광역시" th:text="${nowYearCitys} ? ${nowYearCitys[5]} : ''"></span>
+									<span class="stat__map-point sejong" title="세종특별자치시" th:text="${nowYearCitys} ? ${nowYearCitys[16]} : ''"></span>
+									<span class="stat__map-point gyenggi" title="경기도" th:text="${nowYearCitys} ? ${nowYearCitys[7]} : ''"></span>
+									<span class="stat__map-point gangwon" title="강원도" th:text="${nowYearCitys} ? ${nowYearCitys[8]} : ''"></span>
+									<span class="stat__map-point chungnam" title="충청남도" th:text="${nowYearCitys} ? ${nowYearCitys[10]} : ''"></span>
+									<span class="stat__map-point chungbuk" title="충청북도" th:text="${nowYearCitys} ? ${nowYearCitys[9]} : ''"></span>
+									<span class="stat__map-point jeonnam" title="전라남도" th:text="${nowYearCitys} ? ${nowYearCitys[12]} : ''"></span>
+									<span class="stat__map-point jeonbuk" title="전라북도" th:text="${nowYearCitys} ? ${nowYearCitys[11]} : ''"></span>
+									<span class="stat__map-point gyeongnam" title="경상남도" th:text="${nowYearCitys} ? ${nowYearCitys[14]} : ''"></span>
+									<span class="stat__map-point gyeongbuk" title="경상북도" th:text="${nowYearCitys} ? ${nowYearCitys[13]} : ''"></span>
+									<span class="stat__map-point jeju" title="제주특별자치도" th:text="${nowYearCitys} ? ${nowYearCitys[15]} : ''"></span>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="stat__local-table">
+						<div class="stat__unit">단위: 건</div>
+						<table class="c-table c-table--small">
+							<colgroup>
+								<col />
+								<col style="width: 50px;" />
+								<col style="width: 50px;" />
+							</colgroup>
+							<thead>
+							<tr>
+								<th></th>
+								<th th:text="${productionYear}"></th>
+								<th th:text="${nowYear}"></th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+								<th>서울특별시</th>
+								<td th:text="${productionYearCitys[0]}"></td>
+								<td th:text="${nowYearCitys[0]}"></td>
+							</tr>
+							<tr>
+								<th>부산광역시</th>
+								<td th:text="${productionYearCitys[3]}"></td>
+								<td th:text="${nowYearCitys[3]}"></td>
+							</tr>
+							<tr>
+								<th>대구광역시</th>
+								<td th:text="${productionYearCitys[2]}"></td>
+								<td th:text="${nowYearCitys[2]}"></td>
+							</tr>
+							<tr>
+								<th>인천광역시</th>
+								<td th:text="${productionYearCitys[1]}"></td>
+								<td th:text="${nowYearCitys[1]}"></td>
+							</tr>
+							<tr>
+								<th>광주광역시</th>
+								<td th:text="${productionYearCitys[6]}"></td>
+								<td th:text="${nowYearCitys[6]}"></td>
+							</tr>
+							<tr>
+								<th>대전광역시</th>
+								<td th:text="${productionYearCitys[4]}"></td>
+								<td th:text="${nowYearCitys[4]}"></td>
+							</tr>
+							<tr>
+								<th>울산광역시</th>
+								<td th:text="${productionYearCitys[5]}"></td>
+								<td th:text="${nowYearCitys[5]}"></td>
+							</tr>
+							<tr>
+								<th>세종특별자치시</th>
+								<td th:text="${productionYearCitys[16]}"></td>
+								<td th:text="${nowYearCitys[16]}"></td>
+							</tr>
+							<tr>
+								<th>경기도</th>
+								<td th:text="${productionYearCitys[7]}"></td>
+								<td th:text="${nowYearCitys[7]}"></td>
+							</tr>
+							<tr>
+								<th>강원도</th>
+								<td th:text="${productionYearCitys[8]}"></td>
+								<td th:text="${nowYearCitys[8]}"></td>
+							</tr>
+							<tr>
+								<th>충청남도</th>
+								<td th:text="${productionYearCitys[10]}"></td>
+								<td th:text="${nowYearCitys[10]}"></td>
+							</tr>
+							<tr>
+								<th>충청북도</th>
+								<td th:text="${productionYearCitys[9]}"></td>
+								<td th:text="${nowYearCitys[9]}"></td>
+							</tr>
+							<tr>
+								<th>전라남도</th>
+								<td th:text="${productionYearCitys[12]}"></td>
+								<td th:text="${nowYearCitys[12]}"></td>
+							</tr>
+							<tr>
+								<th>전라북도</th>
+								<td th:text="${productionYearCitys[11]}"></td>
+								<td th:text="${nowYearCitys[11]}"></td>
+							</tr>
+							<tr>
+								<th>경상남도</th>
+								<td th:text="${productionYearCitys[14]}"></td>
+								<td th:text="${nowYearCitys[14]}"></td>
+							</tr>
+							<tr>
+								<th>경상북도</th>
+								<td th:text="${productionYearCitys[13]}"></td>
+								<td th:text="${nowYearCitys[13]}"></td>
+							</tr>
+							<tr>
+								<th>제주특별자치도</th>
+								<td th:text="${productionYearCitys[15]}"></td>
+								<td th:text="${nowYearCitys[15]}"></td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				</div>
+			</div>
+
+			<div sec:authorize="isAuthenticated()" class="stat__item">
+				<h3 id="statish4" class="stat__title"></h3>
+				<div class="stat__map-tab">
+					<ul>
+						<li style="border: 3px solid #ffa143">
+							<a id="productionYear" style="color: #ffa143" href="#" class="stat__tab-link" th:text="${productionYear}"></a>
+						</li>
+						<li style="border: 3px solid #ffa143">
+							<a id="nowYear" style="background-color: #ffa143;color: #fff" href="#" class="stat__tab-link" th:text="${nowYear}"></a>
+						</li>
+					</ul>
+				</div>
+				<br/>
+				<div class="stat__chart" id="rank_chart"></div>
+				<div style="display: none" class="stat__chart" id="rank_chart2"></div>
+			</div>
+
+			<div id="twopage">
+				<br style='height:0; line-height:0'>
+				<div class="stat__item">
+					<h3 id="gra3" class="stat__title"></h3>
+					<div class="stat__chart" id="bar_chart1"></div>
+				</div>
+				<div class="stat__item">
+					<h3 id="gra4" class="stat__title"></h3>
+					<div class="stat__chart" id="bar_chart2"></div>
+				</div>
+				<div class="stat__item">
+					<h3 id="gra5" class="stat__title"></h3>
+					<div class="stat__chart" id="bar_team"></div>
+				</div>
+				<div class="stat__item">
+					<h3 id="gra6" class="stat__title"></h3>
+					<div class="stat__chart" id="bar_chart3"></div>
+				</div>
+			</div>
+		</div>
+		<br/>
+		<div id="threepage" class="stat__item">
+			<article class="article">
+				<h3 id="statish3" class="stat__title"></h3>
+				<table class="c-retable" id ="statisList">
+
+				</table>
+
+				<div class="c-pager">
+					<div class="c-paging" id ="paging" style="position: absolute;left: 40px">
+						<!-- 페이징 처리되는곳   -->
+					</div>
+					<div class="c-paging__total">
+						<div class="c-paging__total-group">
+							Total
+						</div>
+						<div class="c-paging__total-group" id ="totalCnt">0</div>
+					</div>
+				</div>
+			</article>
+		</div>
+		<a href="#" id="print" class="print__btn print--none" title="인쇄">인쇄</a>
+	</section>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+</div>
+</html>
